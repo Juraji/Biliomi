@@ -1,0 +1,68 @@
+# This is an example file for configuring Biliomi.
+
+biliomi:
+  core:
+    # Available update modes are:
+    # INSTALL: (Re)Install Biliomi, your settings will be reset, and Biliomi will request authorization with Twitch
+    # UPDATE: Update Biliomi, set this option when you've replaced the install with a newer version.
+    # OFF: Do not run setup, a.k.a. normal production use.
+    updateMode: INSTALL
+    # The ISO 3166-1 alpha-2 code for the country Biliomi is active in.
+    # This is important for some integrations, to be able to comply with locational laws.
+    # See https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for which code applies to your country.
+    countryCode: NL
+
+  database:
+    # Use a file-based H2 database.
+    # If set to true, Biliomi will use a local H2 database for data storage. Other database settings will be ignored.
+    # If set to false, Biliomi will try and use the connection info below to connect to a MySQL database.
+    # Note: H2 is not recommended for production use as it is VERY slow as opposed to a MySQL server.
+    useH2Database: true
+    # The adress of the MySQL database to connect to.
+    host: localhost
+    port: 3306
+    # The database name to use (Must be created on the MySQL server before installation).
+    database: null
+    # Database login information.
+    username: null
+    password: null
+    # Should Biliomi use SSL for connecting to the database?
+    usessl: false
+
+  twitch:
+    # Due to security reasons you will need to register biliomi as an application on your Twitch account.
+    # Check out Twitch's documentation on how to do this.
+    clientId: null
+    login:
+      # Biliomi uses oAuth tokens to logon to the Twitch servers.
+      # These will be installed on first startup (when updateMode is set to INSTALL)
+      # The only thing we need is to know which Twitch users are going to be connected (lowercase)
+      botUsername: null
+      channelUsername: null
+
+  integrations:
+    # Due to security reasons no OAuth keys are provided by default.
+    # When you want to use a specific integration you must first register Biliomi as an application
+    # on the concerning platform. Links are provided with each integration.
+
+    streamLabs:
+      # Stream labs is used for automatically registering incoming donations and Twitch hosts.
+      # Note: Due to the lack of proper host events support by the Twitch API, this integration is currently the only way
+      # to receive host notifications from Biliomi.
+      # Application registration: https://www.twitch.tv/kraken/oauth2/clients/new
+      consumerKey: null
+      consumerSecret: null
+
+    twitter:
+      # Biliomi can integrate with Twitter, easily post Tweets about being live or have Biliomi listen for specific
+      # tweets and responding to them in the Twitch chat.
+      # Application registration: https://apps.twitter.com/
+      consumerKey: null
+      consumerSecret: null
+
+    spotify:
+      # Have Biliomi state information on music, currently being played on your Spotify account or link up a playlist to
+      # enable song requests.
+      # Application registration: https://developer.spotify.com/my-applications
+      consumerKey: null
+      consumerSecret: null

@@ -1,0 +1,36 @@
+# These game messages are used when a generic comment can be made on the result of a game.
+# Biliomi likes to comment on results, so be creative
+# Use {{username}} to insert the user's display name
+
+biliomi:
+  component:
+    gamemessages:
+      win:
+        - "Congratulations!"
+        - "YATZEE!"
+        - "Fabulous!"
+        - "You got lucky."
+        - "GOOOOOOOOOOOOAAAAAAAAAAAAAAL!"
+        - "Oh my, you did it! HNNG!"
+        - "Baby, now you think you're number one, shining bright for everyone!"
+        - "X GON GIVE IT TO YA!"
+        - "If there were more clumsy, perverted and fun people like {{username}}, the world would be a better place."
+
+      lost:
+        - "Better luck next time!"
+        - "Dreamin', don't give it up {{username}}"
+        - "You have ignited a nuclear war! And no, there is no animated display of a mushroom cloud with parts of bodies flying through the air. We do not reward failure."
+        - "Can you like.. win? please?"
+        - "Game Over."
+        - "Don't looooose your waaaaaaay!"
+        - "You just weren't good enough."
+        - "Will {{username}} finally win? Find out on the next episode of DragonBall Z!"
+        - "{{username}} has lost something great today!"
+        - "Perhaps if you trained in the mountains in solitude, you could learn the art to winning."
+        - "Believe in the heart of the cards!"
+        - "Believe in me who believes in you!"
+        - "404 Win Not Found."
+        - "The gods have forsaken you!"
+        - "To win you must gain sight beyond sight!"
+        - "You're great at losing! Don't let anyone tell you otherwise."
+        - "So tell me, what's it like living in a constant haze of losses?"

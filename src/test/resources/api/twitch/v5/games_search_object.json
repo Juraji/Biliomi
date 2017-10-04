@@ -1,0 +1,41 @@
+{
+  "games": [
+    {
+
+      "_id": 2770,
+      "box": {
+        "large": "https://static-cdn.jtvnw.net/ttv-boxart/Tomb%20Raider-272x380.jpg",
+        "medium": "https://static-cdn.jtvnw.net/ttv-boxart/Tomb%20Raider-136x190.jpg",
+        "small": "https://static-cdn.jtvnw.net/ttv-boxart/Tomb%20Raider-52x72.jpg",
+        "template": "https://static-cdn.jtvnw.net/ttv-boxart/Tomb%20Raider-{width}x{height}.jpg"
+      },
+      "giantbomb_id": 3023,
+      "logo": {
+        "large": "https://static-cdn.jtvnw.net/ttv-logoart/Tomb%20Raider-240x144.jpg",
+        "medium": "https://static-cdn.jtvnw.net/ttv-logoart/Tomb%20Raider-120x72.jpg",
+        "small": "https://static-cdn.jtvnw.net/ttv-logoart/Tomb%20Raider-60x36.jpg",
+        "template": "https://static-cdn.jtvnw.net/ttv-logoart/Tomb%20Raider-{width}x{height}.jpg"
+      },
+      "name": "Tomb Raider",
+      "popularity": 28
+    },
+    {
+      "_id": 317,
+      "box": {
+        "large": "https://static-cdn.jtvnw.net/ttv-boxart/Tomb%20Raider%20II-272x380.jpg",
+        "medium": "https://static-cdn.jtvnw.net/ttv-boxart/Tomb%20Raider%20II-136x190.jpg",
+        "small": "https://static-cdn.jtvnw.net/ttv-boxart/Tomb%20Raider%20II-52x72.jpg",
+        "template": "https://static-cdn.jtvnw.net/ttv-boxart/Tomb%20Raider%20II-{width}x{height}.jpg"
+      },
+      "giantbomb_id": 337,
+      "logo": {
+        "large": "https://static-cdn.jtvnw.net/ttv-logoart/Tomb%20Raider%20II-240x144.jpg",
+        "medium": "https://static-cdn.jtvnw.net/ttv-logoart/Tomb%20Raider%20II-120x72.jpg",
+        "small": "https://static-cdn.jtvnw.net/ttv-logoart/Tomb%20Raider%20II-60x36.jpg",
+        "template": "https://static-cdn.jtvnw.net/ttv-logoart/Tomb%20Raider%20II-{width}x{height}.jpg"
+      },
+      "name": "Tomb Raider II",
+      "popularity": 1
+    }
+  ]
+}

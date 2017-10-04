@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>Authorization Failed</title>
+  <style>
+    body {
+      font-family: Arial, serif;
+      background-color: #dc3545;
+      color: #ffffff;
+    }
+
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .container h1 {
+      text-align: center;
+    }
+
+    .container ul#messages {
+      list-style: none;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+<div class="header">
+
+</div>
+<div class="container">
+  <h1 id="heading" class="">Authorization Failed</h1>
+  <ul id="messages"></ul>
+</div>
+<script>
+  (function () {
+    if (window.location.href.indexOf('?') < 0) {
+      // No query parameters present
+      return;
+    }
+
+    var $messagesUl = document.getElementById('messages');
+    window.location.href.split('?').pop().split('&').forEach(appendItemSet);
+
+    function appendItemSet(itemSet) {
+      var spl = itemSet.split('=');
+      var liElement = document.createElement('li');
+      spl[0] = spl[0].replace(/[^a-z]/gi, ' ')
+          .replace(/(\w+)/g, function (s) {
+            return s.substr(0, 1).toUpperCase() + s.substr(1);
+          });
+      spl[1] = decodeURIComponent(spl[1]);
+      liElement.innerText = spl[0] + ': ' + spl[1];
+      $messagesUl.appendChild(liElement);
+    }
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Properties>
+    <Property name="LOGLEVEL_ROOT">error</Property>
+    <Property name="LOGLEVEL_APPLICATION">info</Property>
+    <property name="LOG_MAX_SIZE">5 MB</property>
+    <property name="LOG_ROTATION_DAYS">1</property>
+  </Properties>
+
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %logger{1}: %msg %throwable{short}%n"/>
+    </Console>
+
+    <RollingFile name="ErrorLogFile" fileName="logs/error.log"
+                 filePattern="logs/archive/error/error-%d{yyyy-MM-dd}-%i.log.gz">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36}: %msg%n%n"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy interval="${LOG_ROTATION_DAYS}" modulate="true"/>
+        <SizeBasedTriggeringPolicy size="${LOG_MAX_SIZE}"/>
+      </Policies>
+    </RollingFile>
+
+    <RollingFile name="ChatLogFile" fileName="logs/chat.log" filePattern="logs/archive/chat/chat-%d{yyyy-MM-dd}-%i.log.gz">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} %msg%n"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy interval="${LOG_ROTATION_DAYS}" modulate="true"/>
+        <SizeBasedTriggeringPolicy size="${LOG_MAX_SIZE}"/>
+      </Policies>
+    </RollingFile>
+  </Appenders>
+  <Loggers>
+    <!-- Root logger (default) -->
+    <Root level="${LOGLEVEL_ROOT}">
+      <AppenderRef ref="Console" level="all"/>
+      <AppenderRef ref="ErrorLogFile" level="error"/>
+    </Root>
+
+    <!-- Application logging -->
+    <Logger name="nl.juraji.biliomi" level="${LOGLEVEL_APPLICATION}"/>
+
+    <!-- Chat logging -->
+    <Logger name="nl.juraji.biliomi.components.shared.ChatService" level="info">
+      <AppenderRef ref="ChatLogFile" level="info"/>
+    </Logger>
+  </Loggers>
+</Configuration>

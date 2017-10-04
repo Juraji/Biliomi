@@ -1,0 +1,45 @@
+{
+  "kind": "youtube#searchListResponse",
+  "etag": "I_8xdZu766_FSaexEaDXTIfEWc0/VfD27xWzpWjW2I5arSdySpSY9UQ",
+  "nextPageToken": "CAEQAA",
+  "regionCode": "NL",
+  "pageInfo": {
+    "totalResults": 209748,
+    "resultsPerPage": 1
+  },
+  "items": [
+    {
+      "kind": "youtube#searchResult",
+      "etag": "I_8xdZu766_FSaexEaDXTIfEWc0/1_rvPclwKhXuZh_HjLqLt77n7nc",
+      "id": {
+        "kind": "youtube#video",
+        "videoId": "ZJL4UGSbeFg"
+      },
+      "snippet": {
+        "publishedAt": "2009-10-09T02:21:30.000Z",
+        "channelId": "UCGD9Vd6tEBkmM0hArMjgu3w",
+        "title": "Shania Twain - Man! I Feel Like A Woman",
+        "description": "Music video by Shania Twain performing Man! I Feel Like A Woman. (C) 2003 Mercury Records.",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/ZJL4UGSbeFg/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/ZJL4UGSbeFg/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/ZJL4UGSbeFg/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          }
+        },
+        "channelTitle": "ShaniaTwainVEVO",
+        "liveBroadcastContent": "none"
+      }
+    }
+  ]
+}

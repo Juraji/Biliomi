@@ -1,0 +1,17 @@
+{
+  "_links": {},
+  "chatter_count": 4,
+  "chatters": {
+    "moderators": [
+      "biliomi",
+      "juraji"
+    ],
+    "staff": [],
+    "admins": [],
+    "global_mods": [],
+    "viewers": [
+      "test_user",
+      "test_user2"
+    ]
+  }
+}

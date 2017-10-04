@@ -1,0 +1,455 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>nl.juraji</groupId>
+  <artifactId>biliomi</artifactId>
+  <version>3.9.0</version>
+  <packaging>jar</packaging>
+
+  <name>Biliomi v3</name>
+  <url>https://juraji.nl</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.timestamp>${maven.build.timestamp}</project.build.timestamp>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ssZ</maven.build.timestamp.format>
+    <sonar.language>java</sonar.language>
+    <sonar.junit.reportsPath>target/surefire-reports</sonar.junit.reportsPath>
+    <sonar.junit.reportsPath>target/jacoco.exec</sonar.junit.reportsPath>
+    <sonar.projectKey>nl.juraji:biliomi:v3</sonar.projectKey>
+
+    <!-- Test Dependencies -->
+    <version.junit>4.12</version.junit>
+    <version.mockito>1.10.19</version.mockito>
+    <version.powermock>1.6.6</version.powermock>
+
+    <!-- Runtime Dependencies -->
+    <version.commons.beanutils>1.9.3</version.commons.beanutils>
+    <version.commons.commons-csv>1.5</version.commons.commons-csv>
+    <version.commons.io>2.5</version.commons.io>
+    <version.commons.lang3>3.6</version.commons.lang3>
+    <version.guava>23.0</version.guava>
+    <version.h2database>1.4.196</version.h2database>
+    <version.hibernate>4.3.11.Final</version.hibernate>
+    <version.jackson>2.9.1</version.jackson>
+    <version.jboss-jandex>2.0.3.Final</version.jboss-jandex>
+    <version.jboss-weld-se>2.4.5.Final</version.jboss-weld-se>
+    <version.jcommander>1.72</version.jcommander>
+    <version.jersey.gf-cdi>2.14</version.jersey.gf-cdi>
+    <version.jersey>2.25.1</version.jersey>
+    <version.jetty>9.4.6.v20170531</version.jetty>
+    <version.jjwt>0.7.0</version.jjwt>
+    <version.joda-time>2.9.9</version.joda-time>
+    <version.log4j>2.9.0</version.log4j>
+    <version.mysql-connector-java>6.0.6</version.mysql-connector-java>
+    <version.nv-websocket-client>2.3</version.nv-websocket-client>
+    <version.org.reflections>0.9.11</version.org.reflections>
+    <version.snakeyaml>1.18</version.snakeyaml>
+    <version.twitter4j>4.0.6</version.twitter4j>
+  </properties>
+
+  <build>
+    <!-- Configure resource filtering -->
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
+    <plugins>
+
+      <!-- Configure the compiler to use Java 8 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+
+      <!-- Configure templating plugin -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>templating-maven-plugin</artifactId>
+        <version>1.0.0</version>
+        <executions>
+          <execution>
+            <id>filter-src</id>
+            <goals>
+              <goal>filter-sources</goal>
+            </goals>
+            <configuration>
+              <overwrite>true</overwrite>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Copy assembly.resources -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.6</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/assembly/resources</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Copy dependencies to target/lib -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.10</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              <!--<prependGroupId>true</prependGroupId>-->
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>true</overWriteSnapshots>
+              <overWriteIfNewer>true</overWriteIfNewer>
+              <includeScope>runtime</includeScope>
+              <excludeScope>test</excludeScope>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Configure how to build the final jar -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>lib/</classpathPrefix>
+              <mainClass>nl.juraji.biliomi.BiliomiContainer</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <!-- Assembly plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+          <descriptor>src/assembly/bin.xml</descriptor>
+          <finalName>${project.artifactId}</finalName>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- TypeScript generator plugin -->
+      <!-- Used for generating a TypeScript version of the model -->
+      <plugin>
+        <groupId>cz.habarta.typescript-generator</groupId>
+        <artifactId>typescript-generator-maven-plugin</artifactId>
+        <version>1.25.322</version>
+        <executions>
+          <execution>
+            <id>generate</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <phase>process-classes</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <jsonLibrary>jackson2</jsonLibrary>
+          <classPatterns>nl.juraji.biliomi.model.**</classPatterns>
+          <excludeClassPatterns>
+            <pattern>nl.juraji.biliomi.model.**Dao</pattern>
+            <pattern>nl.juraji.biliomi.model.core.security.**</pattern>
+          </excludeClassPatterns>
+          <customTypeMappings>
+            <mapping>org.joda.time.DateTime:string</mapping>
+          </customTypeMappings>
+          <outputKind>module</outputKind>
+          <namespace>Biliomi</namespace>
+          <sortTypeDeclarations>true</sortTypeDeclarations>
+          <addTypeNamePrefix>I</addTypeNamePrefix>
+          <outputFileType>implementationFile</outputFileType>
+          <outputFile>${project.build.directory}/Biliomi.ts</outputFile>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+
+    <!-- TEST DEPENDENCIES -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${version.junit}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${version.mockito}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-api-mockito</artifactId>
+      <version>${version.powermock}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-module-junit4</artifactId>
+      <version>${version.powermock}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- END TEST DEPENDENCIES -->
+
+    <!-- RUNTIME DEPENDENCIES -->
+    <!-- Hibernate -->
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>${version.hibernate}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <version>${version.hibernate}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-c3p0</artifactId>
+      <version>${version.hibernate}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>${version.h2database}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>${version.mysql-connector-java}</version>
+    </dependency>
+
+    <!-- Web -->
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-client</artifactId>
+      <version>${version.jetty}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt</artifactId>
+      <version>${version.jjwt}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.neovisionaries</groupId>
+      <artifactId>nv-websocket-client</artifactId>
+      <version>${version.nv-websocket-client}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.socket</groupId>
+      <artifactId>socket.io-client</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+
+    <!-- JBOSS Weld -->
+    <dependency>
+      <groupId>org.jboss.weld.se</groupId>
+      <artifactId>weld-se</artifactId>
+      <version>${version.jboss-weld-se}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss</groupId>
+      <artifactId>jandex</artifactId>
+      <version>${version.jboss-jandex}</version>
+    </dependency>
+
+    <!-- Jersey & JAX-RS -->
+    <dependency>
+      <groupId>org.glassfish.jersey.containers</groupId>
+      <artifactId>jersey-container-grizzly2-http</artifactId>
+      <version>${version.jersey}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.glassfish.jersey.media</groupId>
+      <artifactId>jersey-media-json-jackson</artifactId>
+      <version>${version.jersey}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.glassfish.jersey.media</groupId>
+      <artifactId>jersey-media-sse</artifactId>
+      <version>${version.jersey}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.glassfish.jersey.containers.glassfish</groupId>
+      <artifactId>jersey-gf-cdi</artifactId>
+      <version>${version.jersey.gf-cdi}</version>
+    </dependency>
+
+    <!-- Jackson -->
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${version.jackson}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${version.jackson}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${version.jackson}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-joda</artifactId>
+      <version>${version.jackson}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.module</groupId>
+      <artifactId>jackson-module-jaxb-annotations</artifactId>
+      <version>${version.jackson}</version>
+    </dependency>
+
+    <!-- Utility -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${version.commons.lang3}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>${version.commons.io}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>${version.commons.beanutils}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-csv</artifactId>
+      <version>${version.commons.commons-csv}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.yaml</groupId>
+      <artifactId>snakeyaml</artifactId>
+      <version>${version.snakeyaml}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${version.guava}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.reflections</groupId>
+      <artifactId>reflections</artifactId>
+      <version>${version.org.reflections}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+      <version>${version.joda-time}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.beust</groupId>
+      <artifactId>jcommander</artifactId>
+      <version>${version.jcommander}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.twitter4j</groupId>
+      <artifactId>twitter4j-core</artifactId>
+      <version>${version.twitter4j}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.twitter4j</groupId>
+      <artifactId>twitter4j-stream</artifactId>
+      <version>${version.twitter4j}</version>
+    </dependency>
+
+    <!-- Logging -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>${version.log4j}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-jul</artifactId>
+      <version>${version.log4j}</version>
+    </dependency>
+
+    <!-- END RUNTIME DEPENDENCIES -->
+  </dependencies>
+</project>

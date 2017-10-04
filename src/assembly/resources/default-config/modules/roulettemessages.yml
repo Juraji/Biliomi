@@ -1,0 +1,24 @@
+# A roulette result can go one of two ways, either the user lives or the user dies...
+# Get creative, Biliomi is not scared of blood against the wall
+
+biliomi:
+  component:
+    roulette:
+      messages:
+        win:
+          - "The trigger is pulled, and the revolver clicks. {{username}} has lived to survive roulette!"
+          - "The trigger is pulled, but the revolver malfunctions! {{username}} is lucky, and live's another day!"
+          - "The trigger is pulled, but {{username}} has been saved by magic!"
+          - "The trigger is pulled, but {{username}} has lived due to not having anything in his skull to begin with."
+          - "The trigger is pulled, but {{username}}'s skull was so thick the bullet could not penetrate it."
+          - "The trigger is pulled, but {{username}} stopped space and time and dodged the bullet!"
+          - "The trigger is pulled, but {{username}} did not die from the bullet, the bullet died from them!"
+
+        lost:
+          - "The trigger is pulled, and the revolver fires! {{username}} lies dead in the chat."
+          - "The trigger is pulled, and {{username}} loses their head!"
+          - "{{username}}'s finger slides over the trigger, {{username}} crashes to the floor like a sack of flour!"
+          - "The trigger is pulled, and the hand-cannon goes off with a roar! {{username}} lies dead in the chat."
+          - "The hammer drops, and the .44 fires! {{username}} is now dead in the chat."
+          - "The trigger is pulled, and the revolver fires! {{username}} is now just a blood splatter on the wall."
+          - "The trigger is pulled, and the revolver fires! {{username}} ended their miserable life."

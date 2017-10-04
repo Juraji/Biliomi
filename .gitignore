@@ -1,0 +1,6 @@
+/target/
+/.idea/
+/*.iml
+
+# Holds a copy of the config folder with settings for development
+/src/assembly/resources/testconfig/**/*
