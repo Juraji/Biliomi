@@ -97,3 +97,11 @@ Read these instructions carefully, tldr; == No support :D
 1. Shut down Biliomi
 1. Once again open up `./config/core.yml` in your favorite text editor and change `updateMode` to `OFF`.
 1. Now start Biliomi again and enjoy it's features.
+
+### Localization
+Localization files are available [here](https://github.com/Juraji/Biliomi-L10N).
+
+1. Download the localization pack.
+1. Shut down any currently running instance of Biliomi.
+1. Replace the `l10n` directory, with the installation root, with the preferred `l10n` directory from the language pack.
+1. Now start Biliomi again and enjoy.
