@@ -35,4 +35,19 @@ public class GameDao extends JpaDao<Game> {
 
     return game;
   }
+
+  public Game getBySteamId(long steamId) {
+    return criteria()
+        .add(Restrictions.eq("steamId", steamId))
+        .getResult();
+  }
+
+  public Game getBySteamIdOrName(long steamId, String name) {
+    return criteria()
+        .add(Restrictions.or(
+            Restrictions.eq("steamId", steamId),
+            Restrictions.eq("name", name).ignoreCase()
+        ))
+        .getResult();
+  }
 }

@@ -1,28 +1,26 @@
 package nl.juraji.biliomi.io.api.steam.v1.model.wrappers;
 
-import nl.juraji.biliomi.io.api.steam.v1.model.SteamLibrary;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Created by Juraji on 25-5-2017.
- * Biliomi v3
+ * Created by Juraji on 5-10-2017.
+ * Biliomi
  */
-@XmlRootElement(name = "SteamLibraryResponse")
+@XmlRootElement(name = "SteamResponse")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class SteamLibraryResponse {
+public abstract class SteamResponse<T> {
 
   @XmlElement(name = "response")
-  private SteamLibrary response;
+  private T response;
 
-  public SteamLibrary getResponse() {
+  public T getResponse() {
     return response;
   }
 
-  public void setResponse(SteamLibrary response) {
+  public void setResponse(T response) {
     this.response = response;
   }
 }

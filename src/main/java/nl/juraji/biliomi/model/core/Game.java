@@ -36,6 +36,10 @@ public class Game {
   @XmlElement(name = "FirstPlayedOn")
   private DateTime firstPlayedOn;
 
+  @Column
+  @XmlElement(name = "SteamId")
+  private Long steamId;
+
   public long getId() {
     return id;
   }
@@ -58,5 +62,13 @@ public class Game {
 
   public void setFirstPlayedOn(DateTime firstPlayedOn) {
     this.firstPlayedOn = firstPlayedOn;
+  }
+
+  public Long getSteamId() {
+    return steamId;
+  }
+
+  public void setSteamId(Long steamId) {
+    this.steamId = steamId;
   }
 }

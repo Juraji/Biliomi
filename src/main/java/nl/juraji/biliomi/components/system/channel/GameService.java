@@ -36,6 +36,10 @@ public class GameService {
     return gameDao.getByName(name, createIfNotExists);
   }
 
+  public Game getBySteamId(long steamId) {
+    return gameDao.getBySteamId(steamId);
+  }
+
   /**
    * Get the current channel game
    * Persists the game as Game if it does not exist yet

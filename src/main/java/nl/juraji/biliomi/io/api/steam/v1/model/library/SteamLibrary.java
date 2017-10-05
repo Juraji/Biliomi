@@ -1,4 +1,4 @@
-package nl.juraji.biliomi.io.api.steam.v1.model;
+package nl.juraji.biliomi.io.api.steam.v1.model.library;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
