@@ -4,7 +4,7 @@
 
   <groupId>nl.juraji</groupId>
   <artifactId>biliomi</artifactId>
-  <version>3.9.1</version>
+  <version>3.9.2</version>
   <packaging>jar</packaging>
 
   <name>Biliomi v3</name>
@@ -435,6 +435,12 @@
       <groupId>org.twitter4j</groupId>
       <artifactId>twitter4j-stream</artifactId>
       <version>${version.twitter4j}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <version>1.14</version>
     </dependency>
 
     <!-- Logging -->

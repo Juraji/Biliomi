@@ -10,6 +10,13 @@ import org.apache.commons.lang3.StringUtils;
 public interface SetupTask {
 
   /**
+   * Called when Biliomi boots normally
+   */
+  default void boot() {
+    // Optional implementation
+  }
+
+  /**
    * Called when update mode is set to INSTALL
    */
   void install();

@@ -39,16 +39,32 @@ public class SystemBoot {
     switch (updateMode) {
       case DEVELOPMENT:
       case INSTALL:
-        runInstall();
+        runInstallTasks();
         break;
       case UPDATE:
-        runUpdate();
+        runUpdateTasks();
       default:
+        runBootTasks();
         break;
     }
   }
 
-  private void runInstall() {
+  private void runBootTasks() {
+    List<Class<? extends SetupTask>> setupTasksClasses = findSetupTasksAndPrioritize();
+
+    setupTasksClasses.forEach(setupTaskClass -> {
+      SetupTask setupTask = CDI.current().select(setupTaskClass).get();
+      try {
+        setupTask.boot();
+      } catch (Exception e) {
+        logger.error("Error while running boot task: {}", setupTask.getDisplayName(), e);
+      } finally {
+        CDI.current().destroy(setupTask);
+      }
+    });
+  }
+
+  private void runInstallTasks() {
     logger.info("Running installation tasks...");
     List<Class<? extends SetupTask>> setupTasksClasses = findSetupTasksAndPrioritize();
 
@@ -67,7 +83,7 @@ public class SystemBoot {
     logger.info("Installation tasks completed, do not forget to change biliomi.core.updateMode to {}", UpdateModeType.OFF);
   }
 
-  private void runUpdate() {
+  private void runUpdateTasks() {
     logger.info("Running update tasks...");
     List<Class<? extends SetupTask>> setupTasksClasses = findSetupTasksAndPrioritize();
 
