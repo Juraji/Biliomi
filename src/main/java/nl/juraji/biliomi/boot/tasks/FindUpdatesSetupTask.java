@@ -72,8 +72,7 @@ public class FindUpdatesSetupTask implements SetupTask {
       if (response.isOK()) {
         GithubRelease githubRelease = response.getData();
 
-//        boolean isNewReleaseAvailable = githubApi.isNewRelease(versionInfo.getVersion(), githubRelease.getTagName());
-        boolean isNewReleaseAvailable = githubApi.isNewRelease("v3.9.0", githubRelease.getTagName());
+        boolean isNewReleaseAvailable = githubApi.isNewRelease(versionInfo.getVersion(), githubRelease.getTagName());
         if (isNewReleaseAvailable) {
           runUpdateInstaller(githubRelease);
         } else {
