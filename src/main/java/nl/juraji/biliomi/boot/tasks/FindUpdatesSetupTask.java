@@ -72,8 +72,7 @@ public class FindUpdatesSetupTask implements SetupTask {
       if (response.isOK()) {
         GithubRelease githubRelease = response.getData();
 
-        boolean isNewReleaseAvailable = githubApi.isNewRelease(versionInfo.getVersion(), githubRelease.getTagName());
-        if (isNewReleaseAvailable) {
+        if (!githubRelease.isDraft() && !githubRelease.isPrerelease() && githubApi.isNewRelease(versionInfo.getVersion(), githubRelease.getTagName())) {
           runUpdateInstaller(githubRelease);
         } else {
           logger.info("You are running the latest version of Biliomi, awesome!");
