@@ -69,11 +69,16 @@ public class FindUpdatesSetupTask implements SetupTask {
   @Override
   public void boot() {
     // Run updater on boot
-    this.install();
+    this.update();
   }
 
   @Override
   public void install() {
+    // Do nothing
+  }
+
+  @Override
+  public void update() {
     try {
       Response<GithubRelease> response = githubApi.getLatestRelease(ghRepoOwner, ghRepoName);
       if (response.isOK()) {
@@ -123,8 +128,13 @@ public class FindUpdatesSetupTask implements SetupTask {
     FileUtils.deleteDirectory(downloadDir);
 
     logger.info("Biliomi has been updated successfully");
-    logger.info("Note: The l10n directory has been replaced as well, if you were using a custom language I recommend you " +
-        "download the latest and replace the l10n directory now");
+
+    String coreConfigFile = BiliomiContainer.getParameters().getConfigurationDir().getAbsolutePath() + "/core.yml";
+    logger.info("The following actions are up to you:");
+    logger.info("- The l10n directory has been replaced, if you were using a custom language I recommend you download the latest and replace the l10n directory");
+    logger.info("- Check if there are any new settings you need to copy over from the default-config");
+    logger.info("- Set the update mode to UPDATE in " + coreConfigFile + " in order to run database updates");
+
     logger.info("Restart Biliomi whenever you are ready");
     BiliomiContainer.getContainer().shutdownNow(0);
   }
