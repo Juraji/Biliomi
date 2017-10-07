@@ -67,13 +67,13 @@ Read these instructions carefully, tldr; == No support :D
 1. Open the downloaded archive and unpack the `Biliomi v3` directory to where you want to installation to reside.
 1. Open the file explorer and navigate to the location in which you've unpacked the downloaded archive.
 1. Copy the directory `default-config` to `config`.
-1. Open up `./config/core.yml` in your favorite text editor.
-  * Fill in all the settings as described.
-  * Settings under `integrations:` are optional and may be left to `null` if you do not wish to use the intergrations.
-1. Run Biliomi. *Biliomi will initially be set to installation mode.*
-  1. Run (double-click) the appropriate runner for your system:
-    * On Windows: `start-biliomi.bat`
-    * On Linux/MacOS: `start-biliomi.sh`
+1. Open up `./config/core.yml` in your favorite text editor.<br>
+  a. Fill in all the settings as described.<br>
+  b. Settings under `integrations:` are optional and may be left to `null` if you do not wish to use the intergrations.
+1. Run Biliomi. *Biliomi will initially be set to installation mode.*<br>
+  To run Biliomi start (double-click) the appropriate runner for your system:<br>
+    On Windows: `start-biliomi.bat`<br>
+    On Linux/MacOS: `start-biliomi.sh`
 1. Follow any instructions in the console to fully set up Biliomi.
 1. On successful setup Biliomi will immediately connect to Twitch and start listening for commands.
 1. Wait for Biliomi to finish follower and subscriber updates and exit Biliomi by typing `/exit` in the console.
