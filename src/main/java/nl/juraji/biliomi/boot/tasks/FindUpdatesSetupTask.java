@@ -20,7 +20,10 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Juraji on 6-10-2017.
@@ -32,12 +35,16 @@ public class FindUpdatesSetupTask implements SetupTask {
   private static final String DOWNLOAD_CONTENT_TYPE = "application/x-gzip";
 
   @Inject
-  @AppDataValue("github.repository.owner")
+  @AppDataValue("github.biliomi.repository.owner")
   private String ghRepoOwner;
 
   @Inject
-  @AppDataValue("github.repository.name")
+  @AppDataValue("github.biliomi.repository.name")
   private String ghRepoName;
+
+  @Inject
+  @AppDataValue("biliomi.autoupdate.directories")
+  private String installerDirectories;
 
   @Inject
   private Logger logger;
@@ -145,10 +152,11 @@ public class FindUpdatesSetupTask implements SetupTask {
 
   private void removeOldInstall() throws IOException {
     Collection<File> filesToDelete = FileUtils.listFiles(installDir, new String[]{"jar"}, false);
+    List<File> directories = Arrays.stream(installerDirectories.split(","))
+        .map(s -> new File(installDir, s))
+        .collect(Collectors.toList());
 
-    filesToDelete.add(new File(installDir, "l10n"));
-    filesToDelete.add(new File(installDir, "lib"));
-    filesToDelete.add(new File(installDir, "default-config"));
+    filesToDelete.addAll(directories);
 
     EStream.from(filesToDelete)
         .filter(File::exists)
