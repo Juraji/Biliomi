@@ -29,6 +29,7 @@
     <version.commons.beanutils>1.9.3</version.commons.beanutils>
     <version.commons.commons-csv>1.5</version.commons.commons-csv>
     <version.commons.io>2.5</version.commons.io>
+    <version.commons.compress>1.14</version.commons.compress>
     <version.commons.lang3>3.6</version.commons.lang3>
     <version.guava>23.0</version.guava>
     <version.h2database>1.4.196</version.h2database>
@@ -391,6 +392,12 @@
 
     <dependency>
       <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <version>${version.commons.compress}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
       <artifactId>commons-csv</artifactId>
       <version>${version.commons.commons-csv}</version>
     </dependency>
@@ -435,12 +442,6 @@
       <groupId>org.twitter4j</groupId>
       <artifactId>twitter4j-stream</artifactId>
       <version>${version.twitter4j}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-compress</artifactId>
-      <version>1.14</version>
     </dependency>
 
     <!-- Logging -->
