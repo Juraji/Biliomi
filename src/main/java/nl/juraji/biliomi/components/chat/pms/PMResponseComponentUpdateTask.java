@@ -30,9 +30,4 @@ public class PMResponseComponentUpdateTask implements SetupTask {
       templateDao.save(template);
     }
   }
-
-  @Override
-  public void update() {
-    this.install();
-  }
 }

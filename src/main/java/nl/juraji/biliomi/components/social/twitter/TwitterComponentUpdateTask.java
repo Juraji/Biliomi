@@ -43,9 +43,4 @@ public class TwitterComponentUpdateTask implements SetupTask {
       templateDao.save(template);
     }
   }
-
-  @Override
-  public void update() {
-    this.install();
-  }
 }

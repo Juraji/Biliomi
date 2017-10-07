@@ -44,9 +44,4 @@ public class RaidRegisterComponentUpdateTask implements SetupTask {
       templateDao.save(template);
     }
   }
-
-  @Override
-  public void update() {
-    this.install();
-  }
 }

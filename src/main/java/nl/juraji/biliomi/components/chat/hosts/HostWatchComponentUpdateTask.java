@@ -31,9 +31,4 @@ public class HostWatchComponentUpdateTask implements SetupTask {
       templateDao.save(template);
     }
   }
-
-  @Override
-  public void update() {
-    this.install();
-  }
 }
