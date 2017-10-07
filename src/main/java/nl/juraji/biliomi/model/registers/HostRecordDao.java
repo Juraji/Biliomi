@@ -28,6 +28,7 @@ public class HostRecordDao extends JpaDao<HostRecord> {
             Restrictions.eq("direction", direction)
         ))
         .addOrder(Order.desc("id"))
+        .setMaxResults(1)
         .getResult();
   }
 

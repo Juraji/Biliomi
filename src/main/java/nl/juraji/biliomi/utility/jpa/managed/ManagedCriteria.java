@@ -56,6 +56,11 @@ public class ManagedCriteria<T> extends Managed {
     return this;
   }
 
+  public ManagedCriteria<T> setMaxResults(int i) {
+    criteria.setMaxResults(i);
+    return this;
+  }
+
   public T getRandom() {
     criteria.add(Restrictions.sqlRestriction(RAND_SQL_RESTRICTION));
     return getResult();
@@ -77,22 +82,13 @@ public class ManagedCriteria<T> extends Managed {
     return result;
   }
 
-  public List<T> getList() {
-    return getList(-1);
-  }
-
   @SuppressWarnings("unchecked")
-  public List<T> getList(int maxResults) {
+  public List<T> getList() {
     List<T> list;
 
     try {
       validateSession();
       this.criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-
-      if (maxResults > -1) {
-        this.criteria.setMaxResults(maxResults);
-      }
-
       list = criteria.list();
     } finally {
       session.close();

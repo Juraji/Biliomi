@@ -28,6 +28,7 @@ public class RouletteRecordDao extends JpaDao<RouletteRecord> {
         .createAlias("user", "u")
         .add(Restrictions.eq("u.id", user.getId()))
         .addOrder(Order.desc("id"))
-        .getList(limit);
+        .setMaxResults(limit)
+        .getList();
   }
 }

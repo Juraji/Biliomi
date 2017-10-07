@@ -28,6 +28,7 @@ public class InvestmentRecordDao extends JpaDao<InvestmentRecord> {
         .createAlias("invester", "i")
         .add(Restrictions.eq("i.id", user.getId()))
         .addOrder(Order.desc("id"))
-        .getList(limit);
+        .setMaxResults(limit)
+        .getList();
   }
 }

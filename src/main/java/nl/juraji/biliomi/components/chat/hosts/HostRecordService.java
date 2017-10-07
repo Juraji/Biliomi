@@ -1,9 +1,9 @@
 package nl.juraji.biliomi.components.chat.hosts;
 
-import nl.juraji.biliomi.model.registers.HostRecordDao;
 import nl.juraji.biliomi.model.core.Direction;
-import nl.juraji.biliomi.model.registers.HostRecord;
 import nl.juraji.biliomi.model.core.User;
+import nl.juraji.biliomi.model.registers.HostRecord;
+import nl.juraji.biliomi.model.registers.HostRecordDao;
 import org.joda.time.DateTime;
 
 import javax.enterprise.inject.Default;
@@ -21,11 +21,7 @@ public class HostRecordService {
 
   public DateTime getPreviousHostInDate(User channel) {
     HostRecord record = hostRecordDao.getLatestRecord(channel, Direction.INCOMING);
-    if (record == null) {
-      return DateTime.now();
-    }
-
-    return record.getDate();
+    return (record == null ? null : record.getDate());
   }
 
   public void recordIncomingHost(User channel, boolean isAutoHost) {

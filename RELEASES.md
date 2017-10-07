@@ -5,6 +5,9 @@ Date: -
 * Implement semi-automated updater.<br>
 Runs on boot and checks Github for new releases,
 offering to automatically install if a new version has been found.
+* Fix HostWatch throwing error and not recording hosts.
+* Host notices will now always appear, even when the reward is set to 0.<br>
+You might want to change this or change the template. Both settings can be changed using !hostwatch.
 
 # Biliomi v3.9.1
 Date: October 6th 2017

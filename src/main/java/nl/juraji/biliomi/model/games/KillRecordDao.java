@@ -32,6 +32,7 @@ public class KillRecordDao extends JpaDao<KillRecord> {
             Restrictions.eq("t.id", user.getId())
         ))
         .addOrder(Order.desc("id"))
-        .getList(limit);
+        .setMaxResults(limit)
+        .getList();
   }
 }

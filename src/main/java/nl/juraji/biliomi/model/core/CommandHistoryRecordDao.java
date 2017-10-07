@@ -40,6 +40,7 @@ public class CommandHistoryRecordDao extends JpaDao<CommandHistoryRecord> {
     return criteria()
         .add(Restrictions.eq("command", command))
         .addOrder(Order.desc("id"))
-        .getList(20);
+        .setMaxResults(20)
+        .getList();
   }
 }

@@ -1,15 +1,15 @@
 package nl.juraji.biliomi.components.chat.hosts;
 
 import com.google.common.eventbus.Subscribe;
+import nl.juraji.biliomi.components.shared.ChatService;
+import nl.juraji.biliomi.components.system.points.PointsService;
+import nl.juraji.biliomi.components.system.settings.SettingsService;
+import nl.juraji.biliomi.components.system.users.UsersService;
 import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.settings.HostWatchSettings;
 import nl.juraji.biliomi.model.internal.events.twitch.hosting.TwitchHostInEvent;
-import nl.juraji.biliomi.components.system.points.PointsService;
-import nl.juraji.biliomi.components.system.settings.SettingsService;
-import nl.juraji.biliomi.components.shared.ChatService;
-import nl.juraji.biliomi.components.system.users.UsersService;
 import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
 import nl.juraji.biliomi.utility.types.Init;
 import nl.juraji.biliomi.utility.types.Templater;
@@ -61,29 +61,35 @@ public class HostWatchEventsService implements Init {
   @Subscribe
   public void onTwitchHostInEvent(TwitchHostInEvent event) {
     User channel = usersService.getUser(event.getChannelName(), true);
-    long reward = (pointsEligible(channel) ? settings.getReward() : 0);
+    boolean isCooldownExpired = isCooldownExpired(channel);
 
-    if (reward > 0) {
-      pointsService.give(channel, reward);
-    }
+    if (isCooldownExpired) {
+      hostRecordService.recordIncomingHost(channel, event.isAuto());
 
-    hostRecordService.recordIncomingHost(channel, event.isAuto());
-    Template template = templateDao.getByKey(INCOMING_HOST_NOTICE_TEMPLATE);
+      if (settings.getReward() > 0) {
+        pointsService.give(channel, settings.getReward());
+      }
 
-    assert template != null; // Template cannot be null since it's set during install/update
-    if (StringUtils.isNotEmpty(template.getTemplate())) {
-      chat.say(Templater.template(template.getTemplate())
-          .add("username", channel::getDisplayName)
-          .add("points", pointsService.asString(settings.getReward())));
+      Template template = templateDao.getByKey(INCOMING_HOST_NOTICE_TEMPLATE);
+      assert template != null; // Template cannot be null since it's set during install/update
+      if (StringUtils.isNotEmpty(template.getTemplate())) {
+        chat.say(Templater.template(template.getTemplate())
+            .add("username", channel::getDisplayName)
+            .add("points", pointsService.asString(settings.getReward())));
+      }
     }
   }
 
   // Check if channel has not hosted in the cooldown period
-  private boolean pointsEligible(User channel) {
-    DateTime previousWithCooldownAdded = hostRecordService.getPreviousHostInDate(channel)
-        .withDurationAdded(HOST_POINTS_COOLDOWN, 1);
-    DateTime now = DateTime.now();
+  private boolean isCooldownExpired(User channel) {
+    DateTime previousHostDate = hostRecordService.getPreviousHostInDate(channel);
 
-    return now.isAfter(previousWithCooldownAdded);
+    if (previousHostDate == null) {
+      return true;
+    }
+
+    previousHostDate = previousHostDate.withDurationAdded(HOST_POINTS_COOLDOWN, 1);
+    DateTime now = DateTime.now();
+    return now.isAfter(previousHostDate);
   }
 }

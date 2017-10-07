@@ -3,16 +3,19 @@ package nl.juraji.biliomi.components.system.cli;
 import nl.juraji.biliomi.BiliomiContainer;
 import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.model.internal.events.bot.ConsoleInputEvent;
+import nl.juraji.biliomi.model.internal.events.twitch.hosting.TwitchHostInEvent;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.cmd.CliCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.cmd.CliCommandRouter;
 import nl.juraji.biliomi.utility.commandrouters.cmd.CliCommandRouterRegistry;
 import nl.juraji.biliomi.utility.estreams.EBiStream;
 import nl.juraji.biliomi.utility.estreams.EStream;
+import nl.juraji.biliomi.utility.events.EventBus;
 import nl.juraji.biliomi.utility.types.MutableString;
 import nl.juraji.biliomi.utility.types.collections.MultivaluedHashMap;
 
 import javax.enterprise.inject.Default;
+import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -81,6 +84,13 @@ public class CliSystemComponent extends Component {
     } else {
       BiliomiContainer.getContainer().restartNow();
     }
+    return true;
+  }
+
+  @CliCommandRoute(command = "test", description = "REMOVE ME")
+  public boolean testCommand(ConsoleInputEvent event) {
+    TwitchHostInEvent e = new TwitchHostInEvent("twee_bo", true);
+    CDI.current().select(EventBus.class).get().post(e);
     return true;
   }
 }

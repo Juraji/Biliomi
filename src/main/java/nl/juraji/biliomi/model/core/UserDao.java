@@ -68,7 +68,8 @@ public class UserDao extends JpaDao<User> {
     return criteria()
         .add(Restrictions.eq("follower", true))
         .addOrder(Order.desc("followDate"))
-        .getList(limit);
+        .setMaxResults(limit)
+        .getList();
   }
 
   public long getFollowerCount() {
@@ -85,7 +86,8 @@ public class UserDao extends JpaDao<User> {
     return criteria()
         .add(Restrictions.eq("subscriber", true))
         .addOrder(Order.desc("subscribeDate"))
-        .getList(limit);
+        .setMaxResults(limit)
+        .getList();
   }
 
   public long getSubscriberCount() {
@@ -103,6 +105,7 @@ public class UserDao extends JpaDao<User> {
 
     return criteria
         .addOrder(Order.desc(fieldName))
-        .getList(limit);
+        .setMaxResults(limit)
+        .getList();
   }
 }

@@ -28,6 +28,7 @@ public class AdventureRecordDao extends JpaDao<AdventureRecord> {
         .createAlias("adventurer", "a")
         .add(Restrictions.eq("a.id", user.getId()))
         .addOrder(Order.desc("id"))
-        .getList(limit);
+        .setMaxResults(limit)
+        .getList();
   }
 }
