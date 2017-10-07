@@ -43,6 +43,7 @@ public class SystemBoot {
         break;
       case UPDATE:
         runUpdateTasks();
+        break;
       default:
         runBootTasks();
         break;
