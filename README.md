@@ -88,9 +88,9 @@ Read these instructions carefully, tldr; == No support :D
 1. Shut down any currently running instance of Biliomi.
 1. Unpack the downloaded archive into the final location, from which you like to run Biliomi, overwriting all files.
 1. Compare all config files within `default-config` with the files in the existing `config` directory. Tedious, I know... But one can only do so much.
-1. Open up `./config/core.yml` in your favorite text editor.
-  * Update any setting that needs to be changed. Like added features.
-  * Set `updateMode` to `UPDATE`.
+1. Open up `./config/core.yml` in your favorite text editor.<br>
+  a. Update any setting that needs to be changed. Like added features.
+  b. Set `updateMode` to `UPDATE`.
 1. Start Biliomi again.
 1. Keep an eye out, Biliomi might have some questions for you.
 1. Wait for Biliomi to fully start
