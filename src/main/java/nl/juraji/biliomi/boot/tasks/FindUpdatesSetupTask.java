@@ -84,7 +84,7 @@ public class FindUpdatesSetupTask implements SetupTask {
       if (response.isOK()) {
         GithubRelease githubRelease = response.getData();
 
-        if (!githubRelease.isDraft() && !githubRelease.isPrerelease() && githubApi.isNewRelease(versionInfo.getVersion(), githubRelease.getTagName())) {
+        if (!githubRelease.isDraft() && !githubRelease.isPrerelease() && isNonSemVer(versionInfo.getVersion(), githubRelease.getTagName())) {
           runUpdateInstaller(githubRelease);
         } else {
           logger.info("You are running the latest version of Biliomi, awesome!");
@@ -171,5 +171,22 @@ public class FindUpdatesSetupTask implements SetupTask {
     EStream.from(filesToDelete)
         .filter(File::exists)
         .forEach(FileUtils::forceDelete);
+  }
+
+  private boolean isNonSemVer(String currentVersionTag, String newVersionTag) {
+    if (currentVersionTag == null || newVersionTag == null) {
+      return false;
+    }
+
+    String[] cvs = currentVersionTag.replaceAll("v([0-9.]+).*", "$1").split("\\.");
+    String[] nvs = newVersionTag.replaceAll("v([0-9.]+).*", "$1").split("\\.");
+
+    for (int i = 0; i < cvs.length; i++) {
+      if (Integer.valueOf(cvs[i]) > Integer.valueOf(nvs[i])) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
