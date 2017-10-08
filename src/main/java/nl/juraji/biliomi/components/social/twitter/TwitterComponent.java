@@ -183,6 +183,7 @@ public class TwitterComponent extends Component {
 
   /**
    * Set the template to post in the chat when a tracked word is matched
+   * Usage: !twitter setwordmatchedtemplate [template...]
    */
   @SubCommandRoute(parentCommand = "twitter", command = "setwordmatchedtemplate")
   public boolean twitterSetWordMatchedTemplateCommand(User user, Arguments arguments) {

@@ -42,13 +42,17 @@ public class SteamComponent extends Component {
 
   /**
    * Set various Steam integration settings
-   * Usage: Usage: !steam [autogameupdate] [more...]
+   * Usage: !steam [autogameupdate] [more...]
    */
   @CommandRoute(command = "steam", systemCommand = true)
   public boolean steamCommand(User user, Arguments arguments) {
     return captureSubCommands("steam", () -> l10n.getString("ChatCommand.steam.usage"), user, arguments);
   }
 
+  /**
+   * Enable automatic game sync from Steam to Twitch
+   * Usage: !steam autogameupdate [on or off]
+   */
   @SubCommandRoute(command = "autogameupdate", parentCommand = "steam")
   public boolean steamAutoGameUpdateCommand(User user, Arguments arguments) {
     OnOff onOff = EnumUtils.toEnum(arguments.getSafe(0), OnOff.class);
