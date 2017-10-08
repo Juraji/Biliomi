@@ -7,6 +7,8 @@ biliomi:
     # UPDATE: Update Biliomi, set this option when you've replaced the install with a newer version.
     # OFF: Do not run setup, a.k.a. normal production use.
     updateMode: INSTALL
+    # Have Biliomi automatically fetch updates and propose an update when one is available
+    checkForUpdates: true
     # The ISO 3166-1 alpha-2 code for the country Biliomi is active in.
     # This is important for some integrations, to be able to comply with locational laws.
     # See https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for which code applies to your country.

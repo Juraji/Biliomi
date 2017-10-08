@@ -10,6 +10,7 @@ import nl.juraji.biliomi.io.console.ConsoleApi;
 import nl.juraji.biliomi.io.web.Response;
 import nl.juraji.biliomi.model.core.VersionInfo;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
+import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UserSetting;
 import nl.juraji.biliomi.utility.estreams.EStream;
 import nl.juraji.biliomi.utility.factories.archives.TarArchiveUtils;
 import org.apache.commons.io.FileUtils;
@@ -47,6 +48,10 @@ public class FindUpdatesSetupTask implements SetupTask {
   private String installerDirectories;
 
   @Inject
+  @UserSetting("biliomi.core.checkForUpdates")
+  private String isCheckForUpdates;
+
+  @Inject
   private Logger logger;
 
   @Inject
@@ -79,6 +84,10 @@ public class FindUpdatesSetupTask implements SetupTask {
 
   @Override
   public void update() {
+    if (!"true".equals(isCheckForUpdates)) {
+      return;
+    }
+
     try {
       Response<GithubRelease> response = githubApi.getLatestRelease(ghRepoOwner, ghRepoName);
       if (response.isOK()) {
