@@ -2,7 +2,7 @@
 Date: -
 
 ## Release Notes
-
+* Fix bug in updater where same versions would trigger an update proposal.
 
 # Biliomi v3.10.0
 Date: October 8th 2017
