@@ -42,7 +42,7 @@ public class SteamComponent extends Component {
 
   /**
    * Set various Steam integration settings
-   * Usage: !steam [autogameupdate] [more...]
+   * Usage: !steam [autogamesync|syncnow] [more...]
    */
   @CommandRoute(command = "steam", systemCommand = true)
   public boolean steamCommand(User user, Arguments arguments) {
@@ -51,20 +51,20 @@ public class SteamComponent extends Component {
 
   /**
    * Enable automatic game sync from Steam to Twitch
-   * Usage: !steam autogameupdate [on or off]
+   * Usage: !steam autogamesync [on or off]
    */
-  @SubCommandRoute(command = "autogameupdate", parentCommand = "steam")
-  public boolean steamAutoGameUpdateCommand(User user, Arguments arguments) {
+  @SubCommandRoute(command = "autogamesync", parentCommand = "steam")
+  public boolean steamautogamesyncCommand(User user, Arguments arguments) {
     OnOff onOff = EnumUtils.toEnum(arguments.getSafe(0), OnOff.class);
 
     if (onOff == null) {
-      chat.whisper(user, l10n.get("ChatCommand.steam.autoGameUpdate.usage"));
+      chat.whisper(user, l10n.get("ChatCommand.steam.autoGameSync.usage"));
       return false;
     }
 
     boolean doEnableWatch = OnOff.ON.equals(onOff);
     if (doEnableWatch && !steamGameWatch.isAvailable()) {
-      chat.whisper(user, l10n.get("ChatCommand.steam.autoGameUpdate.unavailable"));
+      chat.whisper(user, l10n.get("ChatCommand.steam.autoGameSync.unavailable"));
       return false;
     }
 
@@ -80,9 +80,24 @@ public class SteamComponent extends Component {
     settings.setAutoUpdateChannelGame(doEnableWatch);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.steam.autoGameUpdate.set")
+    chat.whisper(user, l10n.get("ChatCommand.steam.autoGameSync.set")
         .add("state", l10n.getEnabledDisabled(doEnableWatch)));
     return true;
+  }
+
+  /**
+   * Sync Steam game to Twitch immediately
+   * Usage: !steam syncnow
+   */
+  @SubCommandRoute(command = "syncnow", parentCommand = "steam")
+  public boolean steamSyncNowCommand(User user, Arguments arguments) {
+    try {
+      steamGameWatch.syncToTwitchNow();
+      return true;
+    } catch (Exception e) {
+      chat.whisper(user, l10n.get("ChatCommand.steam.autoGameSync.unavailable"));
+      return false;
+    }
   }
 
   /**

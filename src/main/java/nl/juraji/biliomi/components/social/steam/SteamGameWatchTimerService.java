@@ -45,29 +45,31 @@ public class SteamGameWatchTimerService extends TimerService {
     return steamApi.isAvailable();
   }
 
-  private void update() {
-    if (channelService.isStreamOffline()) {
-      // If the stream is offline no updates should occur
-      return;
+  public void syncToTwitchNow() throws Exception {
+    SteamPlayer steamPlayer = getSteamPlayerIfVisible();
+
+    if (steamPlayer.getCurrentGameId() != null) {
+      Game game = gameService.getBySteamId(steamPlayer.getCurrentGameId());
+
+      if (game == null) {
+        logger.info("You are currently playing a game with Steam id" + steamPlayer.getCurrentGameId() + ", but this game is not known by Biliomi. Try importing your steam library");
+        return;
+      }
+
+      String channelGame = channelService.getStream().getGame();
+      if (!channelGame.equals(game.getName())) {
+        // Only update Twitch if the Steam game differs from Twitch
+        logger.info("Steam game changed, updating Twitch: " + channelGame + " -> " + game.getName());
+        channelService.updateGame(game.getName());
+      }
     }
+  }
 
+  private void update() {
     try {
-      SteamPlayer steamPlayer = getSteamPlayerIfVisible();
-
-      if (steamPlayer.getCurrentGameId() != null) {
-        Game game = gameService.getBySteamId(steamPlayer.getCurrentGameId());
-
-        if (game == null) {
-          logger.info("You are currently playing a game with Steam id" + steamPlayer.getCurrentGameId() + ", but this game is not known by Biliomi. Try importing your steam library");
-          return;
-        }
-
-        String channelGame = channelService.getStream().getGame();
-        if (!channelGame.equals(game.getName())) {
-          // Only update Twitch if the Steam game differs from Twitch
-          logger.info("Steam game changed, updating Twitch: " + channelGame + " -> " + game.getName());
-          channelService.updateGame(game.getName());
-        }
+      if (channelService.isStreamOnline()) {
+        // If the stream is offline no updates should occur
+        this.syncToTwitchNow();
       }
     } catch (UnavailableException e) {
       logger.error("The service is unavailabe unavailable", e);
