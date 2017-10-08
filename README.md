@@ -15,6 +15,7 @@ And since I am a programmer with needs I decided to build my own.
 * Customizable text-based commands
 * Spotify integration
 * Twitter integration
+* Steam integration
 * Stream Labs integration
 * Raid register (manual)
 * Donation register (manual or powered by Stream Labs)
@@ -62,6 +63,13 @@ A WADL for Biliomi's REST Api is available under `http://localhost:30000/applica
 ### Installation
 Read these instructions carefully, tldr; == No support :D
 
+Prerequisites:
+* Your Twitch channel.
+* A Twitch account for the bot.<br>
+Since Biliomi will have to be able to chat and moderate in your chat it needs an account the be able to do so.
+
+Installation
+
 1. Make sure you have the latest version of [Java 8](https://www.java.com/en/download/) or higher installed.
 1. Grab the latest version from [the releases page](https://github.com/Juraji/Biliomi/releases).
 1. Open the downloaded archive and unpack the `Biliomi v3` directory to where you want to installation to reside.
@@ -84,10 +92,13 @@ Read these instructions carefully, tldr; == No support :D
 *Type `!mute` in the console or chat to enable chatter.*
 
 ### Updating
+Biliomi now has an automated update. The update takes care of step 1 to 3 for you.
+
 1. Grab the latest version from [the releases page](https://github.com/Juraji/Biliomi/releases).
 1. Shut down any currently running instance of Biliomi.
 1. Unpack the downloaded archive into the final location, from which you like to run Biliomi, overwriting all files.
-1. Compare all config files within `default-config` with the files in the existing `config` directory. Tedious, I know... But one can only do so much.
+1. Compare all config files within `default-config` with the files in the existing `config` directory.<br>
+Tedious, I know... But one can only do so much. The release notes will always contain a note about changed settings.
 1. Open up `./config/core.yml` in your favorite text editor.<br>
   a. Update any setting that needs to be changed. Like added features.<br>
   b. Set `updateMode` to `UPDATE`.
@@ -105,3 +116,27 @@ Localization files are available [here](https://github.com/Juraji/Biliomi-L10N).
 1. Shut down any currently running instance of Biliomi.
 1. Replace the `l10n` directory, with the installation root, with the preferred `l10n` directory from the language pack.
 1. Now start Biliomi again and enjoy.
+
+## Usage
+### Posting commands
+Biliomi is a command driven bot. This means that every and all interaction is done via posting commands in the chat or the console.
+
+Commands always start with an exclamation mark (!).
+
+When a command requires arguments you can find out which ones and how by simply posting the base command.<br>
+For instance: When you post `!announcement` in the chat, Biliomi will reply with `Usage: !announcement [add|remove|interval|minmsgs] [more...]`.
+
+### The Console
+When Biliomi is done booting it will start listening for input in the console.
+
+> known Bugs:
+> * Any input always requires [enter] to be pressed.
+> * Biliomi's logging can interrupt users typing a command, requiring users to reenter the command.
+
+To find out what commands the console supports, simply type `/help` into the console and press [enter].
+
+Commandline usage:
+* Use console: `/[command] [any required parameters]`
+* Post commands: `![command] [any required parameters]`
+* Send whispers (using bot account): `@[target username] [message...]`
+* post message in chat (using bot account): `>[message...]`
