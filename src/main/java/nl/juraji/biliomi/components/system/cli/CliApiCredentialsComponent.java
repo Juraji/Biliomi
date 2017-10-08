@@ -9,7 +9,7 @@ import nl.juraji.biliomi.components.system.settings.SettingsService;
 import nl.juraji.biliomi.components.system.users.UsersService;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.cmd.CliCommandRoute;
-import nl.juraji.biliomi.utility.security.PasswordEncryption;
+import nl.juraji.biliomi.utility.security.PasswordEncryptor;
 import nl.juraji.biliomi.utility.types.MutableString;
 
 import javax.enterprise.inject.Default;
@@ -76,8 +76,9 @@ public class CliApiCredentialsComponent extends Component {
     }
 
     try {
-      byte[] salt = PasswordEncryption.generateSalt();
-      byte[] encryptedPassword = PasswordEncryption.encrypt(password, salt);
+      PasswordEncryptor encryptor = new PasswordEncryptor();
+      byte[] salt = encryptor.generateSalt();
+      byte[] encryptedPassword = encryptor.encrypt(password, salt);
 
       ApiLogin credentials = new ApiLogin();
       credentials.setUser(user);

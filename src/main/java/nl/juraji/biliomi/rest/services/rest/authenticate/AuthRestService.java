@@ -7,7 +7,7 @@ import nl.juraji.biliomi.model.internal.rest.auth.RestAuthorizationRequest;
 import nl.juraji.biliomi.model.internal.rest.auth.RestAuthorizationResponse;
 import nl.juraji.biliomi.rest.config.Responses;
 import nl.juraji.biliomi.utility.security.JWTGenerator;
-import nl.juraji.biliomi.utility.security.PasswordEncryption;
+import nl.juraji.biliomi.utility.security.PasswordEncryptor;
 
 import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
@@ -64,7 +64,8 @@ public class AuthRestService {
     byte[] passwordSalt = userCredentials.getSalt();
 
     // Check request password against database values
-    if (!PasswordEncryption.authenticate(authorization.getPassword(), encryptedPassword, passwordSalt)) {
+    PasswordEncryptor encryptor = new PasswordEncryptor();
+    if (!encryptor.authenticate(authorization.getPassword(), encryptedPassword, passwordSalt)) {
       authorizationResponse.setMessage(RestAuthorizationResponse.MSG_FAULT_PASSWORD_INVALID);
       return Responses.ok(authorizationResponse);
     }
