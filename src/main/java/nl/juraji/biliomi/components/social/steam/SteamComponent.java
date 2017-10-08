@@ -11,6 +11,7 @@ import nl.juraji.biliomi.utility.commandrouters.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.cmd.CliCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
+import nl.juraji.biliomi.utility.exceptions.UnavailableException;
 
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.spi.CDI;
@@ -64,12 +65,12 @@ public class SteamComponent extends Component {
 
     boolean doEnableWatch = OnOff.ON.equals(onOff);
     if (doEnableWatch && !steamGameWatch.isAvailable()) {
-      chat.whisper(user, l10n.get("ChatCommand.steam.autoGameSync.unavailable"));
+      chat.whisper(user, l10n.get("Common.steam.unavailable"));
       return false;
     }
 
     SteamSettings settings = settingsService.getSettings(SteamSettings.class);
-    if (settings.isAutoUpdateChannelGame() != doEnableWatch){
+    if (settings.isAutoUpdateChannelGame() != doEnableWatch) {
       if (doEnableWatch) {
         steamGameWatch.start();
       } else {
@@ -91,14 +92,24 @@ public class SteamComponent extends Component {
    */
   @SubCommandRoute(command = "syncnow", parentCommand = "steam")
   public boolean steamSyncNowCommand(User user, Arguments arguments) {
+    boolean success = false;
     try {
-      steamGameWatch.syncToTwitchNow();
-      return true;
+      success = steamGameWatch.syncToTwitchNow();
+
+      if (success) {
+        chat.whisper(user, l10n.get("ChatCommand.steam.syncNow.success"));
+      } else {
+        chat.whisper(user, l10n.get("ChatCommand.steam.syncNow.failed"));
+      }
+    } catch (UnavailableException e) {
+      logger.error(e);
+      chat.whisper(user, l10n.get("Common.steam.unavailable"));
     } catch (Exception e) {
       logger.error(e);
-      chat.whisper(user, l10n.get("ChatCommand.steam.autoGameSync.unavailable"));
-      return false;
+      chat.whisper(user, l10n.get("ChatCommand.steam.syncNow.failed"));
     }
+
+    return success;
   }
 
   /**

@@ -25,4 +25,5 @@ public interface L10nMap {
   String getCommandNonExistent(String command);
   String getGroupNonExistent(String groupName);
   String getInputContainsBadWords();
+  String getGenericError(String user, String command, String errorMessage);
 }

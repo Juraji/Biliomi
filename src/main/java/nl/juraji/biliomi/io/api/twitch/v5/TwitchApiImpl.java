@@ -139,13 +139,12 @@ public class TwitchApiImpl implements TwitchApi {
   public TwitchGame searchGame(String gameName) throws Exception {
     Map<String, Object> query = new HashMap<>();
     query.put("query", gameName);
-    query.put("live", false);
 
     Response<TwitchGames> response = webClient.get(Url.url(apiBaseUri, "search", "games").withQuery(query), headers, TwitchGames.class);
     TwitchGame defaultGame = new TwitchGame();
     defaultGame.setName(gameName);
 
-    if (response.isOK()) {
+    if (response.isOK() && response.getData().getGames() != null) {
       return response.getData().getGames().stream()
           .filter(game -> StringUtils.equalsIgnoreCase(game.getName(), gameName))
           .findFirst()

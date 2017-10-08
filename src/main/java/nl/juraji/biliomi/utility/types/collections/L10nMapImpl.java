@@ -103,4 +103,13 @@ public class L10nMapImpl extends Properties implements L10nMap {
   public String getInputContainsBadWords() {
     return getString("Common.input.containsBadWords");
   }
+
+  @Override
+  public String getGenericError(String username, String command, String errorMessage) {
+    return this.get("Common.errors.catchedFatalError")
+        .add("username", username)
+        .add("command", command)
+        .add("errormessage", errorMessage)
+        .apply();
+  }
 }

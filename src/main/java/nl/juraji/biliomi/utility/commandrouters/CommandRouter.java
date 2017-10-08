@@ -116,7 +116,7 @@ public class CommandRouter {
       // No worries about method interface here, since it has already been asserted when it was registered
       commandSuccess = (boolean) entry.getMethod().invoke(entry.getComponentInstance(), user, commandCall.getArguments());
     } catch (Exception e) {
-      chat.say(l10n.get("CommandCheck.errors.catchedFatalError")
+      chat.say(l10n.get("Common.errors.catchedFatalError")
           .add("username", user::getDisplayName)
           .add("command", command::getCommand)
           .add("errormessage", e::getMessage));

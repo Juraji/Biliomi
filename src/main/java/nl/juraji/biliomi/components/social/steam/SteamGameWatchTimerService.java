@@ -38,21 +38,35 @@ public class SteamGameWatchTimerService extends TimerService {
     super.start();
 
     logger.info("Started watching your Steam account in order to sync Twitch with your currently playing game");
-    scheduleAtFixedRate(this::update, 0, 15, TimeUnit.MINUTES);
+    scheduleAtFixedRate(this::syncToTwitch, 0, 15, TimeUnit.MINUTES);
   }
 
   public boolean isAvailable() {
     return steamApi.isAvailable();
   }
 
-  public void syncToTwitchNow() throws Exception {
-    SteamPlayer steamPlayer = getSteamPlayerIfVisible();
+  public boolean syncToTwitchNow() throws Exception {
+    Game game = getSteamGameAsGame();
 
-    if (steamPlayer.getCurrentGameId() != null) {
-      Game game = gameService.getBySteamId(steamPlayer.getCurrentGameId());
+    if (game == null) {
+      logger.info("You are currently playing a game on Steam that is not known by Biliomi. Try importing your steam library");
+      return false;
+    }
 
+    logger.info("Steam game sync forced, updating Twitch with game: " + game.getName());
+    channelService.updateGame(game.getName());
+    return true;
+  }
+
+  private void syncToTwitch() {
+    try {
+      if (channelService.isStreamOffline()) {
+        return;
+      }
+
+      Game game = getSteamGameAsGame();
       if (game == null) {
-        logger.info("You are currently playing a game with Steam id" + steamPlayer.getCurrentGameId() + ", but this game is not known by Biliomi. Try importing your steam library");
+        logger.info("You are currently playing a game on Steam that is not known by Biliomi. Try importing your steam library");
         return;
       }
 
@@ -62,15 +76,6 @@ public class SteamGameWatchTimerService extends TimerService {
         logger.info("Steam game changed, updating Twitch: " + channelGame + " -> " + game.getName());
         channelService.updateGame(game.getName());
       }
-    }
-  }
-
-  private void update() {
-    try {
-      if (channelService.isStreamOnline()) {
-        // If the stream is offline no updates should occur
-        this.syncToTwitchNow();
-      }
     } catch (UnavailableException e) {
       logger.error("The service is unavailabe unavailable", e);
     } catch (Exception e) {
@@ -78,8 +83,9 @@ public class SteamGameWatchTimerService extends TimerService {
     }
   }
 
-  private SteamPlayer getSteamPlayerIfVisible() throws Exception {
+  private Game getSteamGameAsGame() throws Exception {
     Response<SteamPlayersResponse> response = steamApi.getPlayerSummary();
+    Game game = null;
 
     if (response.isOK()) {
       if (response.getData().getResponse().getPlayers().size() == 0) {
@@ -88,7 +94,9 @@ public class SteamGameWatchTimerService extends TimerService {
 
       SteamPlayer steamPlayer = response.getData().getResponse().getPlayers().get(0);
       if (SteamProfileVisibilityState.VISIBLE.equals(steamPlayer.getProfileVisibilityState())) {
-        return steamPlayer;
+        if (steamPlayer.getCurrentGameId() != null) {
+          game = gameService.getBySteamId(steamPlayer.getCurrentGameId());
+        }
       } else {
         throw new UnavailableException("The Steam profile is set to private, Biliomi can't read the nescessary information");
       }
@@ -96,5 +104,7 @@ public class SteamGameWatchTimerService extends TimerService {
       // Something else went wrong
       throw new Exception(response.getRawData());
     }
+
+    return game;
   }
 }
