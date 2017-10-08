@@ -20,12 +20,20 @@ public abstract class SocketClient extends WebSocketAdapter {
 
   @Override
   public void onSendingFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
-    logger.debug("OUT: " + frame.getPayloadText());
+    if (frame.isTextFrame()) {
+      logger.debug("OUT: " + frame.getPayloadText().trim());
+    } else {
+      logger.debug("OUT: Opcode " + frame.getOpcode());
+    }
   }
 
   @Override
   public void onFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
-    logger.debug("IN: " + frame.getPayloadText().trim());
+    if (frame.isTextFrame()) {
+      logger.debug("IN: " + frame.getPayloadText().trim());
+    } else {
+      logger.debug("IN: Opcode " + frame.getOpcode());
+    }
   }
 
   @Override

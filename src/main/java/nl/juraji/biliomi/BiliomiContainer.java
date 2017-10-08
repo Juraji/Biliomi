@@ -1,6 +1,9 @@
 package nl.juraji.biliomi;
 
 import nl.juraji.biliomi.utility.types.AppParameters;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.eclipse.jetty.util.log.JavaUtilLog;
 import org.eclipse.jetty.util.log.Log;
 import org.jboss.weld.environment.se.Weld;
@@ -28,6 +31,7 @@ public final class BiliomiContainer {
     appParameters = new AppParameters(args);
     container = new BiliomiContainer();
     container.go();
+    registerShutdownHooks();
   }
 
   public static AppParameters getParameters() {
@@ -38,12 +42,6 @@ public final class BiliomiContainer {
     return container;
   }
 
-  private void go() {
-    this.weld = new Weld("Biliomi");
-    this.weld.initialize();
-    Biliomi biliomi = CDI.current().select(Biliomi.class).get();
-    biliomi.run();
-  }
 
   // Preferably use this method to programmatically exit Biliomi
   public void shutdownInError() {
@@ -58,5 +56,20 @@ public final class BiliomiContainer {
   public void restartNow() {
     this.weld.shutdown();
     go();
+  }
+
+  private static void registerShutdownHooks() {
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      if (LogManager.getContext() instanceof LoggerContext) {
+        Configurator.shutdown((LoggerContext) LogManager.getContext());
+      }
+    }));
+  }
+
+  private void go() {
+    this.weld = new Weld("Biliomi");
+    this.weld.initialize();
+    Biliomi biliomi = CDI.current().select(Biliomi.class).get();
+    biliomi.run();
   }
 }
