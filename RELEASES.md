@@ -1,9 +1,10 @@
-# Biliomi v3.11.0-SNAPSHOT
-Date: Soon
+# Biliomi v3.10.1
+Date: October 8th 2017
 
 ## Release Notes
 * Fix bug in updater where same versions would trigger an update proposal.
 * CONFIG CHANGE: Add option in `core.yml` to disable checking for updates.
+* Fix bug in Steam game sync that would lead to NullPointerExceptions
 
 # Biliomi v3.10.0
 Date: October 8th 2017
