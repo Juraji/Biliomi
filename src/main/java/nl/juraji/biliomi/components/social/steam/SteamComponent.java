@@ -95,6 +95,7 @@ public class SteamComponent extends Component {
       steamGameWatch.syncToTwitchNow();
       return true;
     } catch (Exception e) {
+      logger.error(e);
       chat.whisper(user, l10n.get("ChatCommand.steam.autoGameSync.unavailable"));
       return false;
     }
