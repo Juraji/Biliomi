@@ -178,11 +178,18 @@ public class FindUpdatesSetupTask implements SetupTask {
       return false;
     }
 
+    // Snapshot releases should always be treated as an older version
+    if (currentVersionTag.contains("SNAPSHOT")) {
+      return true;
+    }
+
+    // Turns both versions in to arrays like {MAJOR, MINOR, MICRO}
     String[] cvs = currentVersionTag.replaceAll("v([0-9.]+).*", "$1").split("\\.");
     String[] nvs = newVersionTag.replaceAll("v([0-9.]+).*", "$1").split("\\.");
 
-    for (int i = 0; i < cvs.length; i++) {
-      if (Integer.valueOf(cvs[i]) > Integer.valueOf(nvs[i])) {
+    // Starts at the second element, since major versions are never updateable
+    for (int i = 1; i < 3; i++) {
+      if (Integer.valueOf(cvs[i]) >= Integer.valueOf(nvs[i])) {
         return false;
       }
     }
