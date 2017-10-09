@@ -24,7 +24,8 @@ public class Biliomi implements Runnable {
     CDI<Object> cdi = CDI.current();
 
     // Start console listener
-    cdi.select(ConsoleApi.class).get().init();
+    ConsoleApi consoleApi = cdi.select(ConsoleApi.class).get();
+    consoleApi.init();
 
     // Run system boot
     SystemBoot systemBoot = cdi.select(SystemBoot.class).get();
@@ -42,6 +43,9 @@ public class Biliomi implements Runnable {
 
     // Start REST API
     cdi.select(RestServerController.class).get().start();
+
+    // Start listening for console commands
+    consoleApi.initCliCommands();
 
     // The EventBusSubscriberInterceptor will register subscribers
     // Events are emitted by the IRC clients to bootstrap components and services

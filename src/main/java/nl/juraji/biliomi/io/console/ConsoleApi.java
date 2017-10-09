@@ -36,9 +36,6 @@ public class ConsoleApi implements Init {
   public void init() {
     DefaultThreadFactory threadFactory = DefaultThreadFactory.newFactory("ConsoleApi", true);
 
-    // Select the CliCommandrouter so it bootstraps
-    CDI.current().select(CliCommandRouter.class).get();
-
     if (System.console() == null) {
       logger.info("Your system does not support console input via the Console API. Using legacy console input.");
       consoleListener = new LegacyConsoleListener(eventBus, logger);
@@ -56,5 +53,10 @@ public class ConsoleApi implements Init {
 
   public String waitForInput() throws ExecutionException, InterruptedException {
     return consoleListener.nextInput().get();
+  }
+
+  public void initCliCommands() {
+    // Select the CliCommandrouter so it bootstraps
+    CDI.current().select(CliCommandRouter.class).get();
   }
 }
