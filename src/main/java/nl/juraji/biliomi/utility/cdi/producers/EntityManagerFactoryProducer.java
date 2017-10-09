@@ -44,55 +44,26 @@ public final class EntityManagerFactoryProducer {
   private EntityManagerFactory entityManagerFactory;
 
   @PostConstruct
-  private void initHibernate() {
+  private void initEntityManagerFactoryProducer() {
     boolean useH2Database = userSettings.getBooleanValue("biliomi.database.useH2Database");
-
-    Map<String, Object> configuration = new HashMap<>();
-    setHbm2ddl(configuration);
+    String ddlMode = updateMode.getDdlMode();
 
     if (useH2Database) {
       try {
-        String jdbcUri = Templater.template("jdbc:h2:file:{{datapath}}/datastore")
-            .add("datapath", BiliomiContainer.getParameters().getWorkingDir().getCanonicalPath())
-            .apply();
-
-        configuration.put("hibernate.connection.url", jdbcUri);
-
-        // Create Entity manager factory
-        HibernatePersistenceProvider provider = new HibernatePersistenceProvider();
-        entityManagerFactory = provider.createEntityManagerFactory("Biliomi-H2-DS", configuration);
+        entityManagerFactory = setupH2EMF(ddlMode);
       } catch (IOException e) {
         BiliomiContainer.getContainer().shutdownInError();
       }
     } else {
-      boolean useSSL = userSettings.getBooleanValue("biliomi.database.usessl");
-      configuration.put("hibernate.connection.useSSL", String.valueOf(useSSL));
-
-      // Biliomi doesn't need the MySQL server to be in the correct timezone since all dates
-      // are persisted as ISO8601, but a server might stall connection if this isn't set.
-      TimeZone timeZone = Calendar.getInstance().getTimeZone();
-      configuration.put("hibernate.connection.serverTimezone", timeZone.getID());
-
-      String jdbcUri = template("jdbc:mysql://{{host}}:{{port}}/{{database}}")
-          .add("host", userSettings.getValue("biliomi.database.host", "localhost"))
-          .add("port", userSettings.getValue("biliomi.database.port", "3306"))
-          .add("database", userSettings.getValue("biliomi.database.database", "biliomi"))
-          .apply();
-
-      configuration.put("hibernate.connection.url", jdbcUri);
-      configuration.put("hibernate.connection.username", userSettings.getValue("biliomi.database.username", "biliomi"));
-      configuration.put("hibernate.connection.password", userSettings.getValue("biliomi.database.password", ""));
-
-      // Create Entity manager factory
-      logger.debug("Creating entity manager factory for external database...");
-      HibernatePersistenceProvider provider = new HibernatePersistenceProvider();
-      entityManagerFactory = provider.createEntityManagerFactory("Biliomi-MySQL-DS", configuration);
+      entityManagerFactory = setupMySQLEMF(ddlMode);
     }
   }
 
   @PreDestroy
-  private void destroyEMFProducer() {
-    entityManagerFactory.close();
+  private void destroyEntityManagerFactoryProducer() {
+    if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
+      entityManagerFactory.close();
+    }
   }
 
   @Produces
@@ -100,25 +71,46 @@ public final class EntityManagerFactoryProducer {
     return entityManagerFactory;
   }
 
-  private void setHbm2ddl(Map<String, Object> configuration) {
-    String mode = null;
+  private EntityManagerFactory setupH2EMF(String ddlMode) throws IOException {
+    Map<String, Object> configuration = new HashMap<>();
 
-    switch (updateMode) {
-      case DEVELOPMENT:
-        mode = "create-drop";
-        break;
-      case INSTALL:
-        mode = "create";
-        break;
-      case UPDATE:
-        mode = "update";
-        break;
-      case OFF:
-        break;
-    }
+    String jdbcUri = Templater.template("jdbc:h2:file:{{datapath}}/datastore")
+        .add("datapath", BiliomiContainer.getParameters().getWorkingDir().getCanonicalPath())
+        .apply();
 
-    if (mode != null) {
-      configuration.put("hibernate.hbm2ddl.auto", mode);
-    }
+    configuration.put("hibernate.connection.url", jdbcUri);
+    configuration.put("hibernate.hbm2ddl.auto", ddlMode);
+
+    // Create Entity manager factory
+    logger.debug("Creating entity manager factory for local H2 database...");
+    HibernatePersistenceProvider provider = new HibernatePersistenceProvider();
+    return provider.createEntityManagerFactory("Biliomi-H2-DS", configuration);
+  }
+
+  private EntityManagerFactory setupMySQLEMF(String ddlMode) {
+    Map<String, Object> configuration = new HashMap<>();
+    boolean useSSL = userSettings.getBooleanValue("biliomi.database.usessl");
+
+    // Biliomi doesn't need the MySQL server to be in the correct timezone since all dates
+    // are persisted as ISO8601, but a server might stall connection if this isn't set.
+    TimeZone timeZone = Calendar.getInstance().getTimeZone();
+    configuration.put("hibernate.connection.serverTimezone", timeZone.getID());
+
+    String jdbcUri = template("jdbc:mysql://{{host}}:{{port}}/{{database}}")
+        .add("host", userSettings.getValue("biliomi.database.host", "localhost"))
+        .add("port", userSettings.getValue("biliomi.database.port", "3306"))
+        .add("database", userSettings.getValue("biliomi.database.database", "biliomi"))
+        .apply();
+
+    configuration.put("hibernate.connection.url", jdbcUri);
+    configuration.put("hibernate.connection.username", userSettings.getValue("biliomi.database.username", "biliomi"));
+    configuration.put("hibernate.connection.password", userSettings.getValue("biliomi.database.password", ""));
+    configuration.put("hibernate.connection.useSSL", String.valueOf(useSSL));
+    configuration.put("hibernate.hbm2ddl.auto", ddlMode);
+
+    // Create Entity manager factory
+    logger.debug("Creating entity manager factory for MySQL database...");
+    HibernatePersistenceProvider provider = new HibernatePersistenceProvider();
+    return provider.createEntityManagerFactory("Biliomi-MySQL-DS", configuration);
   }
 }
