@@ -80,7 +80,7 @@ public class StreamLabsIntegrationSetupTask implements SetupTask {
     logger.info("Biliomi can link to your Stream Labs account and watch various stats like donations, hosts etc.");
     logger.info("Would you like this? Press [Y] and [enter] to open up your browser and authorize or [ENTER] to skip Stream Labs integration:");
 
-    String input = consoleApi.waitForInput();
+    String input = consoleApi.awaitInput();
 
     if (!"Y".equals(input)) {
       logger.info("Skipping Stream Labs integration setup");

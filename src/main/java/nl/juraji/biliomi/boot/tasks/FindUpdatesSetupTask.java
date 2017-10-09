@@ -116,7 +116,7 @@ public class FindUpdatesSetupTask implements SetupTask {
     logger.info("More information about this release can be found at " + githubRelease.getUrl());
     logger.info("I can perform this update for you, would you like me to go ahead and install the latest version?");
     logger.info("Type [Y] and [enter] to install the latest version, or hit [enter] to skip:");
-    String input = consoleApi.waitForInput();
+    String input = consoleApi.awaitInput();
 
     if (!"Y".equals(input)) {
       // User does not wish to update, continue boot

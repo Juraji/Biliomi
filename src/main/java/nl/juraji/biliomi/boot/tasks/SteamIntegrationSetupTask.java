@@ -62,7 +62,7 @@ public class SteamIntegrationSetupTask implements SetupTask {
     logger.info("Open the following URL, log in to the Steam website and fill out the form to retrieve your API key");
     logger.info(getApiKeyUrl);
     logger.info("Enter your Steam API key and hit [enter], or simply hit [enter] to skip Steam integration:");
-    String apiKey = consoleApi.waitForInput();
+    String apiKey = consoleApi.awaitInput();
 
     if (StringUtils.isEmpty(apiKey)) {
       logger.info("Canceled Steam integration setup");
@@ -73,7 +73,7 @@ public class SteamIntegrationSetupTask implements SetupTask {
 
     logger.info("Note: You can use " + getUserIdUrl + " to find out your user id");
     logger.info("Enter your Steam user id and hit [enter], or hit [enter] now to skipt Steam integration:");
-    String userId = consoleApi.waitForInput();
+    String userId = consoleApi.awaitInput();
 
     if (StringUtils.isEmpty(userId)) {
       logger.info("Canceled Steam integration setup");

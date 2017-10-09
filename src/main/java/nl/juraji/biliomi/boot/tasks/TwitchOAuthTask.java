@@ -106,7 +106,7 @@ public class TwitchOAuthTask implements SetupTask {
     logger.info("Biliomi needs authorization to your channel's account, in order to fetch information on your channel and enable channel editing.");
     logger.info("Press [enter] to have biliomi open your browser to authenticate on Twitch with your channel's account...");
 
-    consoleApi.waitForInput();
+    consoleApi.awaitInput();
     installToken(oauthData::setToken,
         TwitchOAuthScope.CHAT_LOGIN,
         TwitchOAuthScope.CHANNEL_READ,
@@ -118,7 +118,7 @@ public class TwitchOAuthTask implements SetupTask {
     logger.info("Biliomi needs authorization to the bot's account, in order to be able to connect to the chat.");
     logger.info("Press [enter] to have biliomi open your browser to authenticate on Twitch with the bot's account...");
 
-    consoleApi.waitForInput();
+    consoleApi.awaitInput();
     installToken(oauthData::setToken, TwitchOAuthScope.CHAT_LOGIN);
   }
 

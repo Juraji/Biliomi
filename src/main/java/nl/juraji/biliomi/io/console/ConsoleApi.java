@@ -51,7 +51,7 @@ public class ConsoleApi implements Init {
     consoleListener.stop();
   }
 
-  public String waitForInput() throws ExecutionException, InterruptedException {
+  public String awaitInput() throws ExecutionException, InterruptedException {
     return consoleListener.nextInput().get();
   }
 

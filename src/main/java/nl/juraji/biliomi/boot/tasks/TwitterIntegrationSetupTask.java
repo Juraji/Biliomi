@@ -82,7 +82,7 @@ public class TwitterIntegrationSetupTask implements SetupTask {
     logger.info("Open the following URL and grant access to your account:");
     logger.info(requestToken.getAuthorizationURL());
     logger.info("Enter the pin presented to you and hit [enter], or simply hit [enter] to skip Twitter integration:");
-    String pinInput = consoleApi.waitForInput();
+    String pinInput = consoleApi.awaitInput();
 
     if (StringUtils.isNotEmpty(pinInput)) {
       AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, pinInput);
