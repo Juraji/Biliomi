@@ -1,6 +1,6 @@
 package nl.juraji.biliomi.components.shared;
 
-import nl.juraji.biliomi.utility.settings.UserSettings;
+import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
 import nl.juraji.biliomi.utility.exceptions.SettingsDefinitionException;
 
 import javax.annotation.PostConstruct;
@@ -23,7 +23,7 @@ public class BadWordsService {
   @PostConstruct
   private void initBadWordsService() {
     //noinspection unchecked
-    List<String> words = (List<String>) userSettings.getObjectValue("biliomi.component.badwords");
+    List<String> words = userSettings.getBiliomi().getComponents().getBadwords();
 
     if (words == null) {
       throw new SettingsDefinitionException("Missing badwords definition, check your settigns");

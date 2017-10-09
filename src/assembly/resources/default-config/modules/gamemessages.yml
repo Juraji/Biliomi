@@ -3,8 +3,8 @@
 # Use {{username}} to insert the user's display name
 
 biliomi:
-  component:
-    gamemessages:
+  components:
+    gameMessages:
       win:
         - "Congratulations!"
         - "YATZEE!"

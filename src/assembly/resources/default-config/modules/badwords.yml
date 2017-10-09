@@ -4,7 +4,7 @@
 # - Be sure to include all variants of a word, biliomi does not deobfuscate input (like 4r5e, which would be arse)
 
 biliomi:
-  component:
+  components:
     badwords:
       - "4r5e"
       - "5h1t"

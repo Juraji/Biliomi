@@ -1,6 +1,6 @@
 biliomi:
-  component:
-    slotMachine:
+  components:
+    slotMachineGame:
       # Define Slot Machine emotes from lowest to highest. The last emote will be used as jackpot emote
       # Add as many as you like, Biliomi will automagically pick up
       emotes:

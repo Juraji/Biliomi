@@ -1,6 +1,6 @@
 package nl.juraji.biliomi.components.games.tamagotchi.services;
 
-import nl.juraji.biliomi.utility.settings.UserSettings;
+import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
@@ -23,7 +23,7 @@ public class SpeciesService {
   @PostConstruct
   private void initSpeciesService() {
     //noinspection unchecked
-    species = (List<String>) userSettings.getObjectValue("biliomi.component.tamagotchis.species");
+    species = userSettings.getBiliomi().getComponents().getTamagotchis().getSpecies();
 
     if (species == null || species.size() == 0) {
       throw new RuntimeException("No tamagotchi species defined, check the settings");

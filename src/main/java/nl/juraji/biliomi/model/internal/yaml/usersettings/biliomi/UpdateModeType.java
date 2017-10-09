@@ -1,4 +1,4 @@
-package nl.juraji.biliomi.utility.settings;
+package nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi;
 
 /**
  * Created by Juraji on 22-4-2017.

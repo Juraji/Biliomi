@@ -4,7 +4,7 @@ package nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi;
  * Created by Juraji on 9-10-2017.
  * Biliomi
  */
-public class UDDatabase {
+public class USDatabase {
   private boolean useH2Database;
   private String host;
   private int port;

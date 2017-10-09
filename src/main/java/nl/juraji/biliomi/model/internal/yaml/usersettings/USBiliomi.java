@@ -1,9 +1,6 @@
 package nl.juraji.biliomi.model.internal.yaml.usersettings;
 
-import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.UDDatabase;
-import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USCore;
-import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USIntegrations;
-import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USTwitch;
+import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.*;
 
 /**
  * Created by Juraji on 9-10-2017.
@@ -11,9 +8,10 @@ import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USTwitch;
  */
 public class USBiliomi {
   private USCore core;
-  private UDDatabase database;
+  private USDatabase database;
   private USTwitch twitch;
   private USIntegrations integrations;
+  private USComponents components;
 
   public USCore getCore() {
     return core;
@@ -23,11 +21,11 @@ public class USBiliomi {
     this.core = core;
   }
 
-  public UDDatabase getDatabase() {
+  public USDatabase getDatabase() {
     return database;
   }
 
-  public void setDatabase(UDDatabase database) {
+  public void setDatabase(USDatabase database) {
     this.database = database;
   }
 
@@ -45,5 +43,13 @@ public class USBiliomi {
 
   public void setIntegrations(USIntegrations integrations) {
     this.integrations = integrations;
+  }
+
+  public USComponents getComponents() {
+    return components;
+  }
+
+  public void setComponents(USComponents components) {
+    this.components = components;
   }
 }

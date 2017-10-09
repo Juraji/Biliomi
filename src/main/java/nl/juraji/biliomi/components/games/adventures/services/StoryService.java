@@ -1,10 +1,8 @@
 package nl.juraji.biliomi.components.games.adventures.services;
 
+import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
+import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.components.adventures.USAdventuresStories;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.calculate.Numbers;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UserSetting;
-import nl.juraji.biliomi.utility.settings.AppSettingProvider;
-import nl.juraji.biliomi.utility.settings.UserSettings;
 import nl.juraji.biliomi.utility.estreams.EStream;
 import nl.juraji.biliomi.utility.exceptions.SettingsDefinitionException;
 
@@ -13,7 +11,6 @@ import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Juraji on 5-6-2017.
@@ -26,36 +23,25 @@ public class StoryService {
 
   @Inject
   private UserSettings userSettings;
-
-  @Inject
-  @UserSetting("biliomi.component.adventures.nextChapterInterval")
-  private String nextChapterInterval;
+  private long nextChapterInterval;
 
   @PostConstruct
   private void initStoryService() {
-    //noinspection unchecked
-    List<Map<String, Object>> storyData = (List<Map<String, Object>>) userSettings.getObjectValue("biliomi.component.adventures.stories");
+    List<USAdventuresStories> stories = userSettings.getBiliomi().getComponents().getAdventures().getStories();
+    nextChapterInterval = userSettings.getBiliomi().getComponents().getAdventures().getNextChapterInterval();
 
-    if (storyData == null || storyData.size() == 0) {
+    if (stories == null || stories.size() == 0) {
       throw new SettingsDefinitionException("No adventure stories defined, check the settings");
     }
 
-    boolean incorrectStoryData = storyData.stream().anyMatch(map ->
-        AppSettingProvider.isInvalidMapProperty("title", String.class, map)
-            || AppSettingProvider.isInvalidMapProperty("chapters", List.class, map));
-    if (incorrectStoryData) {
-      throw new SettingsDefinitionException("Adventure stories defined incorrectly, check the settings");
-    }
-
-    //noinspection unchecked
-    EStream.from(storyData)
-        .mapToBiEStream(data -> (String) data.get("title"), data -> (List<String>) data.get("chapters"))
+    EStream.from(stories)
+        .mapToBiEStream(USAdventuresStories::getTitle, USAdventuresStories::getChapters)
         .map(Story::new)
-        .forEach(stories::add);
+        .forEach(this.stories::add);
   }
 
   public long getNextChapterInterval() {
-    return Numbers.asNumber(nextChapterInterval).toLong();
+    return nextChapterInterval;
   }
 
   public Story getRandomStory() {

@@ -1,7 +1,7 @@
 package nl.juraji.biliomi.components.games.killgame;
 
+import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.settings.UserSettings;
 import nl.juraji.biliomi.utility.exceptions.SettingsDefinitionException;
 import nl.juraji.biliomi.utility.types.Templater;
 
@@ -26,9 +26,9 @@ public class KillMessageService {
   @PostConstruct
   private void initRouletteMessageService() {
     //noinspection unchecked
-    murdersList = (List<String>) userSettings.getObjectValue("biliomi.component.killgame.murders");
+    murdersList = userSettings.getBiliomi().getComponents().getKillGame().getMurders();
     //noinspection unchecked
-    suicidesList = (List<String>) userSettings.getObjectValue("biliomi.component.killgame.suicides");
+    suicidesList = userSettings.getBiliomi().getComponents().getKillGame().getSuicides();
 
     if (murdersList == null || murdersList.size() == 0) {
       throw new SettingsDefinitionException("No kill game murder messages defined, check the settings");

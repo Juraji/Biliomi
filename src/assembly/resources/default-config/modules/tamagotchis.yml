@@ -1,5 +1,5 @@
 biliomi:
-  component:
+  components:
     tamagotchis:
       # Define available tamagotchi species
       # Add as many as you like, Biliomi will automagically pick up

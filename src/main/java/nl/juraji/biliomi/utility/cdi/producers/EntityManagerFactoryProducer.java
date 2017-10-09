@@ -1,9 +1,10 @@
 package nl.juraji.biliomi.utility.cdi.producers;
 
 import nl.juraji.biliomi.BiliomiContainer;
+import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
+import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USDatabase;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UpdateMode;
-import nl.juraji.biliomi.utility.settings.UpdateModeType;
-import nl.juraji.biliomi.utility.settings.UserSettings;
+import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.UpdateModeType;
 import nl.juraji.biliomi.utility.types.Templater;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.jpa.HibernatePersistenceProvider;
@@ -45,7 +46,7 @@ public final class EntityManagerFactoryProducer {
 
   @PostConstruct
   private void initEntityManagerFactoryProducer() {
-    boolean useH2Database = userSettings.getBooleanValue("biliomi.database.useH2Database");
+    boolean useH2Database = userSettings.getBiliomi().getDatabase().isUseH2Database();
     String ddlMode = updateMode.getDdlMode();
 
     if (useH2Database) {
@@ -89,7 +90,8 @@ public final class EntityManagerFactoryProducer {
 
   private EntityManagerFactory setupMySQLEMF(String ddlMode) {
     Map<String, Object> configuration = new HashMap<>();
-    boolean useSSL = userSettings.getBooleanValue("biliomi.database.usessl");
+    USDatabase database = userSettings.getBiliomi().getDatabase();
+    boolean useSSL = database.isUseH2Database();
 
     // Biliomi doesn't need the MySQL server to be in the correct timezone since all dates
     // are persisted as ISO8601, but a server might stall connection if this isn't set.
@@ -97,14 +99,14 @@ public final class EntityManagerFactoryProducer {
     configuration.put("hibernate.connection.serverTimezone", timeZone.getID());
 
     String jdbcUri = template("jdbc:mysql://{{host}}:{{port}}/{{database}}")
-        .add("host", userSettings.getValue("biliomi.database.host", "localhost"))
-        .add("port", userSettings.getValue("biliomi.database.port", "3306"))
-        .add("database", userSettings.getValue("biliomi.database.database", "biliomi"))
+        .add("host", database::getHost)
+        .add("port", database::getPort)
+        .add("database", database::getDatabase)
         .apply();
 
     configuration.put("hibernate.connection.url", jdbcUri);
-    configuration.put("hibernate.connection.username", userSettings.getValue("biliomi.database.username", "biliomi"));
-    configuration.put("hibernate.connection.password", userSettings.getValue("biliomi.database.password", ""));
+    configuration.put("hibernate.connection.username", database.getUsername());
+    configuration.put("hibernate.connection.password", database.getPassword());
     configuration.put("hibernate.connection.useSSL", String.valueOf(useSSL));
     configuration.put("hibernate.hbm2ddl.auto", ddlMode);
 

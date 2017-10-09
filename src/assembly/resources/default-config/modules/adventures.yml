@@ -5,7 +5,7 @@
 # For more information on adventures check the docs
 
 biliomi:
-  component:
+  components:
     adventures:
       nextChapterInterval: 5000
       stories:

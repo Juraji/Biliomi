@@ -2,8 +2,8 @@
 # Have a little fun and put some silly projects in here
 
 biliomi:
-  component:
-    investmentgame:
+  components:
+    investmentGame:
       projects:
         - "Biliomi's Iron Throne"
         - "The Moderator lounge"

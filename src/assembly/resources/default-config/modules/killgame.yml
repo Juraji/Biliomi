@@ -4,8 +4,8 @@
 # For more information on the kill game check the docs
 
 biliomi:
-  component:
-    killgame:
+  components:
+    killGame:
       murders:
         - "{{killer}} murdered {{target}} with a unicorn's horn!"
         - "{{target}} was killed by a {{killer}}!"

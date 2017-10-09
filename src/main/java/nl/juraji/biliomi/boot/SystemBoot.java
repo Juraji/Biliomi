@@ -3,7 +3,7 @@ package nl.juraji.biliomi.boot;
 import nl.juraji.biliomi.model.core.VersionInfo;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UpdateMode;
 import nl.juraji.biliomi.utility.factories.reflections.ReflectionUtils;
-import nl.juraji.biliomi.utility.settings.UpdateModeType;
+import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.UpdateModeType;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.PostConstruct;

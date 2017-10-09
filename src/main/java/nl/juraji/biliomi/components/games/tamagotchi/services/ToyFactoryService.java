@@ -2,19 +2,16 @@ package nl.juraji.biliomi.components.games.tamagotchi.services;
 
 import nl.juraji.biliomi.model.games.Tamagotchi;
 import nl.juraji.biliomi.model.games.TamagotchiToy;
+import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
+import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.components.tamagotchis.USTamagotchiToy;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.estreams.EStream;
 import nl.juraji.biliomi.utility.exceptions.SettingsDefinitionException;
-import nl.juraji.biliomi.utility.settings.AppSettingProvider;
-import nl.juraji.biliomi.utility.settings.UserSettings;
-import nl.juraji.biliomi.utility.types.collections.CIMap;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,7 +24,7 @@ import java.util.stream.Collectors;
  */
 @Default
 public class ToyFactoryService {
-  private final CIMap<Map<String, Object>> toyData = new CIMap<>();
+  private List<USTamagotchiToy> toys;
 
   @Inject
   private UserSettings userSettings;
@@ -35,43 +32,34 @@ public class ToyFactoryService {
   @PostConstruct
   private void initToyFactoryService() {
     //noinspection unchecked
-    List<Map<String, Object>> toyTemplates = (List<Map<String, Object>>) userSettings.getObjectValue("biliomi.component.tamagotchis.toys");
+    toys = userSettings.getBiliomi().getComponents().getTamagotchis().getToys();
 
-    if (toyTemplates == null || toyTemplates.size() == 0) {
+    if (toys == null || toys.size() == 0) {
       throw new SettingsDefinitionException("No toys defined, check the settings");
     }
-
-    boolean incorrectToyData = toyTemplates.stream().anyMatch(toyDefinition ->
-        AppSettingProvider.isInvalidMapProperty("name", String.class, toyDefinition)
-            || AppSettingProvider.isInvalidMapProperty("durationDays", Integer.class, toyDefinition)
-            || AppSettingProvider.isInvalidMapProperty("foodModifier", Double.class, toyDefinition)
-            || AppSettingProvider.isInvalidMapProperty("moodModifier", Double.class, toyDefinition)
-            || AppSettingProvider.isInvalidMapProperty("hygieneModifier", Double.class, toyDefinition)
-            || AppSettingProvider.isInvalidMapProperty("cost", Integer.class, toyDefinition));
-    if (incorrectToyData) {
-      throw new RuntimeException("Tamagotchi toys defined incorrectly, check the settings");
-    }
-    EStream.from(toyTemplates)
-        .mapToBiEStream(r -> (String) r.get("name"), r -> r)
-        .forEach(this.toyData::put);
   }
 
   public Set<String> getToyNameSet() {
-    return Collections.unmodifiableSet(toyData.keySet());
+    return toys.stream()
+        .map(USTamagotchiToy::getName)
+        .collect(Collectors.toSet());
   }
 
   public TamagotchiToy getToy(String toyName) {
-    Map<String, Object> toyDefinition = toyData.get(toyName);
+    USTamagotchiToy toyDef = toys.stream()
+        .filter(usTamagotchiToy -> usTamagotchiToy.getName().equalsIgnoreCase(toyName))
+        .findFirst()
+        .orElse(null);
 
-    if (toyDefinition == null) {
+    if (toyDef == null) {
       return null;
     }
 
-    return generateToy(toyDefinition);
+    return generateToy(toyDef);
   }
 
   public List<TamagotchiToy> getList() {
-    return toyData.values().stream()
+    return toys.stream()
         .map(ToyFactoryService::generateToy)
         .collect(Collectors.toList());
   }
@@ -85,17 +73,17 @@ public class ToyFactoryService {
         .anyMatch(tamagotchiToy -> tamagotchiToy.getToyName().equals(toy.getToyName()));
   }
 
-  private static TamagotchiToy generateToy(Map<String, Object> toyDefinition) {
-    long daysInMillis = TimeUnit.MILLISECONDS.convert((int) toyDefinition.get("durationDays"), TimeUnit.DAYS);
+  private static TamagotchiToy generateToy(USTamagotchiToy toyDef) {
+    long daysInMillis = TimeUnit.MILLISECONDS.convert(toyDef.getDurationDays(), TimeUnit.DAYS);
     DateTime expiryDate = DateTime.now().plus(Duration.millis(daysInMillis));
     TamagotchiToy toy = new TamagotchiToy();
 
-    toy.setToyName((String) toyDefinition.get("name"));
+    toy.setToyName(toyDef.getName());
     toy.setExpiresAt(expiryDate);
-    toy.setFoodModifier((double) toyDefinition.get("foodModifier"));
-    toy.setMoodModifier((double) toyDefinition.get("moodModifier"));
-    toy.setHygieneModifier((double) toyDefinition.get("hygieneModifier"));
-    toy.setCost((int) toyDefinition.get("cost"));
+    toy.setFoodModifier(toyDef.getFoodModifier());
+    toy.setMoodModifier(toyDef.getMoodModifier());
+    toy.setHygieneModifier(toyDef.getHygieneModifier());
+    toy.setCost(toyDef.getCost());
 
     return toy;
   }

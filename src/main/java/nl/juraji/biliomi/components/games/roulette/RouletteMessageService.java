@@ -1,7 +1,7 @@
 package nl.juraji.biliomi.components.games.roulette;
 
+import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.settings.UserSettings;
 import nl.juraji.biliomi.utility.exceptions.SettingsDefinitionException;
 import nl.juraji.biliomi.utility.types.Templater;
 
@@ -26,9 +26,9 @@ public class RouletteMessageService {
   @PostConstruct
   private void initRouletteMessageService() {
     //noinspection unchecked
-    List<String> wins = (List<String>) userSettings.getObjectValue("biliomi.component.roulette.messages.win");
+    List<String> wins = userSettings.getBiliomi().getComponents().getRouletteGame().getWin();
     //noinspection unchecked
-    List<String> lost = (List<String>) userSettings.getObjectValue("biliomi.component.roulette.messages.lost");
+    List<String> lost = userSettings.getBiliomi().getComponents().getRouletteGame().getLost();
 
     if (wins == null || wins.size() == 0) {
       throw new SettingsDefinitionException("No roulette win messages defined, check the settings");

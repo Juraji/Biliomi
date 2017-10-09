@@ -1,7 +1,7 @@
 package nl.juraji.biliomi.components.shared;
 
+import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.settings.UserSettings;
 import nl.juraji.biliomi.utility.exceptions.SettingsDefinitionException;
 import nl.juraji.biliomi.utility.types.Templater;
 
@@ -26,9 +26,9 @@ public class GameMessagesService {
   @PostConstruct
   private void initGameMessagesService() {
     //noinspection unchecked
-    List<String> win = (List<String>) userSettings.getObjectValue("biliomi.component.gamemessages.win");
+    List<String> win = userSettings.getBiliomi().getComponents().getGameMessages().getWin();
     //noinspection unchecked
-    List<String> lost = (List<String>) userSettings.getObjectValue("biliomi.component.gamemessages.lost");
+    List<String> lost = userSettings.getBiliomi().getComponents().getGameMessages().getLost();
 
     if (win == null || win.size() == 0) {
       throw new SettingsDefinitionException("No win messages defined, check the settings");

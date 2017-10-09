@@ -1,8 +1,8 @@
 package nl.juraji.biliomi.components.games.investments;
 
+import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
 import nl.juraji.biliomi.utility.exceptions.SettingsDefinitionException;
-import nl.juraji.biliomi.utility.settings.UserSettings;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
@@ -27,7 +27,7 @@ public class InvestmentProjectService {
   @PostConstruct
   private void initInvestmentProjectService() {
     //noinspection unchecked
-    projects = (List<String>) userSettings.getObjectValue("biliomi.component.investmentgame.projects");
+    projects = userSettings.getBiliomi().getComponents().getInvestmentGame().getProjects();
 
     if (projects == null || projects.size() == 0) {
       throw new SettingsDefinitionException("No investment projects defined, check the settings");
