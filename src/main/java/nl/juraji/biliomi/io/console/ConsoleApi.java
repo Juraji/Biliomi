@@ -62,11 +62,11 @@ public class ConsoleApi implements Init {
    * @return The user input
    */
   public String awaitInput(boolean requireInput) throws ExecutionException, InterruptedException {
-    String input = null;
+    String input;
 
-    while (requireInput && (input == null || input.length() == 0)) {
+    do {
       input = consoleListener.nextInput().get();
-    }
+    } while (requireInput && (input == null || input.length() == 0));
 
     return input;
   }

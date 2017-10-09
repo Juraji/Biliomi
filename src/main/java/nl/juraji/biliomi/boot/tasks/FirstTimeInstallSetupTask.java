@@ -58,7 +58,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
 
   @Override
   public void install() {
-    if (userSettings != null && configDir.exists()) {
+    if (configDir.exists()) {
       // Configuration dir exists, which means the user already copied it.
       return;
     }
@@ -76,8 +76,6 @@ public class FirstTimeInstallSetupTask implements SetupTask {
       logger.info("This is why you need to create the applications on the appropriate platforms and supply the information here");
       logger.info("Note: The callback url will ALWAYS be: " + CallbackResources.REDIRECT_URI);
       setupTwitchUserSettings();
-
-      logger.info("The following questions are optional, you can skip these on by one by pressing [enter] without any other input");
       setupSteamLabsConsumerUserSettings();
       setupTwitterConsumerUserSettings();
       setupSpotifyConsumerUserSettings();
