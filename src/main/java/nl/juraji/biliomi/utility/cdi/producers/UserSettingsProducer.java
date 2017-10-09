@@ -67,7 +67,9 @@ public class UserSettingsProducer {
       }
     } else {
       this.userSettings = new UserSettings();
+      DeepMerge.initializePojo(this.userSettings);
       this.updateMode = UpdateModeType.INSTALL;
+      this.userSettings.getBiliomi().getCore().setUpdateMode(this.updateMode.toString());
     }
   }
 

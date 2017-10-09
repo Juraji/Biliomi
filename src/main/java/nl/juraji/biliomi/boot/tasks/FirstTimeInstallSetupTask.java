@@ -9,7 +9,6 @@ import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USCore;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USDatabase;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USTwitch;
-import nl.juraji.biliomi.utility.calculate.DeepMerge;
 import nl.juraji.biliomi.utility.calculate.Numbers;
 import nl.juraji.biliomi.utility.types.AppParameters;
 import org.apache.commons.io.FileUtils;
@@ -23,7 +22,6 @@ import org.yaml.snakeyaml.nodes.Tag;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutionException;
@@ -47,12 +45,14 @@ public class FirstTimeInstallSetupTask implements SetupTask {
 
   private final File configDir;
   private final File installDir;
+  private final File coreYamlFile;
   private final BiliomiContainer container;
 
   public FirstTimeInstallSetupTask() {
     AppParameters parameters = BiliomiContainer.getParameters();
     configDir = parameters.getConfigurationDir();
     installDir = parameters.getRootDir();
+    coreYamlFile = new File(configDir, "core.yml");
     container = BiliomiContainer.getContainer();
   }
 
@@ -64,8 +64,6 @@ public class FirstTimeInstallSetupTask implements SetupTask {
     }
 
     try {
-      DeepMerge.initializePojo(userSettings);
-
       logger.info("This is the first time you've started Biliomi, hi!");
       logger.info("Biliomi will now setup and ask you a few questions, so don't go anywhere!");
       logger.info("Note that this setup will only run once! To run this again, delete the config directory and restart Biliomi");
@@ -76,6 +74,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
 
       logger.info("For security reasons Biliomi is not shipped with any OAuth applicaiton keys");
       logger.info("This is why you need to create the applications on the appropriate platforms and supply the information here");
+      logger.info("Note: The callback url will ALWAYS be: " + CallbackResources.REDIRECT_URI);
       setupTwitchUserSettings();
 
       logger.info("The following questions are optional, you can skip these on by one by pressing [enter] without any other input");
@@ -84,8 +83,8 @@ public class FirstTimeInstallSetupTask implements SetupTask {
       setupSpotifyConsumerUserSettings();
 
       saveSettings();
-
-      logger.info("Restart Biliomi to apply your settings");
+      logger.info("Your settings have been saved. Restart Biliomi to apply your settings");
+      logger.info("Would you ever wish to edit these settings open up " + coreYamlFile.getAbsolutePath() + " in your favorite text editor");
       container.shutdownNow(0);
     } catch (Exception e) {
       try {
@@ -106,13 +105,12 @@ public class FirstTimeInstallSetupTask implements SetupTask {
     Yaml yamlInstance = new Yaml(new Constructor(UserSettings.class));
     String yamlString = yamlInstance.dumpAs(userSettings, new Tag("biliomi"), DumperOptions.FlowStyle.BLOCK);
 
-    File coreYamlFile = new File(configDir, "core.yml");
     FileUtils.writeStringToFile(coreYamlFile, yamlString, "UTF-8", false);
   }
 
   private void copyDefaultConfigDir() throws IOException {
     File defaultConfigDir = new File(installDir, "default-config");
-    logger.info("Copying " + defaultConfigDir.getPath() + " to " + configDir.getPath() + "...");
+    logger.info("Copying " + defaultConfigDir.getAbsolutePath() + " to " + configDir.getAbsolutePath() + "...");
     FileUtils.copyDirectory(defaultConfigDir, configDir);
     logger.info("Default settings copied to " + configDir.getPath());
   }
@@ -128,7 +126,6 @@ public class FirstTimeInstallSetupTask implements SetupTask {
     String input;
 
     logger.info("Would you like Biliomi to automatically check for updates on startup? [Y/N]:");
-    logger.info("Note: The callback url will ALWAYS be: " + CallbackResources.REDIRECT_URI);
     input = consoleApi.awaitInput(true);
     usCore.setCheckForUpdates("Y".equalsIgnoreCase(input));
 

@@ -102,6 +102,7 @@ public final class DeepMerge {
 
     EStream.from(descriptors)
         .filter(propertyDescriptor -> !isPrimitive(propertyDescriptor))
+        .filter(propertyDescriptor -> PropertyUtils.getProperty(o, propertyDescriptor.getName()) == null)
         .forEach(propertyDescriptor -> {
           Class<?> type = propertyDescriptor.getPropertyType();
           Object subO = type.newInstance();
