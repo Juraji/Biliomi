@@ -58,5 +58,6 @@ public class ConsoleApi implements Init {
   public void initCliCommands() {
     // Select the CliCommandrouter so it bootstraps
     CDI.current().select(CliCommandRouter.class).get();
+    logger.debug("CLI command router initialized");
   }
 }
