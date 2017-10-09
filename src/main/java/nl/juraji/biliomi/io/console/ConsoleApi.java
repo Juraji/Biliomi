@@ -52,9 +52,28 @@ public class ConsoleApi implements Init {
   }
 
   public String awaitInput() throws ExecutionException, InterruptedException {
-    return consoleListener.nextInput().get();
+    return awaitInput(false);
   }
 
+  /**
+   * Await user input in the console
+   *
+   * @param requireInput If True the method will block until the user enters an non-null value
+   * @return The user input
+   */
+  public String awaitInput(boolean requireInput) throws ExecutionException, InterruptedException {
+    String input = null;
+
+    while (requireInput && (input == null || input.length() == 0)) {
+      input = consoleListener.nextInput().get();
+    }
+
+    return input;
+  }
+
+  /**
+   * Initialize the CLI command router
+   */
   public void initCliCommands() {
     // Select the CliCommandrouter so it bootstraps
     CDI.current().select(CliCommandRouter.class).get();

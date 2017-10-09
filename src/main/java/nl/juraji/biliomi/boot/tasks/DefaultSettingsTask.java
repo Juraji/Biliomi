@@ -19,7 +19,7 @@ import java.util.Objects;
  * Biliomi v3
  */
 @Default
-@SetupTaskPriority(priority = 1) // Second
+@SetupTaskPriority(priority = 2)
 public class DefaultSettingsTask implements SetupTask {
 
   @Inject

@@ -21,7 +21,7 @@ import java.util.List;
  * Biliomi v3
  */
 @Default
-@SetupTaskPriority(priority = 2) // Third
+@SetupTaskPriority(priority = 3)
 public class DefaultGroupsAndUsersTask implements SetupTask {
 
   @Inject

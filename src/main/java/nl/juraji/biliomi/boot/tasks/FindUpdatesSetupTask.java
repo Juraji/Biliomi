@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  * Biliomi
  */
 @Default
-@SetupTaskPriority(priority = 0) // First
+@SetupTaskPriority(priority = 1)
 public class FindUpdatesSetupTask implements SetupTask {
   private static final String DOWNLOAD_CONTENT_TYPE = "application/x-gzip";
 

@@ -3,8 +3,8 @@ package nl.juraji.biliomi.utility.cdi.producers;
 import nl.juraji.biliomi.BiliomiContainer;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.UpdateModeType;
-import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.calculate.DeepMerge;
+import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.BotName;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.ChannelName;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UpdateMode;
@@ -38,19 +38,37 @@ import java.util.Objects;
 public class UserSettingsProducer {
 
   private UserSettings userSettings;
+  private UpdateModeType updateMode;
 
   @PostConstruct
   private void initUserSettingsProducer() {
     File configurationDir = BiliomiContainer.getParameters().getConfigurationDir();
-    Yaml yamlInstance = new Yaml(new Constructor(UserSettings.class));
 
-    Collection<File> files = FileUtils.listFiles(configurationDir, new String[]{"yml"}, true);
+    if (configurationDir.exists()) {
+      Collection<File> files = FileUtils.listFiles(configurationDir, new String[]{"yml"}, true);
 
-    userSettings = EStream.from(files)
-        .filter(Objects::nonNull)
-        .map(file -> yamlInstance.loadAs(new FileInputStream(file), UserSettings.class))
-        .reduce(DeepMerge::mergePojo)
-        .orElse(null);
+      Yaml yamlInstance = new Yaml(new Constructor(UserSettings.class));
+      userSettings = EStream.from(files)
+          .filter(Objects::nonNull)
+          .map(file -> yamlInstance.loadAs(new FileInputStream(file), UserSettings.class))
+          .reduce(DeepMerge::mergePojo)
+          .orElse(null);
+
+      if (userSettings == null) {
+        throw new IllegalStateException("Failed to load configuration from " + configurationDir.getAbsolutePath());
+      }
+
+      String updateMode = userSettings.getBiliomi().getCore().getUpdateMode();
+      // Somehow Yaml thinks "off" means "false"
+      if (StringUtils.isEmpty(updateMode)) {
+        this.updateMode = UpdateModeType.OFF;
+      } else {
+        this.updateMode = EnumUtils.toEnum(updateMode, UpdateModeType.class);
+      }
+    } else {
+      this.userSettings = new UserSettings();
+      this.updateMode = UpdateModeType.INSTALL;
+    }
   }
 
   @Produces
@@ -87,14 +105,7 @@ public class UserSettingsProducer {
   @Produces
   @UpdateMode
   public UpdateModeType getUpdateMode() {
-    String updateMode = userSettings.getBiliomi().getCore().getUpdateMode();
-
-    // Somehow Yaml thinks "off" means "false"
-    if (StringUtils.isEmpty(updateMode)) {
-      return UpdateModeType.OFF;
-    }
-
-    return EnumUtils.toEnum(updateMode, UpdateModeType.class);
+    return updateMode;
   }
 
   @Produces

@@ -29,7 +29,7 @@ import java.util.function.Consumer;
  * Biliomi v3
  */
 @Default
-@SetupTaskPriority(priority = 3) // Fourth
+@SetupTaskPriority(priority = 4)
 public class TwitchOAuthTask implements SetupTask {
 
   @Inject

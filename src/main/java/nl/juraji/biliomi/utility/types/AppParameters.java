@@ -67,6 +67,10 @@ public class AppParameters {
     return file;
   }
 
+  public File getRootDir() {
+    return new File("./");
+  }
+
   public String getCasterOAuth() {
     return casterOAuth;
   }

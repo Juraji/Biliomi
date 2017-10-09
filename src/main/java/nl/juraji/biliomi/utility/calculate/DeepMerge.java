@@ -84,7 +84,7 @@ public final class DeepMerge {
         if (targetValue == null) {
           PropertyUtils.setProperty(target, propertyDescriptor.getName(), sourceValue);
         } else {
-          if (ClassUtils.isPrimitiveOrWrapper(propertyDescriptor.getPropertyType()) || targetValue.getClass().equals(Class.class)) {
+          if (isPrimitive(propertyDescriptor)) {
             if (targetValue != sourceValue) {
               PropertyUtils.setProperty(target, propertyDescriptor.getName(), sourceValue);
             }
@@ -95,5 +95,26 @@ public final class DeepMerge {
       }
     });
     return target;
+  }
+
+  public static void initializePojo(Object o) {
+    PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(o);
+
+    EStream.from(descriptors)
+        .filter(propertyDescriptor -> !isPrimitive(propertyDescriptor))
+        .forEach(propertyDescriptor -> {
+          Class<?> type = propertyDescriptor.getPropertyType();
+          Object subO = type.newInstance();
+          PropertyUtils.setProperty(o, propertyDescriptor.getName(), subO);
+          initializePojo(subO);
+        });
+  }
+
+  private static boolean isPrimitive(PropertyDescriptor pd) {
+    Class<?> type = pd.getPropertyType();
+    return (ClassUtils.isPrimitiveOrWrapper(type)
+        || Class.class.equals(type)
+        || String.class.equals(type)
+        || Collection.class.isAssignableFrom(type));
   }
 }
