@@ -36,6 +36,12 @@ Pull requests are always welcome, tho I must tell you I'm very picky.<br>
 Sidenote on pull requests: Your IDE might support editor config, or maybe there's a plugin.
 Use it, it's half of your work done for you
 
+## Release schedule
+* Minor versions, mostly including new features:<br>
+Every week on sunday if changes have been made.
+* Micro versions, mostly bugfixes and security fixes:<br>
+As soon as they are available and tested.
+
 ## "Read the docs"
 Sadly I haven't had any time yet to set up proper documentation for Biliomi.<br>
 While I'm working on that, here are some pointers to give you a headstart:
