@@ -1,12 +1,13 @@
 package nl.juraji.biliomi.components.chat.hosts;
 
+import nl.juraji.biliomi.components.interfaces.Component;
+import nl.juraji.biliomi.components.interfaces.enums.OnOff;
+import nl.juraji.biliomi.components.shared.TemplateSetup;
+import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.settings.HostWatchSettings;
-import nl.juraji.biliomi.components.interfaces.Component;
-import nl.juraji.biliomi.components.interfaces.enums.OnOff;
-import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.calculate.Numbers;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
@@ -110,27 +111,10 @@ public class HostWatchComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "hostwatch", command = "sethostnotice")
   public boolean hostWatchsethostnoticeCommand(User user, Arguments arguments) {
-    String newTemplate = arguments.toString();
-
-    if (StringUtils.isEmpty(newTemplate)) {
-      chat.whisper(user, l10n.get("ChatCommand.hostWatch.sethostnotice.usage"));
-      return false;
-    }
-
-    Template template = templateDao.getByKey(INCOMING_HOST_NOTICE_TEMPLATE);
-    OnOff onOff = EnumUtils.toEnum(newTemplate, OnOff.class);
-
-    assert template != null; // Template cannot be null since it's set during install/update
-    if (OnOff.OFF.equals(onOff)) {
-      template.setTemplate("");
-      templateDao.save(template);
-      chat.whisper(user, l10n.get("ChatCommand.hostWatch.sethostnotice.disabled"));
-    } else {
-      template.setTemplate(newTemplate);
-      templateDao.save(template);
-      chat.whisper(user, l10n.get("ChatCommand.hostWatch.sethostnotice.saved"));
-    }
-
-    return true;
+    return new TemplateSetup(templateDao, chat, l10n)
+        .withCommandUsageKey("ChatCommand.hostWatch.sethostnotice.usage")
+        .withTemplateDisabledKey("ChatCommand.hostWatch.sethostnotice.disabled")
+        .withTemplatedSavedKey("ChatCommand.hostWatch.sethostnotice.saved")
+        .apply(user, arguments.toString(), INCOMING_HOST_NOTICE_TEMPLATE);
   }
 }

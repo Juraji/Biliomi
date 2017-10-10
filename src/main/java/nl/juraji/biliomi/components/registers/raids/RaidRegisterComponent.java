@@ -1,5 +1,6 @@
 package nl.juraji.biliomi.components.registers.raids;
 
+import nl.juraji.biliomi.components.shared.TemplateSetup;
 import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
@@ -118,21 +119,10 @@ public class RaidRegisterComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "raidregister", command = "message")
   public boolean raidRegisterCommandMessage(User user, Arguments arguments) {
-    String newRaidMesssage = arguments.toString();
-
-    if (StringUtils.isEmpty(newRaidMesssage)) {
-      chat.whisper(user, l10n.get("ChatCommand.raidregister.message.usage"));
-      return false;
-    }
-
-    Template template = templateDao.getByKey(RAID_MESSAGE_TEMPLATE_ID);
-
-    assert template != null; // Template cannot be null since it's set during install/update
-    template.setTemplate(newRaidMesssage);
-    templateDao.save(template);
-
-    chat.whisper(user, l10n.get("ChatCommand.raidregister.message.saved"));
-    return true;
+    return new TemplateSetup(templateDao, chat, l10n)
+        .withCommandUsageKey("ChatCommand.raidregister.message.usage")
+        .withTemplatedSavedKey("ChatCommand.raidregister.message.saved")
+        .apply(user, arguments.toString(), RAID_MESSAGE_TEMPLATE_ID);
   }
 
   /**
@@ -141,20 +131,9 @@ public class RaidRegisterComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "raidregister", command = "incomingmessage")
   public boolean raidRegisterIncomingMessageCommand(User user, Arguments arguments) {
-    String newRaidMesssage = arguments.toString();
-
-    if (StringUtils.isEmpty(newRaidMesssage)) {
-      chat.whisper(user, l10n.get("ChatCommand.raidregister.incomingmessage.usage"));
-      return false;
-    }
-
-    Template template = templateDao.getByKey(RAID_MESSAGE_TEMPLATE_ID);
-
-    assert template != null; // Template cannot be null since it's set during install/update
-    template.setTemplate(newRaidMesssage);
-    templateDao.save(template);
-
-    chat.whisper(user, l10n.get("ChatCommand.raidregister.incomingmessage.saved"));
-    return true;
+    return new TemplateSetup(templateDao, chat, l10n)
+        .withCommandUsageKey("ChatCommand.raidregister.incomingmessage.usage")
+        .withTemplatedSavedKey("ChatCommand.raidregister.incomingmessage.saved")
+        .apply(user, arguments.toString(), INCOMING_RAID_MESSAGE_TEMPLATE_ID);
   }
 }

@@ -1,5 +1,6 @@
 package nl.juraji.biliomi.components.chat.subscribers;
 
+import nl.juraji.biliomi.components.shared.TemplateSetup;
 import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
@@ -19,6 +20,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import static nl.juraji.biliomi.components.chat.subscribers.SubscriberWatchConstants.*;
 
 /**
  * Created by Juraji on 3-9-2017.
@@ -105,28 +108,11 @@ public class SubscriberWatchComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "subscriberwatch", command = "setsubnotice")
   public boolean subscriberWatchsetsubnoticeTemplateCommand(User user, Arguments arguments) {
-    String newTemplate = arguments.toString();
-
-    if (StringUtils.isEmpty(newTemplate)) {
-      chat.whisper(user, l10n.get("ChatCommand.subscriberWatch.setsubnotice.usage"));
-      return false;
-    }
-
-    Template template = templateDao.getByKey(SubscriberWatchConstants.SUB_NOTICE_TEMPLATE);
-    OnOff onOff = EnumUtils.toEnum(newTemplate, OnOff.class);
-
-    assert template != null; // Template cannot be null since it's set during install/update
-    if (OnOff.OFF.equals(onOff)) {
-      template.setTemplate("");
-      templateDao.save(template);
-      chat.whisper(user, l10n.get("ChatCommand.followerWatch.setsubnotice.disabled"));
-    } else {
-      template.setTemplate(newTemplate);
-      templateDao.save(template);
-      chat.whisper(user, l10n.get("ChatCommand.followerWatch.setsubnotice.saved"));
-    }
-
-    return true;
+    return new TemplateSetup(templateDao, chat, l10n)
+        .withCommandUsageKey("ChatCommand.subscriberWatch.setsubnotice.usage")
+        .withTemplateDisabledKey("ChatCommand.followerWatch.setsubnotice.disabled")
+        .withTemplatedSavedKey("ChatCommand.followerWatch.setsubnotice.saved")
+        .apply(user, arguments.toString(), SUB_NOTICE_TEMPLATE);
   }
 
   /**
@@ -135,27 +121,10 @@ public class SubscriberWatchComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "subscriberwatch", command = "setresubnotice")
   public boolean subscriberWatchsetresubnoticeTemplateCommand(User user, Arguments arguments) {
-    String newTemplate = arguments.toString();
-
-    if (StringUtils.isEmpty(newTemplate)) {
-      chat.whisper(user, l10n.get("ChatCommand.subscriberWatch.setresubnotice.usage"));
-      return false;
-    }
-
-    Template template = templateDao.getByKey(SubscriberWatchConstants.RESUB_NOTICE_TEMPLATE);
-    OnOff onOff = EnumUtils.toEnum(newTemplate, OnOff.class);
-
-    assert template != null; // Template cannot be null since it's set during install/update
-    if (OnOff.OFF.equals(onOff)) {
-      template.setTemplate("");
-      templateDao.save(template);
-      chat.whisper(user, l10n.get("ChatCommand.followerWatch.setresubnotice.disabled"));
-    } else {
-      template.setTemplate(newTemplate);
-      templateDao.save(template);
-      chat.whisper(user, l10n.get("ChatCommand.followerWatch.setresubnotice.saved"));
-    }
-
-    return true;
+    return new TemplateSetup(templateDao, chat, l10n)
+        .withCommandUsageKey("ChatCommand.subscriberWatch.setresubnotice.usage")
+        .withTemplateDisabledKey("ChatCommand.followerWatch.setresubnotice.disabled")
+        .withTemplatedSavedKey("ChatCommand.followerWatch.setresubnotice.saved")
+        .apply(user, arguments.toString(), RESUB_NOTICE_TEMPLATE);
   }
 }

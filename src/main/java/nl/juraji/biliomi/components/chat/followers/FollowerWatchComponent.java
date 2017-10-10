@@ -1,5 +1,6 @@
 package nl.juraji.biliomi.components.chat.followers;
 
+import nl.juraji.biliomi.components.shared.TemplateSetup;
 import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
@@ -17,6 +18,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import static nl.juraji.biliomi.components.chat.followers.FollowerWatchConstants.INCOMING_FOLLOW_NOTICE;
 
 /**
  * Created by Juraji on 27-4-2017.
@@ -85,27 +88,10 @@ public class FollowerWatchComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "followerwatch", command = "setfollowernotice")
   public boolean followerWatchsetfollowernoticeCommand(User user, Arguments arguments) {
-    String newTemplate = arguments.toString();
-
-    if (StringUtils.isEmpty(newTemplate)) {
-      chat.whisper(user, l10n.get("ChatCommand.followerWatch.setfollowernotice.usage"));
-      return false;
-    }
-
-    Template template = templateDao.getByKey(FollowerWatchConstants.INCOMING_FOLLOW_NOTICE);
-    OnOff onOff = EnumUtils.toEnum(newTemplate, OnOff.class);
-
-    assert template != null; // Template cannot be null since it's set during install/update
-    if (OnOff.OFF.equals(onOff)) {
-      template.setTemplate("");
-      templateDao.save(template);
-      chat.whisper(user, l10n.get("ChatCommand.followerWatch.setfollowernotice.disabled"));
-    } else {
-      template.setTemplate(newTemplate);
-      templateDao.save(template);
-      chat.whisper(user, l10n.get("ChatCommand.followerWatch.setfollowernotice.saved"));
-    }
-
-    return true;
+    return new TemplateSetup(templateDao, chat, l10n)
+        .withCommandUsageKey("ChatCommand.followerWatch.setfollowernotice.usage")
+        .withTemplateDisabledKey("ChatCommand.followerWatch.setfollowernotice.disabled")
+        .withTemplatedSavedKey("ChatCommand.followerWatch.setfollowernotice.saved")
+        .apply(user, arguments.toString(), INCOMING_FOLLOW_NOTICE);
   }
 }

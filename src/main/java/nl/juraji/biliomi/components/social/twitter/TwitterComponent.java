@@ -1,5 +1,6 @@
 package nl.juraji.biliomi.components.social.twitter;
 
+import nl.juraji.biliomi.components.shared.TemplateSetup;
 import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchStream;
 import nl.juraji.biliomi.io.api.twitter.v1.TwitterApi;
 import nl.juraji.biliomi.model.core.Template;
@@ -127,21 +128,10 @@ public class TwitterComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "twitter", command = "setupdatetemplate")
   public boolean twitterSetUpdateTemplateCommand(User user, Arguments arguments) {
-    String newTemplate = arguments.toString();
-
-    if (StringUtils.isEmpty(newTemplate)) {
-      chat.whisper(user, l10n.get("ChatCommand.twitter.setupdatetemplate.usage"));
-      return false;
-    }
-
-    Template template = templateDao.getByKey(TWITTER_UPDATE_TEMPLATE_ID);
-
-    assert template != null; // Template cannot be null since it's set during install/update
-    template.setTemplate(newTemplate);
-
-    templateDao.save(template);
-    chat.whisper(user, l10n.get("ChatCommand.twitter.setupdatetemplate.set"));
-    return true;
+    return new TemplateSetup(templateDao, chat, l10n)
+        .withCommandUsageKey("ChatCommand.twitter.setupdatetemplate.usage")
+        .withTemplatedSavedKey("ChatCommand.twitter.setupdatetemplate.set")
+        .apply(user, arguments.toString(), TWITTER_UPDATE_TEMPLATE_ID);
   }
 
   /**
@@ -187,22 +177,10 @@ public class TwitterComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "twitter", command = "setwordmatchedtemplate")
   public boolean twitterSetWordMatchedTemplateCommand(User user, Arguments arguments) {
-    String newTemplate = arguments.toString();
-
-    if (StringUtils.isEmpty(newTemplate)) {
-      chat.whisper(user, l10n.get("ChatCommand.twitter.setwordmatchedtemplate.usage"));
-      return false;
-    }
-
-    Template template = templateDao.getByKey(TWITTER_TWEET_FOUND_TEMPLATE_ID);
-
-    assert template != null; // Template cannot be null since it's set during install/update
-    template.setTemplate(newTemplate);
-
-    templateDao.save(template);
-    tweetTrackerService.restart();
-    chat.whisper(user, l10n.get("ChatCommand.twitter.setwordmatchedtemplate.set"));
-    return true;
+    return new TemplateSetup(templateDao, chat, l10n)
+        .withCommandUsageKey("ChatCommand.twitter.setwordmatchedtemplate.usage")
+        .withTemplatedSavedKey("ChatCommand.twitter.setwordmatchedtemplate.set")
+        .apply(user, arguments.toString(), TWITTER_TWEET_FOUND_TEMPLATE_ID);
   }
 
   @CliCommandRoute(command = "tweettrackerstatus", description = "Get information on the tweet tracker")
