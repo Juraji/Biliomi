@@ -72,6 +72,18 @@ public class ConsoleApi implements Init {
   }
 
   /**
+   * Await Y/N option from user
+   * - Requires input
+   * - Anything other than "y" or "Y" will be treated as no
+   *
+   * @return True if the user entered "y" or "Y" else false
+   */
+  public boolean awaitYesNo() throws ExecutionException, InterruptedException {
+    String input = awaitInput(true);
+    return "Y".equalsIgnoreCase(input);
+  }
+
+  /**
    * Initialize the CLI command router
    */
   public void initCliCommands() {

@@ -12,6 +12,9 @@ import org.apache.logging.log4j.Logger;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
+import java.awt.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -47,7 +50,7 @@ public class SteamIntegrationSetupTask implements SetupTask {
     if (userToken.getToken() == null) {
       try {
         installSteamToken();
-      } catch (ExecutionException | InterruptedException e) {
+      } catch (Exception e) {
         logger.error("Failed setting up Steam integration", e);
       }
     }
@@ -58,29 +61,26 @@ public class SteamIntegrationSetupTask implements SetupTask {
     return "Setup Steam integration";
   }
 
-  private void installSteamToken() throws ExecutionException, InterruptedException {
-    logger.info("Open the following URL, log in to the Steam website and fill out the form to retrieve your API key");
-    logger.info(getApiKeyUrl);
-    logger.info("Enter your Steam API key and hit [enter], or simply hit [enter] to skip Steam integration:");
-    String apiKey = consoleApi.awaitInput();
-
-    if (StringUtils.isEmpty(apiKey)) {
+  private void installSteamToken() throws Exception {
+    logger.info("Would you like to set up Steam integration now? [Y/N]");
+    if (!consoleApi.awaitYesNo()) {
       logger.info("Canceled Steam integration setup");
       return;
     }
 
+    logger.info("You will need a Steam Api key");
+    logger.info("Hit [enter] to open up " + getApiKeyUrl + " fill out the form");
+    Desktop.getDesktop().browse(new URI(getApiKeyUrl));
+
+    logger.info("Enter your Steam API key and hit [enter]:");
+    String apiKey = consoleApi.awaitInput(true);
     userToken.setToken(apiKey);
 
     logger.info("Note: You can use " + getUserIdUrl + " to find out your user id");
-    logger.info("Enter your Steam user id and hit [enter], or hit [enter] now to skipt Steam integration:");
-    String userId = consoleApi.awaitInput();
-
-    if (StringUtils.isEmpty(userId)) {
-      logger.info("Canceled Steam integration setup");
-      return;
-    }
-
+    logger.info("Enter your Steam user id and hit [enter]:");
+    String userId = consoleApi.awaitInput(true);
     userToken.setUserId(userId);
+
     authTokenDao.save(userToken);
     logger.info("Successfully set up Steam integration");
   }

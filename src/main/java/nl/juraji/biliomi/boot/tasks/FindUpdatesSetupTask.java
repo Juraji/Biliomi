@@ -114,11 +114,8 @@ public class FindUpdatesSetupTask implements SetupTask {
   private void runUpdateInstaller(GithubRelease githubRelease) throws Exception {
     logger.info("A new version of Biliomi is available: " + versionInfo.getVersion() + " -> " + githubRelease.getTagName());
     logger.info("More information about this release can be found at " + githubRelease.getUrl());
-    logger.info("I can perform this update for you, would you like me to go ahead and install the latest version?");
-    logger.info("Type [Y] and [enter] to install the latest version, or hit [enter] to skip:");
-    String input = consoleApi.awaitInput();
-
-    if (!"Y".equals(input)) {
+    logger.info("I can perform this update for you, would you like me to go ahead and install the latest version? [Y/N]");
+    if (!consoleApi.awaitYesNo()) {
       // User does not wish to update, continue boot
       return;
     }

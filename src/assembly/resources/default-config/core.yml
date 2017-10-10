@@ -51,7 +51,7 @@ biliomi:
       # Stream labs is used for automatically registering incoming donations and Twitch hosts.
       # Note: Due to the lack of proper host events support by the Twitch API, this integration is currently the only way
       # to receive host notifications from Biliomi.
-      # Application registration: https://www.twitch.tv/kraken/oauth2/clients/new
+      # Application registration: https://streamlabs.com/dashboard/#/apps/register
       consumerKey: null
       consumerSecret: null
 

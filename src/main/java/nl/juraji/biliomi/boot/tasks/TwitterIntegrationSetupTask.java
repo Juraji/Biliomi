@@ -75,6 +75,12 @@ public class TwitterIntegrationSetupTask implements SetupTask {
   }
 
   private void installTwitterToken(AuthToken token) throws TwitterException, ExecutionException, InterruptedException {
+    logger.info("Would you like ot set up Twitter integration now? [Y/N]");
+    if (!consoleApi.awaitYesNo()) {
+      logger.info("Canceled Twitter integration setup");
+      return;
+    }
+
     Twitter twitter = new TwitterFactory().getInstance();
     twitter.setOAuthConsumer(consumerKey, consumerSecret);
 
@@ -82,17 +88,13 @@ public class TwitterIntegrationSetupTask implements SetupTask {
     logger.info("Open the following URL and grant access to your account:");
     logger.info(requestToken.getAuthorizationURL());
     logger.info("Enter the pin presented to you and hit [enter], or simply hit [enter] to skip Twitter integration:");
-    String pinInput = consoleApi.awaitInput();
+    String pinInput = consoleApi.awaitInput(true);
 
-    if (StringUtils.isNotEmpty(pinInput)) {
-      AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, pinInput);
-      token.setToken(accessToken.getToken());
-      token.setSecret(accessToken.getTokenSecret());
-      token.setUserId(String.valueOf(accessToken.getUserId()));
-      authTokenDao.save(token);
-      logger.info("Successfully set up Twitter integration");
-    } else {
-      logger.info("Canceled Twitter integration setup");
-    }
+    AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, pinInput);
+    token.setToken(accessToken.getToken());
+    token.setSecret(accessToken.getTokenSecret());
+    token.setUserId(String.valueOf(accessToken.getUserId()));
+    authTokenDao.save(token);
+    logger.info("Successfully set up Twitter integration");
   }
 }

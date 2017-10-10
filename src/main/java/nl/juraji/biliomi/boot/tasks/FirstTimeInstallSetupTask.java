@@ -9,6 +9,7 @@ import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USCore;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USDatabase;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USTwitch;
+import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.integrations.USIntegrationConsumer;
 import nl.juraji.biliomi.utility.calculate.Numbers;
 import nl.juraji.biliomi.utility.types.AppParameters;
 import org.apache.commons.io.FileUtils;
@@ -21,10 +22,12 @@ import org.yaml.snakeyaml.nodes.Tag;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.concurrent.ExecutionException;
+import java.net.URI;
+import java.util.function.Consumer;
 
 /**
  * Created by Juraji on 9-10-2017.
@@ -65,6 +68,12 @@ public class FirstTimeInstallSetupTask implements SetupTask {
 
     try {
       logger.info("This is the first time you've started Biliomi, hi!");
+
+      if (!Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+        logger.info("You will need to install Biliomi on a PC with a desktop environment, " +
+            "since you will need a browser to set up OAuth authorizations");
+      }
+
       logger.info("Biliomi will now setup and ask you a few questions, so don't go anywhere!");
       logger.info("Note that this setup will only run once! To run this again, delete the config directory and restart Biliomi");
 
@@ -87,13 +96,20 @@ public class FirstTimeInstallSetupTask implements SetupTask {
     } catch (Exception e) {
       try {
         logger.error("Installation failed, reverting changes...", e);
-        deleteCopiedConfig();
+        if (configDir.exists()) {
+          FileUtils.deleteDirectory(configDir);
+        }
       } catch (IOException e1) {
         logger.info("Failed reverting changes", e);
       } finally {
         container.shutdownInError();
       }
     }
+  }
+
+  @Override
+  public String getDisplayName() {
+    return "First Time Setup";
   }
 
   private void saveSettings() throws InvocationTargetException, IllegalAccessException, IOException {
@@ -113,19 +129,12 @@ public class FirstTimeInstallSetupTask implements SetupTask {
     logger.info("Default settings copied to " + configDir.getPath());
   }
 
-  private void deleteCopiedConfig() throws IOException {
-    if (configDir.exists()) {
-      FileUtils.deleteDirectory(configDir);
-    }
-  }
-
-  private void setupCoreUserSettings() throws ExecutionException, InterruptedException {
+  private void setupCoreUserSettings() throws Exception {
     USCore usCore = userSettings.getBiliomi().getCore();
     String input;
 
     logger.info("Would you like Biliomi to automatically check for updates on startup? [Y/N]:");
-    input = consoleApi.awaitInput(true);
-    usCore.setCheckForUpdates("Y".equalsIgnoreCase(input));
+    usCore.setCheckForUpdates(consoleApi.awaitYesNo());
 
     logger.info("I need your ISO 3166 country code");
     logger.info("You can find out the correct setting for you on https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2");
@@ -136,15 +145,14 @@ public class FirstTimeInstallSetupTask implements SetupTask {
     userSettings.getBiliomi().setCore(usCore);
   }
 
-  private void setupDatabaseUserSettings() throws ExecutionException, InterruptedException {
+  private void setupDatabaseUserSettings() throws Exception {
     USDatabase usDatabase = userSettings.getBiliomi().getDatabase();
     String input;
 
     logger.info("Biliomi is able to either connect to a MySQL database or use a local database");
     logger.info("Note that it is strongly recommended to use a MySQL databse, since the local database will be very slow");
     logger.info("Do you want to use the local database? [Y/N]:");
-    input = consoleApi.awaitInput(true);
-    if (input.equalsIgnoreCase("Y")) {
+    if (consoleApi.awaitYesNo()) {
       usDatabase.setUseH2Database(true);
     } else {
       usDatabase.setUseH2Database(false);
@@ -175,39 +183,70 @@ public class FirstTimeInstallSetupTask implements SetupTask {
       usDatabase.setPassword(input);
 
       logger.info("Does Biliomi need to use SSL in order to connect to the database? [Y/N]");
-      input = consoleApi.awaitInput(true);
-      usDatabase.setUsessl("Y".equalsIgnoreCase(input));
+      usDatabase.setUsessl(consoleApi.awaitYesNo());
     }
   }
 
-  private void setupTwitchUserSettings() throws ExecutionException, InterruptedException {
+  private void setupTwitchUserSettings() throws Exception {
     USTwitch usTwitch = userSettings.getBiliomi().getTwitch();
     String input;
 
     logger.info("Create an application for Biliomi on Twitch");
-    logger.info("You can do this by heading over to https://www.twitch.tv/kraken/oauth2/clients/new and use the callback uri stated above");
+    logger.info("Hit [enter] to open up https://www.twitch.tv/kraken/oauth2/clients/new and use the callback uri stated above");
+    consoleApi.awaitInput();
+    Desktop.getDesktop().browse(new URI("https://www.twitch.tv/kraken/oauth2/clients/new"));
+
     logger.info("When your done enter the Client ID presented to you:");
     input = consoleApi.awaitInput(true);
     usTwitch.setClientId(input);
 
-    logger.info("Now I need to know what the Twitch account name of Biliomi is/will be:");
+    logger.info("Biliomi needs its own Twitch account in order to be able to talk in your chat, please create one of you haven't already");
+    logger.info("Tho not nescessary, it's wise to also make Biliomi's Twitch account an editor on your channel");
+    logger.info("Enter the Twitch account name of Biliomi is/will be in lowercase:");
     input = consoleApi.awaitInput(true);
     usTwitch.getLogin().setBotUsername(input);
 
-    logger.info("Enter your own Twitch account name:");
+    logger.info("Enter your own Twitch account name in lowercase:");
     input = consoleApi.awaitInput(true);
     usTwitch.getLogin().setChannelUsername(input);
   }
 
-  private void setupSteamLabsConsumerUserSettings() {
-    // Todo: Implement me
+  private void setupSteamLabsConsumerUserSettings() throws Exception {
+    USIntegrationConsumer streamLabs = userSettings.getBiliomi().getIntegrations().getStreamLabs();
+    setupIntegration("Stream Labs", "https://streamlabs.com/dashboard/#/apps/register",
+        streamLabs::setConsumerKey, streamLabs::setConsumerSecret);
   }
 
-  private void setupTwitterConsumerUserSettings() {
-    // Todo: Implement me
+  private void setupTwitterConsumerUserSettings() throws Exception {
+    USIntegrationConsumer twitter = userSettings.getBiliomi().getIntegrations().getTwitter();
+    setupIntegration("Twitter", "https://apps.twitter.com/",
+        twitter::setConsumerKey, twitter::setConsumerSecret);
   }
 
-  private void setupSpotifyConsumerUserSettings() {
-    // Todo: Implement me
+  private void setupSpotifyConsumerUserSettings() throws Exception {
+    USIntegrationConsumer spotify = userSettings.getBiliomi().getIntegrations().getSpotify();
+    setupIntegration("Spotify", "https://developer.spotify.com/my-applications",
+        spotify::setConsumerKey, spotify::setConsumerSecret);
+  }
+
+  private void setupIntegration(String name, String appCreationUrl, Consumer<String> keySetter, Consumer<String> secretSetter) throws Exception {
+    String input;
+
+    logger.info("Do you want to setup the " + name + " integration? [Y/N]");
+    if (consoleApi.awaitYesNo()) {
+      logger.info("You will need to setup a " + name + " application on your account");
+      logger.info("Hit [enter] to open up " + appCreationUrl + " and use the callback uri stated above");
+
+      consoleApi.awaitInput();
+      Desktop.getDesktop().browse(new URI(appCreationUrl));
+
+      logger.info("When your done enter your Client ID:");
+      input = consoleApi.awaitInput(true);
+      keySetter.accept(input);
+
+      logger.info("Now enter your Client Secret:");
+      input = consoleApi.awaitInput(true);
+      secretSetter.accept(input);
+    }
   }
 }
