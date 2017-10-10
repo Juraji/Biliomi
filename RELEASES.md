@@ -5,6 +5,7 @@ Date: -
 * Implemented a full installer.<br>
 Installing Biliomi is real easy now, see README.md for more information.
 * Fixed bug in time quantity formatting where 0 time would result in weird messages.
+* Moved all bits cheering notices to live editable templates.
 
 # Biliomi v3.10.1
 Date: October 8th 2017
