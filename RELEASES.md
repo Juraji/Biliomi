@@ -1,7 +1,10 @@
-# Biliomi v3.10.1
+# Biliomi v3.11.0
 Date: -
 
 ## Release Notes
+* Implemented a full installer.<br>
+Installing Biliomi is real easy now, see README.md for more information.
+* Fixed bug in time quantity formatting where 0 time would result in weird messages.
 
 # Biliomi v3.10.1
 Date: October 8th 2017

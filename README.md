@@ -43,12 +43,7 @@ Every week on sunday if changes have been made.
 As soon as they are available and tested.
 
 ## "Read the docs"
-Sadly I haven't had any time yet to set up proper documentation for Biliomi.<br>
-While I'm working on that, here are some pointers to give you a headstart:
-* Use `/help`, in Biliomi's console, to find out how to use the console.
-* The `/exportsystemcommands` console commands creates an export of all system commands and all their properties.<br>
-This might be a good way to get a feel of what is possible.<br>
-I have done my best to make all commands as self-explanatory as possible.
+Biliomi will sometimes refer to "the docs". Find them [here](https://github.com/Juraji/Biliomi/wiki)!
 
 A WADL for Biliomi's REST Api is available under `http://localhost:30000/application.wadl` when Biliomi is running.
 
@@ -61,6 +56,7 @@ A WADL for Biliomi's REST Api is available under `http://localhost:30000/applica
     * biliomi-x.x.x.jar `The main Java executable`
     * start-biliomi.sh `Start script for linux/MacOS`
     * start-biliomi.bat `Start script for Windows`
+  * RELEASES.MD `A list of all previous releases and release notes`
   * README.MD `This read me`
   * LICENSE `License information`
   * database-mysql-ddl.sql `A SQL script for Biliomi's database`
@@ -74,22 +70,21 @@ Prerequisites:
 * A Twitch account for the bot.<br>
 Since Biliomi will have to be able to chat and moderate in your chat it needs an account the be able to do so.
 
-Installation
+Installation (Using the built in installer)
 
 1. Make sure you have the latest version of [Java 8](https://www.java.com/en/download/) or higher installed.
 1. Grab the latest version from [the releases page](https://github.com/Juraji/Biliomi/releases).
 1. Open the downloaded archive and unpack the `Biliomi v3` directory to where you want to installation to reside.
 1. Open the file explorer and navigate to the location in which you've unpacked the downloaded archive.
-1. Copy the directory `default-config` to `config`.
-1. Open up `./config/core.yml` in your favorite text editor.<br>
-  a. Fill in all the settings as described.<br>
-  b. Settings under `integrations:` are optional and may be left to `null` if you do not wish to use the intergrations.
 1. Run Biliomi. *Biliomi will initially be set to installation mode.*<br>
   To run Biliomi start (double-click) the appropriate runner for your system:<br>
     On Windows: `start-biliomi.bat`<br>
-    On Linux/MacOS: `start-biliomi.sh`
+    On Linux/MacOS: `start-biliomi.sh` 
 1. Follow any instructions in the console to fully set up Biliomi.
-1. On successful setup Biliomi will immediately connect to Twitch and start listening for commands.
+1. When the first time installation was successful Biliomi will have saved your settings and automatically shut down.
+1. Restart Biliomi
+1. Biliomi will now setup the database and ask you a few more questions to complete the installation.<br>
+On successful setup Biliomi will immediately connect to Twitch and start listening for commands.
 1. Wait for Biliomi to finish follower and subscriber updates and exit Biliomi by typing `/exit` in the console.
 1. Once again open up `./config/core.yml` in your favorite text editor and change `updateMode` to `OFF`.
 1. Now start Biliomi again and enjoy it's features.
@@ -98,7 +93,9 @@ Installation
 *Type `!mute` in the console or chat to enable chatter.*
 
 ### Updating
-Biliomi now has an automated update. The update takes care of step 1 to 3 for you.
+Biliomi now has an automated update. The update takes care of step 1 to 3 for you.<br>
+*Note: The automatic updater will overwrite your l10n files. If you've made any changes to them they will be lost.*
+*You might want to make a backup of the `./l10n` directory*
 
 1. Grab the latest version from [the releases page](https://github.com/Juraji/Biliomi/releases).
 1. Shut down any currently running instance of Biliomi.
