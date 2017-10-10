@@ -1,17 +1,20 @@
 package nl.juraji.biliomi.components.chat.bits;
 
 import com.google.common.eventbus.Subscribe;
-import nl.juraji.biliomi.model.core.User;
-import nl.juraji.biliomi.model.chat.settings.BitsSettings;
-import nl.juraji.biliomi.model.internal.events.twitch.bits.TwitchBitsEvent;
 import nl.juraji.biliomi.components.chat.subscribers.SubscriberWatchComponent;
+import nl.juraji.biliomi.components.shared.ChatService;
 import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.components.system.settings.SettingsService;
-import nl.juraji.biliomi.components.shared.ChatService;
 import nl.juraji.biliomi.components.system.users.UsersService;
+import nl.juraji.biliomi.model.chat.settings.BitsSettings;
+import nl.juraji.biliomi.model.core.Template;
+import nl.juraji.biliomi.model.core.TemplateDao;
+import nl.juraji.biliomi.model.core.User;
+import nl.juraji.biliomi.model.internal.events.twitch.bits.TwitchBitsEvent;
 import nl.juraji.biliomi.utility.cdi.annotations.modifiers.L10nData;
 import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
 import nl.juraji.biliomi.utility.types.Init;
+import nl.juraji.biliomi.utility.types.Templater;
 import nl.juraji.biliomi.utility.types.collections.L10nMap;
 
 import javax.enterprise.inject.Default;
@@ -27,8 +30,13 @@ import java.util.List;
 @Singleton
 @EventBusSubscriber
 public class BitsComponentEventService implements Init {
+
+  @Inject
+  private TemplateDao templateDao;
+
   @Inject
   private UsersService usersService;
+
   @Inject
   private PointsService pointsService;
 
@@ -52,7 +60,8 @@ public class BitsComponentEventService implements Init {
   public void onTwitchBitsEvent(TwitchBitsEvent event) {
     User user = usersService.getUserByTwitchId(event.getUserId());
 
-    chat.say(l10n.get("TwitchBitsEvent.notification.bits.cheered")
+    Template template = templateDao.getByKey(BitsComponentConstants.BITS_CHEERED_TEMPLATE_ID);
+    chat.say(Templater.template(template.getTemplate())
         .add("usename", user::getDisplayName)
         .add("amount", event::getBitsUsed));
 
@@ -64,7 +73,9 @@ public class BitsComponentEventService implements Init {
       long payout = (long) Math.ceil(event.getBitsUsed() * settings.getBitsToPointsMultiplier());
 
       pointsService.give(user, payout);
-      chat.say(l10n.get("TwitchBitsEvent.notification.bits.payoutToCheerer")
+
+      Template template = templateDao.getByKey(BitsComponentConstants.BITS_PAYOUT_TO_CHEERER_TEMPLATE_ID);
+      chat.say(Templater.template(template.getTemplate())
           .add("username", user::getDisplayName)
           .add("payout", () -> pointsService.asString(payout)));
 
@@ -73,7 +84,8 @@ public class BitsComponentEventService implements Init {
 
         viewers.forEach(viewer -> pointsService.give(viewer, payout));
 
-        chat.say(l10n.get("TwitchBitsEvent.notification.bits.payoutToChatters")
+        template = templateDao.getByKey(BitsComponentConstants.BITS_PAYOUT_TO_CHATTERS_TEMPLATE_ID);
+        chat.say(Templater.template(template.getTemplate())
             .add("payout", () -> pointsService.asString(payout)));
       }
     }

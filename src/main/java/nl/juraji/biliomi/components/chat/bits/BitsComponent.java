@@ -1,10 +1,12 @@
 package nl.juraji.biliomi.components.chat.bits;
 
-import nl.juraji.biliomi.model.core.User;
-import nl.juraji.biliomi.model.chat.settings.BitsSettings;
 import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.components.interfaces.enums.OnOff;
+import nl.juraji.biliomi.components.shared.TemplateSetup;
 import nl.juraji.biliomi.components.system.settings.SettingsService;
+import nl.juraji.biliomi.model.chat.settings.BitsSettings;
+import nl.juraji.biliomi.model.core.TemplateDao;
+import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.calculate.Numbers;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
@@ -15,6 +17,8 @@ import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import static nl.juraji.biliomi.components.chat.bits.BitsComponentConstants.*;
 
 /**
  * Created by Juraji on 10-9-2017.
@@ -30,6 +34,9 @@ public class BitsComponent extends Component {
 
   @Inject
   private BitsComponentEventService bitsComponentEventService;
+
+  @Inject
+  private TemplateDao templateDao;
 
   @Override
   public void init() {
@@ -111,5 +118,50 @@ public class BitsComponent extends Component {
     chat.whisper(user, l10n.get("ChatCommand.bitsToPoints.multiplier.set")
         .add("amount", newMultiplier));
     return true;
+  }
+
+  /**
+   * Edit notice templates for bits
+   * Usage: !bitstemplates [notice|payouttocheerer|payouttochatters] [more...]
+   */
+  @CommandRoute(command = "bitstemplates", systemCommand = true)
+  public boolean bitsTemplatesCommand(User user, Arguments arguments) {
+    return captureSubCommands("bitstemplates", () -> l10n.getString("ChatCommand.bitsTemplates.usage"), user, arguments);
+  }
+
+  /**
+   * Edit bits cheer notice template
+   * Usage: !bitstemplates notice [message...]
+   */
+  @SubCommandRoute(command = "notice", parentCommand = "bitstemplates")
+  public boolean bitsTemplatesnoticeCommand(User user, Arguments arguments) {
+    return new TemplateSetup(templateDao, chat, l10n)
+        .withCommandUsageKey("ChatCommand.bitsTemplates.notice.usage")
+        .withTemplatedSavedKey("ChatCommand.bitsTemplates.notice.set")
+        .apply(user, arguments.toString(), BITS_CHEERED_TEMPLATE_ID);
+  }
+
+  /**
+   * Edit payout to cheerer template
+   * Usage: !bitstemplates payouttocheerer [message...]
+   */
+  @SubCommandRoute(command = "payouttocheerer", parentCommand = "bitstemplates")
+  public boolean bitsTemplatespayouttocheererCommand(User user, Arguments arguments) {
+    return new TemplateSetup(templateDao, chat, l10n)
+        .withCommandUsageKey("ChatCommand.bitsTemplates.payoutToCheerer.usage")
+        .withTemplatedSavedKey("ChatCommand.bitsTemplates.payoutToCheerer.set")
+        .apply(user, arguments.toString(), BITS_PAYOUT_TO_CHEERER_TEMPLATE_ID);
+  }
+
+  /**
+   * Edit payout to chatters template
+   * Usage: !bitstemplates payouttochatters [message...]
+   */
+  @SubCommandRoute(command = "payouttochatters", parentCommand = "bitstemplates")
+  public boolean bitsTemplatespayouttochattersCommand(User user, Arguments arguments) {
+    return new TemplateSetup(templateDao, chat, l10n)
+        .withCommandUsageKey("ChatCommand.bitsTemplates.payoutToChatters.usage")
+        .withTemplatedSavedKey("ChatCommand.bitsTemplates.payoutToChatters.set")
+        .apply(user, arguments.toString(), BITS_PAYOUT_TO_CHATTERS_TEMPLATE_ID);
   }
 }
