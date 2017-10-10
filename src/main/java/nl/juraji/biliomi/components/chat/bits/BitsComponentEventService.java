@@ -44,10 +44,6 @@ public class BitsComponentEventService implements Init {
   private ChatService chat;
 
   @Inject
-  @L10nData(SubscriberWatchComponent.class)
-  private L10nMap l10n;
-
-  @Inject
   private SettingsService settingsService;
   private BitsSettings settings;
 

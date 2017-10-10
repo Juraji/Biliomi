@@ -28,6 +28,7 @@ public class BitsComponentSetupTask implements SetupTask {
       template.setDescription("Posted in the chat when bits are cheered");
       template.getKeyDescriptions().put("username", "The display name of the user cheering bits");
       template.getKeyDescriptions().put("amount", "The amount of bits being cheered");
+      templateDao.save(template);
     }
 
     if (!templateDao.templateExists(BITS_PAYOUT_TO_CHEERER_TEMPLATE_ID)) {
@@ -37,6 +38,7 @@ public class BitsComponentSetupTask implements SetupTask {
       template.setDescription("Posted in the chat when a payout occurs to the cheerer");
       template.getKeyDescriptions().put("username", "The display name of the user cheering bits");
       template.getKeyDescriptions().put("payout", "The amount of points being payed out");
+      templateDao.save(template);
     }
 
     if (!templateDao.templateExists(BITS_PAYOUT_TO_CHATTERS_TEMPLATE_ID)) {
@@ -44,6 +46,8 @@ public class BitsComponentSetupTask implements SetupTask {
       template.setTemplateKey(BITS_PAYOUT_TO_CHATTERS_TEMPLATE_ID);
       template.setTemplate("And for you, and you... {{payout}} for everyone!");
       template.setDescription("Posted in the chat when payout to all chatters is enabled");
+      template.getKeyDescriptions().put("payout", "The amount of points being payed out");
+      templateDao.save(template);
     }
   }
 }
