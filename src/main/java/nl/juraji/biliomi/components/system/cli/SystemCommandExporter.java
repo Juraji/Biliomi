@@ -1,11 +1,11 @@
 package nl.juraji.biliomi.components.system.cli;
 
-import nl.juraji.biliomi.model.core.Command;
-import nl.juraji.biliomi.model.core.CommandDao;
 import nl.juraji.biliomi.components.ComponentManager;
 import nl.juraji.biliomi.components.interfaces.Component;
-import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.components.shared.TimeFormatter;
+import nl.juraji.biliomi.components.system.points.PointsService;
+import nl.juraji.biliomi.model.core.Command;
+import nl.juraji.biliomi.model.core.CommandDao;
 import nl.juraji.biliomi.utility.calculate.TextUtils;
 import nl.juraji.biliomi.utility.commandrouters.CommandExecutorUtils;
 import nl.juraji.biliomi.utility.commandrouters.CommandRoute;
@@ -51,9 +51,9 @@ public class SystemCommandExporter extends Exporter {
             command.getCommand(),
             command.isSystemCommand(),
             command.isModeratorCanActivate(),
-            command.getUserGroup().getName(),
-            timeFormatter.timeQuantity(command.getCooldown()),
-            pointsService.asString(command.getPrice()),
+            (command.isSystemCommand() ? null : command.getUserGroup().getName()),
+            (command.getCooldown() == 0 ? null : timeFormatter.timeQuantity(command.getCooldown())),
+            (command.getPrice() == 0 ? null : pointsService.asString(command.getPrice())),
             TextUtils.commaList(command.getAliasses())
         ));
   }

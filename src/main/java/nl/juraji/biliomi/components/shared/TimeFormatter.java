@@ -165,7 +165,7 @@ public class TimeFormatter {
   public String timeQuantityBetween(DateTime since, DateTime until) {
     long diff = new Duration(since, until).getMillis();
     if (diff <= 1000) {
-      return "0 " + l10n.get("TimeUnit.seconds");
+      return "0 " + l10n.getString("TimeUnit.seconds");
     }
 
     if (diff < MILLIS_IN_MONTH) {
