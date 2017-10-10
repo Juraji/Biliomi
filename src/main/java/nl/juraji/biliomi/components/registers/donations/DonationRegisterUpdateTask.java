@@ -1,7 +1,6 @@
 package nl.juraji.biliomi.components.registers.donations;
 
 import nl.juraji.biliomi.boot.SetupTask;
-import nl.juraji.biliomi.components.chat.followers.FollowerWatchConstants;
 import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
 

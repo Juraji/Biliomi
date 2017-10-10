@@ -1,13 +1,11 @@
 package nl.juraji.biliomi.components.chat.subscribers;
 
 import nl.juraji.biliomi.components.shared.TemplateSetup;
-import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.settings.SubscriberWatchSettings;
 import nl.juraji.biliomi.model.internal.events.twitch.subscribers.SubscriberPlanType;
 import nl.juraji.biliomi.components.interfaces.Component;
-import nl.juraji.biliomi.components.interfaces.enums.OnOff;
 import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.components.system.settings.SettingsService;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
@@ -16,7 +14,6 @@ import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

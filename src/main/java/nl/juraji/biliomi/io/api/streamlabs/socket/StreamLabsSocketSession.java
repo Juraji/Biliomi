@@ -3,10 +3,8 @@ package nl.juraji.biliomi.io.api.streamlabs.socket;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import nl.juraji.biliomi.io.api.streamlabs.socket.listeners.StreamLabsEventListener;
-import nl.juraji.biliomi.io.web.Url;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
 import nl.juraji.biliomi.utility.events.EventBus;
-import nl.juraji.biliomi.utility.factories.ModelUtils;
 import nl.juraji.biliomi.utility.types.Restartable;
 import org.apache.logging.log4j.Logger;
 
@@ -14,7 +12,6 @@ import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.net.URISyntaxException;
-import java.util.Map;
 
 /**
  * Created by Juraji on 2-10-2017.

@@ -7,15 +7,12 @@ import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import java.awt.*;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Juraji on 15-9-2017.
