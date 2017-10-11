@@ -1,5 +1,7 @@
 package nl.juraji.biliomi.components.registers.donations;
 
+import nl.juraji.biliomi.components.shared.TemplateSetup;
+import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.registers.Donation;
 import nl.juraji.biliomi.components.interfaces.Component;
@@ -13,6 +15,8 @@ import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import static nl.juraji.biliomi.components.registers.donations.DonationRegisterConstants.*;
 
 /**
  * Created by Juraji on 24-5-2017.
@@ -28,6 +32,9 @@ public class DonationRegisterComponent extends Component {
 
   @Inject
   private DonationsEventService donationsEventService;
+
+  @Inject
+  private TemplateDao templateDao;
 
   @Override
   public void init() {
@@ -69,7 +76,7 @@ public class DonationRegisterComponent extends Component {
         .add("username", donator::getNameAndTitle)
         .add("donation", donation::getDonation));
 
-    chat.say(l10n.get("ChatCommand.donations.add.added.extra")
+    chat.say(l10n.get("ChatCommand.donations.add.added.donationCount")
         .add("ordinalcount", MathUtils.getOrdinal(count))
         .add("username", donator::getNameAndTitle));
     return true;
@@ -131,5 +138,29 @@ public class DonationRegisterComponent extends Component {
     }
 
     return true;
+  }
+
+  /**
+   * Set the notice to post in the chat when a new donation is registered manually
+   * Usage: !donations setexternalnotice [message...]
+   */
+  @SubCommandRoute(command = "setmanualnotice", parentCommand = "donations")
+  public boolean donationsSetNoticeCommand(User user, Arguments arguments) {
+    return new TemplateSetup(templateDao, chat, l10n)
+        .withCommandUsageKey("ChatCommand.donations.setManualNotice.usage")
+        .withTemplatedSavedKey("Common.noticeTemplate.saved")
+        .apply(user, arguments.toString(), MANUAL_DONATION_NOTICE);
+  }
+
+  /**
+   * Set the notice to post in the chat when a new donation is registered automatically (E.g. Via Stream Labs)
+   * Usage: !donations setexternalnotice [message...]
+   */
+  @SubCommandRoute(command = "setexternalnotice", parentCommand = "donations")
+  public boolean donationsSetStreamLabsNoticeCommand(User user, Arguments arguments) {
+    return new TemplateSetup(templateDao, chat, l10n)
+        .withCommandUsageKey("ChatCommand.donations.setExternalNotice.usage")
+        .withTemplatedSavedKey("Common.noticeTemplate.saved")
+        .apply(user, arguments.toString(), INCOMING_DONATION_NOTICE);
   }
 }
