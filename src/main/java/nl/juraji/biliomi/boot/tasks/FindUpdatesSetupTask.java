@@ -61,7 +61,7 @@ public class FindUpdatesSetupTask implements SetupTask {
   private GithubApi githubApi;
 
   @Inject
-  private ConsoleApi consoleApi;
+  private ConsoleApi console;
 
   private final File downloadDir;
   private final File installDir;
@@ -112,36 +112,42 @@ public class FindUpdatesSetupTask implements SetupTask {
   }
 
   private void runUpdateInstaller(GithubRelease githubRelease) throws Exception {
-    logger.info("A new version of Biliomi is available: " + versionInfo.getVersion() + " -> " + githubRelease.getTagName());
-    logger.info("More information about this release can be found at " + githubRelease.getUrl());
-    logger.info("I can perform this update for you, would you like me to go ahead and install the latest version? [y/n]");
-    if (!consoleApi.awaitYesNo()) {
+    console.println();
+    console.println("A new version of Biliomi is available: " + versionInfo.getVersion() + " -> " + githubRelease.getTagName() + ".");
+    console.println("More information about this release can be found at " + githubRelease.getUrl() + ".");
+    console.print("I can perform this update for you, would you like me to go ahead and install the latest version? [y/n]: ");
+    if (!console.awaitYesNo()) {
       // User does not wish to update, continue boot
       return;
     }
 
-    logger.info("Downloading Biliomi " + githubRelease.getTagName() + "...");
+    console.println();
+    console.println("Downloading Biliomi " + githubRelease.getTagName() + "...");
     File archiveFile = downloadReleaseTar(githubRelease);
 
-    logger.info("Removing old files...");
+    console.println("Removing old files...");
     removeOldInstall();
 
-    logger.info("Unpacking new release...");
+    console.println("Unpacking new release...");
     TarArchiveUtils.extract(archiveFile);
 
-    logger.info("Finalizing installation...");
+    console.println("Finalizing installation...");
     FileUtils.copyDirectory(new File(archiveFile.getParent(), "Biliomi v3"), installDir);
     FileUtils.deleteDirectory(downloadDir);
 
-    logger.info("Biliomi has been updated successfully");
+    console.println();
+    console.println("Biliomi has been updated successfully");
+    console.println();
 
     String coreConfigFile = BiliomiContainer.getParameters().getConfigurationDir().getAbsolutePath() + "/core.yml";
-    logger.info("The following actions are up to you:");
-    logger.info("- The l10n directory has been replaced, if you were using a custom language I recommend you download the latest and replace the l10n directory");
-    logger.info("- Check if there are any new settings you need to copy over from the default-config");
-    logger.info("- Set the update mode to UPDATE in " + coreConfigFile + " in order to run database updates");
+    console.println("The following actions are up to you:");
+    console.println("- The l10n directory has been replaced, if you were using a custom language I recommend you download the latest and replace the l10n directory.");
+    console.println("- Check if there are any new settings you need to copy over from the default-config.");
+    console.println("- Set the update mode to UPDATE in " + coreConfigFile + " in order to run database updates.");
+    console.println();
 
-    logger.info("Restart Biliomi whenever you are ready");
+    console.println("Restart Biliomi whenever you are ready...");
+    console.println();
     BiliomiContainer.getContainer().shutdownNow(0);
   }
 

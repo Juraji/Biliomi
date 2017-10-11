@@ -33,7 +33,7 @@ public class StreamLabsIntegrationSetupTask implements SetupTask {
   private Logger logger;
 
   @Inject
-  private ConsoleApi consoleApi;
+  private ConsoleApi console;
 
   @Inject
   private WebClient webClient;
@@ -77,10 +77,11 @@ public class StreamLabsIntegrationSetupTask implements SetupTask {
   }
 
   private void installAccessToken(AuthToken token) throws Exception {
-    logger.info("Biliomi can link to your Stream Labs account and watch various stats like donations, hosts etc.");
-    logger.info("Would you like this? [y/n]:");
+    console.println();
+    console.println("Biliomi can link to your Stream Labs account and watch various stats like donations, hosts etc.");
+    console.print("Would you like this? [y/n]: ");
 
-    if (!consoleApi.awaitYesNo()) {
+    if (!console.awaitYesNo()) {
       logger.info("Skipping Stream Labs integration setup");
       return;
     }

@@ -26,7 +26,7 @@ public class SteamIntegrationSetupTask implements SetupTask {
   private Logger logger;
 
   @Inject
-  private ConsoleApi consoleApi;
+  private ConsoleApi console;
 
   @Inject
   @AppDataValue("steam.api.uris.getapikey")
@@ -59,26 +59,31 @@ public class SteamIntegrationSetupTask implements SetupTask {
   }
 
   private void installSteamToken() throws Exception {
-    logger.info("Would you like to set up Steam integration now? [y/n]");
-    if (!consoleApi.awaitYesNo()) {
+    console.println();
+    console.println("Would you like to set up Steam integration now? [y/n]: ");
+    if (!console.awaitYesNo()) {
       logger.info("Canceled Steam integration setup");
       return;
     }
 
-    logger.info("You will need a Steam Api key");
-    logger.info("Hit [enter] to open up " + getApiKeyUrl + " fill out the form");
+    console.println();
+    console.println("You will need a Steam Api key.");
+    console.print("Hit [enter] to open up " + getApiKeyUrl + " fill out the form.");
     Desktop.getDesktop().browse(new URI(getApiKeyUrl));
 
-    logger.info("Enter your Steam API key and hit [enter]:");
-    String apiKey = consoleApi.awaitInput(true);
+    console.println();
+    console.print("Enter your Steam API key and hit [enter]: ");
+    String apiKey = console.awaitInput(true);
     userToken.setToken(apiKey);
 
-    logger.info("Note: You can use " + getUserIdUrl + " to find out your user id");
-    logger.info("Enter your Steam user id and hit [enter]:");
-    String userId = consoleApi.awaitInput(true);
+    console.println();
+    console.println("Note: You can use " + getUserIdUrl + " to find out your user id.");
+    console.print("Enter your Steam user id and hit [enter]: ");
+    String userId = console.awaitInput(true);
     userToken.setUserId(userId);
 
     authTokenDao.save(userToken);
-    logger.info("Successfully set up Steam integration");
+    console.println("Successfully set up Steam integration");
+    console.println();
   }
 }

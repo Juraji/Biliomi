@@ -37,7 +37,7 @@ public class SpotifyIntegrationSetupTask implements SetupTask {
   private Logger logger;
 
   @Inject
-  private ConsoleApi consoleApi;
+  private ConsoleApi console;
 
   @Inject
   private WebClient webClient;
@@ -85,9 +85,10 @@ public class SpotifyIntegrationSetupTask implements SetupTask {
   }
 
   private void installAccessToken(AuthToken token) throws Exception {
-    logger.info("Biliomi can link to your spotify account to be able to present viewers with information like currently playing songs and integrate support for song requests using Spotify.");
-    logger.info("Would you like this? [y/n]");
-    if (!consoleApi.awaitYesNo()) {
+    console.println();
+    console.println("Biliomi can link to your spotify account to be able to present viewers with information like currently playing songs and integrate support for song requests using Spotify.");
+    console.print("Would you like this? [y/n]: ");
+    if (!console.awaitYesNo()) {
       logger.info("Skipping Spotify integration setup");
       return;
     }
@@ -131,7 +132,8 @@ public class SpotifyIntegrationSetupTask implements SetupTask {
 
       token.setUserId(me.getData().getId());
       authTokenDao.save(token);
-      logger.info("Successfully set up Spotfy integration for user " + me.getData().getDisplayName());
+      console.println("Successfully set up Spotfy integration for user " + me.getData().getDisplayName() + ".");
+      console.println();
     } catch (IOException e) {
       throw new Exception("You need to be able to open a web browser in order to authenticate with Spotify.", e);
     }

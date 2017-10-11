@@ -36,7 +36,7 @@ public class TwitchOAuthTask implements SetupTask {
   private Logger logger;
 
   @Inject
-  private ConsoleApi consoleApi;
+  private ConsoleApi console;
 
   @Inject
   private AuthTokenDao authTokenDao;
@@ -103,10 +103,11 @@ public class TwitchOAuthTask implements SetupTask {
   }
 
   private void installChannelAccessToken(AuthToken oauthData) throws Exception {
-    logger.info("Biliomi needs authorization to your channel's account, in order to fetch information on your channel and enable channel editing.");
-    logger.info("Press [enter] to have biliomi open your browser to authenticate on Twitch with your channel's account...");
+    console.println();
+    console.println("Biliomi needs authorization to your channel's account, in order to fetch information on your channel and enable channel editing.");
+    console.print("Press [enter] to have biliomi open your browser to authenticate on Twitch with your channel's account...");
 
-    consoleApi.awaitInput();
+    console.awaitInput();
     installToken(oauthData::setToken,
         TwitchOAuthScope.CHAT_LOGIN,
         TwitchOAuthScope.CHANNEL_READ,
@@ -115,10 +116,11 @@ public class TwitchOAuthTask implements SetupTask {
   }
 
   private void installBotAccessToken(AuthToken oauthData) throws Exception {
+    console.println();
     logger.info("Biliomi needs authorization to the bot's account, in order to be able to connect to the chat.");
     logger.info("Press [enter] to have biliomi open your browser to authenticate on Twitch with the bot's account...");
 
-    consoleApi.awaitInput();
+    console.awaitInput();
     installToken(oauthData::setToken, TwitchOAuthScope.CHAT_LOGIN);
   }
 
@@ -132,7 +134,7 @@ public class TwitchOAuthTask implements SetupTask {
 
       if (authSuccess) {
         tokenSetter.accept(oAuthFlow.getAccessToken());
-        logger.info("Successfully installed Twitch OAuth token.");
+        console.println("Successfully installed Twitch OAuth token.");
       } else {
         throw new Exception(oAuthFlow.getAuthenticationError());
       }

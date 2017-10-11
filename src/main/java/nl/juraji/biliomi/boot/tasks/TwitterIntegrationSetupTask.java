@@ -17,7 +17,8 @@ import twitter4j.auth.RequestToken;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
-import java.util.concurrent.ExecutionException;
+import java.awt.*;
+import java.net.URI;
 
 /**
  * Created by Juraji on 11-9-2017.
@@ -39,18 +40,13 @@ public class TwitterIntegrationSetupTask implements SetupTask {
   private Logger logger;
 
   @Inject
-  private ConsoleApi consoleApi;
+  private ConsoleApi console;
 
   @Inject
   private AuthTokenDao authTokenDao;
 
   @Override
   public void install() {
-    if (StringUtils.isEmpty(consumerKey) || StringUtils.isEmpty(consumerSecret)) {
-      logger.info("No OAuth information set for Twitter, skipping set up");
-      return;
-    }
-
     if (StringUtils.isEmpty(consumerKey) || StringUtils.isEmpty(consumerSecret)) {
       logger.info("No consumer information set for Twitter");
       return;
@@ -63,7 +59,7 @@ public class TwitterIntegrationSetupTask implements SetupTask {
         installTwitterToken(token);
       } catch (TwitterException e) {
         logger.error("An exception occurred while authorizing Twitter", e);
-      } catch (InterruptedException | ExecutionException e) {
+      } catch (Exception e) {
         logger.error("Failed setting up Twitter integration", e);
       }
     }
@@ -74,9 +70,10 @@ public class TwitterIntegrationSetupTask implements SetupTask {
     return "Setup Twitter integration";
   }
 
-  private void installTwitterToken(AuthToken token) throws TwitterException, ExecutionException, InterruptedException {
-    logger.info("Would you like ot set up Twitter integration now? [y/n]");
-    if (!consoleApi.awaitYesNo()) {
+  private void installTwitterToken(AuthToken token) throws Exception {
+    console.println();
+    logger.info("Would you like to set up Twitter integration now? [y/n]: ");
+    if (!console.awaitYesNo()) {
       logger.info("Canceled Twitter integration setup");
       return;
     }
@@ -85,16 +82,22 @@ public class TwitterIntegrationSetupTask implements SetupTask {
     twitter.setOAuthConsumer(consumerKey, consumerSecret);
 
     RequestToken requestToken = twitter.getOAuthRequestToken();
-    logger.info("Open the following URL and grant access to your account:");
-    logger.info(requestToken.getAuthorizationURL());
-    logger.info("Enter the pin presented to you and hit [enter], or simply hit [enter] to skip Twitter integration:");
-    String pinInput = consoleApi.awaitInput(true);
+
+    console.println();
+    console.print("Hit [enter] to open up " + requestToken.getAuthorizationURL() + " and authorize on Twitter.");
+    Desktop.getDesktop().browse(new URI(requestToken.getAuthorizationURL()));
+
+    console.print("Enter the pin presented to you and hit [enter]: ");
+    String pinInput = console.awaitInput(true);
 
     AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, pinInput);
     token.setToken(accessToken.getToken());
     token.setSecret(accessToken.getTokenSecret());
     token.setUserId(String.valueOf(accessToken.getUserId()));
     authTokenDao.save(token);
-    logger.info("Successfully set up Twitter integration");
+
+    console.println();
+    console.println("Successfully set up Twitter integration");
+    console.println();
   }
 }
