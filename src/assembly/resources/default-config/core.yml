@@ -1,5 +1,3 @@
-# This is an example file for configuring Biliomi.
-
 biliomi:
   core:
     # Available update modes are:
@@ -41,30 +39,3 @@ biliomi:
       # The only thing we need is to know which Twitch users are going to be connected (lowercase)
       botUsername: null
       channelUsername: null
-
-  integrations:
-    # Due to security reasons no OAuth keys are provided by default.
-    # When you want to use a specific integration you must first register Biliomi as an application
-    # on the concerning platform. Links are provided with each integration.
-
-    streamLabs:
-      # Stream labs is used for automatically registering incoming donations and Twitch hosts.
-      # Note: Due to the lack of proper host events support by the Twitch API, this integration is currently the only way
-      # to receive host notifications from Biliomi.
-      # Application registration: https://streamlabs.com/dashboard/#/apps/register
-      consumerKey: null
-      consumerSecret: null
-
-    twitter:
-      # Biliomi can integrate with Twitter, easily post Tweets about being live or have Biliomi listen for specific
-      # tweets and responding to them in the Twitch chat.
-      # Application registration: https://apps.twitter.com/
-      consumerKey: null
-      consumerSecret: null
-
-    spotify:
-      # Have Biliomi state information on music, currently being played on your Spotify account or link up a playlist to
-      # enable song requests.
-      # Application registration: https://developer.spotify.com/my-applications
-      consumerKey: null
-      consumerSecret: null

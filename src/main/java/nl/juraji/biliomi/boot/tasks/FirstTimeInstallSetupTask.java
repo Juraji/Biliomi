@@ -9,7 +9,6 @@ import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USCore;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USDatabase;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USTwitch;
-import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.integrations.USIntegrationConsumer;
 import nl.juraji.biliomi.utility.calculate.Numbers;
 import nl.juraji.biliomi.utility.types.AppParameters;
 import org.apache.commons.io.FileUtils;
@@ -27,7 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
-import java.util.function.Consumer;
 
 /**
  * Created by Juraji on 9-10-2017.
@@ -41,7 +39,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
   private Logger logger;
 
   @Inject
-  private ConsoleApi consoleApi;
+  private ConsoleApi console;
 
   @Inject
   private UserSettings userSettings;
@@ -67,31 +65,35 @@ public class FirstTimeInstallSetupTask implements SetupTask {
     }
 
     try {
-      logger.info("This is the first time you've started Biliomi, hi!");
+      console.println();
+      console.println("This is the first time you've started Biliomi, hi!.");
+      console.println();
 
       if (!Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-        logger.info("You will need to install Biliomi on a PC with a desktop environment, " +
-            "since you will need a browser to set up OAuth authorizations");
+        console.println("You will need to install Biliomi on a PC with a desktop environment, " +
+            "since you will need a browser to set up OAuth authorizations.");
+        container.shutdownNow(0);
       }
 
-      logger.info("Biliomi will now setup and ask you a few questions, so don't go anywhere!");
-      logger.info("Note that this setup will only run once! To run this again, delete the config directory and restart Biliomi");
+      console.println("Biliomi will now setup and ask you a few questions, so don't go anywhere!");
+      console.println("Note that this setup will only run once! To run this again, delete the config directory and restart Biliomi.");
+      console.println();
 
       copyDefaultConfigDir();
       setupCoreUserSettings();
       setupDatabaseUserSettings();
-
-      logger.info("For security reasons Biliomi is not shipped with any OAuth applicaiton keys");
-      logger.info("This is why you need to create the applications on the appropriate platforms and supply the information here");
-      logger.info("Note: The callback url will ALWAYS be: " + CallbackResources.REDIRECT_URI);
       setupTwitchUserSettings();
-      setupSteamLabsConsumerUserSettings();
-      setupTwitterConsumerUserSettings();
-      setupSpotifyConsumerUserSettings();
 
       saveSettings();
-      logger.info("Your settings have been saved. Restart Biliomi to apply your settings");
-      logger.info("Would you ever wish to edit these settings open up " + coreYamlFile.getAbsolutePath() + " in your favorite text editor");
+      console.println("Your settings have been saved. Restart Biliomi to apply your settings.");
+      console.println();
+      console.println("Would you ever wish to edit these settings open up " + coreYamlFile.getAbsolutePath() + " in your favorite text editor.");
+
+      File integrationsYamlFile = new File(configDir, "integrations.yml");
+      console.println("If you want to use integrations like Stream Labs or Twitter open up " + integrationsYamlFile.getAbsolutePath() +
+          " in your favorite text editor and follow the instructions there.");
+      console.println();
+
       container.shutdownNow(0);
     } catch (Exception e) {
       try {
@@ -113,8 +115,9 @@ public class FirstTimeInstallSetupTask implements SetupTask {
   }
 
   private void saveSettings() throws InvocationTargetException, IllegalAccessException, IOException {
-    // Component settings are saved in separate files, the components tag should be null in core.yml
+    // Component and integration settings are saved in separate files, these tags should be null in core.yml
     userSettings.getBiliomi().setComponents(null);
+    userSettings.getBiliomi().setIntegrations(null);
 
     Yaml yamlInstance = new Yaml(new Constructor(UserSettings.class));
     String yamlString = yamlInstance.dumpAs(userSettings, new Tag("biliomi"), DumperOptions.FlowStyle.BLOCK);
@@ -124,66 +127,71 @@ public class FirstTimeInstallSetupTask implements SetupTask {
 
   private void copyDefaultConfigDir() throws IOException {
     File defaultConfigDir = new File(installDir, "default-config");
-    logger.info("Copying " + defaultConfigDir.getAbsolutePath() + " to " + configDir.getAbsolutePath() + "...");
+    console.println("Copying " + defaultConfigDir.getAbsolutePath() + " to " + configDir.getAbsolutePath() + "...");
     FileUtils.copyDirectory(defaultConfigDir, configDir);
-    logger.info("Default settings copied to " + configDir.getPath());
+    console.println("Default settings copied to " + configDir.getPath() + ".");
+    console.println();
   }
 
   private void setupCoreUserSettings() throws Exception {
     USCore usCore = userSettings.getBiliomi().getCore();
     String input;
 
-    logger.info("Would you like Biliomi to automatically check for updates on startup? [y/n]:");
-    usCore.setCheckForUpdates(consoleApi.awaitYesNo());
+    console.print("Would you like Biliomi to automatically check for updates on startup? [y/n]: ");
+    usCore.setCheckForUpdates(console.awaitYesNo());
+    console.println();
 
-    logger.info("I need your ISO 3166 country code");
-    logger.info("You can find out the correct setting for you on https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2");
-    logger.info("Enter your country code and press [enter]:");
-    input = consoleApi.awaitInput(true);
+    console.println("I need your ISO 3166 country code.");
+    console.println("You can find out the correct setting for you on https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.");
+    console.print("Enter your country code and press [enter]: ");
+    input = console.awaitInput(true);
     usCore.setCountryCode(input);
-
-    userSettings.getBiliomi().setCore(usCore);
+    console.println();
   }
 
   private void setupDatabaseUserSettings() throws Exception {
     USDatabase usDatabase = userSettings.getBiliomi().getDatabase();
     String input;
 
-    logger.info("Biliomi is able to either connect to a MySQL database or use a local database");
-    logger.info("Note that it is strongly recommended to use a MySQL databse, since the local database will be very slow");
-    logger.info("Do you want to use the local database? [y/n]:");
-    if (consoleApi.awaitYesNo()) {
+    console.println("Biliomi is able to either connect to a MySQL database or use a local database.");
+    console.println("Note that it is strongly recommended to use a MySQL databse, since the local database will be very slow.");
+    console.print("Do you want to use the local database? [y/n]: ");
+    if (console.awaitYesNo()) {
       usDatabase.setUseH2Database(true);
+      console.println();
     } else {
       usDatabase.setUseH2Database(false);
+      console.println();
 
-      logger.info("In order to connect to a MySQL database Biliomi needs some specifics");
-      logger.info("Enter the database host address, e.g. localhost or myserverprovider.com:");
-      input = consoleApi.awaitInput(true);
-      usDatabase.setHost(input);
+      console.println("In order to connect to a MySQL database Biliomi needs some specifics.");
+      console.print("Enter the database host address, e.g. localhost or myserverprovider.com: ");
+      usDatabase.setHost(console.awaitInput(true));
+      console.println();
 
-      logger.info("Enter the database port, or press [enter] to use the default: [3306]");
-      input = consoleApi.awaitInput();
+      console.print("Enter the database port, or press [enter] to use the default [3306]: ");
+      input = console.awaitInput();
       if (StringUtils.isEmpty(input)) {
         usDatabase.setPort(3306);
       } else {
         usDatabase.setPort(Numbers.asNumber(input).toInteger());
       }
+      console.println();
 
-      logger.info("Enter the database name:");
-      input = consoleApi.awaitInput(true);
-      usDatabase.setDatabase(input);
+      console.print("Enter the database name: ");
+      usDatabase.setDatabase(console.awaitInput(true));
+      console.println();
 
-      logger.info("Enter the username for Biliomi to use for the database:");
-      input = consoleApi.awaitInput(true);
+      console.print("Enter the username for Biliomi to use for the database: ");
+      input = console.awaitInput(true);
       usDatabase.setUsername(input);
 
-      logger.info("Enter the password for Biliomi to use for the database, this is not hidden, make sure no one's looking:");
-      input = consoleApi.awaitInput(true);
+      console.print("Enter the password for Biliomi to use for the database, this is not hidden, make sure no one's looking: ");
+      input = console.awaitInput(true);
       usDatabase.setPassword(input);
 
-      logger.info("Does Biliomi need to use SSL in order to connect to the database? [y/n]");
-      usDatabase.setUsessl(consoleApi.awaitYesNo());
+      console.print("Does Biliomi need to use SSL in order to connect to the database? [y/n]: ");
+      usDatabase.setUsessl(console.awaitYesNo());
+      console.println();
     }
   }
 
@@ -191,62 +199,30 @@ public class FirstTimeInstallSetupTask implements SetupTask {
     USTwitch usTwitch = userSettings.getBiliomi().getTwitch();
     String input;
 
-    logger.info("Create an application for Biliomi on Twitch");
-    logger.info("Hit [enter] to open up https://www.twitch.tv/kraken/oauth2/clients/new and use the callback uri stated above");
-    consoleApi.awaitInput();
+    console.println("Create an application for Biliomi on Twitch.");
+    console.println("For security reasons Biliomi is not shipped with any OAuth application keys.");
+    console.println("This is why you need to create an application on Twitch and supply the information here.");
+    console.println("Note: The oauth callback url will be: " + CallbackResources.REDIRECT_URI);
+    console.print("Hit [enter] to open up https://www.twitch.tv/kraken/oauth2/clients/new and use the callback uri stated above.");
+    console.awaitInput();
     Desktop.getDesktop().browse(new URI("https://www.twitch.tv/kraken/oauth2/clients/new"));
+    console.println();
 
-    logger.info("When your done enter the Client ID presented to you:");
-    input = consoleApi.awaitInput(true);
+    console.print("When your done enter the Client ID presented to you: ");
+    input = console.awaitInput(true);
     usTwitch.setClientId(input);
+    console.println();
 
-    logger.info("Biliomi needs its own Twitch account in order to be able to talk in your chat, please create one of you haven't already");
-    logger.info("Tho not nescessary, it's wise to also make Biliomi's Twitch account an editor on your channel");
-    logger.info("Enter the Twitch account name of Biliomi is/will be in lowercase:");
-    input = consoleApi.awaitInput(true);
+    console.println("Biliomi needs its own Twitch account in order to be able to talk in your chat, please create one of you haven't already.");
+    console.println("Tho not nescessary, it's wise to also make Biliomi's Twitch account an editor on your channel.");
+    console.print("Enter the Twitch account name of Biliomi in lowercase: ");
+    input = console.awaitInput(true);
     usTwitch.getLogin().setBotUsername(input);
+    console.println();
 
-    logger.info("Enter your own Twitch account name in lowercase:");
-    input = consoleApi.awaitInput(true);
+    console.print("Enter your own Twitch account name in lowercase: ");
+    input = console.awaitInput(true);
     usTwitch.getLogin().setChannelUsername(input);
-  }
-
-  private void setupSteamLabsConsumerUserSettings() throws Exception {
-    USIntegrationConsumer streamLabs = userSettings.getBiliomi().getIntegrations().getStreamLabs();
-    setupIntegration("Stream Labs", "https://streamlabs.com/dashboard/#/apps/register",
-        streamLabs::setConsumerKey, streamLabs::setConsumerSecret);
-  }
-
-  private void setupTwitterConsumerUserSettings() throws Exception {
-    USIntegrationConsumer twitter = userSettings.getBiliomi().getIntegrations().getTwitter();
-    setupIntegration("Twitter", "https://apps.twitter.com/",
-        twitter::setConsumerKey, twitter::setConsumerSecret);
-  }
-
-  private void setupSpotifyConsumerUserSettings() throws Exception {
-    USIntegrationConsumer spotify = userSettings.getBiliomi().getIntegrations().getSpotify();
-    setupIntegration("Spotify", "https://developer.spotify.com/my-applications",
-        spotify::setConsumerKey, spotify::setConsumerSecret);
-  }
-
-  private void setupIntegration(String name, String appCreationUrl, Consumer<String> keySetter, Consumer<String> secretSetter) throws Exception {
-    String input;
-
-    logger.info("Do you want to setup the " + name + " integration? [y/n]");
-    if (consoleApi.awaitYesNo()) {
-      logger.info("You will need to setup a " + name + " application on your account");
-      logger.info("Hit [enter] to open up " + appCreationUrl + " and use the callback uri stated above");
-
-      consoleApi.awaitInput();
-      Desktop.getDesktop().browse(new URI(appCreationUrl));
-
-      logger.info("When your done enter your Client ID:");
-      input = consoleApi.awaitInput(true);
-      keySetter.accept(input);
-
-      logger.info("Now enter your Client Secret:");
-      input = consoleApi.awaitInput(true);
-      secretSetter.accept(input);
-    }
+    console.println();
   }
 }
