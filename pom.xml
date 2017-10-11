@@ -15,9 +15,6 @@
     <project.build.timestamp>${maven.build.timestamp}</project.build.timestamp>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ssZ</maven.build.timestamp.format>
-    <sonar.language>java</sonar.language>
-    <sonar.junit.reportsPath>target/surefire-reports</sonar.junit.reportsPath>
-    <sonar.junit.reportsPath>target/jacoco.exec</sonar.junit.reportsPath>
     <sonar.projectKey>nl.juraji:biliomi:v3</sonar.projectKey>
 
     <!-- Test Dependencies -->
