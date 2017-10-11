@@ -48,6 +48,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
   private final File installDir;
   private final File coreYamlFile;
   private final BiliomiContainer container;
+  private Thread setupCancelHook;
 
   public FirstTimeInstallSetupTask() {
     AppParameters parameters = BiliomiContainer.getParameters();
@@ -63,6 +64,8 @@ public class FirstTimeInstallSetupTask implements SetupTask {
       // Configuration dir exists, which means the user already copied it.
       return;
     }
+
+    registerSetupCancelHook();
 
     try {
       console.println();
@@ -94,18 +97,10 @@ public class FirstTimeInstallSetupTask implements SetupTask {
           " in your favorite text editor and follow the instructions there.");
       console.println();
 
+      removeSetupCancelHook();
       container.shutdownNow(0);
     } catch (Exception e) {
-      try {
-        logger.error("Installation failed, reverting changes...", e);
-        if (configDir.exists()) {
-          FileUtils.deleteDirectory(configDir);
-        }
-      } catch (IOException e1) {
-        logger.info("Failed reverting changes", e);
-      } finally {
-        container.shutdownInError();
-      }
+      container.shutdownInError();
     }
   }
 
@@ -224,5 +219,25 @@ public class FirstTimeInstallSetupTask implements SetupTask {
     input = console.awaitInput(true);
     usTwitch.getLogin().setChannelUsername(input);
     console.println();
+  }
+
+  private void registerSetupCancelHook() {
+    setupCancelHook = new Thread(() -> {
+      try {
+        console.println(); // In case a question is on the current line
+        logger.error("Installation canceled, reverting changes...");
+        if (configDir.exists()) {
+          FileUtils.deleteDirectory(configDir);
+        }
+      } catch (IOException e) {
+        logger.info("Failed reverting changes", e);
+      }
+    });
+
+    Runtime.getRuntime().addShutdownHook(setupCancelHook);
+  }
+
+  private void removeSetupCancelHook() {
+    Runtime.getRuntime().removeShutdownHook(setupCancelHook);
   }
 }
