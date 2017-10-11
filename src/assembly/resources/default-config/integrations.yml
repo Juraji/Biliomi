@@ -25,3 +25,9 @@ biliomi:
       # Application registration: https://developer.spotify.com/my-applications
       consumerKey: null
       consumerSecret: null
+
+    patreon:
+      # Have Biliomi respond to pledges on Patreon
+      # Application registration: https://www.patreon.com/platform/start/registerclients
+      consumerKey: null
+      consumerSecret: null

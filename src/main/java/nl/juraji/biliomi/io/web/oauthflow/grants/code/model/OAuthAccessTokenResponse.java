@@ -1,4 +1,4 @@
-package nl.juraji.biliomi.io.api.spotify.oauth.model;
+package nl.juraji.biliomi.io.web.oauthflow.grants.code.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Created by Juraji on 30-9-2017.
  * Biliomi
  */
-@XmlRootElement(name = "SpotifyPagingObject")
+@XmlRootElement(name = "OAuthAccessTokenResponse")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class SpotifyOAuthAccessToken {
+public class OAuthAccessTokenResponse {
 
   @XmlElement(name = "access_token")
   private String accessToken;

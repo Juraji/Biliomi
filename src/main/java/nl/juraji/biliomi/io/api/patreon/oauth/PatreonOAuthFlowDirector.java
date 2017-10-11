@@ -1,4 +1,4 @@
-package nl.juraji.biliomi.io.api.spotify.oauth;
+package nl.juraji.biliomi.io.api.patreon.oauth;
 
 import com.google.common.net.MediaType;
 import nl.juraji.biliomi.io.web.oauthflow.grants.code.model.OAuthAccessTokenResponse;
@@ -8,19 +8,17 @@ import nl.juraji.biliomi.io.web.WebClient;
 import nl.juraji.biliomi.io.web.oauthflow.grants.code.CallbackServer;
 import nl.juraji.biliomi.io.web.oauthflow.grants.code.OAuthFlowDirector;
 import org.eclipse.jetty.http.HttpFields;
-import org.eclipse.jetty.http.HttpHeader;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Juraji on 30-9-2017.
+ * Created by Juraji on 11-10-2017.
  * Biliomi
  */
 @SuppressWarnings("Duplicates")
-public class SpotifyOAuthFlowDirector extends OAuthFlowDirector<SpotifyOAuthScope> {
+public class PatreonOAuthFlowDirector extends OAuthFlowDirector<PatreonOAuthScope> {
   private final String consumerSecret;
   private final WebClient webClient;
   private String accessToken;
@@ -28,22 +26,21 @@ public class SpotifyOAuthFlowDirector extends OAuthFlowDirector<SpotifyOAuthScop
   private String authenticationError;
   private int timeToLive;
 
-  public SpotifyOAuthFlowDirector(String baseUri, String consumerKey, String consumerSecret, WebClient webClient) {
+  public PatreonOAuthFlowDirector(String baseUri, String consumerKey, String consumerSecret, WebClient webClient) {
     super(baseUri, consumerKey);
     this.consumerSecret = consumerSecret;
     this.webClient = webClient;
   }
 
   @Override
-  public String getAuthenticationUri(SpotifyOAuthScope... scopes) {
+  public String getAuthenticationUri(PatreonOAuthScope... scopes) {
     Map<String, Object> queryMap = new HashMap<>();
     queryMap.put("client_id", getConsumerKey());
     queryMap.put("response_type", "code");
     queryMap.put("redirect_uri", getRedirectUri());
     queryMap.put("state", getStateToken());
-    queryMap.put("scope", SpotifyOAuthScope.join(scopes));
-    queryMap.put("show_dialog", "true");
-    return Url.url(getBaseUri(), "authorize").withQuery(queryMap).toString();
+    queryMap.put("scope", PatreonOAuthScope.join(scopes));
+    return Url.url(getBaseUri(), "oauth2", "authorize").withQuery(queryMap).toString();
   }
 
   @Override
@@ -54,6 +51,7 @@ public class SpotifyOAuthFlowDirector extends OAuthFlowDirector<SpotifyOAuthScop
       authenticationError = callback.getAuthorizationError();
       return false;
     }
+
     return exchangeCodeForToken(callback.getAccessToken());
   }
 
@@ -62,17 +60,17 @@ public class SpotifyOAuthFlowDirector extends OAuthFlowDirector<SpotifyOAuthScop
     return accessToken;
   }
 
+  @Override
+  public String getAuthenticationError() {
+    return authenticationError;
+  }
+
   public String getRefreshToken() {
     return refreshToken;
   }
 
   public long getTimeToLive() {
     return timeToLive * 1000;
-  }
-
-  @Override
-  public String getAuthenticationError() {
-    return authenticationError;
   }
 
   public boolean awaitRefreshedAccessToken(String refreshToken) {
@@ -84,25 +82,23 @@ public class SpotifyOAuthFlowDirector extends OAuthFlowDirector<SpotifyOAuthScop
   }
 
   private boolean exchangeCodeForToken(String accessCode) {
-    Map<String, Object> formData = new HashMap<>();
-    formData.put("grant_type", "authorization_code");
-    formData.put("code", accessCode);
-    formData.put("redirect_uri", getRedirectUri());
+    Map<String, Object> queryMap = new HashMap<>();
+    queryMap.put("grant_type", "authorization_code");
+    queryMap.put("code", accessCode);
+    queryMap.put("redirect_uri", getRedirectUri());
 
-    return requestAccessToken(formData);
+    return requestAccessToken(queryMap);
   }
 
-  private boolean requestAccessToken(Map<String, Object> requestFormData) {
-    Url tokenUri = Url.url(getBaseUri(), "api", "token");
-
-    String clientCode = getConsumerKey() + ':' + consumerSecret;
-    String base64ClientCode = Base64.getEncoder().encodeToString(clientCode.getBytes());
+  private boolean requestAccessToken(Map<String, Object> queryMap) {
+    Url tokenUri = Url.url(getBaseUri(), "oauth2", "token");
 
     HttpFields headers = new HttpFields();
-    headers.put(HttpHeader.AUTHORIZATION, "Basic " + base64ClientCode);
     headers.put(WebClient.NO_CACHE_HEADER, "true");
 
-    String formDataString = Url.createQueryString(requestFormData);
+    queryMap.put("client_id", getConsumerKey());
+    queryMap.put("client_secret", consumerSecret);
+    String formDataString = Url.createQueryString(queryMap);
 
     try {
       Response<OAuthAccessTokenResponse> response = webClient.post(tokenUri, headers, formDataString, MediaType.FORM_DATA, OAuthAccessTokenResponse.class);
