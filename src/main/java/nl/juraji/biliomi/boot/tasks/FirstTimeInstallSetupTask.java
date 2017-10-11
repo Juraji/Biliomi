@@ -133,7 +133,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
     USCore usCore = userSettings.getBiliomi().getCore();
     String input;
 
-    logger.info("Would you like Biliomi to automatically check for updates on startup? [Y/N]:");
+    logger.info("Would you like Biliomi to automatically check for updates on startup? [y/n]:");
     usCore.setCheckForUpdates(consoleApi.awaitYesNo());
 
     logger.info("I need your ISO 3166 country code");
@@ -151,7 +151,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
 
     logger.info("Biliomi is able to either connect to a MySQL database or use a local database");
     logger.info("Note that it is strongly recommended to use a MySQL databse, since the local database will be very slow");
-    logger.info("Do you want to use the local database? [Y/N]:");
+    logger.info("Do you want to use the local database? [y/n]:");
     if (consoleApi.awaitYesNo()) {
       usDatabase.setUseH2Database(true);
     } else {
@@ -182,7 +182,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
       input = consoleApi.awaitInput(true);
       usDatabase.setPassword(input);
 
-      logger.info("Does Biliomi need to use SSL in order to connect to the database? [Y/N]");
+      logger.info("Does Biliomi need to use SSL in order to connect to the database? [y/n]");
       usDatabase.setUsessl(consoleApi.awaitYesNo());
     }
   }
@@ -232,7 +232,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
   private void setupIntegration(String name, String appCreationUrl, Consumer<String> keySetter, Consumer<String> secretSetter) throws Exception {
     String input;
 
-    logger.info("Do you want to setup the " + name + " integration? [Y/N]");
+    logger.info("Do you want to setup the " + name + " integration? [y/n]");
     if (consoleApi.awaitYesNo()) {
       logger.info("You will need to setup a " + name + " application on your account");
       logger.info("Hit [enter] to open up " + appCreationUrl + " and use the callback uri stated above");

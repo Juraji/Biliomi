@@ -75,7 +75,7 @@ public class TwitterIntegrationSetupTask implements SetupTask {
   }
 
   private void installTwitterToken(AuthToken token) throws TwitterException, ExecutionException, InterruptedException {
-    logger.info("Would you like ot set up Twitter integration now? [Y/N]");
+    logger.info("Would you like ot set up Twitter integration now? [y/n]");
     if (!consoleApi.awaitYesNo()) {
       logger.info("Canceled Twitter integration setup");
       return;

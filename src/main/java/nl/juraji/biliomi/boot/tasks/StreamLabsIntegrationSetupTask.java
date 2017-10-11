@@ -78,7 +78,7 @@ public class StreamLabsIntegrationSetupTask implements SetupTask {
 
   private void installAccessToken(AuthToken token) throws Exception {
     logger.info("Biliomi can link to your Stream Labs account and watch various stats like donations, hosts etc.");
-    logger.info("Would you like this? [Y/N]:");
+    logger.info("Would you like this? [y/n]:");
 
     if (!consoleApi.awaitYesNo()) {
       logger.info("Skipping Stream Labs integration setup");

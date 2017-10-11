@@ -86,7 +86,7 @@ public class SpotifyIntegrationSetupTask implements SetupTask {
 
   private void installAccessToken(AuthToken token) throws Exception {
     logger.info("Biliomi can link to your spotify account to be able to present viewers with information like currently playing songs and integrate support for song requests using Spotify.");
-    logger.info("Would you like this? [Y/N]");
+    logger.info("Would you like this? [y/n]");
     if (!consoleApi.awaitYesNo()) {
       logger.info("Skipping Spotify integration setup");
       return;

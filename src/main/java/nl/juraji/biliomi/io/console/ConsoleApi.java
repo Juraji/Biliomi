@@ -73,13 +73,17 @@ public class ConsoleApi implements Init {
 
   /**
    * Await Y/N option from user
-   * - Requires input
-   * - Anything other than "y" or "Y" will be treated as no
+   * Requires input to match either y or n, ignoring case
    *
    * @return True if the user entered "y" or "Y" else false
    */
   public boolean awaitYesNo() throws ExecutionException, InterruptedException {
-    String input = awaitInput(true);
+    String input;
+
+    do {
+      input = awaitInput(true);
+    } while (!"Y".equalsIgnoreCase(input) && !"N".equalsIgnoreCase(input));
+
     return "Y".equalsIgnoreCase(input);
   }
 
