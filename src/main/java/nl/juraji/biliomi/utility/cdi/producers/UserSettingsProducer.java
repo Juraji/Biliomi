@@ -95,6 +95,7 @@ public class UserSettingsProducer {
           c++;
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
           LogManager.getLogger(getClass()).error("Failed retrieving setting " + settingPath, e);
+          return null;
         }
       }
 
@@ -113,12 +114,12 @@ public class UserSettingsProducer {
   @Produces
   @BotName
   public String getBotName() {
-    return userSettings.getBiliomi().getTwitch().getLogin().getBotUsername();
+    return userSettings.getBiliomi().getTwitch().getLogin().getBotUsername().toLowerCase();
   }
 
   @Produces
   @ChannelName
   public String getChannelName() {
-    return userSettings.getBiliomi().getTwitch().getLogin().getChannelUsername();
+    return userSettings.getBiliomi().getTwitch().getLogin().getChannelUsername().toLowerCase();
   }
 }

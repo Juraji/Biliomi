@@ -81,7 +81,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
       setupCoreUserSettings();
       setupDatabaseUserSettings();
 
-      logger.info("For security reasons Biliomi is not shipped with any OAuth applicaiton keys");
+      logger.info("For security reasons Biliomi is not shipped with any OAuth application keys");
       logger.info("This is why you need to create the applications on the appropriate platforms and supply the information here");
       logger.info("Note: The callback url will ALWAYS be: " + CallbackResources.REDIRECT_URI);
       setupTwitchUserSettings();
@@ -150,7 +150,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
     String input;
 
     logger.info("Biliomi is able to either connect to a MySQL database or use a local database");
-    logger.info("Note that it is strongly recommended to use a MySQL databse, since the local database will be very slow");
+    logger.info("Note that it is strongly recommended to use a MySQL database for larger channels, since the local database will be very slow");
     logger.info("Do you want to use the local database? [Y/N]:");
     if (consoleApi.awaitYesNo()) {
       usDatabase.setUseH2Database(true);
