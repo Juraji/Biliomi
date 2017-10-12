@@ -11,7 +11,6 @@ import nl.juraji.biliomi.utility.factories.reflections.ReflectionUtils;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import static org.junit.Assert.assertArrayEquals;

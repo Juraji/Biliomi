@@ -1,7 +1,6 @@
 package nl.juraji.biliomi.components.chat.bits;
 
 import com.google.common.eventbus.Subscribe;
-import nl.juraji.biliomi.components.chat.subscribers.SubscriberWatchComponent;
 import nl.juraji.biliomi.components.shared.ChatService;
 import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.components.system.settings.SettingsService;
@@ -11,11 +10,9 @@ import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.internal.events.twitch.bits.TwitchBitsEvent;
-import nl.juraji.biliomi.utility.cdi.annotations.modifiers.L10nData;
 import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
 import nl.juraji.biliomi.utility.types.Init;
 import nl.juraji.biliomi.utility.types.Templater;
-import nl.juraji.biliomi.utility.types.collections.L10nMap;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;

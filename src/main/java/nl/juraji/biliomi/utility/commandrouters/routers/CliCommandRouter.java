@@ -6,18 +6,13 @@ import nl.juraji.biliomi.model.internal.events.irc.user.messages.IrcChatMessageE
 import nl.juraji.biliomi.components.shared.ChatService;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.ChannelName;
 import nl.juraji.biliomi.utility.commandrouters.types.RegistryEntry;
-import nl.juraji.biliomi.utility.estreams.EBiStream;
-import nl.juraji.biliomi.utility.estreams.EStream;
-import nl.juraji.biliomi.utility.estreams.types.EStreamAssertionFailedException;
 import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
 import org.apache.logging.log4j.Logger;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.LinkedList;
 
 /**

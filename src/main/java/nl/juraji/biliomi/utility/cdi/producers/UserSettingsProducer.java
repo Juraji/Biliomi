@@ -3,7 +3,7 @@ package nl.juraji.biliomi.utility.cdi.producers;
 import nl.juraji.biliomi.BiliomiContainer;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.UpdateModeType;
-import nl.juraji.biliomi.utility.calculate.DeepMerge;
+import nl.juraji.biliomi.utility.calculate.ObjectGraphs;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.BotName;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.ChannelName;
@@ -51,7 +51,7 @@ public class UserSettingsProducer {
       userSettings = EStream.from(files)
           .filter(Objects::nonNull)
           .map(file -> yamlInstance.loadAs(new FileInputStream(file), UserSettings.class))
-          .reduce(DeepMerge::mergePojo)
+          .reduce(ObjectGraphs::mergePojo)
           .orElse(null);
 
       if (userSettings == null) {
@@ -67,7 +67,7 @@ public class UserSettingsProducer {
       }
     } else {
       this.userSettings = new UserSettings();
-      DeepMerge.initializePojo(this.userSettings);
+      ObjectGraphs.initializeObject(this.userSettings);
       this.updateMode = UpdateModeType.INSTALL;
       this.userSettings.getBiliomi().getCore().setUpdateMode(this.updateMode.toString());
     }
