@@ -9,7 +9,6 @@ import nl.juraji.biliomi.io.web.WebClient;
 import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UserSetting;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
@@ -40,10 +39,6 @@ public class PatreonIntegrationSetupTask implements SetupTask {
 
   @Inject
   private AuthTokenDao authTokenDao;
-
-  @Inject
-  @AppDataValue("patreon.api.uris.authorization")
-  private String authorizationBaseUri;
 
   @Inject
   @UserSetting("biliomi.integrations.patreon.consumerKey")
@@ -86,7 +81,7 @@ public class PatreonIntegrationSetupTask implements SetupTask {
       return;
     }
 
-    PatreonOAuthFlowDirector director = new PatreonOAuthFlowDirector(authorizationBaseUri, consumerKey, consumerSecret, webClient);
+    PatreonOAuthFlowDirector director = new PatreonOAuthFlowDirector(consumerKey, consumerSecret, webClient);
     String authenticationUrl = director.getAuthenticationUri(
         PatreonOAuthScope.USERS,
         PatreonOAuthScope.MY_CAMPAIGN,

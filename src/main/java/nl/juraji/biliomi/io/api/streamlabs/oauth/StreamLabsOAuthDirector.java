@@ -25,8 +25,8 @@ public class StreamLabsOAuthDirector extends OAuthFlowDirector<StreamLabsOAuthSc
   private long timeToLive;
   private String authenticationError;
 
-  public StreamLabsOAuthDirector(String baseUri, String consumerKey, String consumerSecret, WebClient webClient) {
-    super(baseUri, consumerKey);
+  public StreamLabsOAuthDirector(String consumerKey, String consumerSecret, WebClient webClient) {
+    super(consumerKey);
     this.consumerSecret = consumerSecret;
     this.webClient = webClient;
   }
@@ -39,7 +39,7 @@ public class StreamLabsOAuthDirector extends OAuthFlowDirector<StreamLabsOAuthSc
     queryMap.put("redirect_uri", getRedirectUri());
     queryMap.put("scope", StreamLabsOAuthScope.join(scopes));
     queryMap.put("state", getStateToken());
-    return Url.url(getBaseUri(), "authorize").withQuery(queryMap).toString();
+    return Url.url("https://streamlabs.com/api/v1.0", "authorize").withQuery(queryMap).toString();
   }
 
   @Override
@@ -94,7 +94,7 @@ public class StreamLabsOAuthDirector extends OAuthFlowDirector<StreamLabsOAuthSc
   }
 
   private boolean requestAccessToken(Map<String, Object> queryMap) {
-    Url tokenUri = Url.url(getBaseUri(), "token");
+    Url tokenUri = Url.url("https://streamlabs.com/api/v1.0", "token");
     String formData = Url.createQueryString(queryMap);
     HttpFields headers = new HttpFields();
     headers.put(WebClient.NO_CACHE_HEADER, "true");

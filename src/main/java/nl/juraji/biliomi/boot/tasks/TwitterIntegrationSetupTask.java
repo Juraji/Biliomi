@@ -72,7 +72,7 @@ public class TwitterIntegrationSetupTask implements SetupTask {
 
   private void installTwitterToken(AuthToken token) throws Exception {
     console.println();
-    logger.info("Would you like to set up Twitter integration now? [y/n]: ");
+    console.print("Would you like to set up Twitter integration now? [y/n]: ");
     if (!console.awaitYesNo()) {
       logger.info("Canceled Twitter integration setup");
       return;

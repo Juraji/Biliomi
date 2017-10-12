@@ -13,10 +13,8 @@ public abstract class OAuthFlowDirector<E> {
 
   private final String consumerKey;
   private final String stateToken;
-  private final String baseUri;
 
-  public OAuthFlowDirector(String baseUri, String consumerKey) {
-    this.baseUri = baseUri;
+  public OAuthFlowDirector(String consumerKey) {
     if (StringUtils.isEmpty(consumerKey)) {
       throw new IllegalArgumentException("consumerKey may not be NULL or empty");
     }
@@ -35,10 +33,6 @@ public abstract class OAuthFlowDirector<E> {
 
   protected String getRedirectUri() {
     return CallbackResources.REDIRECT_URI;
-  }
-
-  protected String getBaseUri() {
-    return baseUri;
   }
 
   public abstract String getAuthenticationUri(E[] scopes);

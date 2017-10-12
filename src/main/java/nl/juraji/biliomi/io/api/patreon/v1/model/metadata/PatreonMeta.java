@@ -1,4 +1,4 @@
-package nl.juraji.biliomi.io.api.patreon.v1.model;
+package nl.juraji.biliomi.io.api.patreon.v1.model.metadata;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -9,18 +9,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Created by Juraji on 12-10-2017.
  * Biliomi
  */
-@XmlRootElement(name = "PatreonDataWrapper")
+@XmlRootElement(name = "PatreonMeta")
 @XmlAccessorType(XmlAccessType.FIELD)
-public abstract class PatreonDataWrapper<T> {
+public class PatreonMeta {
 
-  @XmlElement(name = "data")
-  private T data;
+  @XmlElement(name = "count")
+  private int count;
 
-  public T getData() {
-    return data;
+  public int getCount() {
+    return count;
   }
 
-  public void setData(T data) {
-    this.data = data;
+  public void setCount(int count) {
+    this.count = count;
   }
 }

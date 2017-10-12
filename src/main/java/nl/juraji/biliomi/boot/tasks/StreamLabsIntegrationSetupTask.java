@@ -9,7 +9,6 @@ import nl.juraji.biliomi.io.web.WebClient;
 import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UserSetting;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
@@ -40,10 +39,6 @@ public class StreamLabsIntegrationSetupTask implements SetupTask {
 
   @Inject
   private AuthTokenDao authTokenDao;
-
-  @Inject
-  @AppDataValue("streamlabs.api.uris.v1")
-  private String apiBaseUri;
 
   @Inject
   @UserSetting("biliomi.integrations.streamLabs.consumerKey")
@@ -86,7 +81,7 @@ public class StreamLabsIntegrationSetupTask implements SetupTask {
       return;
     }
 
-    StreamLabsOAuthDirector director = new StreamLabsOAuthDirector(apiBaseUri, consumerKey, consumerSecret, webClient);
+    StreamLabsOAuthDirector director = new StreamLabsOAuthDirector(consumerKey, consumerSecret, webClient);
     String authenticationUrl = director.getAuthenticationUri(
         StreamLabsOAuthScope.DONATIONS_READ,
         StreamLabsOAuthScope.SOCKET_TOKEN);

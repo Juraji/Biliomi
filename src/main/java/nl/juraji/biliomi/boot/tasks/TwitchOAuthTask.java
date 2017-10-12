@@ -9,7 +9,6 @@ import nl.juraji.biliomi.io.console.ConsoleApi;
 import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.BotName;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.ChannelName;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UserSetting;
@@ -40,10 +39,6 @@ public class TwitchOAuthTask implements SetupTask {
 
   @Inject
   private AuthTokenDao authTokenDao;
-
-  @Inject
-  @AppDataValue("twitch.api.uris.v5")
-  private String twitchBaseUri;
 
   @Inject
   @UserSetting("biliomi.twitch.clientId")
@@ -125,7 +120,7 @@ public class TwitchOAuthTask implements SetupTask {
   }
 
   private void installToken(Consumer<String> tokenSetter, TwitchOAuthScope... scopes) throws Exception {
-    TwitchOAuthFlowDirector oAuthFlow = new TwitchOAuthFlowDirector(twitchBaseUri, clientId);
+    TwitchOAuthFlowDirector oAuthFlow = new TwitchOAuthFlowDirector(clientId);
     String authenticationUrl = oAuthFlow.getAuthenticationUri(scopes);
 
     try {

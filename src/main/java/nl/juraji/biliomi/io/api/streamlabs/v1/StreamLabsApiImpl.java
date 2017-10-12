@@ -86,7 +86,7 @@ public class StreamLabsApiImpl implements StreamLabsApi {
     DateTime expiryTime = token.getExpiryTime();
     DateTime now = DateTime.now();
     if (expiryTime != null && now.isAfter(expiryTime)) {
-      StreamLabsOAuthDirector director = new StreamLabsOAuthDirector(apiBaseUri, consumerKey, consumerSecret, webClient);
+      StreamLabsOAuthDirector director = new StreamLabsOAuthDirector(consumerKey, consumerSecret, webClient);
       boolean refreshSuccess = director.awaitRefreshedAccessToken(token.getRefreshToken());
 
       if (refreshSuccess) {

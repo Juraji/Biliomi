@@ -1,26 +1,17 @@
 package nl.juraji.biliomi.io.api.patreon.v1.model;
 
+import nl.juraji.biliomi.io.api.patreon.v1.model.campaigns.PatreonCampaign;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
 /**
  * Created by Juraji on 12-10-2017.
  * Biliomi
  */
-@XmlRootElement(name = "PatreonDataWrapper")
+@XmlRootElement(name = "PatreonCampaigns")
 @XmlAccessorType(XmlAccessType.FIELD)
-public abstract class PatreonDataWrapper<T> {
-
-  @XmlElement(name = "data")
-  private T data;
-
-  public T getData() {
-    return data;
-  }
-
-  public void setData(T data) {
-    this.data = data;
-  }
+public class PatreonCampaigns extends PatreonDataWrapper<List<PatreonCampaign>> {
 }

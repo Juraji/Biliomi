@@ -24,10 +24,10 @@ public class PatreonOAuthFlowDirector extends OAuthFlowDirector<PatreonOAuthScop
   private String accessToken;
   private String refreshToken;
   private String authenticationError;
-  private int timeToLive;
+  private long timeToLive;
 
-  public PatreonOAuthFlowDirector(String baseUri, String consumerKey, String consumerSecret, WebClient webClient) {
-    super(baseUri, consumerKey);
+  public PatreonOAuthFlowDirector(String consumerKey, String consumerSecret, WebClient webClient) {
+    super(consumerKey);
     this.consumerSecret = consumerSecret;
     this.webClient = webClient;
   }
@@ -40,7 +40,7 @@ public class PatreonOAuthFlowDirector extends OAuthFlowDirector<PatreonOAuthScop
     queryMap.put("redirect_uri", getRedirectUri());
     queryMap.put("state", getStateToken());
     queryMap.put("scope", PatreonOAuthScope.join(scopes));
-    return Url.url(getBaseUri(), "oauth2", "authorize").withQuery(queryMap).toString();
+    return Url.url("https://www.patreon.com", "oauth2", "authorize").withQuery(queryMap).toString();
   }
 
   @Override
@@ -91,7 +91,7 @@ public class PatreonOAuthFlowDirector extends OAuthFlowDirector<PatreonOAuthScop
   }
 
   private boolean requestAccessToken(Map<String, Object> queryMap) {
-    Url tokenUri = Url.url(getBaseUri(), "oauth2", "token");
+    Url tokenUri = Url.url("https://api.patreon.com", "oauth2", "token");
 
     HttpFields headers = new HttpFields();
     headers.put(WebClient.NO_CACHE_HEADER, "true");

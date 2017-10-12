@@ -17,8 +17,8 @@ public class TwitchOAuthFlowDirector extends OAuthFlowDirector<TwitchOAuthScope>
   private String accessToken;
   private String authenticationError;
 
-  public TwitchOAuthFlowDirector(String baseUri, String consumerKey) {
-    super(baseUri, consumerKey);
+  public TwitchOAuthFlowDirector(String consumerKey) {
+    super(consumerKey);
   }
 
   @Override
@@ -30,7 +30,7 @@ public class TwitchOAuthFlowDirector extends OAuthFlowDirector<TwitchOAuthScope>
     queryMap.put("state", getStateToken());
     queryMap.put("force_verify", "true");
     queryMap.put("scope", TwitchOAuthScope.join(scopes));
-    return Url.url(getBaseUri(), "oauth2", "authorize").withQuery(queryMap).toString();
+    return Url.url("https://api.twitch.tv/kraken", "oauth2", "authorize").withQuery(queryMap).toString();
   }
 
   @Override

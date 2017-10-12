@@ -12,7 +12,6 @@ import nl.juraji.biliomi.io.web.WebClient;
 import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UserSetting;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
@@ -48,10 +47,6 @@ public class SpotifyIntegrationSetupTask implements SetupTask {
 
   @Inject
   private AuthTokenDao authTokenDao;
-
-  @Inject
-  @AppDataValue("spotify.api.uris.accounts")
-  private String accountsBaseUri;
 
   @Inject
   @UserSetting("biliomi.integrations.spotify.consumerKey")
@@ -93,7 +88,7 @@ public class SpotifyIntegrationSetupTask implements SetupTask {
       return;
     }
 
-    SpotifyOAuthFlowDirector director = new SpotifyOAuthFlowDirector(accountsBaseUri, consumerKey, consumerSecret, webClient);
+    SpotifyOAuthFlowDirector director = new SpotifyOAuthFlowDirector(consumerKey, consumerSecret, webClient);
     String authenticationUrl = director.getAuthenticationUri(
         SpotifyOAuthScope.PLAYLIST_READ_PRIVATE,
         SpotifyOAuthScope.PLAYLIST_READ_COLLABORATIVE,

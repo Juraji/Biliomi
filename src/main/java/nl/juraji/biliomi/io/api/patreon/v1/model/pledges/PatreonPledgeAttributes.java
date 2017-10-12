@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Created by Juraji on 11-10-2017.
+ * Created by Juraji on 12-10-2017.
  * Biliomi
  */
 @XmlRootElement(name = "PatreonPledgeAttributes")

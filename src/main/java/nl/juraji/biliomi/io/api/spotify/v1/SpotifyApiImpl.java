@@ -45,10 +45,6 @@ public class SpotifyApiImpl implements SpotifyApi {
   private String apiBaseUri;
 
   @Inject
-  @AppDataValue("spotify.api.uris.accounts")
-  private String accountsBaseUri;
-
-  @Inject
   @UserSetting("biliomi.integrations.spotify.consumerKey")
   private String consumerKey;
 
@@ -147,7 +143,7 @@ public class SpotifyApiImpl implements SpotifyApi {
     DateTime expiryTime = token.getExpiryTime();
     DateTime now = DateTime.now();
     if (expiryTime != null && now.isAfter(expiryTime)) {
-      SpotifyOAuthFlowDirector director = new SpotifyOAuthFlowDirector(accountsBaseUri, consumerKey, consumerSecret, webClient);
+      SpotifyOAuthFlowDirector director = new SpotifyOAuthFlowDirector(consumerKey, consumerSecret, webClient);
       boolean refreshSuccess = director.awaitRefreshedAccessToken(token.getRefreshToken());
 
       if (refreshSuccess) {
@@ -155,13 +151,12 @@ public class SpotifyApiImpl implements SpotifyApi {
         token.setIssuedAt(now);
         token.setTimeToLive(director.getTimeToLive());
         authTokenDao.save(token);
-
-        headers.put(HttpHeader.AUTHORIZATION, OAUTH_HEADER_PREFIX + token.getToken());
       } else {
         throw new UnavailableException("The Spotify Api failed to refresh the access token");
       }
+    } else {
+      headers.put(HttpHeader.AUTHORIZATION, OAUTH_HEADER_PREFIX + token.getToken());
     }
-
     return token.getUserId();
   }
 }

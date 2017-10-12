@@ -1,7 +1,7 @@
 package nl.juraji.biliomi.io.api.patreon.v1;
 
-import nl.juraji.biliomi.io.api.patreon.v1.model.responses.PatreonPledgesResponse;
-import nl.juraji.biliomi.io.api.patreon.v1.model.responses.PatreonUserResponse;
+import nl.juraji.biliomi.io.api.patreon.v1.model.PatreonCampaigns;
+import nl.juraji.biliomi.io.api.patreon.v1.model.PatreonPledges;
 import nl.juraji.biliomi.io.web.Response;
 
 /**
@@ -20,12 +20,19 @@ public interface PatreonApi {
    *
    * @see <a href="https://docs.patreon.com/#fetch-your-own-profile-and-campaign-info">Fetch your own profile and campaign info</a>
    */
-  Response<PatreonUserResponse> getUserAndCampaignInfo() throws Exception;
+  Response<PatreonCampaigns> getUserAndCampaignInfo() throws Exception;
 
   /**
    * Get a list of pledges for the current user's campaign
    *
    * @see <a href="https://docs.patreon.com/?java#paging-through-a-list-of-pledges-to-you">Paging through a list of pledges to you</a>
    */
-  Response<PatreonPledgesResponse> getPledges(String campaignId, String nextLink) throws Exception;
+  Response<PatreonPledges> getPledges(String campaignId) throws Exception;
+
+  /**
+   * Get a list of pledges for the current user's campaign using the next link from a previous response
+   *
+   * @see <a href="https://docs.patreon.com/?java#paging-through-a-list-of-pledges-to-you">Paging through a list of pledges to you</a>
+   */
+  Response<PatreonPledges> getPledges(PatreonPledges previousResponse) throws Exception;
 }

@@ -23,7 +23,7 @@ public class DonationRegisterUpdateTask implements SetupTask {
   public void install() {
     if (!templateDao.templateExists(MANUAL_DONATION_NOTICE)) {
       Template template = new Template();
-      template.setTemplateKey(INCOMING_DONATION_NOTICE);
+      template.setTemplateKey(MANUAL_DONATION_NOTICE);
       template.setTemplate("Straight into the awesomebox! Thank you {{username}} for donating {{donation}} <3");
       template.setDescription("Posted in the chat when a new StreamLabs donation is registered");
       template.getKeyDescriptions().put("username", "The username of the donator");

@@ -26,10 +26,10 @@ public class SpotifyOAuthFlowDirector extends OAuthFlowDirector<SpotifyOAuthScop
   private String accessToken;
   private String refreshToken;
   private String authenticationError;
-  private int timeToLive;
+  private long timeToLive;
 
-  public SpotifyOAuthFlowDirector(String baseUri, String consumerKey, String consumerSecret, WebClient webClient) {
-    super(baseUri, consumerKey);
+  public SpotifyOAuthFlowDirector(String consumerKey, String consumerSecret, WebClient webClient) {
+    super(consumerKey);
     this.consumerSecret = consumerSecret;
     this.webClient = webClient;
   }
@@ -43,7 +43,7 @@ public class SpotifyOAuthFlowDirector extends OAuthFlowDirector<SpotifyOAuthScop
     queryMap.put("state", getStateToken());
     queryMap.put("scope", SpotifyOAuthScope.join(scopes));
     queryMap.put("show_dialog", "true");
-    return Url.url(getBaseUri(), "authorize").withQuery(queryMap).toString();
+    return Url.url("https://accounts.spotify.com", "authorize").withQuery(queryMap).toString();
   }
 
   @Override
@@ -93,7 +93,7 @@ public class SpotifyOAuthFlowDirector extends OAuthFlowDirector<SpotifyOAuthScop
   }
 
   private boolean requestAccessToken(Map<String, Object> requestFormData) {
-    Url tokenUri = Url.url(getBaseUri(), "api", "token");
+    Url tokenUri = Url.url("https://accounts.spotify.com", "api", "token");
 
     String clientCode = getConsumerKey() + ':' + consumerSecret;
     String base64ClientCode = Base64.getEncoder().encodeToString(clientCode.getBytes());

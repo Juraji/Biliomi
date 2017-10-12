@@ -30,7 +30,7 @@ public class OAuthAccessTokenResponse {
     this.accessToken = accessToken;
   }
 
-  public int getExpiresIn() {
+  public long getExpiresIn() {
     return expiresIn;
   }
 

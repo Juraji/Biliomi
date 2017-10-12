@@ -1,8 +1,8 @@
 package nl.juraji.biliomi.io.api.patreon.v1;
 
 import nl.juraji.biliomi.io.api.patreon.oauth.PatreonOAuthFlowDirector;
-import nl.juraji.biliomi.io.api.patreon.v1.model.responses.PatreonPledgesResponse;
-import nl.juraji.biliomi.io.api.patreon.v1.model.responses.PatreonUserResponse;
+import nl.juraji.biliomi.io.api.patreon.v1.model.PatreonCampaigns;
+import nl.juraji.biliomi.io.api.patreon.v1.model.PatreonPledges;
 import nl.juraji.biliomi.io.web.Response;
 import nl.juraji.biliomi.io.web.Url;
 import nl.juraji.biliomi.io.web.WebClient;
@@ -12,7 +12,6 @@ import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UserSetting;
 import nl.juraji.biliomi.utility.exceptions.UnavailableException;
-import nl.juraji.biliomi.utility.factories.ModelUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.http.HttpHeader;
@@ -22,6 +21,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -36,10 +36,6 @@ public class PatreonApiImpl implements PatreonApi {
   @Inject
   @AppDataValue("patreon.api.uris.v1")
   private String apiBaseUri;
-
-  @Inject
-  @AppDataValue("patreon.api.uris.authorization")
-  private String athorizationBaseUri;
 
   @Inject
   @UserSetting("biliomi.integrations.patreon.consumerKey")
@@ -75,23 +71,30 @@ public class PatreonApiImpl implements PatreonApi {
   }
 
   @Override
-  public Response<PatreonUserResponse> getUserAndCampaignInfo() throws Exception {
-    Url url = Url.url(apiBaseUri, "current_user", "campaigns").withQuery(getIncludeQuery());
-    return webClient.get(url, headers, PatreonUserResponse.class);
+  public Response<PatreonCampaigns> getUserAndCampaignInfo() throws Exception {
+    executeTokenPreflight();
+    Url url = Url.url(apiBaseUri, "current_user", "campaigns");
+    return webClient.get(url, headers, PatreonCampaigns.class);
   }
 
   @Override
-  public Response<PatreonPledgesResponse> getPledges(String campaignId, String nextLink) throws Exception {
-    if (nextLink == null) {
-      Url url = Url.url(apiBaseUri, "campaigns", campaignId, "pledges").withQuery(getIncludeQuery());
-      return webClient.get(url, headers, PatreonPledgesResponse.class);
-    } else {
-      return webClient.get(nextLink, headers, PatreonPledgesResponse.class);
-    }
+  public Response<PatreonPledges> getPledges(String campaignId) throws Exception {
+    executeTokenPreflight();
+    Map<String, Object> queryMap = new HashMap<>();
+    queryMap.put("page[count]", 10);
+    queryMap.put("sort", "created");
+
+    Url url = Url.url(apiBaseUri, "campaigns", campaignId, "pledges").withQuery(queryMap);
+    return webClient.get(url, headers, PatreonPledges.class);
   }
 
-  private Map<String, Object> getIncludeQuery() {
-    return ModelUtils.mapWith("include", "rewards,creator,goals,pledges");
+  @Override
+  public Response<PatreonPledges> getPledges(PatreonPledges previousResponse) throws Exception {
+    executeTokenPreflight();
+    if (previousResponse == null || previousResponse.getLinks().getNextPageLink() == null) {
+      throw new IllegalArgumentException("PatreonPledges is null or does not have a next link");
+    }
+    return webClient.get(previousResponse.getLinks().getNextPageLink(), headers, PatreonPledges.class);
   }
 
   @SuppressWarnings("Duplicates")
@@ -105,7 +108,7 @@ public class PatreonApiImpl implements PatreonApi {
     DateTime expiryTime = token.getExpiryTime();
     DateTime now = DateTime.now();
     if (expiryTime != null && now.isAfter(expiryTime)) {
-      PatreonOAuthFlowDirector director = new PatreonOAuthFlowDirector(athorizationBaseUri, consumerKey, consumerSecret, webClient);
+      PatreonOAuthFlowDirector director = new PatreonOAuthFlowDirector(consumerKey, consumerSecret, webClient);
       boolean refreshSuccess = director.awaitRefreshedAccessToken(token.getRefreshToken());
 
       if (refreshSuccess) {
@@ -113,11 +116,11 @@ public class PatreonApiImpl implements PatreonApi {
         token.setIssuedAt(now);
         token.setTimeToLive(director.getTimeToLive());
         authTokenDao.save(token);
-
-        headers.put(HttpHeader.AUTHORIZATION, OAUTH_HEADER_PREFIX + token.getToken());
       } else {
         throw new UnavailableException("The Patreon Api failed to refresh the access token");
       }
+    } else {
+      headers.put(HttpHeader.AUTHORIZATION, OAUTH_HEADER_PREFIX + token.getToken());
     }
   }
 }
