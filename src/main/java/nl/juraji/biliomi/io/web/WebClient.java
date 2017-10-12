@@ -6,6 +6,9 @@ import org.eclipse.jetty.http.HttpFields;
 /**
  * Created by Juraji on 20-4-2017.
  * Biliomi v3
+ *
+ * Note: If the given model class is a Java type the response data will not be set.
+ * The response raw data will always contain a string of the response contents.
  */
 public interface WebClient {
 

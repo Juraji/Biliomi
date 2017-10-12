@@ -1,11 +1,10 @@
-package nl.juraji.biliomi.utility.commandrouters.cmd;
+package nl.juraji.biliomi.utility.commandrouters.routers;
 
 import com.google.common.eventbus.Subscribe;
 import nl.juraji.biliomi.model.internal.events.bot.ConsoleInputEvent;
 import nl.juraji.biliomi.model.internal.events.irc.user.messages.IrcChatMessageEvent;
 import nl.juraji.biliomi.components.shared.ChatService;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.ChannelName;
-import nl.juraji.biliomi.utility.commandrouters.CommandRouter;
 import nl.juraji.biliomi.utility.commandrouters.types.RegistryEntry;
 import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
 import org.apache.logging.log4j.Logger;
@@ -114,4 +113,5 @@ public class CliCommandRouter {
       logger.error("Failed invoking command executor for input /" + event.toString(), e);
     }
   }
+
 }

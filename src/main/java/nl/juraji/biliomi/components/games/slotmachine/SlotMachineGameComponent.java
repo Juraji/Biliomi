@@ -5,7 +5,7 @@ import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.components.shared.GameMessagesService;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.commandrouters.CommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 

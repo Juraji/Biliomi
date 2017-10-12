@@ -8,7 +8,7 @@ import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.components.system.settings.SettingsService;
 import nl.juraji.biliomi.components.system.users.UsersService;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
-import nl.juraji.biliomi.utility.commandrouters.cmd.CliCommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.CliCommandRoute;
 import nl.juraji.biliomi.utility.security.PasswordEncryptor;
 import nl.juraji.biliomi.utility.types.MutableString;
 

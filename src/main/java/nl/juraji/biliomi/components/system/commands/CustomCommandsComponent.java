@@ -8,10 +8,10 @@ import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.components.shared.TimeFormatter;
 import nl.juraji.biliomi.components.system.users.UserGroupService;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
-import nl.juraji.biliomi.utility.commandrouters.CommandRoute;
-import nl.juraji.biliomi.utility.commandrouters.CommandRouter;
-import nl.juraji.biliomi.utility.commandrouters.CommandRouterRegistry;
-import nl.juraji.biliomi.utility.commandrouters.SubCommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.routers.CommandRouter;
+import nl.juraji.biliomi.utility.commandrouters.routers.CommandRouterRegistry;
+import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.types.Templater;
 

@@ -1,4 +1,4 @@
-package nl.juraji.biliomi.utility.commandrouters.cmd;
+package nl.juraji.biliomi.utility.commandrouters.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -5,7 +5,7 @@ import nl.juraji.biliomi.model.core.CustomCommandDao;
 import nl.juraji.biliomi.components.system.commands.CustomCommandsComponent;
 import nl.juraji.biliomi.rest.config.ModelRestService;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
-import nl.juraji.biliomi.utility.commandrouters.CommandRouterRegistry;
+import nl.juraji.biliomi.utility.commandrouters.routers.CommandRouterRegistry;
 
 import javax.inject.Inject;
 import javax.ws.rs.Path;

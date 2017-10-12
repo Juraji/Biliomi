@@ -5,8 +5,8 @@ import nl.juraji.biliomi.model.internal.events.irc.user.messages.IrcChatMessageE
 import nl.juraji.biliomi.model.internal.rest.CommandRequest;
 import nl.juraji.biliomi.rest.config.Responses;
 import nl.juraji.biliomi.rest.config.RestRequestInfoHolder;
-import nl.juraji.biliomi.utility.commandrouters.CommandRouter;
-import nl.juraji.biliomi.utility.commandrouters.cmd.CliCommandRouter;
+import nl.juraji.biliomi.utility.commandrouters.routers.CommandRouter;
+import nl.juraji.biliomi.utility.commandrouters.routers.CliCommandRouter;
 import nl.juraji.biliomi.utility.types.MutableString;
 import org.apache.commons.lang3.StringUtils;
 

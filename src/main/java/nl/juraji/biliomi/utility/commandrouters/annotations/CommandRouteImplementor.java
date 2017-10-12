@@ -1,4 +1,4 @@
-package nl.juraji.biliomi.utility.commandrouters.cmd;
+package nl.juraji.biliomi.utility.commandrouters.annotations;
 
 import javax.interceptor.InterceptorBinding;
 import java.lang.annotation.*;
@@ -11,5 +11,5 @@ import java.lang.annotation.*;
 @InterceptorBinding
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface CliCommandRouteImplementor {
+public @interface CommandRouteImplementor {
 }

@@ -4,7 +4,7 @@
 
   <interceptors>
     <class>nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriberInterceptor</class>
-    <class>nl.juraji.biliomi.utility.commandrouters.CommandRouteImplementorInterceptor</class>
-    <class>nl.juraji.biliomi.utility.commandrouters.cmd.CliCommandRouteImplementorInterceptor</class>
+    <class>nl.juraji.biliomi.utility.commandrouters.interceptors.CommandRouteImplementorInterceptor</class>
+    <class>nl.juraji.biliomi.utility.commandrouters.interceptors.CliCommandRouteImplementorInterceptor</class>
   </interceptors>
 </beans>

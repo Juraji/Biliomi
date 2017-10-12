@@ -4,7 +4,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import nl.juraji.biliomi.model.core.*;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.commandrouters.CommandRouterRegistry;
+import nl.juraji.biliomi.utility.commandrouters.routers.CommandRouterRegistry;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 

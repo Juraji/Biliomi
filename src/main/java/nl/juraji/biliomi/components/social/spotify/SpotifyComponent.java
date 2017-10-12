@@ -18,8 +18,8 @@ import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
 import nl.juraji.biliomi.utility.calculate.Numbers;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
-import nl.juraji.biliomi.utility.commandrouters.CommandRoute;
-import nl.juraji.biliomi.utility.commandrouters.SubCommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import org.apache.commons.lang3.StringUtils;
 

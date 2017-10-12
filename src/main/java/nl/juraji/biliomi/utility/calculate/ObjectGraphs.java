@@ -14,13 +14,13 @@ import java.util.Objects;
  * Created by Juraji on 19-7-2017.
  * Biliomi v3
  */
-public final class DeepMerge {
-  private DeepMerge() {
+public final class ObjectGraphs {
+  private ObjectGraphs() {
     // Private constructor
   }
 
   /**
-   * Merge two maps
+   * deep merge two maps
    *
    * @param target The target map
    * @param source The source map
@@ -68,6 +68,14 @@ public final class DeepMerge {
     });
   }
 
+  /**
+   * Deep merge to POJO objects
+   *
+   * @param target The target POJO
+   * @param source The source POJO
+   * @param <T>    The POJO type
+   * @return The merge result
+   */
   public static <T> T mergePojo(T target, T source) throws Exception {
     if (!target.getClass().equals(source.getClass())) {
       throw new IllegalArgumentException("Type mismatch " + source.getClass().getSimpleName() + " -> " + target.getClass().getSimpleName());
@@ -84,7 +92,7 @@ public final class DeepMerge {
         if (targetValue == null) {
           PropertyUtils.setProperty(target, propertyDescriptor.getName(), sourceValue);
         } else {
-          if (isPrimitive(propertyDescriptor)) {
+          if (isJavaType(propertyDescriptor)) {
             if (targetValue != sourceValue) {
               PropertyUtils.setProperty(target, propertyDescriptor.getName(), sourceValue);
             }
@@ -97,22 +105,40 @@ public final class DeepMerge {
     return target;
   }
 
-  public static void initializePojo(Object o) {
+  /**
+   * Recursively initialize all non-primitive properties of an object
+   *
+   * @param o The object to initialize
+   */
+  public static void initializeObject(Object o) {
     PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(o);
 
     EStream.from(descriptors)
-        .filter(propertyDescriptor -> !isPrimitive(propertyDescriptor))
+        .filter(propertyDescriptor -> !isJavaType(propertyDescriptor))
         .filter(propertyDescriptor -> PropertyUtils.getProperty(o, propertyDescriptor.getName()) == null)
         .forEach(propertyDescriptor -> {
           Class<?> type = propertyDescriptor.getPropertyType();
           Object subO = type.newInstance();
           PropertyUtils.setProperty(o, propertyDescriptor.getName(), subO);
-          initializePojo(subO);
+          initializeObject(subO);
         });
   }
 
-  private static boolean isPrimitive(PropertyDescriptor pd) {
-    Class<?> type = pd.getPropertyType();
+  /**
+   * Check if the given property is a Java type
+   * @param pd A PropertyDescriptor
+   * @return True when the property type is a Java type, else False
+   */
+  public static boolean isJavaType(PropertyDescriptor pd) {
+    return isJavaType(pd.getPropertyType());
+  }
+
+  /**
+   * Check if the given class is a Java type
+   * @param type A class
+   * @return True when the property type is a Java type, else False
+   */
+  public static boolean isJavaType(Class<?> type) {
     return (ClassUtils.isPrimitiveOrWrapper(type)
         || Class.class.equals(type)
         || String.class.equals(type)

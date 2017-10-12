@@ -7,8 +7,8 @@ import nl.juraji.biliomi.model.chat.settings.AnnouncementsSettings;
 import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.components.shared.TimeFormatter;
 import nl.juraji.biliomi.utility.calculate.Numbers;
-import nl.juraji.biliomi.utility.commandrouters.CommandRoute;
-import nl.juraji.biliomi.utility.commandrouters.SubCommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 

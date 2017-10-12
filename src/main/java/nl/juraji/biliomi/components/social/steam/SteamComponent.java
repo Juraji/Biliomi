@@ -7,9 +7,9 @@ import nl.juraji.biliomi.model.internal.events.bot.ConsoleInputEvent;
 import nl.juraji.biliomi.model.social.steam.SteamSettings;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
-import nl.juraji.biliomi.utility.commandrouters.CommandRoute;
-import nl.juraji.biliomi.utility.commandrouters.SubCommandRoute;
-import nl.juraji.biliomi.utility.commandrouters.cmd.CliCommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.CliCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.exceptions.UnavailableException;
 

@@ -4,7 +4,7 @@ import nl.juraji.biliomi.model.internal.events.bot.ConsoleInputEvent;
 import nl.juraji.biliomi.components.games.tamagotchi.services.AgingTimerService;
 import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
-import nl.juraji.biliomi.utility.commandrouters.cmd.CliCommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.CliCommandRoute;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;

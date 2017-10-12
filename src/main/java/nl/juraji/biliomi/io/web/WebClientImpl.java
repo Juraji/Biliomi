@@ -5,6 +5,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.net.MediaType;
 import nl.juraji.biliomi.model.core.VersionInfo;
 import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.ObjectGraphs;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
 import nl.juraji.biliomi.utility.factories.marshalling.JacksonMarshaller;
 import org.apache.logging.log4j.Logger;
@@ -156,8 +157,10 @@ public class WebClientImpl implements WebClient {
         response.setRawData(cr.getContentAsString().trim());
 
         if (cr.getStatus() == 200) {
-          T unmarshal = JacksonMarshaller.unmarshal(cr.getContentAsString(), model);
-          response.setData(unmarshal);
+          if (!ObjectGraphs.isJavaType(model)) {
+            T unmarshal = JacksonMarshaller.unmarshal(cr.getContentAsString(), model);
+            response.setData(unmarshal);
+          }
         }
 
         if (!bypassCache) {
