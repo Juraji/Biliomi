@@ -1,4 +1,4 @@
-package nl.juraji.biliomi.utility.commandrouters;
+package nl.juraji.biliomi.utility.commandrouters.routers;
 
 import nl.juraji.biliomi.model.core.Command;
 import nl.juraji.biliomi.model.core.CommandHistoryRecordDao;
@@ -11,12 +11,17 @@ import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.components.system.users.UsersService;
 import nl.juraji.biliomi.utility.commandrouters.types.CommandCall;
 import nl.juraji.biliomi.utility.commandrouters.types.RegistryEntry;
+import nl.juraji.biliomi.utility.estreams.EBiStream;
+import nl.juraji.biliomi.utility.estreams.EStream;
+import nl.juraji.biliomi.utility.estreams.types.EStreamAssertionFailedException;
 import nl.juraji.biliomi.utility.types.collections.L10nMap;
 import org.apache.logging.log4j.Logger;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  * Created by Juraji on 28-4-2017.
@@ -178,5 +183,18 @@ public class CommandRouter {
   private boolean pointsWithdrawalOK(User user, Command command) {
     // The service was not able to take the required amount of points from this user
     return pointsService.take(user, command.getPrice()) != -1;
+  }
+
+  /**
+   * Get a BiEStream of CommandRoute annotations and the annotated metods for a class
+   * componentClass can be any class for compatibility with interceptors
+   *
+   * @param componentClass The class to scan
+   * @return A BiEStream
+   */
+  public static <A extends Annotation> EBiStream<A, Method, Exception> findCommandMethods(Class<?> componentClass, Class<A> annotation) throws EStreamAssertionFailedException {
+    return EStream.from(componentClass.getDeclaredMethods())
+        .filter(method -> method.isAnnotationPresent(annotation))
+        .mapToBiEStream(method -> method.getAnnotation(annotation), method -> method);
   }
 }

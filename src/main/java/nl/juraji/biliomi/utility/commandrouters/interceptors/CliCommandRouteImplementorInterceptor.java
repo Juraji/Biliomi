@@ -1,7 +1,10 @@
-package nl.juraji.biliomi.utility.commandrouters.cmd;
+package nl.juraji.biliomi.utility.commandrouters.interceptors;
 
 import nl.juraji.biliomi.components.interfaces.Component;
-import nl.juraji.biliomi.utility.commandrouters.CommandExecutorUtils;
+import nl.juraji.biliomi.utility.commandrouters.annotations.CliCommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.CliCommandRouteImplementor;
+import nl.juraji.biliomi.utility.commandrouters.routers.CliCommandRouterRegistry;
+import nl.juraji.biliomi.utility.commandrouters.routers.CommandRouter;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -22,7 +25,7 @@ public class CliCommandRouteImplementorInterceptor {
   @PostConstruct
   public Object registerCommandRoutes(InvocationContext ctx) throws Exception {
     Component component = (Component) ctx.getTarget();
-    CommandExecutorUtils.findCliCommandExecutors(component.getClass())
+    CommandRouter.findCommandMethods(component.getClass(), CliCommandRoute.class)
         .mapKey(CliCommandRoute::command)
         .forEach((command, method) -> cliCommandRouterRegistry.put(command, component, method));
 

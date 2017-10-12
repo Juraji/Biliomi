@@ -1,9 +1,10 @@
-package nl.juraji.biliomi.utility.commandrouters;
+package nl.juraji.biliomi.utility.commandrouters.routers;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.components.interfaces.Component;
+import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.commandrouters.types.CommandRouteInvocationException;
 import nl.juraji.biliomi.utility.commandrouters.types.CommandRouteNotFoundException;
@@ -28,7 +29,7 @@ public class SubCommandRouter {
 
   public void buildRoutes() throws Exception {
     if (subCommandExecutors.isEmpty()) {
-      CommandExecutorUtils.findSubCommandExecutors(parentComponent.getClass())
+      CommandRouter.findCommandMethods(parentComponent.getClass(), SubCommandRoute.class)
           .forEach((annot, method) -> subCommandExecutors.put(annot.parentCommand(), annot.command(), method));
     }
   }

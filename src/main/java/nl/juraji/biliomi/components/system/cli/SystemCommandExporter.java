@@ -7,9 +7,9 @@ import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.model.core.Command;
 import nl.juraji.biliomi.model.core.CommandDao;
 import nl.juraji.biliomi.utility.calculate.TextUtils;
-import nl.juraji.biliomi.utility.commandrouters.CommandExecutorUtils;
-import nl.juraji.biliomi.utility.commandrouters.CommandRoute;
-import nl.juraji.biliomi.utility.commandrouters.SubCommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.routers.CommandRouter;
 import nl.juraji.biliomi.utility.estreams.EStream;
 import nl.juraji.biliomi.utility.factories.reflections.ReflectionUtils;
 import nl.juraji.biliomi.utility.types.Exporter;
@@ -67,10 +67,10 @@ public class SystemCommandExporter extends Exporter {
     ReflectionUtils.forClassPackage(ComponentManager.class)
         .subTypes(Component.class)
         .forEach(componentClass -> {
-          CommandExecutorUtils.findCommandExecutors(componentClass)
+          CommandRouter.findCommandMethods(componentClass, CommandRoute.class)
               .map((route, method) -> route)
               .forEach(commandRoutes::add);
-          CommandExecutorUtils.findSubCommandExecutors(componentClass)
+          CommandRouter.findCommandMethods(componentClass, SubCommandRoute.class)
               .map((subRoute, method) -> subRoute)
               .forEach(subCommandRoutes::add);
         });

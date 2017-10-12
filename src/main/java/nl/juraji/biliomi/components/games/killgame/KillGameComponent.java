@@ -3,7 +3,7 @@ package nl.juraji.biliomi.components.games.killgame;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.UserKDRRecordStats;
 import nl.juraji.biliomi.components.interfaces.Component;
-import nl.juraji.biliomi.utility.commandrouters.CommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.types.Templater;

@@ -4,7 +4,7 @@ import nl.juraji.biliomi.model.core.Command;
 import nl.juraji.biliomi.model.core.CommandDao;
 import nl.juraji.biliomi.model.core.CustomCommand;
 import nl.juraji.biliomi.rest.config.ModelRestService;
-import nl.juraji.biliomi.utility.commandrouters.CommandRouterRegistry;
+import nl.juraji.biliomi.utility.commandrouters.routers.CommandRouterRegistry;
 
 import javax.inject.Inject;
 import javax.ws.rs.ForbiddenException;

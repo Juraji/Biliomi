@@ -6,7 +6,7 @@ import nl.juraji.biliomi.model.internal.events.irc.user.messages.IrcChatMessageE
 import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
-import nl.juraji.biliomi.utility.commandrouters.CommandRouter;
+import nl.juraji.biliomi.utility.commandrouters.routers.CommandRouter;
 import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
 import org.apache.logging.log4j.Logger;
 

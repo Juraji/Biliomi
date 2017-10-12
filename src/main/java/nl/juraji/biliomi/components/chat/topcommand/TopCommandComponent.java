@@ -7,7 +7,7 @@ import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.components.system.commands.CommandService;
 import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.components.shared.TimeFormatter;
-import nl.juraji.biliomi.utility.commandrouters.CommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.BotName;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.ChannelName;

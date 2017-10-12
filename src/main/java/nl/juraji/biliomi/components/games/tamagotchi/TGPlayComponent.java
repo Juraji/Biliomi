@@ -7,7 +7,7 @@ import nl.juraji.biliomi.components.games.tamagotchi.services.TamagotchiService;
 import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.components.system.commands.CommandService;
 import nl.juraji.biliomi.components.shared.MessageTimerService;
-import nl.juraji.biliomi.utility.commandrouters.CommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 

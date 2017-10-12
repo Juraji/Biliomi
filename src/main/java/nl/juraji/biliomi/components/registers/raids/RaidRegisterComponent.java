@@ -8,8 +8,8 @@ import nl.juraji.biliomi.model.registers.RaidRecord;
 import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
-import nl.juraji.biliomi.utility.commandrouters.CommandRoute;
-import nl.juraji.biliomi.utility.commandrouters.SubCommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
+import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.types.Templater;
 

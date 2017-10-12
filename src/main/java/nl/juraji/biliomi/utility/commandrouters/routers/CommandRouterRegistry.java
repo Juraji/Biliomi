@@ -1,4 +1,4 @@
-package nl.juraji.biliomi.utility.commandrouters;
+package nl.juraji.biliomi.utility.commandrouters.routers;
 
 import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.utility.commandrouters.types.RegistryEntry;

@@ -3,7 +3,7 @@ package nl.juraji.biliomi.io.console;
 import nl.juraji.biliomi.io.console.support.ConsoleListener;
 import nl.juraji.biliomi.io.console.support.LegacyConsoleListener;
 import nl.juraji.biliomi.io.console.support.ModernConsoleListener;
-import nl.juraji.biliomi.utility.commandrouters.cmd.CliCommandRouter;
+import nl.juraji.biliomi.utility.commandrouters.routers.CliCommandRouter;
 import nl.juraji.biliomi.utility.events.EventBus;
 import nl.juraji.biliomi.utility.factories.concurrent.DefaultThreadFactory;
 import nl.juraji.biliomi.utility.types.Init;
