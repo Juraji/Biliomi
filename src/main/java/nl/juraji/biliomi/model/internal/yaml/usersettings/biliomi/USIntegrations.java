@@ -10,7 +10,6 @@ public class USIntegrations {
   private USIntegrationConsumer streamLabs;
   private USIntegrationConsumer twitter;
   private USIntegrationConsumer spotify;
-  private USIntegrationConsumer patreon;
 
   public USIntegrationConsumer getStreamLabs() {
     return streamLabs;
@@ -34,13 +33,5 @@ public class USIntegrations {
 
   public void setSpotify(USIntegrationConsumer spotify) {
     this.spotify = spotify;
-  }
-
-  public USIntegrationConsumer getPatreon() {
-    return patreon;
-  }
-
-  public void setPatreon(USIntegrationConsumer patreon) {
-    this.patreon = patreon;
   }
 }

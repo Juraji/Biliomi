@@ -12,8 +12,6 @@ Installing Biliomi is real easy now, see README.md for more information.
 * The Bits component now supports live editable templates.<br>
 *One template to post in the chat when a user cheers bits, one for when points are payed out to the cheerer and one for when points are payed to to all viewers.*<br>
 *Check [the wiki](https://github.com/Juraji/Biliomi/wiki/Bits) for more information on donation register templates*
-* Implement a draft for the Patreon api.<br>
-*Due to a code merging error this sneaked into the main branch. What the Patreon integration will actually do is yet to be designed.*
 
 # Biliomi v3.10.1
 Date: October 8th 2017
