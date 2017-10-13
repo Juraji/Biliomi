@@ -75,7 +75,11 @@ public class SubscriberWatchUpdateService extends TimerService {
       // Failes when one or more pages failed to fetch
       List<TwitchSubscription> twitchSubscriptions = EStream.from(futures)
           .map(Future::get)
-          .assertion(r -> r != null && r.isOK(), r -> "A response was not OK, cannot make a complete comparison")
+          .peek(r -> {
+            if (r == null || !r.isOK()) {
+              throw new Exception("A response was not OK, cannot make a complete comparison");
+            }
+          })
           .flatMap(r -> r.getData().getSubscriptions().stream())
           .collect(Collectors.toList());
 

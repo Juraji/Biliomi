@@ -89,7 +89,11 @@ public class FollowerWatchUpdateService extends TimerService {
       // Failes when one or more pages failed to fetch
       List<TwitchFollower> twitchFollowers = EStream.from(futures)
           .map(Future::get)
-          .assertion(r -> r != null && r.isOK(), response -> "A response was not OK, cannot make a complete comparison")
+          .peek(r -> {
+            if (r == null || !r.isOK()) {
+              throw new Exception("A response was not OK, cannot make a complete comparison");
+            }
+          })
           .flatMap(response -> response.getData().getFollows().stream())
           .collect(Collectors.toList());
 

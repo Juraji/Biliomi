@@ -1,7 +1,6 @@
 package nl.juraji.biliomi.utility.estreams;
 
 import nl.juraji.biliomi.utility.estreams.einterface.*;
-import nl.juraji.biliomi.utility.estreams.types.EStreamAssertionFailedException;
 
 import java.util.*;
 import java.util.function.BinaryOperator;
@@ -71,23 +70,6 @@ public interface EBiStream<K, V, E extends Exception> {
 
   default EBiStream<K, V, E> filterValue(EPredicate<? super V, E> predicate) {
     return from(entries().filter(e -> predicate(predicate).test(e.getValue())));
-  }
-
-  /**
-   * Perform an assertion using a predicate
-   *
-   * @param predicate The predicate to test
-   * @param message A message to use as exception message
-   * @return The current stream
-   * @throws EStreamAssertionFailedException When the predicate tests to false
-   */
-  default <R extends String> EBiStream<K, V, E> assertion(EBiPredicate<K, V, E> predicate, EBiFunction<K, V, R, E> message) throws EStreamAssertionFailedException {
-    return from(entries().map(function(e -> {
-      if (!biPredicate(predicate).test(e.getKey(), e.getValue())) {
-        throw new EStreamAssertionFailedException(message.apply(e.getKey(), e.getValue()));
-      }
-      return e;
-    })));
   }
 
   default EBiStream<K, V, E> filter(EBiPredicate<? super K, ? super V, E> biPredicate) {

@@ -43,7 +43,7 @@ public class DefaultSettingsTask implements SetupTask {
     ReflectionUtils.forClassPackage(Settings.class)
         .subTypes(Settings.class)
         .mapToBiEStream(settingsDao::getSettings)
-        .mapValue((clazz, obj) -> (obj == null ? clazz.newInstance() : obj))
+        .mapValue((clazz, obj) -> (obj == null ? clazz.getDeclaredConstructor().newInstance() : obj))
         .forEach((clazz, obj) -> {
           obj.setDefaultValues();
           settingsDao.save(obj);
@@ -61,7 +61,7 @@ public class DefaultSettingsTask implements SetupTask {
     ReflectionUtils.forClassPackage(Settings.class)
         .subTypes(Settings.class)
         .mapToBiEStream(settingsDao::getSettings)
-        .mapValue((clazz, obj) -> (obj == null ? clazz.newInstance() : null))
+        .mapValue((clazz, obj) -> (obj == null ? clazz.getDeclaredConstructor().newInstance() : null))
         .filterValue(Objects::nonNull)
         .forEach((clazz, obj) -> {
           obj.setDefaultValues();

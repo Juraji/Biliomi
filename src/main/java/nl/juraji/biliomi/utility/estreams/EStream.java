@@ -1,7 +1,6 @@
 package nl.juraji.biliomi.utility.estreams;
 
 import nl.juraji.biliomi.utility.estreams.einterface.*;
-import nl.juraji.biliomi.utility.estreams.types.EStreamAssertionFailedException;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -42,23 +41,6 @@ public interface EStream<T, E extends Exception> {
 
   default EStream<T, E> filter(EPredicate<? super T, E> predicate) {
     return from(stream().filter(predicate(predicate)));
-  }
-
-  /**
-   * Perform an assertion using a predicate
-   *
-   * @param predicate The predicate to test
-   * @param message A message to use as exception message
-   * @return The current stream
-   * @throws EStreamAssertionFailedException When the predicate tests to false
-   */
-  default <R extends String> EStream<T, E> assertion(EPredicate<T, E> predicate, EFunction<T, R, E> message) throws EStreamAssertionFailedException {
-    return from(stream().map(function(t -> {
-      if (!predicate(predicate).test(t)) {
-        throw new EStreamAssertionFailedException(message.apply(t));
-      }
-      return t;
-    })));
   }
 
   default void close() {

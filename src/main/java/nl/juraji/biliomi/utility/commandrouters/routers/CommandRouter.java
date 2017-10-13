@@ -1,19 +1,18 @@
 package nl.juraji.biliomi.utility.commandrouters.routers;
 
-import nl.juraji.biliomi.model.core.Command;
-import nl.juraji.biliomi.model.core.CommandHistoryRecordDao;
-import nl.juraji.biliomi.model.core.User;
-import nl.juraji.biliomi.model.internal.events.irc.user.messages.IrcMessageEvent;
 import nl.juraji.biliomi.components.shared.ChatService;
 import nl.juraji.biliomi.components.shared.TimeFormatter;
 import nl.juraji.biliomi.components.system.commands.CommandService;
 import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.components.system.users.UsersService;
+import nl.juraji.biliomi.model.core.Command;
+import nl.juraji.biliomi.model.core.CommandHistoryRecordDao;
+import nl.juraji.biliomi.model.core.User;
+import nl.juraji.biliomi.model.internal.events.irc.user.messages.IrcMessageEvent;
 import nl.juraji.biliomi.utility.commandrouters.types.CommandCall;
 import nl.juraji.biliomi.utility.commandrouters.types.RegistryEntry;
 import nl.juraji.biliomi.utility.estreams.EBiStream;
 import nl.juraji.biliomi.utility.estreams.EStream;
-import nl.juraji.biliomi.utility.estreams.types.EStreamAssertionFailedException;
 import nl.juraji.biliomi.utility.types.collections.L10nMap;
 import org.apache.logging.log4j.Logger;
 
@@ -192,7 +191,7 @@ public class CommandRouter {
    * @param componentClass The class to scan
    * @return A BiEStream
    */
-  public static <A extends Annotation> EBiStream<A, Method, Exception> findCommandMethods(Class<?> componentClass, Class<A> annotation) throws EStreamAssertionFailedException {
+  public static <A extends Annotation> EBiStream<A, Method, Exception> findCommandMethods(Class<?> componentClass, Class<A> annotation) {
     return EStream.from(componentClass.getDeclaredMethods())
         .filter(method -> method.isAnnotationPresent(annotation))
         .mapToBiEStream(method -> method.getAnnotation(annotation), method -> method);
