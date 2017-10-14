@@ -201,11 +201,11 @@ public class FindUpdatesSetupTask implements SetupTask {
 
     // Starts at the second element, since major versions are never updateable
     for (int i = 1; i < 3; i++) {
-      if (Integer.valueOf(cvs[i]) <= Integer.valueOf(nvs[i])) {
-        return false;
+      if (Integer.valueOf(cvs[i]) < Integer.valueOf(nvs[i])) {
+        return true;
       }
     }
 
-    return true;
+    return false;
   }
 }
