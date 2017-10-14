@@ -1,5 +1,5 @@
 # Biliomi v3.11.0
-Date: -
+Date: October 14th 2017
 
 ## Release Notes
 * Implemented a full installer.<br>
