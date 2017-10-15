@@ -194,6 +194,7 @@
           <excludeClassPatterns>
             <pattern>nl.juraji.biliomi.model.**Dao</pattern>
             <pattern>nl.juraji.biliomi.model.core.security.**</pattern>
+            <pattern>nl.juraji.biliomi.model.internal.yaml.**</pattern>
           </excludeClassPatterns>
           <customTypeMappings>
             <mapping>org.joda.time.DateTime:string</mapping>
