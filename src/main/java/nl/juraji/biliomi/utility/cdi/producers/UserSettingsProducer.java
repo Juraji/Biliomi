@@ -51,7 +51,7 @@ public class UserSettingsProducer {
       userSettings = EStream.from(files)
           .filter(Objects::nonNull)
           .map(file -> yamlInstance.loadAs(new FileInputStream(file), UserSettings.class))
-          .reduce(ObjectGraphs::mergePojo)
+          .reduce(ObjectGraphs::mergeObjects)
           .orElse(null);
 
       if (userSettings == null) {
@@ -67,7 +67,7 @@ public class UserSettingsProducer {
       }
     } else {
       this.userSettings = new UserSettings();
-      ObjectGraphs.initializeObject(this.userSettings);
+      ObjectGraphs.initializeObjectGraph(this.userSettings);
       this.updateMode = UpdateModeType.INSTALL;
       this.userSettings.getBiliomi().getCore().setUpdateMode(this.updateMode.toString());
     }
