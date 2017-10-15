@@ -14,9 +14,6 @@ import java.util.Map;
  */
 public class TwitchOAuthFlowDirector extends OAuthFlowDirector<TwitchOAuthScope> {
 
-  private String accessToken;
-  private String authenticationError;
-
   public TwitchOAuthFlowDirector(String consumerKey) {
     super(consumerKey);
   }
@@ -40,15 +37,5 @@ public class TwitchOAuthFlowDirector extends OAuthFlowDirector<TwitchOAuthScope>
     accessToken = callback.getAccessToken();
     authenticationError = callback.getAuthorizationError();
     return accessToken != null;
-  }
-
-  @Override
-  public String getAccessToken() {
-    return accessToken;
-  }
-
-  @Override
-  public String getAuthenticationError() {
-    return authenticationError;
   }
 }

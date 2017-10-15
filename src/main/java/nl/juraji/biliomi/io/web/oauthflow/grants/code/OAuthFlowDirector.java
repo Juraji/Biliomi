@@ -14,6 +14,11 @@ public abstract class OAuthFlowDirector<E> {
   private final String consumerKey;
   private final String stateToken;
 
+  protected String accessToken;
+  protected String refreshToken;
+  protected String authenticationError;
+  protected long timeToLive;
+
   public OAuthFlowDirector(String consumerKey) {
     if (StringUtils.isEmpty(consumerKey)) {
       throw new IllegalArgumentException("consumerKey may not be NULL or empty");
@@ -35,11 +40,23 @@ public abstract class OAuthFlowDirector<E> {
     return CallbackResources.REDIRECT_URI;
   }
 
-  public abstract String getAuthenticationUri(E[] scopes);
+  public String getAccessToken() {
+    return accessToken;
+  }
+
+  public String getRefreshToken() {
+    return refreshToken;
+  }
+
+  public String getAuthenticationError() {
+    return authenticationError;
+  }
+
+  public long getTimeToLive() {
+    return timeToLive;
+  }
 
   public abstract boolean awaitAccessToken() throws IOException;
 
-  public abstract String getAccessToken();
-
-  public abstract String getAuthenticationError();
+  public abstract String getAuthenticationUri(E[] scopes);
 }

@@ -23,10 +23,6 @@ import java.util.Map;
 public class SpotifyOAuthFlowDirector extends OAuthFlowDirector<SpotifyOAuthScope> {
   private final String consumerSecret;
   private final WebClient webClient;
-  private String accessToken;
-  private String refreshToken;
-  private String authenticationError;
-  private long timeToLive;
 
   public SpotifyOAuthFlowDirector(String consumerKey, String consumerSecret, WebClient webClient) {
     super(consumerKey);
@@ -55,24 +51,6 @@ public class SpotifyOAuthFlowDirector extends OAuthFlowDirector<SpotifyOAuthScop
       return false;
     }
     return exchangeCodeForToken(callback.getAccessToken());
-  }
-
-  @Override
-  public String getAccessToken() {
-    return accessToken;
-  }
-
-  public String getRefreshToken() {
-    return refreshToken;
-  }
-
-  public long getTimeToLive() {
-    return timeToLive * 1000;
-  }
-
-  @Override
-  public String getAuthenticationError() {
-    return authenticationError;
   }
 
   public boolean awaitRefreshedAccessToken(String refreshToken) {

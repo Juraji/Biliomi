@@ -20,10 +20,6 @@ import java.util.Map;
 public class StreamLabsOAuthDirector extends OAuthFlowDirector<StreamLabsOAuthScope> {
   private final String consumerSecret;
   private final WebClient webClient;
-  private String accessToken;
-  private String refreshToken;
-  private long timeToLive;
-  private String authenticationError;
 
   public StreamLabsOAuthDirector(String consumerKey, String consumerSecret, WebClient webClient) {
     super(consumerKey);
@@ -51,24 +47,6 @@ public class StreamLabsOAuthDirector extends OAuthFlowDirector<StreamLabsOAuthSc
       return false;
     }
     return exchangeCodeForToken(callback.getAccessToken());
-  }
-
-  @Override
-  public String getAccessToken() {
-    return accessToken;
-  }
-
-  public String getRefreshToken() {
-    return refreshToken;
-  }
-
-  public long getTimeToLive() {
-    return timeToLive * 1000;
-  }
-
-  @Override
-  public String getAuthenticationError() {
-    return authenticationError;
   }
 
   public boolean awaitRefreshedAccessToken(String refreshToken) {
