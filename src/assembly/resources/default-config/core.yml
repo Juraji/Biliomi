@@ -18,16 +18,18 @@ biliomi:
     # If set to false, Biliomi will try and use the connection info below to connect to a MySQL database.
     # Note: H2 is not recommended for production use as it is VERY slow as opposed to a MySQL server.
     useH2Database: true
-    # The adress of the MySQL database to connect to.
-    host: localhost
-    port: 3306
-    # The database name to use (Must be created on the MySQL server before installation).
-    database: null
-    # Database login information.
-    username: null
-    password: null
-    # Should Biliomi use SSL for connecting to the database?
-    usessl: false
+    # If you chose to not use the H2 database fill in the the information below.
+    mySQL:
+      # The adress of the MySQL database to connect to.
+      host: localhost
+      port: 3306
+      # The database name to use (Must be created on the MySQL server before installation).
+      database: null
+      # Database login information.
+      username: null
+      password: null
+      # Should Biliomi use SSL for connecting to the database?
+      usessl: false
 
   twitch:
     # Due to security reasons you will need to register biliomi as an application on your Twitch account.

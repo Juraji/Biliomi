@@ -9,6 +9,7 @@ import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USCore;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USDatabase;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USTwitch;
+import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.database.USMySQL;
 import nl.juraji.biliomi.utility.calculate.Numbers;
 import nl.juraji.biliomi.utility.types.AppParameters;
 import org.apache.commons.io.FileUtils;
@@ -156,36 +157,37 @@ public class FirstTimeInstallSetupTask implements SetupTask {
       console.println();
     } else {
       usDatabase.setUseH2Database(false);
+      USMySQL usMySQL = usDatabase.getMySQL();
       console.println();
 
       console.println("In order to connect to a MySQL database Biliomi needs some specifics.");
       console.print("Enter the database host address, e.g. localhost or myserverprovider.com: ");
-      usDatabase.setHost(console.awaitInput(true));
+      usMySQL.setHost(console.awaitInput(true));
       console.println();
 
       console.print("Enter the database port, or press [enter] to use the default [3306]: ");
       input = console.awaitInput();
       if (StringUtils.isEmpty(input)) {
-        usDatabase.setPort(3306);
+        usMySQL.setPort(3306);
       } else {
-        usDatabase.setPort(Numbers.asNumber(input).toInteger());
+        usMySQL.setPort(Numbers.asNumber(input).toInteger());
       }
       console.println();
 
       console.print("Enter the database name: ");
-      usDatabase.setDatabase(console.awaitInput(true));
+      usMySQL.setDatabase(console.awaitInput(true));
       console.println();
 
       console.print("Enter the username for Biliomi to use for the database: ");
       input = console.awaitInput(true);
-      usDatabase.setUsername(input);
+      usMySQL.setUsername(input);
 
       console.print("Enter the password for Biliomi to use for the database, this is not hidden, make sure no one's looking: ");
       input = console.awaitInput(true);
-      usDatabase.setPassword(input);
+      usMySQL.setPassword(input);
 
       console.print("Does Biliomi need to use SSL in order to connect to the database? [y/n]: ");
-      usDatabase.setUsessl(console.awaitYesNo());
+      usMySQL.setUsessl(console.awaitYesNo());
       console.println();
     }
   }

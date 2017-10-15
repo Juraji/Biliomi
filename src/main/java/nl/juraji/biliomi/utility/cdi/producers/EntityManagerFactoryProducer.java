@@ -2,9 +2,9 @@ package nl.juraji.biliomi.utility.cdi.producers;
 
 import nl.juraji.biliomi.BiliomiContainer;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
-import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USDatabase;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UpdateMode;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.UpdateModeType;
+import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.database.USMySQL;
+import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UpdateMode;
 import nl.juraji.biliomi.utility.types.Templater;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.jpa.HibernatePersistenceProvider;
@@ -90,8 +90,8 @@ public final class EntityManagerFactoryProducer {
 
   private EntityManagerFactory setupMySQLEMF(String ddlMode) {
     Map<String, Object> configuration = new HashMap<>();
-    USDatabase database = userSettings.getBiliomi().getDatabase();
-    boolean useSSL = database.isUseH2Database();
+    USMySQL mySQL = userSettings.getBiliomi().getDatabase().getMySQL();
+    boolean useSSL = mySQL.isUsessl();
 
     // Biliomi doesn't need the MySQL server to be in the correct timezone since all dates
     // are persisted as ISO8601, but a server might stall connection if this isn't set.
@@ -99,14 +99,14 @@ public final class EntityManagerFactoryProducer {
     configuration.put("hibernate.connection.serverTimezone", timeZone.getID());
 
     String jdbcUri = template("jdbc:mysql://{{host}}:{{port}}/{{database}}")
-        .add("host", database::getHost)
-        .add("port", database::getPort)
-        .add("database", database::getDatabase)
+        .add("host", mySQL::getHost)
+        .add("port", mySQL::getPort)
+        .add("database", mySQL::getDatabase)
         .apply();
 
     configuration.put("hibernate.connection.url", jdbcUri);
-    configuration.put("hibernate.connection.username", database.getUsername());
-    configuration.put("hibernate.connection.password", database.getPassword());
+    configuration.put("hibernate.connection.username", mySQL.getUsername());
+    configuration.put("hibernate.connection.password", mySQL.getPassword());
     configuration.put("hibernate.connection.useSSL", String.valueOf(useSSL));
     configuration.put("hibernate.hbm2ddl.auto", ddlMode);
 
