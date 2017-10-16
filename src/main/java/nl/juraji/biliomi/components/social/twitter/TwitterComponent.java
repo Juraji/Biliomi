@@ -102,6 +102,8 @@ public class TwitterComponent extends Component {
             .add("status", stream.getChannel()::getStatus)
             .apply());
       }
+
+      chat.whisper(user, l10n.get("ChatCommand.tweetStatus.success"));
     } catch (UnavailableException e) {
       chat.whisper(user, l10n.get("ChatCommand.tweetStatus.twitterNotAvailable"));
       return false;
