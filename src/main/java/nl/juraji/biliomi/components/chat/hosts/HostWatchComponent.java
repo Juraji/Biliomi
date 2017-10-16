@@ -107,10 +107,10 @@ public class HostWatchComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "hostwatch", command = "sethostnotice")
   public boolean hostWatchsethostnoticeCommand(User user, Arguments arguments) {
-    return new TemplateSetup(templateDao, chat, l10n)
-        .withCommandUsageKey("ChatCommand.hostWatch.sethostnotice.usage")
-        .withTemplateDisabledKey("ChatCommand.hostWatch.sethostnotice.disabled")
-        .withTemplatedSavedKey("ChatCommand.hostWatch.sethostnotice.saved")
+    return new TemplateSetup(templateDao, chat)
+        .withCommandUsageMessage(l10n.getString("ChatCommand.hostWatch.sethostnotice.usage"))
+        .withTemplateDisabledMessage(l10n.getString("ChatCommand.hostWatch.sethostnotice.disabled"))
+        .withTemplatedSavedMessage(l10n.getString("ChatCommand.hostWatch.sethostnotice.saved"))
         .apply(user, arguments.toString(), INCOMING_HOST_NOTICE_TEMPLATE);
   }
 }

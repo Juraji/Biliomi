@@ -128,9 +128,9 @@ public class TwitterComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "twitter", command = "setupdatetemplate")
   public boolean twitterSetUpdateTemplateCommand(User user, Arguments arguments) {
-    return new TemplateSetup(templateDao, chat, l10n)
-        .withCommandUsageKey("ChatCommand.twitter.setupdatetemplate.usage")
-        .withTemplatedSavedKey("ChatCommand.twitter.setupdatetemplate.set")
+    return new TemplateSetup(templateDao, chat)
+        .withCommandUsageMessage(l10n.getString("ChatCommand.twitter.setupdatetemplate.usage"))
+        .withTemplatedSavedMessage(l10n.getString("ChatCommand.twitter.setupdatetemplate.set"))
         .apply(user, arguments.toString(), TWITTER_UPDATE_TEMPLATE_ID);
   }
 
@@ -177,9 +177,9 @@ public class TwitterComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "twitter", command = "setwordmatchedtemplate")
   public boolean twitterSetWordMatchedTemplateCommand(User user, Arguments arguments) {
-    return new TemplateSetup(templateDao, chat, l10n)
-        .withCommandUsageKey("ChatCommand.twitter.setwordmatchedtemplate.usage")
-        .withTemplatedSavedKey("ChatCommand.twitter.setwordmatchedtemplate.set")
+    return new TemplateSetup(templateDao, chat)
+        .withCommandUsageMessage(l10n.getString("ChatCommand.twitter.setwordmatchedtemplate.usage"))
+        .withTemplatedSavedMessage(l10n.getString("ChatCommand.twitter.setwordmatchedtemplate.set"))
         .apply(user, arguments.toString(), TWITTER_TWEET_FOUND_TEMPLATE_ID);
   }
 

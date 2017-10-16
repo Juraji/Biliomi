@@ -146,9 +146,9 @@ public class DonationRegisterComponent extends Component {
    */
   @SubCommandRoute(command = "setmanualnotice", parentCommand = "donations")
   public boolean donationsSetNoticeCommand(User user, Arguments arguments) {
-    return new TemplateSetup(templateDao, chat, l10n)
-        .withCommandUsageKey("ChatCommand.donations.setManualNotice.usage")
-        .withTemplatedSavedKey("Common.noticeTemplate.saved")
+    return new TemplateSetup(templateDao, chat)
+        .withCommandUsageMessage(l10n.getString("ChatCommand.donations.setManualNotice.usage"))
+        .withTemplatedSavedMessage(l10n.getString("Common.noticeTemplate.saved"))
         .apply(user, arguments.toString(), MANUAL_DONATION_NOTICE);
   }
 
@@ -158,9 +158,9 @@ public class DonationRegisterComponent extends Component {
    */
   @SubCommandRoute(command = "setexternalnotice", parentCommand = "donations")
   public boolean donationsSetStreamLabsNoticeCommand(User user, Arguments arguments) {
-    return new TemplateSetup(templateDao, chat, l10n)
-        .withCommandUsageKey("ChatCommand.donations.setExternalNotice.usage")
-        .withTemplatedSavedKey("Common.noticeTemplate.saved")
+    return new TemplateSetup(templateDao, chat)
+        .withCommandUsageMessage(l10n.getString("ChatCommand.donations.setExternalNotice.usage"))
+        .withTemplatedSavedMessage(l10n.getString("Common.noticeTemplate.saved"))
         .apply(user, arguments.toString(), INCOMING_DONATION_NOTICE);
   }
 }

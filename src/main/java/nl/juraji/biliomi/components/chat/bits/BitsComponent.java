@@ -135,9 +135,9 @@ public class BitsComponent extends Component {
    */
   @SubCommandRoute(command = "notice", parentCommand = "bitstemplates")
   public boolean bitsTemplatesnoticeCommand(User user, Arguments arguments) {
-    return new TemplateSetup(templateDao, chat, l10n)
-        .withCommandUsageKey("ChatCommand.bitsTemplates.notice.usage")
-        .withTemplatedSavedKey("ChatCommand.bitsTemplates.notice.set")
+    return new TemplateSetup(templateDao, chat)
+        .withCommandUsageMessage(l10n.getString("ChatCommand.bitsTemplates.notice.usage"))
+        .withTemplatedSavedMessage(l10n.getString("ChatCommand.bitsTemplates.notice.set"))
         .apply(user, arguments.toString(), BITS_CHEERED_TEMPLATE_ID);
   }
 
@@ -147,9 +147,9 @@ public class BitsComponent extends Component {
    */
   @SubCommandRoute(command = "payouttocheerer", parentCommand = "bitstemplates")
   public boolean bitsTemplatespayouttocheererCommand(User user, Arguments arguments) {
-    return new TemplateSetup(templateDao, chat, l10n)
-        .withCommandUsageKey("ChatCommand.bitsTemplates.payoutToCheerer.usage")
-        .withTemplatedSavedKey("ChatCommand.bitsTemplates.payoutToCheerer.set")
+    return new TemplateSetup(templateDao, chat)
+        .withCommandUsageMessage(l10n.getString("ChatCommand.bitsTemplates.payoutToCheerer.usage"))
+        .withTemplatedSavedMessage(l10n.getString("ChatCommand.bitsTemplates.payoutToCheerer.set"))
         .apply(user, arguments.toString(), BITS_PAYOUT_TO_CHEERER_TEMPLATE_ID);
   }
 
@@ -159,9 +159,9 @@ public class BitsComponent extends Component {
    */
   @SubCommandRoute(command = "payouttochatters", parentCommand = "bitstemplates")
   public boolean bitsTemplatespayouttochattersCommand(User user, Arguments arguments) {
-    return new TemplateSetup(templateDao, chat, l10n)
-        .withCommandUsageKey("ChatCommand.bitsTemplates.payoutToChatters.usage")
-        .withTemplatedSavedKey("ChatCommand.bitsTemplates.payoutToChatters.set")
+    return new TemplateSetup(templateDao, chat)
+        .withCommandUsageMessage(l10n.getString("ChatCommand.bitsTemplates.payoutToChatters.usage"))
+        .withTemplatedSavedMessage(l10n.getString("ChatCommand.bitsTemplates.payoutToChatters.set"))
         .apply(user, arguments.toString(), BITS_PAYOUT_TO_CHATTERS_TEMPLATE_ID);
   }
 }

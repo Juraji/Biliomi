@@ -84,10 +84,10 @@ public class FollowerWatchComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "followerwatch", command = "setfollowernotice")
   public boolean followerWatchsetfollowernoticeCommand(User user, Arguments arguments) {
-    return new TemplateSetup(templateDao, chat, l10n)
-        .withCommandUsageKey("ChatCommand.followerWatch.setfollowernotice.usage")
-        .withTemplateDisabledKey("ChatCommand.followerWatch.setfollowernotice.disabled")
-        .withTemplatedSavedKey("ChatCommand.followerWatch.setfollowernotice.saved")
+    return new TemplateSetup(templateDao, chat)
+        .withCommandUsageMessage(l10n.getString("ChatCommand.followerWatch.setfollowernotice.usage"))
+        .withTemplateDisabledMessage(l10n.getString("ChatCommand.followerWatch.setfollowernotice.disabled"))
+        .withTemplatedSavedMessage(l10n.getString("ChatCommand.followerWatch.setfollowernotice.saved"))
         .apply(user, arguments.toString(), INCOMING_FOLLOW_NOTICE);
   }
 }

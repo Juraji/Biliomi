@@ -118,9 +118,9 @@ public class RaidRegisterComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "raidregister", command = "message")
   public boolean raidRegisterCommandMessage(User user, Arguments arguments) {
-    return new TemplateSetup(templateDao, chat, l10n)
-        .withCommandUsageKey("ChatCommand.raidregister.message.usage")
-        .withTemplatedSavedKey("ChatCommand.raidregister.message.saved")
+    return new TemplateSetup(templateDao, chat)
+        .withCommandUsageMessage(l10n.getString("ChatCommand.raidregister.message.usage"))
+        .withTemplatedSavedMessage(l10n.getString("ChatCommand.raidregister.message.saved"))
         .apply(user, arguments.toString(), RAID_MESSAGE_TEMPLATE_ID);
   }
 
@@ -130,9 +130,9 @@ public class RaidRegisterComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "raidregister", command = "incomingmessage")
   public boolean raidRegisterIncomingMessageCommand(User user, Arguments arguments) {
-    return new TemplateSetup(templateDao, chat, l10n)
-        .withCommandUsageKey("ChatCommand.raidregister.incomingmessage.usage")
-        .withTemplatedSavedKey("ChatCommand.raidregister.incomingmessage.saved")
+    return new TemplateSetup(templateDao, chat)
+        .withCommandUsageMessage(l10n.getString("ChatCommand.raidregister.incomingmessage.usage"))
+        .withTemplatedSavedMessage(l10n.getString("ChatCommand.raidregister.incomingmessage.saved"))
         .apply(user, arguments.toString(), INCOMING_RAID_MESSAGE_TEMPLATE_ID);
   }
 }
