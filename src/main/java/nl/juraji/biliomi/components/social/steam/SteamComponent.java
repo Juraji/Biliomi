@@ -2,14 +2,15 @@ package nl.juraji.biliomi.components.social.steam;
 
 import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.components.interfaces.enums.OnOff;
+import nl.juraji.biliomi.model.core.Game;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.internal.events.bot.ConsoleInputEvent;
 import nl.juraji.biliomi.model.social.steam.SteamSettings;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
+import nl.juraji.biliomi.utility.commandrouters.annotations.CliCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
-import nl.juraji.biliomi.utility.commandrouters.annotations.CliCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.exceptions.UnavailableException;
 
@@ -92,15 +93,13 @@ public class SteamComponent extends Component {
    */
   @SubCommandRoute(command = "syncnow", parentCommand = "steam")
   public boolean steamSyncNowCommand(User user, Arguments arguments) {
-    boolean success = false;
-    try {
-      success = steamGameWatch.syncToTwitchNow();
 
-      if (success) {
-        chat.whisper(user, l10n.get("ChatCommand.steam.syncNow.success"));
-      } else {
-        chat.whisper(user, l10n.get("ChatCommand.steam.syncNow.failed"));
-      }
+    try {
+      Game syncedGame = steamGameWatch.syncToTwitchNow();
+      chat.whisper(user, l10n.get("ChatCommand.steam.syncNow.success")
+          .add("game", syncedGame::getName));
+
+      return true;
     } catch (UnavailableException e) {
       logger.error(e);
       chat.whisper(user, l10n.get("Common.steam.unavailable"));
@@ -109,7 +108,7 @@ public class SteamComponent extends Component {
       chat.whisper(user, l10n.get("ChatCommand.steam.syncNow.failed"));
     }
 
-    return success;
+    return false;
   }
 
   /**

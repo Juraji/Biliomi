@@ -45,17 +45,16 @@ public class SteamGameWatchTimerService extends TimerService {
     return steamApi.isAvailable();
   }
 
-  public boolean syncToTwitchNow() throws Exception {
+  public Game syncToTwitchNow() throws Exception {
     Game game = getSteamGameAsGame();
 
     if (game == null) {
-      logger.info("You are currently playing a game on Steam that is not known by Biliomi. Try importing your steam library");
-      return false;
+      throw new Exception("You are currently playing a game on Steam that is not known by Biliomi. Try importing your steam library");
     }
 
     logger.info("Steam game sync forced, updating Twitch with game: " + game.getName());
     channelService.updateGame(game.getName());
-    return true;
+    return game;
   }
 
   private void syncToTwitch() {
