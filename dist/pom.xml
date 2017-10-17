@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>biliomi</artifactId>
+    <groupId>nl.juraji</groupId>
+    <version>3.12.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>biliomi-dist</artifactId>
+
+  <build>
+    <plugins>
+      <!-- Configure how to build the final jar -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <finalName>biliomi-${project.version}</finalName>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>lib/</classpathPrefix>
+              <mainClass>nl.juraji.biliomi.BiliomiContainer</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <!-- TypeScript generator plugin -->
+      <!-- Used for generating a TypeScript version of the model -->
+      <plugin>
+        <groupId>cz.habarta.typescript-generator</groupId>
+        <artifactId>typescript-generator-maven-plugin</artifactId>
+        <version>1.25.322</version>
+        <executions>
+          <execution>
+            <id>generate</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <phase>process-classes</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <jsonLibrary>jackson2</jsonLibrary>
+          <classPatterns>nl.juraji.biliomi.model.**</classPatterns>
+          <excludeClassPatterns>
+            <pattern>nl.juraji.biliomi.model.**Dao</pattern>
+            <pattern>nl.juraji.biliomi.model.core.security.**</pattern>
+            <pattern>nl.juraji.biliomi.model.internal.yaml.**</pattern>
+          </excludeClassPatterns>
+          <customTypeMappings>
+            <mapping>org.joda.time.DateTime:string</mapping>
+          </customTypeMappings>
+          <outputKind>module</outputKind>
+          <namespace>Biliomi</namespace>
+          <sortTypeDeclarations>true</sortTypeDeclarations>
+          <addTypeNamePrefix>I</addTypeNamePrefix>
+          <outputFileType>implementationFile</outputFileType>
+          <outputFile>${project.build.directory}/Biliomi.ts</outputFile>
+        </configuration>
+      </plugin>
+
+      <!-- Assembly plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <finalName>biliomi-${project.version}</finalName>
+          <appendAssemblyId>false</appendAssemblyId>
+          <descriptors>
+            <descriptor>src/assembly/bin.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <dependencies>
+    <!-- Biliomi Core dependency -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>biliomi-core</artifactId>
+      <version>${project.version}</version>
+      <type>zip</type>
+    </dependency>
+
+    <!-- Components -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>biliomi-integration-twitter</artifactId>
+      <version>${project.version}</version>
+      <type>zip</type>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>biliomi-integration-steam</artifactId>
+      <version>${project.version}</version>
+      <type>zip</type>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>biliomi-integration-spotify</artifactId>
+      <version>${project.version}</version>
+      <type>zip</type>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>biliomi-integration-auto-updates</artifactId>
+      <version>${project.version}</version>
+      <type>zip</type>
+    </dependency>
+  </dependencies>
+</project>

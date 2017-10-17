@@ -1,0 +1,12 @@
+biliomi:
+  integrations:
+    # Due to security reasons no OAuth keys are provided by default.
+    # When you want to use a specific integration you must first register Biliomi as an application
+    # on the concerning platform. Links are provided with each integration.
+
+    twitter:
+      # Biliomi can integrate with Twitter, easily post Tweets about being live or have Biliomi listen for specific
+      # tweets and responding to them in the Twitch chat.
+      # Application registration: https://apps.twitter.com/
+      consumerKey: null
+      consumerSecret: null
