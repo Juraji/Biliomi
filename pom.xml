@@ -63,7 +63,7 @@
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}</outputDirectory>
+              <outputDirectory>${project.build.directory}/resources</outputDirectory>
               <resources>
                 <resource>
                   <directory>src/assembly/resources</directory>

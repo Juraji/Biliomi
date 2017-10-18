@@ -98,7 +98,6 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>biliomi-core</artifactId>
       <version>${project.version}</version>
-      <type>zip</type>
     </dependency>
 
     <!-- Components -->
@@ -106,28 +105,30 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>biliomi-integration-twitter</artifactId>
       <version>${project.version}</version>
-      <type>zip</type>
     </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>biliomi-integration-steam</artifactId>
       <version>${project.version}</version>
-      <type>zip</type>
     </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>biliomi-integration-spotify</artifactId>
       <version>${project.version}</version>
-      <type>zip</type>
     </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>biliomi-integration-auto-updates</artifactId>
       <version>${project.version}</version>
-      <type>zip</type>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>biliomi-integration-streamlabs</artifactId>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
 </project>
