@@ -26,6 +26,16 @@
     <module>components/chat/raffles</module>
     <module>components/chat/subscribers</module>
     <module>components/chat/usergreetings</module>
+    <module>components/registers/donations</module>
+    <module>components/registers/raids</module>
+    <module>components/games/tamagotchi</module>
+    <module>components/games/adventures</module>
+    <module>components/games/8ball</module>
+    <module>components/games/investments</module>
+    <module>components/games/creativemurders</module>
+    <module>components/games/roulette</module>
+    <module>components/games/slotmachine</module>
+    <module>components/integrations/hosts</module>
   </modules>
 
   <properties>
