@@ -5,7 +5,6 @@ import nl.juraji.biliomi.components.games.adventures.services.AdventureRunnerSer
 import nl.juraji.biliomi.components.games.adventures.services.AdventureState;
 import nl.juraji.biliomi.components.games.tamagotchi.services.TamagotchiConstants;
 import nl.juraji.biliomi.components.games.tamagotchi.services.TamagotchiService;
-import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.components.shared.TimeFormatter;
 import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.model.core.User;
@@ -17,6 +16,7 @@ import nl.juraji.biliomi.utility.calculate.Numbers;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
+import nl.juraji.biliomi.utility.types.components.Component;
 import org.joda.time.DateTime;
 
 import javax.enterprise.inject.Default;

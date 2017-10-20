@@ -4,12 +4,12 @@ import nl.juraji.biliomi.components.integrations.steam.api.v1.SteamApi;
 import nl.juraji.biliomi.components.integrations.steam.api.v1.model.players.SteamPlayer;
 import nl.juraji.biliomi.components.integrations.steam.api.v1.model.players.SteamPlayersResponse;
 import nl.juraji.biliomi.components.integrations.steam.api.v1.model.players.SteamProfileVisibilityState;
-import nl.juraji.biliomi.components.interfaces.TimerService;
 import nl.juraji.biliomi.components.system.channel.ChannelService;
 import nl.juraji.biliomi.components.system.channel.GameService;
 import nl.juraji.biliomi.io.web.Response;
 import nl.juraji.biliomi.model.core.Game;
 import nl.juraji.biliomi.utility.exceptions.UnavailableException;
+import nl.juraji.biliomi.utility.types.components.TimerService;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;

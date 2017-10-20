@@ -1,6 +1,5 @@
 package nl.juraji.biliomi.components.system.cli;
 
-import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.components.system.settings.SettingsService;
 import nl.juraji.biliomi.components.system.users.UsersService;
 import nl.juraji.biliomi.model.core.User;
@@ -11,6 +10,7 @@ import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CliCommandRoute;
 import nl.juraji.biliomi.utility.security.PasswordEncryptor;
 import nl.juraji.biliomi.utility.types.MutableString;
+import nl.juraji.biliomi.utility.types.components.Component;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;

@@ -1,10 +1,10 @@
 package nl.juraji.biliomi.utility.commandrouters.interceptors;
 
-import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CliCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CliCommandRouteImplementor;
 import nl.juraji.biliomi.utility.commandrouters.routers.CliCommandRouterRegistry;
 import nl.juraji.biliomi.utility.commandrouters.routers.CommandRouter;
+import nl.juraji.biliomi.utility.types.components.Component;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;

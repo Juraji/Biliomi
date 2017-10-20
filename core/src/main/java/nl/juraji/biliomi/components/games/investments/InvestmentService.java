@@ -1,6 +1,5 @@
 package nl.juraji.biliomi.components.games.investments;
 
-import nl.juraji.biliomi.components.interfaces.TimerService;
 import nl.juraji.biliomi.components.shared.ChatService;
 import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.components.system.settings.SettingsService;
@@ -13,6 +12,7 @@ import nl.juraji.biliomi.model.games.settings.InvestmentSettings;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.modifiers.L10nData;
 import nl.juraji.biliomi.utility.types.collections.L10nMap;
+import nl.juraji.biliomi.utility.types.components.TimerService;
 import org.joda.time.DateTime;
 
 import javax.enterprise.inject.Default;

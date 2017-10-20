@@ -1,12 +1,12 @@
 package nl.juraji.biliomi.components.games.tamagotchi.services;
 
-import nl.juraji.biliomi.components.interfaces.TimerService;
 import nl.juraji.biliomi.components.system.settings.SettingsService;
 import nl.juraji.biliomi.io.console.Ansi;
 import nl.juraji.biliomi.model.games.Tamagotchi;
 import nl.juraji.biliomi.model.games.TamagotchiToy;
 import nl.juraji.biliomi.model.games.settings.TamagotchiSettings;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.BotName;
+import nl.juraji.biliomi.utility.types.components.TimerService;
 import org.apache.logging.log4j.Logger;
 
 import javax.enterprise.inject.Default;

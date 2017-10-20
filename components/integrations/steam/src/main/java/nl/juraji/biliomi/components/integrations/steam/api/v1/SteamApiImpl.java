@@ -8,7 +8,6 @@ import nl.juraji.biliomi.io.web.WebClient;
 import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
 import nl.juraji.biliomi.utility.exceptions.UnavailableException;
 
 import javax.annotation.PostConstruct;
@@ -23,13 +22,10 @@ import java.util.Map;
  */
 @Default
 public class SteamApiImpl implements SteamApi {
+  private static final String API_BASE_URI = "http://api.steampowered.com";
 
   @Inject
   private AuthTokenDao authTokenDao;
-
-  @Inject
-  @AppDataValue("steam.api.uris.v1")
-  private String apiBaseUri;
 
   @Inject
   private WebClient webClient;
@@ -58,7 +54,7 @@ public class SteamApiImpl implements SteamApi {
     query.put("format", "json");
     query.put("include_appinfo", 1);
 
-    return webClient.get(Url.url(apiBaseUri, "IPlayerService", "GetOwnedGames", "v0001").withQuery(query), null, SteamLibraryResponse.class);
+    return webClient.get(Url.url(API_BASE_URI, "IPlayerService", "GetOwnedGames", "v0001").withQuery(query), null, SteamLibraryResponse.class);
   }
 
   @Override
@@ -70,7 +66,7 @@ public class SteamApiImpl implements SteamApi {
     query.put("steamids", userId);
     query.put("format", "json");
 
-    return webClient.get(Url.url(apiBaseUri, "ISteamUser", "GetPlayerSummaries", "v0002").withQuery(query), null, SteamPlayersResponse.class);
+    return webClient.get(Url.url(API_BASE_URI, "ISteamUser", "GetPlayerSummaries", "v0002").withQuery(query), null, SteamPlayersResponse.class);
   }
 
   private void executeTokenPreflight() throws UnavailableException {

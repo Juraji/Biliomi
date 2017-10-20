@@ -2,12 +2,12 @@ package nl.juraji.biliomi.utility.commandrouters.routers;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.commandrouters.types.CommandRouteInvocationException;
 import nl.juraji.biliomi.utility.commandrouters.types.CommandRouteNotFoundException;
+import nl.juraji.biliomi.utility.types.components.Component;
 
 import javax.enterprise.inject.Vetoed;
 import java.lang.reflect.InvocationTargetException;

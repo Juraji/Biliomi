@@ -2,10 +2,10 @@ package nl.juraji.biliomi.components.integrations.spotify;
 
 import nl.juraji.biliomi.boot.SetupTask;
 import nl.juraji.biliomi.boot.SetupTaskPriority;
-import nl.juraji.biliomi.io.api.spotify.oauth.SpotifyOAuthFlowDirector;
-import nl.juraji.biliomi.io.api.spotify.oauth.SpotifyOAuthScope;
-import nl.juraji.biliomi.io.api.spotify.v1.SpotifyApi;
-import nl.juraji.biliomi.io.api.spotify.v1.model.user.SpotifyUser;
+import nl.juraji.biliomi.components.integrations.spotify.api.oauth.SpotifyOAuthFlowDirector;
+import nl.juraji.biliomi.components.integrations.spotify.api.oauth.SpotifyOAuthScope;
+import nl.juraji.biliomi.components.integrations.spotify.api.v1.SpotifyApi;
+import nl.juraji.biliomi.components.integrations.spotify.api.v1.model.user.SpotifyUser;
 import nl.juraji.biliomi.io.console.ConsoleApi;
 import nl.juraji.biliomi.io.web.Response;
 import nl.juraji.biliomi.io.web.WebClient;

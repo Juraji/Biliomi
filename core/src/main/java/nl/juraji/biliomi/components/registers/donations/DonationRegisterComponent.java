@@ -1,6 +1,5 @@
 package nl.juraji.biliomi.components.registers.donations;
 
-import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.components.shared.TemplateSetup;
 import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
@@ -11,6 +10,7 @@ import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
+import nl.juraji.biliomi.utility.types.components.Component;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;

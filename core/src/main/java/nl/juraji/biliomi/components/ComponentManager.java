@@ -1,13 +1,13 @@
 package nl.juraji.biliomi.components;
 
 import com.google.common.eventbus.Subscribe;
-import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.model.internal.events.irc.channel.IrcChannelJoinedEvent;
 import nl.juraji.biliomi.model.internal.events.irc.user.messages.IrcChatMessageEvent;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.routers.CommandRouter;
 import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
+import nl.juraji.biliomi.utility.types.components.Component;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.PreDestroy;

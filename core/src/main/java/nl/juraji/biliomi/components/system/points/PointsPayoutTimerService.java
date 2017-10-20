@@ -1,12 +1,12 @@
 package nl.juraji.biliomi.components.system.points;
 
-import nl.juraji.biliomi.components.interfaces.TimerService;
 import nl.juraji.biliomi.components.shared.ChatService;
 import nl.juraji.biliomi.components.system.channel.ChannelService;
 import nl.juraji.biliomi.components.system.settings.SettingsService;
 import nl.juraji.biliomi.components.system.users.UsersService;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.settings.PointsSettings;
+import nl.juraji.biliomi.utility.types.components.TimerService;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;

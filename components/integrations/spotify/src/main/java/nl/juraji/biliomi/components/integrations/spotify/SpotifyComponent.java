@@ -1,19 +1,17 @@
 package nl.juraji.biliomi.components.integrations.spotify;
 
-import nl.juraji.biliomi.components.interfaces.Component;
-import nl.juraji.biliomi.components.interfaces.enums.OnOff;
+import nl.juraji.biliomi.components.integrations.spotify.api.v1.SpotifyApi;
+import nl.juraji.biliomi.components.integrations.spotify.api.v1.model.SpotifySnapshot;
+import nl.juraji.biliomi.components.integrations.spotify.api.v1.model.player.SpotifyCurrentTrack;
+import nl.juraji.biliomi.components.integrations.spotify.api.v1.model.playlist.SpotifyPlaylist;
+import nl.juraji.biliomi.components.integrations.spotify.api.v1.model.tracks.SpotifyTrack;
+import nl.juraji.biliomi.components.integrations.spotify.api.v1.model.tracks.SpotifyTracksSearchResult;
 import nl.juraji.biliomi.components.shared.TimeFormatter;
 import nl.juraji.biliomi.components.system.channel.ChannelService;
 import nl.juraji.biliomi.components.system.settings.SettingsService;
-import nl.juraji.biliomi.io.api.spotify.v1.SpotifyApi;
-import nl.juraji.biliomi.io.api.spotify.v1.model.SpotifySnapshot;
-import nl.juraji.biliomi.io.api.spotify.v1.model.player.SpotifyCurrentTrack;
-import nl.juraji.biliomi.io.api.spotify.v1.model.playlist.SpotifyPlaylist;
-import nl.juraji.biliomi.io.api.spotify.v1.model.tracks.SpotifyTrack;
-import nl.juraji.biliomi.io.api.spotify.v1.model.tracks.SpotifyTracksSearchResult;
 import nl.juraji.biliomi.io.web.Response;
 import nl.juraji.biliomi.model.core.User;
-import nl.juraji.biliomi.model.integrations.spotify.SpotifySettings;
+import nl.juraji.biliomi.model.integrations.SpotifySettings;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
 import nl.juraji.biliomi.utility.calculate.Numbers;
@@ -21,6 +19,8 @@ import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
+import nl.juraji.biliomi.utility.types.components.Component;
+import nl.juraji.biliomi.utility.types.enums.OnOff;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.inject.Default;

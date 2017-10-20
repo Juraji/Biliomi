@@ -1,6 +1,5 @@
 package nl.juraji.biliomi.components.system.users;
 
-import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.components.shared.BadWordsService;
 import nl.juraji.biliomi.components.shared.TimeFormatter;
 import nl.juraji.biliomi.components.system.points.PointsService;
@@ -8,6 +7,7 @@ import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
+import nl.juraji.biliomi.utility.types.components.Component;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;

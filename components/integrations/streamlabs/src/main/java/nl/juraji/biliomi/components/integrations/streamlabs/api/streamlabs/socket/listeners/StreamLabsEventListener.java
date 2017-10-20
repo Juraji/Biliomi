@@ -5,7 +5,7 @@ import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.socke
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.socket.model.SocketEventForType;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.socket.model.message.DonationMessage;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.socket.model.message.HostMessage;
-import nl.juraji.biliomi.model.internal.events.streamlabs.StreamLabsDonationEvent;
+import nl.juraji.biliomi.model.internal.events.StreamLabsDonationEvent;
 import nl.juraji.biliomi.model.internal.events.twitch.hosting.TwitchHostInEvent;
 import nl.juraji.biliomi.utility.events.EventBus;
 

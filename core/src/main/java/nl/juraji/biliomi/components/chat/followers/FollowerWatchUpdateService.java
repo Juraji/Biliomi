@@ -1,6 +1,5 @@
 package nl.juraji.biliomi.components.chat.followers;
 
-import nl.juraji.biliomi.components.interfaces.TimerService;
 import nl.juraji.biliomi.components.system.channel.ChannelService;
 import nl.juraji.biliomi.components.system.users.UsersService;
 import nl.juraji.biliomi.io.api.twitch.v5.TwitchApi;
@@ -13,6 +12,7 @@ import nl.juraji.biliomi.model.internal.events.twitch.followers.TwitchFollowEven
 import nl.juraji.biliomi.utility.estreams.EStream;
 import nl.juraji.biliomi.utility.events.EventBus;
 import nl.juraji.biliomi.utility.factories.concurrent.ThreadPools;
+import nl.juraji.biliomi.utility.types.components.TimerService;
 import org.joda.time.DateTime;
 
 import javax.enterprise.inject.Default;

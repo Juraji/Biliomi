@@ -1,10 +1,8 @@
 package nl.juraji.biliomi.components.integrations.steam;
 
-import nl.juraji.biliomi.components.interfaces.Component;
-import nl.juraji.biliomi.components.interfaces.enums.OnOff;
 import nl.juraji.biliomi.model.core.Game;
 import nl.juraji.biliomi.model.core.User;
-import nl.juraji.biliomi.model.integrations.steam.SteamSettings;
+import nl.juraji.biliomi.model.integrations.SteamSettings;
 import nl.juraji.biliomi.model.internal.events.bot.ConsoleInputEvent;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
@@ -13,6 +11,8 @@ import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.exceptions.UnavailableException;
+import nl.juraji.biliomi.utility.types.components.Component;
+import nl.juraji.biliomi.utility.types.enums.OnOff;
 
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.spi.CDI;

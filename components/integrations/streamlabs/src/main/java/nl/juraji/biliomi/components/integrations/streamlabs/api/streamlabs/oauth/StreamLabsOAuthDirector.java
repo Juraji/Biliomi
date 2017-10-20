@@ -17,6 +17,7 @@ import java.util.Map;
  * Created by Juraji on 2-10-2017.
  * Biliomi
  */
+@SuppressWarnings("Duplicates")
 public class StreamLabsOAuthDirector extends OAuthFlowDirector<StreamLabsOAuthScope> {
   private final String consumerSecret;
   private final WebClient webClient;

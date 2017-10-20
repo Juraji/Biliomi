@@ -1,8 +1,6 @@
 package nl.juraji.biliomi.components.integrations.twitter;
 
 import nl.juraji.biliomi.components.integrations.twitter.api.v1.TwitterApi;
-import nl.juraji.biliomi.components.interfaces.Component;
-import nl.juraji.biliomi.components.interfaces.enums.OnOff;
 import nl.juraji.biliomi.components.shared.TemplateSetup;
 import nl.juraji.biliomi.components.system.channel.ChannelService;
 import nl.juraji.biliomi.components.system.settings.SettingsService;
@@ -10,7 +8,7 @@ import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchStream;
 import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
-import nl.juraji.biliomi.model.integrations.twitter.TwitterSettings;
+import nl.juraji.biliomi.model.integrations.TwitterSettings;
 import nl.juraji.biliomi.model.internal.events.bot.ConsoleInputEvent;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.BotName;
@@ -21,6 +19,8 @@ import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.exceptions.UnavailableException;
 import nl.juraji.biliomi.utility.types.Templater;
+import nl.juraji.biliomi.utility.types.components.Component;
+import nl.juraji.biliomi.utility.types.enums.OnOff;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.PreDestroy;

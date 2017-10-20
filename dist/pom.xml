@@ -88,7 +88,6 @@
           </execution>
         </executions>
       </plugin>
-
     </plugins>
   </build>
 
@@ -128,6 +127,36 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>biliomi-integration-streamlabs</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>biliomi-chat-announcements</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>biliomi-chat-bits</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>biliomi-chat-chatmoderator</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>biliomi-chat-pmresponses</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>biliomi-chat-quotes</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

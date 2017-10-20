@@ -1,8 +1,6 @@
 package nl.juraji.biliomi.components.system.settings;
 
 import com.google.common.base.Joiner;
-import nl.juraji.biliomi.components.interfaces.Component;
-import nl.juraji.biliomi.components.interfaces.enums.OnOff;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.settings.SystemSettings;
 import nl.juraji.biliomi.model.internal.events.irc.user.messages.IrcChatMessageEvent;
@@ -12,6 +10,8 @@ import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.routers.CommandRouter;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
+import nl.juraji.biliomi.utility.types.components.Component;
+import nl.juraji.biliomi.utility.types.enums.OnOff;
 
 import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;

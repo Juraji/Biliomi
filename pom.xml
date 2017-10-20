@@ -18,6 +18,14 @@
     <module>components/integrations/steam</module>
     <module>components/integrations/twitter</module>
     <module>components/integrations/streamlabs</module>
+    <module>components/chat/announcements</module>
+    <module>components/chat/bits</module>
+    <module>components/chat/chatmoderator</module>
+    <module>components/chat/pmresponses</module>
+    <module>components/chat/quotes</module>
+    <module>components/chat/raffles</module>
+    <module>components/chat/subscribers</module>
+    <module>components/chat/usergreetings</module>
   </modules>
 
   <properties>

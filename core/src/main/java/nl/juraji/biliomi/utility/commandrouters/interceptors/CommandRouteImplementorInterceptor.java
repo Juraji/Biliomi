@@ -1,6 +1,5 @@
 package nl.juraji.biliomi.utility.commandrouters.interceptors;
 
-import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.components.system.commands.CommandService;
 import nl.juraji.biliomi.components.system.users.UserGroupService;
 import nl.juraji.biliomi.model.core.Command;
@@ -8,6 +7,7 @@ import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRouteImplementor;
 import nl.juraji.biliomi.utility.commandrouters.routers.CommandRouter;
 import nl.juraji.biliomi.utility.commandrouters.routers.CommandRouterRegistry;
+import nl.juraji.biliomi.utility.types.components.Component;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;

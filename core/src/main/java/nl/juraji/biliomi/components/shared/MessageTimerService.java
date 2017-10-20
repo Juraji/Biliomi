@@ -1,7 +1,7 @@
 package nl.juraji.biliomi.components.shared;
 
-import nl.juraji.biliomi.components.interfaces.TimerService;
 import nl.juraji.biliomi.utility.types.Templater;
+import nl.juraji.biliomi.utility.types.components.TimerService;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;

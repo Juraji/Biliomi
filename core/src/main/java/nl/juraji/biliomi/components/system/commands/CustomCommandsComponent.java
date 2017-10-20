@@ -1,7 +1,6 @@
 package nl.juraji.biliomi.components.system.commands;
 
 import nl.juraji.biliomi.BiliomiContainer;
-import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.components.shared.TimeFormatter;
 import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.components.system.users.UserGroupService;
@@ -14,6 +13,7 @@ import nl.juraji.biliomi.utility.commandrouters.routers.CommandRouter;
 import nl.juraji.biliomi.utility.commandrouters.routers.CommandRouterRegistry;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.types.Templater;
+import nl.juraji.biliomi.utility.types.components.Component;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

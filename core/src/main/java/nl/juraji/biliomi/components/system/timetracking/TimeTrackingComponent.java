@@ -1,7 +1,5 @@
 package nl.juraji.biliomi.components.system.timetracking;
 
-import nl.juraji.biliomi.components.interfaces.Component;
-import nl.juraji.biliomi.components.interfaces.enums.OnOff;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.settings.TimeTrackingSettings;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
@@ -9,6 +7,8 @@ import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
+import nl.juraji.biliomi.utility.types.components.Component;
+import nl.juraji.biliomi.utility.types.enums.OnOff;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

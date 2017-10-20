@@ -10,7 +10,7 @@ import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
-import nl.juraji.biliomi.model.integrations.twitter.TwitterSettings;
+import nl.juraji.biliomi.model.integrations.TwitterSettings;
 import nl.juraji.biliomi.utility.calculate.Numbers;
 import nl.juraji.biliomi.utility.types.Restartable;
 import nl.juraji.biliomi.utility.types.Templater;

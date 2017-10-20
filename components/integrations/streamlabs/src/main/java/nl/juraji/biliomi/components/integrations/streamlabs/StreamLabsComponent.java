@@ -4,10 +4,10 @@ import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.socke
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.v1.StreamLabsApi;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.v1.model.StreamLabsSocketToken;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.v1.model.StreamLabsTwitchUser;
-import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.io.web.Response;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.exceptions.UnavailableException;
+import nl.juraji.biliomi.utility.types.components.Component;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.inject.Default;

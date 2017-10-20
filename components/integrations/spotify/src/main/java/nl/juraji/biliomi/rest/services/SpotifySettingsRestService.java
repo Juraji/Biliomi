@@ -1,9 +1,9 @@
 package nl.juraji.biliomi.rest.services;
 
-import nl.juraji.biliomi.io.api.spotify.v1.SpotifyApi;
-import nl.juraji.biliomi.io.api.spotify.v1.model.playlist.SpotifyPlaylist;
+import nl.juraji.biliomi.components.integrations.spotify.api.v1.SpotifyApi;
+import nl.juraji.biliomi.components.integrations.spotify.api.v1.model.playlist.SpotifyPlaylist;
 import nl.juraji.biliomi.io.web.Response;
-import nl.juraji.biliomi.model.integrations.spotify.SpotifySettings;
+import nl.juraji.biliomi.model.integrations.SpotifySettings;
 import nl.juraji.biliomi.rest.config.SettingsModelRestService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;

@@ -1,8 +1,8 @@
 package nl.juraji.biliomi.utility.types.collections;
 
-import nl.juraji.biliomi.components.interfaces.enums.OnOff;
-import nl.juraji.biliomi.components.interfaces.enums.StreamState;
 import nl.juraji.biliomi.utility.types.Templater;
+import nl.juraji.biliomi.utility.types.enums.OnOff;
+import nl.juraji.biliomi.utility.types.enums.StreamState;
 
 import java.util.List;
 import java.util.function.Supplier;

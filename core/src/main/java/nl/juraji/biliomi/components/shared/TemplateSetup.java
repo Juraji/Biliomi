@@ -1,10 +1,10 @@
 package nl.juraji.biliomi.components.shared;
 
-import nl.juraji.biliomi.components.interfaces.enums.OnOff;
 import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
+import nl.juraji.biliomi.utility.types.enums.OnOff;
 import org.apache.commons.lang3.StringUtils;
 
 /**

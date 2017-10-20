@@ -2,7 +2,7 @@ package nl.juraji.biliomi.rest.services;
 
 import nl.juraji.biliomi.components.integrations.twitter.TweetTrackerService;
 import nl.juraji.biliomi.components.system.settings.SettingsService;
-import nl.juraji.biliomi.model.integrations.twitter.TwitterSettings;
+import nl.juraji.biliomi.model.integrations.TwitterSettings;
 import nl.juraji.biliomi.rest.config.SettingsModelRestService;
 
 import javax.inject.Inject;

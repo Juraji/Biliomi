@@ -1,6 +1,6 @@
 package nl.juraji.biliomi.utility.commandrouters.types;
 
-import nl.juraji.biliomi.components.interfaces.Component;
+import nl.juraji.biliomi.utility.types.components.Component;
 
 import java.lang.reflect.Method;
 

@@ -1,6 +1,6 @@
 package nl.juraji.biliomi.utility.calculate;
 
-import nl.juraji.biliomi.components.interfaces.enums.OnOff;
+import nl.juraji.biliomi.utility.types.enums.OnOff;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

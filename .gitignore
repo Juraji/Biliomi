@@ -3,4 +3,4 @@
 /**/*.iml
 
 # Holds a copy of the config folder with settings for development
-/dist/src/assembly/resources/testconfig/**/*
+/dist/src/assembly/testconfig/

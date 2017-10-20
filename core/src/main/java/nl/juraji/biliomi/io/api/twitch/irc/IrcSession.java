@@ -5,7 +5,6 @@ import nl.juraji.biliomi.io.web.sockets.SocketSession;
 import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.BotName;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.ChannelName;
 import nl.juraji.biliomi.utility.events.EventBus;
@@ -30,10 +29,6 @@ public class IrcSession extends SocketSession {
   private AuthTokenDao authTokenDao;
 
   @Inject
-  @AppDataValue("twitch.irc.uri")
-  private String serverUri;
-
-  @Inject
   @BotName
   private String botName;
 
@@ -49,7 +44,7 @@ public class IrcSession extends SocketSession {
 
   @Override
   protected String produceSocketUri() {
-    return serverUri;
+    return "wss://irc-ws.chat.twitch.tv";
   }
 
   public ChatClientFacade getChatClient() {

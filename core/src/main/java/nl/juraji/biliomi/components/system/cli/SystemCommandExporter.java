@@ -1,7 +1,6 @@
 package nl.juraji.biliomi.components.system.cli;
 
 import nl.juraji.biliomi.components.ComponentManager;
-import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.components.shared.TimeFormatter;
 import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.model.core.Command;
@@ -14,6 +13,7 @@ import nl.juraji.biliomi.utility.estreams.EStream;
 import nl.juraji.biliomi.utility.factories.reflections.ReflectionUtils;
 import nl.juraji.biliomi.utility.types.Exporter;
 import nl.juraji.biliomi.utility.types.collections.FastList;
+import nl.juraji.biliomi.utility.types.components.Component;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.enterprise.inject.Default;

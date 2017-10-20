@@ -9,7 +9,6 @@ import nl.juraji.biliomi.io.web.WebClient;
 import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UserSetting;
 import nl.juraji.biliomi.utility.exceptions.UnavailableException;
 import nl.juraji.biliomi.utility.factories.ModelUtils;
@@ -31,10 +30,7 @@ import java.util.Map;
 @Default
 @Singleton
 public class StreamLabsApiImpl implements StreamLabsApi {
-
-  @Inject
-  @AppDataValue("streamlabs.api.uris.v1")
-  private String apiBaseUri;
+  private static final String API_BASE_URI = "https://streamlabs.com/api/v1.0";
 
   @Inject
   @UserSetting("biliomi.integrations.streamLabs.consumerKey")
@@ -61,13 +57,13 @@ public class StreamLabsApiImpl implements StreamLabsApi {
   @Override
   public Response<StreamLabsTwitchUser> getMe() throws Exception {
     Map<String, Object> queryMap = executeTokenPreflight();
-    return webClient.get(Url.url(apiBaseUri, "user").withQuery(queryMap), headers, StreamLabsTwitchUser.class);
+    return webClient.get(Url.url(API_BASE_URI, "user").withQuery(queryMap), headers, StreamLabsTwitchUser.class);
   }
 
   @Override
   public Response<StreamLabsSocketToken> getSocketToken() throws Exception {
     Map<String, Object> queryMap = executeTokenPreflight();
-    return webClient.get(Url.url(apiBaseUri, "socket", "token").withQuery(queryMap), headers, StreamLabsSocketToken.class);
+    return webClient.get(Url.url(API_BASE_URI, "socket", "token").withQuery(queryMap), headers, StreamLabsSocketToken.class);
   }
 
   /**

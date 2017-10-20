@@ -7,8 +7,8 @@
 
   <formats>
     <format>dir</format>
-    <format>zip</format>
-    <format>tar.gz</format>
+    <!--<format>zip</format>-->
+    <!--<format>tar.gz</format>-->
   </formats>
 
   <includeBaseDirectory>false</includeBaseDirectory>
@@ -32,9 +32,6 @@
         <fileSets>
           <fileSet>
             <directory>/target/resources</directory>
-            <excludes>
-              <exclude>testconfig/**</exclude>
-            </excludes>
           </fileSet>
         </fileSets>
       </sources>

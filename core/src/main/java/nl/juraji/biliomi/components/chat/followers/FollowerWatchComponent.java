@@ -1,6 +1,5 @@
 package nl.juraji.biliomi.components.chat.followers;
 
-import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.components.shared.TemplateSetup;
 import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.model.core.TemplateDao;
@@ -11,6 +10,7 @@ import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
+import nl.juraji.biliomi.utility.types.components.Component;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

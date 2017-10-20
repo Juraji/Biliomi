@@ -19,7 +19,6 @@
       <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
       <property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
 
-      <property name="hibernate.archive.autodetection" value="class"/>
       <property name="hibernate.transaction.factory_class"
                 value="org.hibernate.transaction.JDBCTransactionFactory"/>
     </properties>
@@ -36,7 +35,6 @@
       <property name="hibernate.format_sql" value="false"/>
       <property name="hibernate.use_sql_comments" value="false"/>
 
-      <property name="hibernate.archive.autodetection" value="class"/>
       <property name="hibernate.transaction.factory_class"
                 value="org.hibernate.transaction.JDBCTransactionFactory"/>
 

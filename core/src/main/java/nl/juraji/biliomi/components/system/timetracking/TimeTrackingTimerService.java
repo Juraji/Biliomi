@@ -1,6 +1,5 @@
 package nl.juraji.biliomi.components.system.timetracking;
 
-import nl.juraji.biliomi.components.interfaces.TimerService;
 import nl.juraji.biliomi.components.shared.ChatService;
 import nl.juraji.biliomi.components.system.channel.ChannelService;
 import nl.juraji.biliomi.components.system.settings.SettingsService;
@@ -10,6 +9,7 @@ import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.UserGroup;
 import nl.juraji.biliomi.model.core.settings.TimeTrackingSettings;
 import nl.juraji.biliomi.utility.estreams.EStream;
+import nl.juraji.biliomi.utility.types.components.TimerService;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 

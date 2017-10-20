@@ -1,6 +1,5 @@
 package nl.juraji.biliomi.components.registers.raids;
 
-import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.components.shared.TemplateSetup;
 import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
@@ -12,6 +11,7 @@ import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.types.Templater;
+import nl.juraji.biliomi.utility.types.components.Component;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;

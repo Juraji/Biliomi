@@ -1,9 +1,9 @@
 package nl.juraji.biliomi.components.system.users;
 
-import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.model.internal.events.bot.ConsoleInputEvent;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CliCommandRoute;
+import nl.juraji.biliomi.utility.types.components.Component;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

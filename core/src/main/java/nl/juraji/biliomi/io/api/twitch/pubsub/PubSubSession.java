@@ -6,7 +6,6 @@ import nl.juraji.biliomi.io.web.sockets.SocketSession;
 import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
 import nl.juraji.biliomi.utility.events.EventBus;
 
 import javax.enterprise.inject.Default;
@@ -20,10 +19,6 @@ import javax.inject.Singleton;
 @Default
 @Singleton
 public class PubSubSession extends SocketSession {
-
-  @Inject
-  @AppDataValue("twitch.pubsub.uri")
-  private String serverUri;
 
   @Inject
   private EventBus eventBus;
@@ -43,6 +38,6 @@ public class PubSubSession extends SocketSession {
 
   @Override
   protected String produceSocketUri() {
-    return serverUri;
+    return "wss://pubsub-edge.twitch.tv";
   }
 }

@@ -1,7 +1,5 @@
 package nl.juraji.biliomi.components.system.channel;
 
-import nl.juraji.biliomi.components.interfaces.Component;
-import nl.juraji.biliomi.components.interfaces.enums.OnOff;
 import nl.juraji.biliomi.components.shared.TimeFormatter;
 import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchStream;
 import nl.juraji.biliomi.model.core.Game;
@@ -14,6 +12,8 @@ import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.types.Templater;
+import nl.juraji.biliomi.utility.types.components.Component;
+import nl.juraji.biliomi.utility.types.enums.OnOff;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;

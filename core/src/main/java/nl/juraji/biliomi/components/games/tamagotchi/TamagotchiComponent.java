@@ -3,7 +3,6 @@ package nl.juraji.biliomi.components.games.tamagotchi;
 import nl.juraji.biliomi.components.games.tamagotchi.services.AgingTimerService;
 import nl.juraji.biliomi.components.games.tamagotchi.services.TamagotchiService;
 import nl.juraji.biliomi.components.games.tamagotchi.services.ToyFactoryService;
-import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.components.shared.BadWordsService;
 import nl.juraji.biliomi.components.shared.TimeFormatter;
 import nl.juraji.biliomi.components.system.points.PointsService;
@@ -17,6 +16,7 @@ import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
+import nl.juraji.biliomi.utility.types.components.Component;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;

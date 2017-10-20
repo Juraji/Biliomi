@@ -1,12 +1,12 @@
 package nl.juraji.biliomi.utility.commandrouters.routers;
 
-import nl.juraji.biliomi.components.interfaces.Component;
 import nl.juraji.biliomi.utility.calculate.WeldUtils;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CliCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.RegistryEntry;
 import nl.juraji.biliomi.utility.estreams.EStream;
 import nl.juraji.biliomi.utility.types.collections.CIMap;
 import nl.juraji.biliomi.utility.types.collections.MultivaluedHashMap;
+import nl.juraji.biliomi.utility.types.components.Component;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Singleton;

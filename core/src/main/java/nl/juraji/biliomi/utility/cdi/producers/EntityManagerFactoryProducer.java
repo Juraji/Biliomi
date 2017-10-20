@@ -5,8 +5,9 @@ import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.UpdateModeType;
 import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.database.USMySQL;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UpdateMode;
-import nl.juraji.biliomi.utility.types.Templater;
+import nl.juraji.biliomi.utility.factories.reflections.ReflectionUtils;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.jpa.AvailableSettings;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 
 import javax.annotation.PostConstruct;
@@ -15,12 +16,11 @@ import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.persistence.Entity;
 import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static nl.juraji.biliomi.utility.types.Templater.template;
 
@@ -75,12 +75,15 @@ public final class EntityManagerFactoryProducer {
   private EntityManagerFactory setupH2EMF(String ddlMode) throws IOException {
     Map<String, Object> configuration = new HashMap<>();
 
-    String jdbcUri = Templater.template("jdbc:h2:file:{{datapath}}/datastore")
+    String jdbcUri = template("jdbc:h2:file:{{datapath}}/datastore")
         .add("datapath", BiliomiContainer.getParameters().getWorkingDir().getCanonicalPath())
         .apply();
 
     configuration.put("hibernate.connection.url", jdbcUri);
     configuration.put("hibernate.hbm2ddl.auto", ddlMode);
+
+    // Add entity classes
+    configuration.put(AvailableSettings.LOADED_CLASSES, scanForEntityClasses());
 
     // Create Entity manager factory
     logger.debug("Creating entity manager factory for local H2 database...");
@@ -110,9 +113,18 @@ public final class EntityManagerFactoryProducer {
     configuration.put("hibernate.connection.useSSL", String.valueOf(useSSL));
     configuration.put("hibernate.hbm2ddl.auto", ddlMode);
 
+    // Add entity classes
+    configuration.put(AvailableSettings.LOADED_CLASSES, scanForEntityClasses());
+
     // Create Entity manager factory
     logger.debug("Creating entity manager factory for MySQL database...");
     HibernatePersistenceProvider provider = new HibernatePersistenceProvider();
     return provider.createEntityManagerFactory("Biliomi-MySQL-DS", configuration);
+  }
+
+  private List<Class<?>> scanForEntityClasses() {
+    return ReflectionUtils.forPackages("nl.juraji.biliomi.model")
+        .annotatedTypes(Entity.class)
+        .collect(Collectors.toList());
   }
 }

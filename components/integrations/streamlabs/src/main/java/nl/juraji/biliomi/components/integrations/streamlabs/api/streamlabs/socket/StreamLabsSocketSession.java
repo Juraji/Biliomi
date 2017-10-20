@@ -3,7 +3,6 @@ package nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.sock
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.socket.listeners.StreamLabsEventListener;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
 import nl.juraji.biliomi.utility.events.EventBus;
 import nl.juraji.biliomi.utility.types.Restartable;
 import org.apache.logging.log4j.Logger;
@@ -20,16 +19,13 @@ import java.net.URISyntaxException;
 @Default
 @Singleton
 public class StreamLabsSocketSession implements Restartable {
+  private static final String SOCKET_URI = "https://sockets.streamlabs.com";
 
   @Inject
   private Logger logger;
 
   @Inject
   private EventBus eventBus;
-
-  @Inject
-  @AppDataValue("streamlabs.api.uris.socket")
-  private String socketUri;
 
   private String socketToken;
   private Socket socket;
@@ -42,7 +38,7 @@ public class StreamLabsSocketSession implements Restartable {
 
     if (socket == null) {
       try {
-        socket = IO.socket(socketUri, getIOOptions());
+        socket = IO.socket(SOCKET_URI, getIOOptions());
         socket.on("event", new StreamLabsEventListener(eventBus));
       } catch (URISyntaxException e) {
         logger.error("Failed connection to Stream Labs socket.io", e);

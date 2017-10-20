@@ -3,7 +3,6 @@ package nl.juraji.biliomi.components.system.users;
 import com.google.common.base.Splitter;
 import com.google.common.eventbus.Subscribe;
 import nl.juraji.biliomi.BiliomiContainer;
-import nl.juraji.biliomi.components.interfaces.TimerService;
 import nl.juraji.biliomi.io.api.twitch.irc.IrcSession;
 import nl.juraji.biliomi.io.api.twitch.irc.utils.Tags;
 import nl.juraji.biliomi.model.core.User;
@@ -12,6 +11,7 @@ import nl.juraji.biliomi.utility.calculate.TextUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.BotName;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.ChannelName;
 import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
+import nl.juraji.biliomi.utility.types.components.TimerService;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;

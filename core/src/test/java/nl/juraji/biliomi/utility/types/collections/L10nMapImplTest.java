@@ -1,7 +1,7 @@
 package nl.juraji.biliomi.utility.types.collections;
 
-import nl.juraji.biliomi.components.interfaces.enums.StreamState;
 import nl.juraji.biliomi.utility.types.Templater;
+import nl.juraji.biliomi.utility.types.enums.StreamState;
 import org.junit.Before;
 import org.junit.Test;
 
