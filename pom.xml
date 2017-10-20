@@ -13,29 +13,29 @@
   <modules>
     <module>core</module>
     <module>dist</module>
-    <module>components/integrations/auto-updates</module>
-    <module>components/integrations/spotify</module>
-    <module>components/integrations/steam</module>
-    <module>components/integrations/twitter</module>
-    <module>components/integrations/streamlabs</module>
-    <module>components/chat/announcements</module>
-    <module>components/chat/bits</module>
-    <module>components/chat/chatmoderator</module>
-    <module>components/chat/pmresponses</module>
-    <module>components/chat/quotes</module>
-    <module>components/chat/raffles</module>
-    <module>components/chat/subscribers</module>
-    <module>components/chat/usergreetings</module>
-    <module>components/registers/donations</module>
-    <module>components/registers/raids</module>
-    <module>components/games/tamagotchi</module>
-    <module>components/games/adventures</module>
-    <module>components/games/8ball</module>
-    <module>components/games/investments</module>
-    <module>components/games/creativemurders</module>
-    <module>components/games/roulette</module>
-    <module>components/games/slotmachine</module>
-    <module>components/integrations/hosts</module>
+    <module>packages/integrations/auto-updates</module>
+    <module>packages/integrations/spotify</module>
+    <module>packages/integrations/steam</module>
+    <module>packages/integrations/twitter</module>
+    <module>packages/integrations/streamlabs</module>
+    <module>packages/chat/announcements</module>
+    <module>packages/chat/bits</module>
+    <module>packages/chat/chatmoderator</module>
+    <module>packages/chat/pmresponses</module>
+    <module>packages/chat/quotes</module>
+    <module>packages/chat/raffles</module>
+    <module>packages/chat/subscribers</module>
+    <module>packages/chat/usergreetings</module>
+    <module>packages/registers/donations</module>
+    <module>packages/registers/raids</module>
+    <module>packages/games/tamagotchi</module>
+    <module>packages/games/adventures</module>
+    <module>packages/games/8ball</module>
+    <module>packages/games/investments</module>
+    <module>packages/games/creativemurders</module>
+    <module>packages/games/roulette</module>
+    <module>packages/games/slotmachine</module>
+    <module>packages/integrations/hosts</module>
   </modules>
 
   <properties>
