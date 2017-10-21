@@ -2,6 +2,9 @@
 Date: -
 
 ## Release Notes
+* Fix Biliomi failing to authorize with Twitch, due to Twitch sending auth data via url hash.
+* Implement Maven modularization in order to have component specific sources split of from the core.
+This will not affect end-users, other than being able to completely remove unwanted features.
 
 # Biliomi v3.11.0
 Date: October 14th 2017
