@@ -1,5 +1,5 @@
 # Biliomi v3.12.0
-Date: -
+Date: 21th october 2017
 
 ## Release Notes
 * Fix Biliomi failing to authorize with Twitch, due to Twitch sending auth data via url hash.
