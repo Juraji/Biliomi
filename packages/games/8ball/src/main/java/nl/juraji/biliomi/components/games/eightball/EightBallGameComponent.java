@@ -8,8 +8,8 @@ import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.types.components.Component;
 
 import javax.enterprise.inject.Default;
+import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.List;
 
 /**
  * Created by Juraji on 21-5-2017.
@@ -19,6 +19,9 @@ import java.util.List;
 @Singleton
 @NormalComponent
 public class EightBallGameComponent extends Component {
+
+  @Inject
+  private EightballConfigService configService;
 
   /**
    * The 8ball knows all
@@ -31,8 +34,7 @@ public class EightBallGameComponent extends Component {
       return false;
     }
 
-    List<String> strings = l10n.getKeyStartsWith("ChatCommand.8ball.answer.");
-    String message = MathUtils.listRand(strings);
+    String message = MathUtils.listRand(configService.getEightballMessages());
     chat.say(message);
     return true;
   }
