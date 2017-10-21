@@ -56,13 +56,20 @@ public class CallbackRequestHandler implements Runnable {
       Map<String, String> queryParams = Url.unpackQueryString(requestUri);
 
       try {
-        updateCallbackEventListener(queryParams);
-
-        // Determine which page to send by query params
-        if (queryParams.containsKey(accessTokenParamName)) {
-          sendFile(CallbackResources.getAuthSuccessPageFile(), CONTENT_TYPE_HTML, outputStream);
+        if (queryParams.size() == 0) {
+          // There were no query params, the token most probably came via hash data
+          // The redirect page rewrites this to query parameters then comes back here
+          sendFile(CallbackResources.getAuthHashRedirectPageFile(), CONTENT_TYPE_HTML, outputStream);
         } else {
-          sendFile(CallbackResources.getAuthFailedPageFile(), CONTENT_TYPE_HTML, outputStream);
+          updateCallbackEventListener(queryParams);
+
+          if (queryParams.containsKey(accessTokenParamName)) {
+            // Authorization was succesful
+            sendFile(CallbackResources.getAuthSuccessPageFile(), CONTENT_TYPE_HTML, outputStream);
+          } else {
+            // Authorization failed
+            sendFile(CallbackResources.getAuthFailedPageFile(), CONTENT_TYPE_HTML, outputStream);
+          }
         }
       } catch (IllegalStateException e) {
         sendFile(CallbackResources.getAuthFailedPageFile(), CONTENT_TYPE_HTML, outputStream);

@@ -18,4 +18,8 @@ public class CallbackResources {
   public static URL getAuthSuccessPageFile() {
     return CallbackResources.class.getResource("/oauth/auth-success.html");
   }
+
+  public static URL getAuthHashRedirectPageFile() {
+    return CallbackResources.class.getResource("/oauth/auth-hash-redirect.html");
+  }
 }
