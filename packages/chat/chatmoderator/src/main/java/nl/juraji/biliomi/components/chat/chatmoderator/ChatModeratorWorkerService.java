@@ -10,7 +10,7 @@ import nl.juraji.biliomi.model.chat.ModerationReason;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.internal.events.irc.user.messages.IrcChatMessageEvent;
 import nl.juraji.biliomi.utility.calculate.PatternUtils;
-import nl.juraji.biliomi.utility.cdi.annotations.modifiers.L10nData;
+import nl.juraji.biliomi.utility.cdi.annotations.modifiers.I18nData;
 import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
 import nl.juraji.biliomi.utility.types.Init;
 import nl.juraji.biliomi.utility.types.collections.I18nMap;
@@ -36,7 +36,7 @@ public class ChatModeratorWorkerService implements Init {
   private static final String L10N_MODERATION_ACTION_MESSAGE_PREFIX = "Moderation.messageFor.";
 
   @Inject
-  @L10nData(ChatModeratorComponent.class)
+  @I18nData(ChatModeratorComponent.class)
   private I18nMap i18n;
 
   @Inject

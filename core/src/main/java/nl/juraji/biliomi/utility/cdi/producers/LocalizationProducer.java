@@ -1,7 +1,7 @@
 package nl.juraji.biliomi.utility.cdi.producers;
 
 import nl.juraji.biliomi.BiliomiContainer;
-import nl.juraji.biliomi.utility.cdi.annotations.modifiers.L10nData;
+import nl.juraji.biliomi.utility.cdi.annotations.modifiers.I18nData;
 import nl.juraji.biliomi.utility.types.collections.I18NMapImpl;
 import nl.juraji.biliomi.utility.types.collections.I18nMap;
 import org.apache.logging.log4j.Logger;
@@ -55,8 +55,8 @@ public final class LocalizationProducer {
     Annotated annotated = injectionPoint.getAnnotated();
     String baseName;
 
-    if (annotated.isAnnotationPresent(L10nData.class)) {
-      baseName = annotated.getAnnotation(L10nData.class).value().getSimpleName();
+    if (annotated.isAnnotationPresent(I18nData.class)) {
+      baseName = annotated.getAnnotation(I18nData.class).value().getSimpleName();
     } else {
       baseName = injectionPoint.getBean().getBeanClass().getSimpleName();
     }

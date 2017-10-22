@@ -11,7 +11,7 @@ import nl.juraji.biliomi.model.games.InvestmentRecordDao;
 import nl.juraji.biliomi.model.games.InvestmentSettings;
 import nl.juraji.biliomi.model.games.UserInvestRecordStats;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.cdi.annotations.modifiers.L10nData;
+import nl.juraji.biliomi.utility.cdi.annotations.modifiers.I18nData;
 import nl.juraji.biliomi.utility.types.collections.I18nMap;
 import nl.juraji.biliomi.utility.types.components.TimerService;
 import org.joda.time.DateTime;
@@ -39,7 +39,7 @@ public class InvestmentService extends TimerService {
   private InvestmentsConfigService configService;
 
   @Inject
-  @L10nData(InvestmentGameComponent.class)
+  @I18nData(InvestmentGameComponent.class)
   private I18nMap i18n;
 
   @Inject

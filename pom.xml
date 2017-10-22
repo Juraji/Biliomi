@@ -36,6 +36,7 @@
     <module>packages/games/roulette</module>
     <module>packages/games/slotmachine</module>
     <module>packages/integrations/hosts</module>
+    <module>packages/games/achievements</module>
   </modules>
 
   <properties>

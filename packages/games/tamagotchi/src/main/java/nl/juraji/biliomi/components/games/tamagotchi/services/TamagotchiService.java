@@ -7,7 +7,7 @@ import nl.juraji.biliomi.model.games.Tamagotchi;
 import nl.juraji.biliomi.model.games.TamagotchiDao;
 import nl.juraji.biliomi.model.games.settings.TamagotchiSettings;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.cdi.annotations.modifiers.L10nData;
+import nl.juraji.biliomi.utility.cdi.annotations.modifiers.I18nData;
 import nl.juraji.biliomi.utility.types.Templater;
 import nl.juraji.biliomi.utility.types.collections.I18nMap;
 import org.joda.time.DateTime;
@@ -27,7 +27,7 @@ import java.util.List;
 public class TamagotchiService {
 
   @Inject
-  @L10nData(TamagotchiComponent.class)
+  @I18nData(TamagotchiComponent.class)
   private I18nMap i18n;
 
   @Inject

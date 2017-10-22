@@ -11,7 +11,7 @@ import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.AdventureSettings;
 import nl.juraji.biliomi.model.games.Tamagotchi;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.cdi.annotations.modifiers.L10nData;
+import nl.juraji.biliomi.utility.cdi.annotations.modifiers.I18nData;
 import nl.juraji.biliomi.utility.estreams.EBiStream;
 import nl.juraji.biliomi.utility.factories.concurrent.ThreadPools;
 import nl.juraji.biliomi.utility.types.Counter;
@@ -64,7 +64,7 @@ public class AdventureRunnerService {
   private AdventureRecordService adventureRecordService;
 
   @Inject
-  @L10nData(AdventureComponent.class)
+  @I18nData(AdventureComponent.class)
   private I18nMap i18n;
 
   private AdventureSettings settings;
