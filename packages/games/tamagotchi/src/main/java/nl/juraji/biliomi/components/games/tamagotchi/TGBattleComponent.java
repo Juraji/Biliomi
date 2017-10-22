@@ -4,6 +4,7 @@ import nl.juraji.biliomi.components.games.tamagotchi.services.TamagotchiService;
 import nl.juraji.biliomi.components.shared.MessageTimerService;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.Tamagotchi;
+import nl.juraji.biliomi.model.internal.events.bot.AchievementEvent;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.BotName;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
@@ -162,6 +163,9 @@ public class TGBattleComponent extends Component {
     }
 
     tamagotchiService.save(tamagotchi1, tamagotchi2);
+
+    eventBus.post(new AchievementEvent(tamagotchi1.getOwner(), "TG_BATTLE_COMPLETED", i18n.getString("Achievement.battleCompleted")));
+    eventBus.post(new AchievementEvent(tamagotchi2.getOwner(), "TG_BATTLE_COMPLETED", i18n.getString("Achievement.battleCompleted")));
 
     messageTimerService.scheduleMessage(
         i18n.get("Common.tgbattle.result")

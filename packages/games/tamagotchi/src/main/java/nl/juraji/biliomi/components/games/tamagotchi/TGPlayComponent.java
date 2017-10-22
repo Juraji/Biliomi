@@ -6,6 +6,7 @@ import nl.juraji.biliomi.components.system.commands.CommandService;
 import nl.juraji.biliomi.model.core.Command;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.Tamagotchi;
+import nl.juraji.biliomi.model.internal.events.bot.AchievementEvent;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
@@ -128,6 +129,9 @@ public class TGPlayComponent extends Component {
       tamagotchiService.increaseAffection(tamagotchi);
       tamagotchiService.increaseAffection(otherTamagotchi);
       tamagotchiService.save(tamagotchi, otherTamagotchi);
+
+      eventBus.post(new AchievementEvent(tamagotchi.getOwner(), "TG_PLAYDATE", i18n.getString("Achievement.playDate")));
+      eventBus.post(new AchievementEvent(otherTamagotchi.getOwner(), "TG_PLAYDATE", i18n.getString("Achievement.playDate")));
 
       chat.say(i18n.get("ChatCommand.tpglaydate.sentOffOnPlaydate")
           .add("name", tamagotchi::getName)

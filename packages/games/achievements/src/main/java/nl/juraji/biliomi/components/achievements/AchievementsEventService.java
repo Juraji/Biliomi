@@ -46,18 +46,17 @@ public class AchievementsEventService implements Init {
 
   @Subscribe
   public void onAchievementEvent(AchievementEvent event) {
-    if (settings.isAchievementsEnabled()) {
-      if (!recordDao.recordExists(event.getUser(), event.getAchievement())) {
-        AchievementRecord record = new AchievementRecord();
-        record.setUser(event.getUser());
-        record.setAchievement(event.getAchievement());
+    if (settings.isAchievementsEnabled() && !recordDao.recordExists(event.getUser(), event.getAchievementId())) {
+      AchievementRecord record = new AchievementRecord();
+      record.setUser(event.getUser());
+      record.setAchievementId(event.getAchievementId());
+      record.setAchievement(event.getAchievement());
 
-        recordDao.save(record);
+      recordDao.save(record);
 
-        chat.say(i18n.get("Event.achievement.get")
-            .add("username", event.getUser()::getDisplayName)
-            .add("achievement", event::getAchievement));
-      }
+      chat.say(i18n.get("AchievementEvent.get")
+          .add("username", event.getUser()::getDisplayName)
+          .add("achievement", event::getAchievement));
     }
   }
 }

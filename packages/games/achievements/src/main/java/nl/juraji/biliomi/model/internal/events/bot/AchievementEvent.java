@@ -19,11 +19,15 @@ public class AchievementEvent extends Event {
   @XmlElement(name = "User")
   private User user;
 
+  @XmlElement(name = "AchievementId")
+  private String achievementId;
+
   @XmlElement(name = "Achievement")
   private String achievement;
 
-  public AchievementEvent(User user, String achievement, boolean isBuiltIn) {
+  public AchievementEvent(User user, String achievementId, String achievement) {
     this.user = user;
+    this.achievementId = achievementId;
     this.achievement = achievement;
   }
 
@@ -33,6 +37,14 @@ public class AchievementEvent extends Event {
 
   public void setUser(User user) {
     this.user = user;
+  }
+
+  public String getAchievementId() {
+    return achievementId;
+  }
+
+  public void setAchievementId(String achievementId) {
+    this.achievementId = achievementId;
   }
 
   public String getAchievement() {

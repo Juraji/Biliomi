@@ -32,11 +32,11 @@ public class AchievementRecordDao extends JpaDao<AchievementRecord> {
         .getList();
   }
 
-  public boolean recordExists(User user, String name) {
+  public boolean recordExists(User user, String achievementId) {
     return criteria()
         .createAlias("user", "u")
         .add(Restrictions.eq("u.id", user.getId()))
-        .add(Restrictions.eq("name", name))
+        .add(Restrictions.eq("achievementId", achievementId))
         .getCount() > 0;
   }
 }

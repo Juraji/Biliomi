@@ -27,6 +27,10 @@ public class AchievementRecord {
   private User user;
 
   @Column(nullable = false)
+  @XmlElement(name = "AchievementId")
+  private String achievementId;
+
+  @Column(nullable = false)
   @XmlElement(name = "Achievement")
   private String achievement;
 
@@ -44,6 +48,14 @@ public class AchievementRecord {
 
   public void setUser(User user) {
     this.user = user;
+  }
+
+  public String getAchievementId() {
+    return achievementId;
+  }
+
+  public void setAchievementId(String achievementId) {
+    this.achievementId = achievementId;
   }
 
   public String getAchievement() {

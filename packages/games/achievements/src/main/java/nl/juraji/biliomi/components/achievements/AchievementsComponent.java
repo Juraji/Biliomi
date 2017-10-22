@@ -5,6 +5,7 @@ import nl.juraji.biliomi.model.games.AchievementRecord;
 import nl.juraji.biliomi.model.games.AchievementRecordDao;
 import nl.juraji.biliomi.model.games.AchievementsSettings;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
+import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
  */
 @Default
 @Singleton
+@NormalComponent
 public class AchievementsComponent extends Component {
 
   @Inject

@@ -40,7 +40,7 @@ public class DefaultSettingsTask implements SetupTask {
   @Override
   public void install() {
     // Load all Settings objects and save their initial state to the database
-    ReflectionUtils.forClassPackage(Settings.class)
+    ReflectionUtils.forPackages("nl.juraji.biliomi.model")
         .subTypes(Settings.class)
         .mapToBiEStream(settingsDao::getSettings)
         .mapValue((clazz, obj) -> (obj == null ? clazz.getDeclaredConstructor().newInstance() : obj))
@@ -58,7 +58,7 @@ public class DefaultSettingsTask implements SetupTask {
   @Override
   public void update() {
     // Load all Settings objects and save their initial state to the database if no entry exists
-    ReflectionUtils.forClassPackage(Settings.class)
+    ReflectionUtils.forPackages("nl.juraji.biliomi.model")
         .subTypes(Settings.class)
         .mapToBiEStream(settingsDao::getSettings)
         .mapValue((clazz, obj) -> (obj == null ? clazz.getDeclaredConstructor().newInstance() : null))

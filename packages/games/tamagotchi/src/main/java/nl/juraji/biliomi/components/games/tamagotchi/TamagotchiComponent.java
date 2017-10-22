@@ -11,6 +11,7 @@ import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.Tamagotchi;
 import nl.juraji.biliomi.model.games.TamagotchiToy;
 import nl.juraji.biliomi.model.games.settings.TamagotchiSettings;
+import nl.juraji.biliomi.model.internal.events.bot.AchievementEvent;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
 import nl.juraji.biliomi.utility.calculate.Numbers;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
@@ -159,6 +160,8 @@ public class TamagotchiComponent extends Component {
     pointsService.take(user, settings.getNewPrice());
     Tamagotchi tamagotchi = tamagotchiService.createTamagotchi(name, user, species);
 
+    eventBus.post(new AchievementEvent(user, "TG_BUY_TAMAGOTCHI", i18n.getString("Achievement.buyTamagotchi")));
+
     chat.say(i18n.get("ChatCommand.tgStore.buy.newTamagotchi")
         .add("username", user::getDisplayName)
         .add("gender", tamagotchiService.getGenderName(tamagotchi))
@@ -208,6 +211,8 @@ public class TamagotchiComponent extends Component {
     tamagotchiService.increaseAffection(tamagotchi);
     tamagotchiService.save(tamagotchi);
 
+    eventBus.post(new AchievementEvent(user, "TG_BUY_FOOD", i18n.getString("Achievement.buyFood")));
+
     chat.whisper(user, i18n.get("ChatCommand.tgStore.food.added")
         .add("addedamount", (int) Math.ceil(amountToAdd))
         .add("name", tamagotchi::getName)
@@ -241,6 +246,8 @@ public class TamagotchiComponent extends Component {
     tamagotchi.setHygieneLevel(settings.getMaxHygiene());
     tamagotchiService.increaseAffection(tamagotchi);
     tamagotchiService.save(tamagotchi);
+
+    eventBus.post(new AchievementEvent(user, "TG_BUY_SOAP", i18n.getString("Achievement.buySoap")));
 
     chat.say(i18n.get("ChatCommand.tgStore.soap.cleaned")
         .add("name", tamagotchi::getName)
@@ -313,6 +320,8 @@ public class TamagotchiComponent extends Component {
     tamagotchi.getToys().add(toy);
     tamagotchiService.increaseAffection(tamagotchi);
     tamagotchiService.save(tamagotchi);
+
+    eventBus.post(new AchievementEvent(user, "TG_BUY_TOY", i18n.getString("Achievement.buyToy")));
 
     chat.say(i18n.get("ChatCommand.tgStore.toy.toyAdded")
         .add("username", user::getDisplayName)

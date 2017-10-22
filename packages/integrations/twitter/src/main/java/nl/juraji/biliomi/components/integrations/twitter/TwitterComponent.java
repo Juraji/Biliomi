@@ -3,7 +3,6 @@ package nl.juraji.biliomi.components.integrations.twitter;
 import nl.juraji.biliomi.components.integrations.twitter.api.v1.TwitterApi;
 import nl.juraji.biliomi.components.shared.TemplateSetup;
 import nl.juraji.biliomi.components.system.channel.ChannelService;
-import nl.juraji.biliomi.components.system.settings.SettingsService;
 import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchStream;
 import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
@@ -51,9 +50,6 @@ public class TwitterComponent extends Component {
 
   @Inject
   private TweetTrackerService tweetTrackerService;
-
-  @Inject
-  private SettingsService settingsService;
 
   @Inject
   private TemplateDao templateDao;

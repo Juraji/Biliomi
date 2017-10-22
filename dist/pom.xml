@@ -237,5 +237,11 @@
       <artifactId>biliomi-integration-hosts</artifactId>
       <version>${project.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>biliomi-games-achievements</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>
