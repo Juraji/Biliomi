@@ -1,7 +1,7 @@
 package nl.juraji.biliomi.components.games.tamagotchi;
 
 import nl.juraji.biliomi.components.games.tamagotchi.services.TamagotchiService;
-import nl.juraji.biliomi.components.shared.MessageTimerService;
+import nl.juraji.biliomi.components.shared.SimpleTimerService;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.Tamagotchi;
 import nl.juraji.biliomi.model.internal.events.bot.AchievementEvent;
@@ -42,7 +42,7 @@ public class TGBattleComponent extends Component {
   private TamagotchiService tamagotchiService;
 
   @Inject
-  private MessageTimerService messageTimerService;
+  private SimpleTimerService simpleTimerService;
 
   @Inject
   @BotName
@@ -164,13 +164,15 @@ public class TGBattleComponent extends Component {
 
     tamagotchiService.save(tamagotchi1, tamagotchi2);
 
-    eventBus.post(new AchievementEvent(tamagotchi1.getOwner(), "TG_BATTLE_COMPLETED", i18n.getString("Achievement.battleCompleted")));
-    eventBus.post(new AchievementEvent(tamagotchi2.getOwner(), "TG_BATTLE_COMPLETED", i18n.getString("Achievement.battleCompleted")));
+    simpleTimerService.schedule(
+        () -> {
+          eventBus.post(new AchievementEvent(tamagotchi1.getOwner(), "TG_BATTLE_COMPLETED", i18n.getString("Achievement.battleCompleted")));
+          eventBus.post(new AchievementEvent(tamagotchi2.getOwner(), "TG_BATTLE_COMPLETED", i18n.getString("Achievement.battleCompleted")));
 
-    messageTimerService.scheduleMessage(
-        i18n.get("Common.tgbattle.result")
-            .add("victorname", () -> (decision ? tamagotchi1.getName() : tamagotchi2.getName()))
-            .add("losername", () -> (decision ? tamagotchi2.getName() : tamagotchi1.getName())),
+          chat.say(i18n.get("Common.tgbattle.result")
+              .add("victorname", () -> (decision ? tamagotchi1.getName() : tamagotchi2.getName()))
+              .add("losername", () -> (decision ? tamagotchi2.getName() : tamagotchi1.getName())));
+        },
         BATTLE_DURATION_MINUTES, TimeUnit.MINUTES);
     return true;
   }

@@ -1,7 +1,7 @@
 package nl.juraji.biliomi.components.games.tamagotchi;
 
 import nl.juraji.biliomi.components.games.tamagotchi.services.TamagotchiService;
-import nl.juraji.biliomi.components.shared.MessageTimerService;
+import nl.juraji.biliomi.components.shared.SimpleTimerService;
 import nl.juraji.biliomi.components.system.commands.CommandService;
 import nl.juraji.biliomi.model.core.Command;
 import nl.juraji.biliomi.model.core.User;
@@ -39,7 +39,7 @@ public class TGPlayComponent extends Component {
   private CommandService commandService;
 
   @Inject
-  private MessageTimerService messageTimerService;
+  private SimpleTimerService simpleTimerService;
 
   /**
    * Send your Tamagotchi off to play
@@ -73,9 +73,9 @@ public class TGPlayComponent extends Component {
 
     // Register a delayed message at the end of command cooldown
     Command tgplayCommand = commandService.getCommand("tgplay");
-    messageTimerService.scheduleMessage(
-        i18n.get("ChatCommand.tpglay.tamagotchiReturned")
-            .add("name", tamagotchi::getName),
+    simpleTimerService.schedule(
+        () -> chat.say(i18n.get("ChatCommand.tpglay.tamagotchiReturned")
+            .add("name", tamagotchi::getName)),
         tgplayCommand.getCooldown(),
         TimeUnit.MILLISECONDS
     );
@@ -130,19 +130,22 @@ public class TGPlayComponent extends Component {
       tamagotchiService.increaseAffection(otherTamagotchi);
       tamagotchiService.save(tamagotchi, otherTamagotchi);
 
-      eventBus.post(new AchievementEvent(tamagotchi.getOwner(), "TG_PLAYDATE", i18n.getString("Achievement.playDate")));
-      eventBus.post(new AchievementEvent(otherTamagotchi.getOwner(), "TG_PLAYDATE", i18n.getString("Achievement.playDate")));
-
       chat.say(i18n.get("ChatCommand.tpglaydate.sentOffOnPlaydate")
           .add("name", tamagotchi::getName)
           .add("othername", otherTamagotchi::getName));
 
       // Register a delayed message at the end of command cooldown
       Command tgplaydateCommand = commandService.getCommand("tgplaydate");
-      messageTimerService.scheduleMessage(
-          i18n.get("ChatCommand.tpglaydate.tamagotchiReturned")
-              .add("name", tamagotchi::getName)
-              .add("othername", otherTamagotchi::getName),
+
+      simpleTimerService.schedule(
+          () -> {
+            eventBus.post(new AchievementEvent(tamagotchi.getOwner(), "TG_PLAYDATE", i18n.getString("Achievement.playDate")));
+            eventBus.post(new AchievementEvent(otherTamagotchi.getOwner(), "TG_PLAYDATE", i18n.getString("Achievement.playDate")));
+
+            chat.say(i18n.get("ChatCommand.tpglaydate.tamagotchiReturned")
+                .add("name", tamagotchi::getName)
+                .add("othername", otherTamagotchi::getName));
+          },
           tgplaydateCommand.getCooldown(),
           TimeUnit.MILLISECONDS
       );
