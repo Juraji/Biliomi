@@ -31,4 +31,11 @@ public class AdventureRecordDao extends JpaDao<AdventureRecord> {
         .setMaxResults(limit)
         .getList();
   }
+
+  public long getRecordCount(User user) {
+    return criteria()
+        .createAlias("adventurer", "a")
+        .add(Restrictions.eq("a.id", user.getId()))
+        .getCount();
+  }
 }

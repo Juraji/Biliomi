@@ -30,6 +30,10 @@ public class AdventureRecordService {
     adventureRecordDao.save(record);
   }
 
+  public long getRecordCount(User user) {
+    return adventureRecordDao.getRecordCount(user);
+  }
+
   public UserAdventureRecordStats getRecordInfo(User user) {
     List<AdventureRecord> records = adventureRecordDao.getRecords(user);
 

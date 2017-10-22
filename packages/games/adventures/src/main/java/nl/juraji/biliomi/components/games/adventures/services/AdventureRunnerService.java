@@ -10,9 +10,11 @@ import nl.juraji.biliomi.config.adventures.YamlAdventureStory;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.AdventureSettings;
 import nl.juraji.biliomi.model.games.Tamagotchi;
+import nl.juraji.biliomi.model.internal.events.bot.AchievementEvent;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.modifiers.I18nData;
 import nl.juraji.biliomi.utility.estreams.EBiStream;
+import nl.juraji.biliomi.utility.events.EventBus;
 import nl.juraji.biliomi.utility.factories.concurrent.ThreadPools;
 import nl.juraji.biliomi.utility.types.Counter;
 import nl.juraji.biliomi.utility.types.Templater;
@@ -44,6 +46,9 @@ public class AdventureRunnerService {
 
   private final List<Adventurer> survivors = new ArrayList<>();
   private final List<Adventurer> victims = new ArrayList<>();
+
+  @Inject
+  private EventBus eventBus;
 
   @Inject
   private SettingsService settingsService;
@@ -110,6 +115,8 @@ public class AdventureRunnerService {
       addAdventurer(new Adventurer(tamagotchi, bet / 2, settings.getWinMultiplier()));
     }
 
+    eventBus.post(new AchievementEvent(user, "ADV_GO_ON_ADVENTURE", i18n.getString("Achievement.goOnAdventure")));
+
     Adventurer adventurer = new Adventurer(user, bet, settings.getWinMultiplier());
     addAdventurer(adventurer);
   }
@@ -173,6 +180,7 @@ public class AdventureRunnerService {
       User user = adventurer.getUser();
 
       adventureRecordService.recordAdventureRun(user, bet, payout, adventurer.isTamagotchi());
+      processSurvivorAchievements(adventurer);
 
       payouts.compute(user.getId(), (id, value) -> {
         long add = (adventurer.isTamagotchi() ? payout : bet + payout);
@@ -199,6 +207,27 @@ public class AdventureRunnerService {
         adventurer.getBet(),
         0,
         adventurer.isTamagotchi())));
+  }
+
+  private void processSurvivorAchievements(Adventurer adventurer) {
+    User user = adventurer.getUser();
+
+    // Go big achievement
+    if (adventurer.getBet() >= 1000) {
+      eventBus.post(new AchievementEvent(user, "ADV_GO_BIG", i18n.getString("Achievement.goBig")));
+    }
+
+    long recordCount = adventureRecordService.getRecordCount(user);
+
+    // Bear Grylls achievement
+    if (recordCount >= 10) {
+      eventBus.post(new AchievementEvent(user, "ADV_BEAR_GRYLLS", i18n.getString("Achievement.bearGrylls")));
+    }
+
+    // Steve Irwin achievement
+    if (recordCount >= 20) {
+      eventBus.post(new AchievementEvent(user, "ADV_STEVE_IRWIN", i18n.getString("Achievement.steveIrwin")));
+    }
   }
 
   private void resetAdventure() {
