@@ -3,6 +3,7 @@ package nl.juraji.biliomi.components.games.creativemurders;
 import nl.juraji.biliomi.config.creativemurders.CreativeMurdersConfigService;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.UserKDRRecordStats;
+import nl.juraji.biliomi.model.internal.events.bot.AchievementEvent;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
@@ -97,6 +98,7 @@ public class CreativeMurdersComponent extends Component {
    */
   private void murder(User killer, User target) {
     killRecordService.recordKill(killer, target);
+    processMurderAchievements(killer);
     chat.say(Templater.template(configService.getMurderMessage(killer.getNameAndTitle(), target.getNameAndTitle())));
   }
 
@@ -107,6 +109,24 @@ public class CreativeMurdersComponent extends Component {
    */
   private void suicide(User user) {
     killRecordService.recordSuicicide(user);
+    eventBus.post(new AchievementEvent(user, "CM_SUICIDAL", i18n.getString("Achievement.suicidal")));
     chat.say(configService.getSuicideMessage(user.getNameAndTitle()));
+  }
+
+  private void processMurderAchievements(User killer) {
+    eventBus.post(new AchievementEvent(killer, "CM_FIRST_BLOOD", i18n.getString("Achievement.firstBlood")));
+    long killCount = killRecordService.getKillCount(killer);
+
+    if (killCount >= 5) {
+      eventBus.post(new AchievementEvent(killer, "CM_COMBO_BREAKER", i18n.getString("Achievement.comboBreaker")));
+    }
+
+    if (killCount >= 10) {
+      eventBus.post(new AchievementEvent(killer, "CM_SERIAL_KILLER", i18n.getString("Achievement.serialKiller")));
+    }
+
+    if (killCount >= 30) {
+      eventBus.post(new AchievementEvent(killer, "CM_MOST_WANTED", i18n.getString("Achievement.mostWanted")));
+    }
   }
 }

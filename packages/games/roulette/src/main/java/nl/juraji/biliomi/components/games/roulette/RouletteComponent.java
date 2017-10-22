@@ -5,6 +5,7 @@ import nl.juraji.biliomi.config.roulette.RouletteConfigService;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.RouletteSettings;
 import nl.juraji.biliomi.model.games.UserRecordStats;
+import nl.juraji.biliomi.model.internal.events.bot.AchievementEvent;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
 import nl.juraji.biliomi.utility.calculate.Numbers;
@@ -64,6 +65,7 @@ public class RouletteComponent extends Component {
             .add("time", timeFormatter.timeQuantity(settings.getTimeoutOnDeath())));
       }
     } else {
+      eventBus.post(new AchievementEvent(user, "RO_QUICKSILVER", i18n.getString("Achievement.quickSilver")));
       message = configService.getRandomWin();
     }
 

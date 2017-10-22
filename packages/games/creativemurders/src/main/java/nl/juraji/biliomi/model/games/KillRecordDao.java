@@ -35,4 +35,11 @@ public class KillRecordDao extends JpaDao<KillRecord> {
         .setMaxResults(limit)
         .getList();
   }
+
+  public long getKillCount(User killer) {
+    return criteria()
+        .createAlias("killer", "k")
+        .add(Restrictions.eq("k.id", killer.getId()))
+        .getCount();
+  }
 }

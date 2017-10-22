@@ -40,6 +40,10 @@ public class KillRecordService {
     killRecordDao.save(record);
   }
 
+  public long getKillCount(User killer) {
+    return killRecordDao.getKillCount(killer);
+  }
+
   /**
    * Get the kill/death/suicide ratio for a User
    *
@@ -74,7 +78,7 @@ public class KillRecordService {
 
       return new UserKDRRecordStats(records.size(), kills, deaths, suicides, favoriteTarget);
     }
-    
+
     return null;
   }
 }

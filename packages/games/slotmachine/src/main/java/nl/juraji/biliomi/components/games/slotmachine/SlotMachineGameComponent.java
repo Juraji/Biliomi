@@ -5,6 +5,7 @@ import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.config.slotmachine.SlotmachineConfigService;
 import nl.juraji.biliomi.config.slotmachine.YamlSlotmachineEmote;
 import nl.juraji.biliomi.model.core.User;
+import nl.juraji.biliomi.model.internal.events.bot.AchievementEvent;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
@@ -46,6 +47,8 @@ public class SlotMachineGameComponent extends Component {
 
     // Initially calculate the result
     long payout = calculateResultPayout(e1, e2, e3);
+
+    processAchievements(user, e1, e2, e3);
 
     // Check if the jackpot emote has been seen
     // If so add the value of the jackpot emote divided by 3 to the payout
@@ -104,6 +107,33 @@ public class SlotMachineGameComponent extends Component {
         default:
           // None of the emotes match
           return 0;
+      }
+    }
+  }
+
+  private void processAchievements(User user, YamlSlotmachineEmote e1, YamlSlotmachineEmote e2, YamlSlotmachineEmote e3) {
+    boolean jackpotSeen = configService.isJackpotSeen(e1, e2, e3);
+
+    if (jackpotSeen) {
+      eventBus.post(new AchievementEvent(user, "SM_JACKPOT_SEEN", i18n.getString("Achievement.jackpotSeen")));
+    }
+
+    boolean allEmotesMatch = MathUtils.compareNumbers(e1.getIndex(), e2.getIndex(), e3.getIndex());
+    if (allEmotesMatch) {
+      eventBus.post(new AchievementEvent(user, "SM_TRIPPLE_MATCH", i18n.getString("Achievement.trippleMatch")));
+
+      if (jackpotSeen) {
+        eventBus.post(new AchievementEvent(user, "SM_JACKPOT", i18n.getString("Achievement.jackpot")));
+      }
+    } else {
+      int which = MathUtils.compareGroupedNumbers(
+          MathUtils.integerArray(e1.getIndex(), e2.getIndex()),
+          MathUtils.integerArray(e2.getIndex(), e3.getIndex()),
+          MathUtils.integerArray(e3.getIndex(), e1.getIndex())
+      );
+
+      if (which>0) {
+        eventBus.post(new AchievementEvent(user, "SM_DOUBLE_MATCH", i18n.getString("Achievement.doubleMatch")));
       }
     }
   }
