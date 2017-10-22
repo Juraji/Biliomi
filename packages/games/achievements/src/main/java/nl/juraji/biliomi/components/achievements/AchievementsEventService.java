@@ -11,6 +11,7 @@ import nl.juraji.biliomi.utility.cdi.annotations.modifiers.I18nData;
 import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
 import nl.juraji.biliomi.utility.types.Init;
 import nl.juraji.biliomi.utility.types.collections.I18nMap;
+import org.joda.time.DateTime;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -51,6 +52,7 @@ public class AchievementsEventService implements Init {
       record.setUser(event.getUser());
       record.setAchievementId(event.getAchievementId());
       record.setAchievement(event.getAchievement());
+      record.setDate(DateTime.now());
 
       recordDao.save(record);
 

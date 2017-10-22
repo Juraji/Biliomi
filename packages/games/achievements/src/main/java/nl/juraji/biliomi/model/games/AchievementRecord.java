@@ -1,6 +1,9 @@
 package nl.juraji.biliomi.model.games;
 
 import nl.juraji.biliomi.model.core.User;
+import nl.juraji.biliomi.utility.types.hibernatetypes.DateTimeISO8601Type;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -34,6 +37,11 @@ public class AchievementRecord {
   @XmlElement(name = "Achievement")
   private String achievement;
 
+  @Column
+  @Type(type = DateTimeISO8601Type.TYPE)
+  @XmlElement(name = "Date")
+  private DateTime date;
+
   public long getId() {
     return id;
   }
@@ -64,5 +72,13 @@ public class AchievementRecord {
 
   public void setAchievement(String achievement) {
     this.achievement = achievement;
+  }
+
+  public DateTime getDate() {
+    return date;
+  }
+
+  public void setDate(DateTime date) {
+    this.date = date;
   }
 }
