@@ -6,13 +6,13 @@ import nl.juraji.biliomi.components.integrations.spotify.api.oauth.SpotifyOAuthF
 import nl.juraji.biliomi.components.integrations.spotify.api.oauth.SpotifyOAuthScope;
 import nl.juraji.biliomi.components.integrations.spotify.api.v1.SpotifyApi;
 import nl.juraji.biliomi.components.integrations.spotify.api.v1.model.user.SpotifyUser;
+import nl.juraji.biliomi.config.spotify.SpotifyConfigService;
 import nl.juraji.biliomi.io.console.ConsoleApi;
 import nl.juraji.biliomi.io.web.Response;
 import nl.juraji.biliomi.io.web.WebClient;
 import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UserSetting;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
@@ -49,16 +49,11 @@ public class SpotifyIntegrationSetupTask implements SetupTask {
   private AuthTokenDao authTokenDao;
 
   @Inject
-  @UserSetting("biliomi.integrations.spotify.consumerKey")
-  private String consumerKey;
-
-  @Inject
-  @UserSetting("biliomi.integrations.spotify.consumerSecret")
-  private String consumerSecret;
+  private SpotifyConfigService configService;
 
   @Override
   public void install() {
-    if (StringUtils.isEmpty(consumerKey) || StringUtils.isEmpty(consumerSecret)) {
+    if (StringUtils.isEmpty(configService.getConsumerKey()) || StringUtils.isEmpty(configService.getConsumerSecret())) {
       logger.info("No OAuth information set for Spotify, skipping set up");
       return;
     }
@@ -88,7 +83,7 @@ public class SpotifyIntegrationSetupTask implements SetupTask {
       return;
     }
 
-    SpotifyOAuthFlowDirector director = new SpotifyOAuthFlowDirector(consumerKey, consumerSecret, webClient);
+    SpotifyOAuthFlowDirector director = new SpotifyOAuthFlowDirector(configService.getConsumerKey(), configService.getConsumerSecret(), webClient);
     String authenticationUrl = director.getAuthenticationUri(
         SpotifyOAuthScope.PLAYLIST_READ_PRIVATE,
         SpotifyOAuthScope.PLAYLIST_READ_COLLABORATIVE,

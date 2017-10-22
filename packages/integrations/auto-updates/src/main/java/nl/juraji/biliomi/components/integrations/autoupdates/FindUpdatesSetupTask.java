@@ -9,7 +9,7 @@ import nl.juraji.biliomi.components.integrations.autoupdates.github.api.v3.model
 import nl.juraji.biliomi.io.console.ConsoleApi;
 import nl.juraji.biliomi.io.web.Response;
 import nl.juraji.biliomi.model.core.VersionInfo;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UserSetting;
+import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.CoreSetting;
 import nl.juraji.biliomi.utility.estreams.EStream;
 import nl.juraji.biliomi.utility.factories.archives.TarArchiveUtils;
 import org.apache.commons.io.FileUtils;
@@ -38,7 +38,7 @@ public class FindUpdatesSetupTask implements SetupTask {
   private static final String[] INSTALLER_DIRS = {"l10n", "lib", "default-config"};
 
   @Inject
-  @UserSetting("biliomi.core.checkForUpdates")
+  @CoreSetting("biliomi.core.checkForUpdates")
   private String isCheckForUpdates;
 
   @Inject

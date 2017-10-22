@@ -1,9 +1,9 @@
 package nl.juraji.biliomi.utility.cdi.producers;
 
 import nl.juraji.biliomi.BiliomiContainer;
-import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
-import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.UpdateModeType;
-import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.database.USMySQL;
+import nl.juraji.biliomi.config.core.YamlCoreSettings;
+import nl.juraji.biliomi.config.core.biliomi.UpdateModeType;
+import nl.juraji.biliomi.config.core.biliomi.database.USMySQL;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UpdateMode;
 import nl.juraji.biliomi.utility.factories.reflections.ReflectionUtils;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +33,7 @@ import static nl.juraji.biliomi.utility.types.Templater.template;
 public final class EntityManagerFactoryProducer {
 
   @Inject
-  private UserSettings userSettings;
+  private YamlCoreSettings yamlCoreSettings;
 
   @Inject
   private Logger logger;
@@ -46,7 +46,7 @@ public final class EntityManagerFactoryProducer {
 
   @PostConstruct
   private void initEntityManagerFactoryProducer() {
-    boolean useH2Database = userSettings.getBiliomi().getDatabase().isUseH2Database();
+    boolean useH2Database = yamlCoreSettings.getBiliomi().getDatabase().isUseH2Database();
     String ddlMode = updateMode.getDdlMode();
 
     if (useH2Database) {
@@ -93,7 +93,7 @@ public final class EntityManagerFactoryProducer {
 
   private EntityManagerFactory setupMySQLEMF(String ddlMode) {
     Map<String, Object> configuration = new HashMap<>();
-    USMySQL mySQL = userSettings.getBiliomi().getDatabase().getMySQL();
+    USMySQL mySQL = yamlCoreSettings.getBiliomi().getDatabase().getMySQL();
     boolean useSSL = mySQL.isUsessl();
 
     // Biliomi doesn't need the MySQL server to be in the correct timezone since all dates

@@ -2,6 +2,8 @@ package nl.juraji.biliomi.components.games.slotmachine;
 
 import nl.juraji.biliomi.components.shared.GameMessagesService;
 import nl.juraji.biliomi.components.system.points.PointsService;
+import nl.juraji.biliomi.config.slotmachine.SlotmachineConfigService;
+import nl.juraji.biliomi.config.slotmachine.YamlSlotmachineEmote;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
@@ -23,7 +25,7 @@ import javax.inject.Singleton;
 public class SlotMachineGameComponent extends Component {
 
   @Inject
-  private EmoteService emoteService;
+  private SlotmachineConfigService configService;
 
   @Inject
   private PointsService pointsService;
@@ -38,9 +40,9 @@ public class SlotMachineGameComponent extends Component {
   @CommandRoute(command = "slot")
   public boolean slotCommand(User user, Arguments arguments) {
     // Retrieve 3 random Emotes
-    Emote e1 = emoteService.getRandom();
-    Emote e2 = emoteService.getRandom();
-    Emote e3 = emoteService.getRandom();
+    YamlSlotmachineEmote e1 = configService.getRandomEmote();
+    YamlSlotmachineEmote e2 = configService.getRandomEmote();
+    YamlSlotmachineEmote e3 = configService.getRandomEmote();
 
     // Initially calculate the result
     long payout = calculateResultPayout(e1, e2, e3);
@@ -48,8 +50,8 @@ public class SlotMachineGameComponent extends Component {
     // Check if the jackpot emote has been seen
     // If so add the value of the jackpot emote divided by 3 to the payout
     // and state the jackpotSeen message
-    if (emoteService.isJackpotSeen(e1, e2, e3)) {
-      Emote jpEmote = emoteService.getJackPotEmote();
+    if (configService.isJackpotSeen(e1, e2, e3)) {
+      YamlSlotmachineEmote jpEmote = configService.getJackpot();
       payout += Math.round(jpEmote.getValue());
 
       chat.say(l10n.get("ChatCommand.slot.jackpotSeen")
@@ -77,16 +79,16 @@ public class SlotMachineGameComponent extends Component {
     return true;
   }
 
-  private long calculateResultPayout(Emote e1, Emote e2, Emote e3) {
-    if (MathUtils.compareNumbers(e1.getId(), e2.getId(), e3.getId())) {
+  private long calculateResultPayout(YamlSlotmachineEmote e1, YamlSlotmachineEmote e2, YamlSlotmachineEmote e3) {
+    if (MathUtils.compareNumbers(e1.getIndex(), e2.getIndex(), e3.getIndex())) {
       // If all emotes equal return the value of the first emote times 3 (for each emote)
       return e1.getValue() * 3;
     } else {
       // Find out which if the emotes match
       int which = MathUtils.compareGroupedNumbers(
-          MathUtils.integerArray(e1.getId(), e2.getId()),
-          MathUtils.integerArray(e2.getId(), e3.getId()),
-          MathUtils.integerArray(e3.getId(), e1.getId())
+          MathUtils.integerArray(e1.getIndex(), e2.getIndex()),
+          MathUtils.integerArray(e2.getIndex(), e3.getIndex()),
+          MathUtils.integerArray(e3.getIndex(), e1.getIndex())
       );
 
       switch (which) {

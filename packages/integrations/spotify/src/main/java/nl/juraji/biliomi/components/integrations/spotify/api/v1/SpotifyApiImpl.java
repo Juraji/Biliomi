@@ -9,13 +9,14 @@ import nl.juraji.biliomi.components.integrations.spotify.api.v1.model.tracks.Spo
 import nl.juraji.biliomi.components.integrations.spotify.api.v1.model.tracks.SpotifyTrackUriList;
 import nl.juraji.biliomi.components.integrations.spotify.api.v1.model.tracks.SpotifyTracksSearchResult;
 import nl.juraji.biliomi.components.integrations.spotify.api.v1.model.user.SpotifyUser;
+import nl.juraji.biliomi.config.spotify.SpotifyConfigService;
 import nl.juraji.biliomi.io.web.Response;
 import nl.juraji.biliomi.io.web.Url;
 import nl.juraji.biliomi.io.web.WebClient;
 import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UserSetting;
+import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.CoreSetting;
 import nl.juraji.biliomi.utility.exceptions.UnavailableException;
 import nl.juraji.biliomi.utility.factories.marshalling.JacksonMarshaller;
 import org.apache.commons.lang3.StringUtils;
@@ -41,15 +42,10 @@ public class SpotifyApiImpl implements SpotifyApi {
   private static final String API_BASE_URI = "https://api.spotify.com/v1";
 
   @Inject
-  @UserSetting("biliomi.integrations.spotify.consumerKey")
-  private String consumerKey;
+  private SpotifyConfigService configService;
 
   @Inject
-  @UserSetting("biliomi.integrations.spotify.consumerSecret")
-  private String consumerSecret;
-
-  @Inject
-  @UserSetting("biliomi.core.countryCode")
+  @CoreSetting("biliomi.core.countryCode")
   private String countryCode;
 
   @Inject
@@ -139,7 +135,7 @@ public class SpotifyApiImpl implements SpotifyApi {
     DateTime expiryTime = token.getExpiryTime();
     DateTime now = DateTime.now();
     if (expiryTime != null && now.isAfter(expiryTime)) {
-      SpotifyOAuthFlowDirector director = new SpotifyOAuthFlowDirector(consumerKey, consumerSecret, webClient);
+      SpotifyOAuthFlowDirector director = new SpotifyOAuthFlowDirector(configService.getConsumerKey(), configService.getConsumerSecret(), webClient);
       boolean refreshSuccess = director.awaitRefreshedAccessToken(token.getRefreshToken());
 
       if (refreshSuccess) {

@@ -3,13 +3,13 @@ package nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.v1;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.oauth.StreamLabsOAuthDirector;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.v1.model.StreamLabsSocketToken;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.v1.model.StreamLabsTwitchUser;
+import nl.juraji.biliomi.config.spotify.StreamLabsConfigService;
 import nl.juraji.biliomi.io.web.Response;
 import nl.juraji.biliomi.io.web.Url;
 import nl.juraji.biliomi.io.web.WebClient;
 import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UserSetting;
 import nl.juraji.biliomi.utility.exceptions.UnavailableException;
 import nl.juraji.biliomi.utility.factories.ModelUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -33,12 +33,7 @@ public class StreamLabsApiImpl implements StreamLabsApi {
   private static final String API_BASE_URI = "https://streamlabs.com/api/v1.0";
 
   @Inject
-  @UserSetting("biliomi.integrations.streamLabs.consumerKey")
-  private String consumerKey;
-
-  @Inject
-  @UserSetting("biliomi.integrations.streamLabs.consumerSecret")
-  private String consumerSecret;
+  private StreamLabsConfigService configService;
 
   @Inject
   private WebClient webClient;
@@ -82,7 +77,7 @@ public class StreamLabsApiImpl implements StreamLabsApi {
     DateTime expiryTime = token.getExpiryTime();
     DateTime now = DateTime.now();
     if (expiryTime != null && now.isAfter(expiryTime)) {
-      StreamLabsOAuthDirector director = new StreamLabsOAuthDirector(consumerKey, consumerSecret, webClient);
+      StreamLabsOAuthDirector director = new StreamLabsOAuthDirector(configService.getConsumerKey(), configService.getConsumerSecret(), webClient);
       boolean refreshSuccess = director.awaitRefreshedAccessToken(token.getRefreshToken());
 
       if (refreshSuccess) {

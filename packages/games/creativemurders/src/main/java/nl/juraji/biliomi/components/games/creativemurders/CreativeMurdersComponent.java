@@ -1,5 +1,6 @@
 package nl.juraji.biliomi.components.games.creativemurders;
 
+import nl.juraji.biliomi.config.creativemurders.CreativeMurdersConfigService;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.UserKDRRecordStats;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
@@ -25,7 +26,7 @@ public class CreativeMurdersComponent extends Component {
   private KillRecordService killRecordService;
 
   @Inject
-  private KillMessageService killMessageService;
+  private CreativeMurdersConfigService configService;
 
   /**
    * The kill game, cuz we need it
@@ -85,7 +86,7 @@ public class CreativeMurdersComponent extends Component {
    * @param target The target as string
    */
   private void murder(User killer, String target) {
-    chat.say(killMessageService.getMurderMessage(killer.getNameAndTitle(), target));
+    chat.say(configService.getMurderMessage(killer.getNameAndTitle(), target));
   }
 
   /**
@@ -96,7 +97,7 @@ public class CreativeMurdersComponent extends Component {
    */
   private void murder(User killer, User target) {
     killRecordService.recordKill(killer, target);
-    chat.say(Templater.template(killMessageService.getMurderMessage(killer.getNameAndTitle(), target.getNameAndTitle())));
+    chat.say(Templater.template(configService.getMurderMessage(killer.getNameAndTitle(), target.getNameAndTitle())));
   }
 
   /**
@@ -106,6 +107,6 @@ public class CreativeMurdersComponent extends Component {
    */
   private void suicide(User user) {
     killRecordService.recordSuicicide(user);
-    chat.say(killMessageService.getSuicideMessage(user.getNameAndTitle()));
+    chat.say(configService.getSuicideMessage(user.getNameAndTitle()));
   }
 }

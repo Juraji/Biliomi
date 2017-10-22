@@ -13,7 +13,7 @@ import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UserSetting;
+import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.CoreSetting;
 import nl.juraji.biliomi.utility.factories.marshalling.JacksonMarshaller;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.http.HttpFields;
@@ -39,7 +39,7 @@ public class TwitchApiImpl implements TwitchApi {
   private static final String tmiBaseUri = "https://tmi.twitch.tv";
 
   @Inject
-  @UserSetting("biliomi.twitch.clientId")
+  @CoreSetting("biliomi.twitch.clientId")
   private String clientId;
 
   @Inject

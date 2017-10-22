@@ -11,7 +11,7 @@ import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.BotName;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.ChannelName;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UserSetting;
+import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.CoreSetting;
 import nl.juraji.biliomi.utility.types.AppParameters;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
@@ -41,7 +41,7 @@ public class TwitchOAuthTask implements SetupTask {
   private AuthTokenDao authTokenDao;
 
   @Inject
-  @UserSetting("biliomi.twitch.clientId")
+  @CoreSetting("biliomi.twitch.clientId")
   private String clientId;
 
   @Inject

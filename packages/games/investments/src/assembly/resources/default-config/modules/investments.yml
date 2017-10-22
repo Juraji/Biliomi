@@ -1,9 +1,0 @@
-# This file containes "projects" used in the investment game
-# Have a little fun and put some silly projects in here
-
-biliomi:
-  components:
-    investmentGame:
-      projects:
-        - "Biliomi's Iron Throne"
-        - "The Moderator lounge"

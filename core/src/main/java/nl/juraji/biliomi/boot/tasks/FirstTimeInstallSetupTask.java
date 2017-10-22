@@ -3,13 +3,13 @@ package nl.juraji.biliomi.boot.tasks;
 import nl.juraji.biliomi.BiliomiContainer;
 import nl.juraji.biliomi.boot.SetupTask;
 import nl.juraji.biliomi.boot.SetupTaskPriority;
+import nl.juraji.biliomi.config.core.YamlCoreSettings;
+import nl.juraji.biliomi.config.core.biliomi.USCore;
+import nl.juraji.biliomi.config.core.biliomi.USDatabase;
+import nl.juraji.biliomi.config.core.biliomi.USTwitch;
+import nl.juraji.biliomi.config.core.biliomi.database.USMySQL;
 import nl.juraji.biliomi.io.console.ConsoleApi;
 import nl.juraji.biliomi.io.web.oauthflow.grants.code.CallbackResources;
-import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
-import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USCore;
-import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USDatabase;
-import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.USTwitch;
-import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.database.USMySQL;
 import nl.juraji.biliomi.utility.calculate.Numbers;
 import nl.juraji.biliomi.utility.types.AppParameters;
 import org.apache.commons.io.FileUtils;
@@ -43,7 +43,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
   private ConsoleApi console;
 
   @Inject
-  private UserSettings userSettings;
+  private YamlCoreSettings yamlCoreSettings;
 
   private final File configDir;
   private final File installDir;
@@ -112,11 +112,9 @@ public class FirstTimeInstallSetupTask implements SetupTask {
 
   private void saveSettings() throws InvocationTargetException, IllegalAccessException, IOException {
     // Component and integration settings are saved in separate files, these tags should be null in core.yml
-    userSettings.getBiliomi().setComponents(null);
-    userSettings.getBiliomi().setIntegrations(null);
 
-    Yaml yamlInstance = new Yaml(new Constructor(UserSettings.class));
-    String yamlString = yamlInstance.dumpAs(userSettings, new Tag("nl/juraji/biliomi"), DumperOptions.FlowStyle.BLOCK);
+    Yaml yamlInstance = new Yaml(new Constructor(YamlCoreSettings.class));
+    String yamlString = yamlInstance.dumpAs(yamlCoreSettings, new Tag("nl/juraji/biliomi"), DumperOptions.FlowStyle.BLOCK);
 
     FileUtils.writeStringToFile(coreYamlFile, yamlString, "UTF-8", false);
   }
@@ -130,7 +128,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
   }
 
   private void setupCoreUserSettings() throws Exception {
-    USCore usCore = userSettings.getBiliomi().getCore();
+    USCore usCore = yamlCoreSettings.getBiliomi().getCore();
     String input;
 
     console.print("Would you like Biliomi to automatically check for updates on startup? [y/n]: ");
@@ -146,7 +144,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
   }
 
   private void setupDatabaseUserSettings() throws Exception {
-    USDatabase usDatabase = userSettings.getBiliomi().getDatabase();
+    USDatabase usDatabase = yamlCoreSettings.getBiliomi().getDatabase();
     String input;
 
     console.println("Biliomi is able to either connect to a MySQL database or use a local database.");
@@ -193,7 +191,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
   }
 
   private void setupTwitchUserSettings() throws Exception {
-    USTwitch usTwitch = userSettings.getBiliomi().getTwitch();
+    USTwitch usTwitch = yamlCoreSettings.getBiliomi().getTwitch();
     String input;
 
     console.println("Create an application for Biliomi on Twitch.");

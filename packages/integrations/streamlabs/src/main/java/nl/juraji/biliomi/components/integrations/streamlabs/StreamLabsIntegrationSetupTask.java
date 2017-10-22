@@ -4,12 +4,12 @@ import nl.juraji.biliomi.boot.SetupTask;
 import nl.juraji.biliomi.boot.SetupTaskPriority;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.oauth.StreamLabsOAuthDirector;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.oauth.StreamLabsOAuthScope;
+import nl.juraji.biliomi.config.spotify.StreamLabsConfigService;
 import nl.juraji.biliomi.io.console.ConsoleApi;
 import nl.juraji.biliomi.io.web.WebClient;
 import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UserSetting;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
@@ -41,16 +41,11 @@ public class StreamLabsIntegrationSetupTask implements SetupTask {
   private AuthTokenDao authTokenDao;
 
   @Inject
-  @UserSetting("biliomi.integrations.streamLabs.consumerKey")
-  private String consumerKey;
-
-  @Inject
-  @UserSetting("biliomi.integrations.streamLabs.consumerSecret")
-  private String consumerSecret;
+  private StreamLabsConfigService configService;
 
   @Override
   public void install() {
-    if (StringUtils.isEmpty(consumerKey) || StringUtils.isEmpty(consumerSecret)) {
+    if (StringUtils.isEmpty(configService.getConsumerKey()) || StringUtils.isEmpty(configService.getConsumerSecret())) {
       logger.info("No OAuth information set for Stream Labs, skipping set up");
       return;
     }
@@ -81,7 +76,7 @@ public class StreamLabsIntegrationSetupTask implements SetupTask {
       return;
     }
 
-    StreamLabsOAuthDirector director = new StreamLabsOAuthDirector(consumerKey, consumerSecret, webClient);
+    StreamLabsOAuthDirector director = new StreamLabsOAuthDirector(configService.getConsumerKey(), configService.getConsumerSecret(), webClient);
     String authenticationUrl = director.getAuthenticationUri(
         StreamLabsOAuthScope.DONATIONS_READ,
         StreamLabsOAuthScope.SOCKET_TOKEN);

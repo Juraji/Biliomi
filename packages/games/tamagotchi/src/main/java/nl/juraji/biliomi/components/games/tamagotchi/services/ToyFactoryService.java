@@ -1,15 +1,13 @@
 package nl.juraji.biliomi.components.games.tamagotchi.services;
 
+import nl.juraji.biliomi.config.tamagotchi.TamagotchiConfigService;
+import nl.juraji.biliomi.config.tamagotchi.YamlTamagotchiToy;
 import nl.juraji.biliomi.model.games.Tamagotchi;
 import nl.juraji.biliomi.model.games.TamagotchiToy;
-import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
-import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.components.tamagotchis.USTamagotchiToy;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.exceptions.SettingsDefinitionException;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import java.util.List;
@@ -23,30 +21,19 @@ import java.util.stream.Collectors;
  */
 @Default
 public class ToyFactoryService {
-  private List<USTamagotchiToy> toys;
 
   @Inject
-  private UserSettings userSettings;
-
-  @PostConstruct
-  private void initToyFactoryService() {
-    //noinspection unchecked
-    toys = userSettings.getBiliomi().getComponents().getTamagotchis().getToys();
-
-    if (toys == null || toys.size() == 0) {
-      throw new SettingsDefinitionException("No toys defined, check the settings");
-    }
-  }
+  private TamagotchiConfigService configService;
 
   public Set<String> getToyNameSet() {
-    return toys.stream()
-        .map(USTamagotchiToy::getName)
+    return configService.getToys().stream()
+        .map(YamlTamagotchiToy::getName)
         .collect(Collectors.toSet());
   }
 
   public TamagotchiToy getToy(String toyName) {
-    USTamagotchiToy toyDef = toys.stream()
-        .filter(usTamagotchiToy -> usTamagotchiToy.getName().equalsIgnoreCase(toyName))
+    YamlTamagotchiToy toyDef = configService.getToys().stream()
+        .filter(YamlTamagotchiToy -> YamlTamagotchiToy.getName().equalsIgnoreCase(toyName))
         .findFirst()
         .orElse(null);
 
@@ -58,7 +45,7 @@ public class ToyFactoryService {
   }
 
   public List<TamagotchiToy> getList() {
-    return toys.stream()
+    return configService.getToys().stream()
         .map(ToyFactoryService::generateToy)
         .collect(Collectors.toList());
   }
@@ -72,7 +59,7 @@ public class ToyFactoryService {
         .anyMatch(tamagotchiToy -> tamagotchiToy.getToyName().equals(toy.getToyName()));
   }
 
-  private static TamagotchiToy generateToy(USTamagotchiToy toyDef) {
+  private static TamagotchiToy generateToy(YamlTamagotchiToy toyDef) {
     long daysInMillis = TimeUnit.MILLISECONDS.convert(toyDef.getDurationDays(), TimeUnit.DAYS);
     DateTime expiryDate = DateTime.now().plus(Duration.millis(daysInMillis));
     TamagotchiToy toy = new TamagotchiToy();

@@ -6,6 +6,7 @@ import nl.juraji.biliomi.components.games.tamagotchi.services.ToyFactoryService;
 import nl.juraji.biliomi.components.shared.BadWordsService;
 import nl.juraji.biliomi.components.shared.TimeFormatter;
 import nl.juraji.biliomi.components.system.points.PointsService;
+import nl.juraji.biliomi.config.tamagotchi.TamagotchiConfigService;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.Tamagotchi;
 import nl.juraji.biliomi.model.games.TamagotchiToy;
@@ -50,6 +51,9 @@ public class TamagotchiComponent extends Component {
 
   @Inject
   private TimeFormatter timeFormatter;
+
+  @Inject
+  private TamagotchiConfigService configService;
 
   private TamagotchiSettings settings;
 
@@ -112,7 +116,7 @@ public class TamagotchiComponent extends Component {
     if (!arguments.assertMinSize(2)) {
       chat.whisper(user, l10n.get("ChatCommand.tgStore.buy.usage"));
       chat.whisper(user, l10n.get("ChatCommand.tgStore.buy.usage.listSpecies")
-          .add("list", tamagotchiService::getAvailableSpecies));
+          .add("list", configService::getAvailableSpecies));
       return false;
     }
 
@@ -131,10 +135,10 @@ public class TamagotchiComponent extends Component {
     }
 
     // Check if the prefered species exists
-    String species = tamagotchiService.getSpeciesIfExists(arguments.pop());
+    String species = configService.getSpeciesIfExists(arguments.pop());
     if (species == null) {
       chat.whisper(user, l10n.get("ChatCommand.tgStore.buy.speciesNonExistent")
-          .add("list", tamagotchiService::getAvailableSpecies));
+          .add("list", configService::getAvailableSpecies));
       return false;
     }
 

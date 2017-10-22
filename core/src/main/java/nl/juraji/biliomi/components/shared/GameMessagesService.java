@@ -1,13 +1,12 @@
 package nl.juraji.biliomi.components.shared;
 
-import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
+import nl.juraji.biliomi.config.ConfigService;
+import nl.juraji.biliomi.config.core.YamlGameMessagesConfig;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
 import nl.juraji.biliomi.utility.exceptions.SettingsDefinitionException;
 import nl.juraji.biliomi.utility.types.Templater;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
-import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -15,31 +14,10 @@ import java.util.List;
  * Biliomi v3
  */
 @Default
-public class GameMessagesService {
+public class GameMessagesService extends ConfigService<YamlGameMessagesConfig> {
 
-  private List<String> winList;
-  private List<String> lostList;
-
-  @Inject
-  private UserSettings userSettings;
-
-  @PostConstruct
-  private void initGameMessagesService() {
-    //noinspection unchecked
-    List<String> win = userSettings.getBiliomi().getComponents().getGameMessages().getWin();
-    //noinspection unchecked
-    List<String> lost = userSettings.getBiliomi().getComponents().getGameMessages().getLost();
-
-    if (win == null || win.size() == 0) {
-      throw new SettingsDefinitionException("No win messages defined, check the settings");
-    }
-
-    if (lost == null || lost.size() == 0) {
-      throw new SettingsDefinitionException("No lost messages defined, check the settings");
-    }
-
-    winList = win;
-    lostList = lost;
+  public GameMessagesService() {
+    super("core/gamemessages.yml", YamlGameMessagesConfig.class);
   }
 
   /**
@@ -49,7 +27,7 @@ public class GameMessagesService {
    * @return A templated message
    */
   public String getWinMessage(String username) {
-    return buildMessage(winList, username);
+    return buildMessage(config.getWins(), username);
   }
 
   /**
@@ -59,7 +37,7 @@ public class GameMessagesService {
    * @return A templated message
    */
   public String getLostMessage(String username) {
-    return buildMessage(lostList, username);
+    return buildMessage(config.getLosts(), username);
   }
 
   private String buildMessage(List<String> list, String username) {

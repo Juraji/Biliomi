@@ -4,6 +4,7 @@ import nl.juraji.biliomi.components.shared.ChatService;
 import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.components.system.settings.SettingsService;
 import nl.juraji.biliomi.components.system.users.UsersService;
+import nl.juraji.biliomi.config.investments.InvestmentsConfigService;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.InvestmentRecord;
 import nl.juraji.biliomi.model.games.InvestmentRecordDao;
@@ -35,7 +36,7 @@ public class InvestmentService extends TimerService {
   private ChatService chat;
 
   @Inject
-  private InvestmentProjectService investmentProjectService;
+  private InvestmentsConfigService configService;
 
   @Inject
   @L10nData(InvestmentGameComponent.class)
@@ -71,7 +72,7 @@ public class InvestmentService extends TimerService {
     record.setInvester(invester);
     record.setInvested(invested);
     record.setInterest(interest);
-    record.setProject(investmentProjectService.getRandom());
+    record.setProject(configService.getRandomProject());
     record.setMarketStateGood(marketStateGood);
     record.setDate(new DateTime());
     investmentRecordDao.save(record);
@@ -105,10 +106,6 @@ public class InvestmentService extends TimerService {
         .sum();
 
     return new UserInvestRecordStats(records.size(), losses, wins, totalInvested, totalEarned);
-  }
-
-  public List<String> getProjects() {
-    return investmentProjectService.getList();
   }
 
   private void investmentResult(InvestmentRecord record) {

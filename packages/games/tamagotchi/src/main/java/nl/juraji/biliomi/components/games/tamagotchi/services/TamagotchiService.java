@@ -37,9 +37,6 @@ public class TamagotchiService {
   private GenderService genderService;
 
   @Inject
-  private SpeciesService speciesService;
-
-  @Inject
   private TamagotchiDao tamagotchiDao;
 
   private TamagotchiSettings settings;
@@ -72,25 +69,6 @@ public class TamagotchiService {
 
     tamagotchiDao.save(tamagotchi);
     return tamagotchi;
-  }
-
-  /**
-   * Check if a given species name exists (ignoring case)
-   *
-   * @param speciesName The species name to look up
-   * @return The matched species name, or null of none was matched
-   */
-  public String getSpeciesIfExists(String speciesName) {
-    return speciesService.getSpeciesIfExists(speciesName);
-  }
-
-  /**
-   * Get a list of available species set in the user settings
-   *
-   * @return A List of species names
-   */
-  public List<String> getAvailableSpecies() {
-    return speciesService.getAvailableSpecies();
   }
 
   /**

@@ -5,6 +5,8 @@ import nl.juraji.biliomi.components.shared.ChatService;
 import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.components.system.settings.SettingsService;
 import nl.juraji.biliomi.components.system.users.UsersService;
+import nl.juraji.biliomi.config.adventures.AdventuresConfigService;
+import nl.juraji.biliomi.config.adventures.YamlAdventureStory;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.AdventureSettings;
 import nl.juraji.biliomi.model.games.Tamagotchi;
@@ -53,7 +55,7 @@ public class AdventureRunnerService {
   private ChatService chat;
 
   @Inject
-  private StoryService storyService;
+  private AdventuresConfigService configService;
 
   @Inject
   private UsersService usersService;
@@ -69,7 +71,7 @@ public class AdventureRunnerService {
   private AdventureState state = NOT_RUNNING;
   private ScheduledExecutorService executor = null;
   private DateTime nextRun = DateTime.now();
-  private Story story = null;
+  private YamlAdventureStory story = null;
 
   @PostConstruct
   private void initAdventureRunnerService() {
@@ -98,7 +100,7 @@ public class AdventureRunnerService {
     // Adventure is not running, set to join
     if (NOT_RUNNING.equals(state)) {
       state = JOIN;
-      story = storyService.getRandomStory();
+      story = configService.getRandomStory();
       executor = ThreadPools.newScheduledExecutorService("AdventureRunner");
       executor.schedule(this::runAdventure, settings.getJoinTimeout(), TimeUnit.MILLISECONDS);
     }
@@ -131,14 +133,14 @@ public class AdventureRunnerService {
     story.getChapters().stream()
         .map(Templater::template)
         .forEach(templater -> {
-          executor.schedule(() -> formatAndPostChapter(templater), counter.get() * storyService.getNextChapterInterval(), TimeUnit.MILLISECONDS);
+          executor.schedule(() -> formatAndPostChapter(templater), counter.get() * configService.getNextChapterInterval(), TimeUnit.MILLISECONDS);
           counter.increment();
         });
 
     executor.schedule(() -> {
       runPayouts();
       resetAdventure();
-    }, counter.get() * storyService.getNextChapterInterval(), TimeUnit.MILLISECONDS);
+    }, counter.get() * configService.getNextChapterInterval(), TimeUnit.MILLISECONDS);
   }
 
   private void formatAndPostChapter(Templater templater) {

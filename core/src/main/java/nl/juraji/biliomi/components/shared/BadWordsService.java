@@ -1,44 +1,29 @@
 package nl.juraji.biliomi.components.shared;
 
-import nl.juraji.biliomi.model.internal.yaml.usersettings.UserSettings;
-import nl.juraji.biliomi.utility.exceptions.SettingsDefinitionException;
+import nl.juraji.biliomi.config.ConfigService;
+import nl.juraji.biliomi.config.core.YamlBadWordsConfig;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
-import javax.inject.Inject;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by Juraji on 13-5-2017.
  * Biliomi v3
  */
 @Default
-public class BadWordsService {
+public class BadWordsService extends ConfigService<YamlBadWordsConfig> {
 
-  @Inject
-  private UserSettings userSettings;
-  private List<String> wordList;
-
-  @PostConstruct
-  private void initBadWordsService() {
-    //noinspection unchecked
-    List<String> words = userSettings.getBiliomi().getComponents().getBadwords();
-
-    if (words == null) {
-      throw new SettingsDefinitionException("Missing badwords definition, check your settigns");
-    }
-
-    wordList = words;
+  public BadWordsService() {
+    super("core/badwords.yml", YamlBadWordsConfig.class);
   }
 
   public boolean isBadWord(String word) {
-    return wordList.stream()
+    return config.getBadwords().stream()
         .anyMatch(word::equalsIgnoreCase);
   }
 
   public boolean containsBadWords(String input) {
     return Arrays.stream(input.split(" "))
-        .anyMatch(wordList::contains);
+        .anyMatch(config.getBadwords()::contains);
   }
 }

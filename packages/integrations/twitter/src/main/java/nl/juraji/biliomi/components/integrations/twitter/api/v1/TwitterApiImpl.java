@@ -2,10 +2,10 @@ package nl.juraji.biliomi.components.integrations.twitter.api.v1;
 
 import nl.juraji.biliomi.components.integrations.twitter.api.v1.model.TweetListener;
 import nl.juraji.biliomi.components.integrations.twitter.api.v1.model.TweetStreamFuture;
+import nl.juraji.biliomi.config.twitter.TwitterConfigService;
 import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UserSetting;
 import nl.juraji.biliomi.utility.exceptions.UnavailableException;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
@@ -26,12 +26,7 @@ import java.util.Set;
 public class TwitterApiImpl implements TwitterApi {
 
   @Inject
-  @UserSetting("biliomi.integrations.twitter.consumerKey")
-  private String consumerKey;
-
-  @Inject
-  @UserSetting("biliomi.integrations.twitter.consumerSecret")
-  private String consumerSecret;
+  private TwitterConfigService configService;
 
   @Inject
   private AuthTokenDao authTokenDao;
@@ -47,7 +42,7 @@ public class TwitterApiImpl implements TwitterApi {
       accessToken = new AccessToken(authToken.getToken(), authToken.getSecret());
 
       twitter = new TwitterFactory().getInstance();
-      twitter.setOAuthConsumer(consumerKey, consumerSecret);
+      twitter.setOAuthConsumer(configService.getConsumerKey(), configService.getConsumerSecret());
       twitter.setOAuthAccessToken(accessToken);
     }
   }
@@ -63,7 +58,7 @@ public class TwitterApiImpl implements TwitterApi {
     assertServiceAvailable();
     // Create a new instance for every listener, so the caller can stop this specific instance if needed
     TwitterStream twitterStream = new TwitterStreamFactory().getInstance();
-    twitterStream.setOAuthConsumer(consumerKey, consumerSecret);
+    twitterStream.setOAuthConsumer(configService.getConsumerKey(), configService.getConsumerSecret());
     twitterStream.setOAuthAccessToken(accessToken);
     twitterStream.addListener(tweetListener);
     twitterStream.filter(keywords.toArray(new String[]{}));

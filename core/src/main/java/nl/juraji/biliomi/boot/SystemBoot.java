@@ -1,7 +1,7 @@
 package nl.juraji.biliomi.boot;
 
+import nl.juraji.biliomi.config.core.biliomi.UpdateModeType;
 import nl.juraji.biliomi.model.core.VersionInfo;
-import nl.juraji.biliomi.model.internal.yaml.usersettings.biliomi.UpdateModeType;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UpdateMode;
 import nl.juraji.biliomi.utility.factories.reflections.ReflectionUtils;
 import org.apache.logging.log4j.Logger;

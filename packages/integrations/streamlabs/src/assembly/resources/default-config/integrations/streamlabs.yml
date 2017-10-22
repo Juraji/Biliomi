@@ -1,13 +1,10 @@
-biliomi:
-  integrations:
-    # Due to security reasons no OAuth keys are provided by default.
-    # When you want to use a specific integration you must first register Biliomi as an application
-    # on the concerning platform. Links are provided with each integration.
+# Due to security reasons no OAuth keys are provided by default.
+# When you want to use a specific integration you must first register Biliomi as an application
+# on the concerning platform. Links are provided with each integration.
 
-    streamLabs:
-      # Stream labs is used for automatically registering incoming donations and Twitch hosts.
-      # Note: Due to the lack of proper host events support by the Twitch API, this integration is currently the only way
-      # to receive host notifications from Biliomi.
-      # Application registration: https://streamlabs.com/dashboard/#/apps/register
-      consumerKey: null
-      consumerSecret: null
+# Stream labs is used for automatically registering incoming donations and Twitch hosts.
+# Note: Due to the lack of proper host events support by the Twitch API, this integration is currently the only way
+# to receive host notifications from Biliomi.
+# Application registration: https://streamlabs.com/dashboard/#/apps/register
+consumerKey: null
+consumerSecret: null

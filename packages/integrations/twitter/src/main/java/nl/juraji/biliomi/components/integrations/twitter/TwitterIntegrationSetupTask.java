@@ -2,11 +2,11 @@ package nl.juraji.biliomi.components.integrations.twitter;
 
 import nl.juraji.biliomi.boot.SetupTask;
 import nl.juraji.biliomi.boot.SetupTaskPriority;
+import nl.juraji.biliomi.config.twitter.TwitterConfigService;
 import nl.juraji.biliomi.io.console.ConsoleApi;
 import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.UserSetting;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
 import twitter4j.Twitter;
@@ -29,12 +29,7 @@ import java.net.URI;
 public class TwitterIntegrationSetupTask implements SetupTask {
 
   @Inject
-  @UserSetting("biliomi.integrations.twitter.consumerKey")
-  private String consumerKey;
-
-  @Inject
-  @UserSetting("biliomi.integrations.twitter.consumerSecret")
-  private String consumerSecret;
+  private TwitterConfigService configService;
 
   @Inject
   private Logger logger;
@@ -47,7 +42,7 @@ public class TwitterIntegrationSetupTask implements SetupTask {
 
   @Override
   public void install() {
-    if (StringUtils.isEmpty(consumerKey) || StringUtils.isEmpty(consumerSecret)) {
+    if (StringUtils.isEmpty(configService.getConsumerKey()) || StringUtils.isEmpty(configService.getConsumerSecret())) {
       logger.info("No consumer information set for Twitter");
       return;
     }
@@ -79,7 +74,7 @@ public class TwitterIntegrationSetupTask implements SetupTask {
     }
 
     Twitter twitter = new TwitterFactory().getInstance();
-    twitter.setOAuthConsumer(consumerKey, consumerSecret);
+    twitter.setOAuthConsumer(configService.getConsumerKey(), configService.getConsumerSecret());
 
     RequestToken requestToken = twitter.getOAuthRequestToken();
 

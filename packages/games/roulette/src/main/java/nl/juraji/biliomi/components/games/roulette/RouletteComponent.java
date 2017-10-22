@@ -1,6 +1,7 @@
 package nl.juraji.biliomi.components.games.roulette;
 
 import nl.juraji.biliomi.components.shared.TimeFormatter;
+import nl.juraji.biliomi.config.roulette.RouletteConfigService;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.RouletteSettings;
 import nl.juraji.biliomi.model.games.UserRecordStats;
@@ -11,6 +12,7 @@ import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
+import nl.juraji.biliomi.utility.types.Templater;
 import nl.juraji.biliomi.utility.types.components.Component;
 import nl.juraji.biliomi.utility.types.enums.OnOff;
 
@@ -32,7 +34,7 @@ public class RouletteComponent extends Component {
   private RouletteRecordService rouletteRecordService;
 
   @Inject
-  private RouletteMessageService rouletteMessageService;
+  private RouletteConfigService configService;
 
   @Inject
   private TimeFormatter timeFormatter;
@@ -54,7 +56,7 @@ public class RouletteComponent extends Component {
     String message;
 
     if (isFatal) {
-      message = rouletteMessageService.getLostMessage(user.getNameAndTitle());
+      message = configService.getRandomLost();
 
       if (settings.isTimeoutOnDeathEnabled() && !user.isCaster() && !user.isModerator()) {
         chat.timeoutUser(user.getUsername(), settings.getTimeoutOnDeath());
@@ -62,10 +64,11 @@ public class RouletteComponent extends Component {
             .add("time", timeFormatter.timeQuantity(settings.getTimeoutOnDeath())));
       }
     } else {
-      message = rouletteMessageService.getWinMessage(user.getNameAndTitle());
+      message = configService.getRandomWin();
     }
 
-    chat.say(message);
+    chat.say(Templater.template(message)
+        .add("username", user::getDisplayName));
     rouletteRecordService.recordRouletteRun(user, isFatal);
 
     return true;
