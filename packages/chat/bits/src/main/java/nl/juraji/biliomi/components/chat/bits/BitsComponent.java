@@ -50,7 +50,7 @@ public class BitsComponent extends Component {
    */
   @CommandRoute(command = "bitstopoints", systemCommand = true)
   public boolean bitsToPointsCommmand(User user, Arguments arguments) {
-    return captureSubCommands("bitstopoints", l10n.supply("ChatCommand.bitsToPoints.usage"), user, arguments);
+    return captureSubCommands("bitstopoints", i18n.supply("ChatCommand.bitsToPoints.usage"), user, arguments);
   }
 
   /**
@@ -62,7 +62,7 @@ public class BitsComponent extends Component {
     OnOff onOff = EnumUtils.toEnum(arguments.getSafe(0), OnOff.class);
 
     if (onOff == null) {
-      chat.whisper(user, l10n.get("ChatCommand.bitsToPoints.enable.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.bitsToPoints.enable.usage"));
       return false;
     }
 
@@ -70,8 +70,8 @@ public class BitsComponent extends Component {
     settings.setEnableBitsToPoints(OnOff.ON.equals(onOff));
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.bitsToPoints.enable.set")
-        .add("state", l10n.getEnabledDisabled(settings.isEnableBitsToPoints())));
+    chat.whisper(user, i18n.get("ChatCommand.bitsToPoints.enable.set")
+        .add("state", i18n.getEnabledDisabled(settings.isEnableBitsToPoints())));
     return true;
   }
 
@@ -84,7 +84,7 @@ public class BitsComponent extends Component {
     OnOff onOff = EnumUtils.toEnum(arguments.getSafe(0), OnOff.class);
 
     if (onOff == null) {
-      chat.whisper(user, l10n.get("ChatCommand.bitsToPoints.toChatters.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.bitsToPoints.toChatters.usage"));
       return false;
     }
 
@@ -92,8 +92,8 @@ public class BitsComponent extends Component {
     settings.setBitsToPointsPayoutToAllChatters(OnOff.ON.equals(onOff));
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.bitsToPoints.toChatters.set")
-        .add("state", l10n.getEnabledDisabled(settings.isBitsToPointsPayoutToAllChatters())));
+    chat.whisper(user, i18n.get("ChatCommand.bitsToPoints.toChatters.set")
+        .add("state", i18n.getEnabledDisabled(settings.isBitsToPointsPayoutToAllChatters())));
     return true;
   }
 
@@ -107,7 +107,7 @@ public class BitsComponent extends Component {
     Double newMultiplier = Numbers.asNumber(arguments.getSafe(0)).toDouble();
 
     if (newMultiplier == null || newMultiplier <= 0) {
-      chat.whisper(user, l10n.get("ChatCommand.bitsToPoints.multiplier.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.bitsToPoints.multiplier.usage"));
       return false;
     }
 
@@ -115,7 +115,7 @@ public class BitsComponent extends Component {
     settings.setBitsToPointsMultiplier(newMultiplier);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.bitsToPoints.multiplier.set")
+    chat.whisper(user, i18n.get("ChatCommand.bitsToPoints.multiplier.set")
         .add("amount", newMultiplier));
     return true;
   }
@@ -126,7 +126,7 @@ public class BitsComponent extends Component {
    */
   @CommandRoute(command = "bitstemplates", systemCommand = true)
   public boolean bitsTemplatesCommand(User user, Arguments arguments) {
-    return captureSubCommands("bitstemplates", () -> l10n.getString("ChatCommand.bitsTemplates.usage"), user, arguments);
+    return captureSubCommands("bitstemplates", () -> i18n.getString("ChatCommand.bitsTemplates.usage"), user, arguments);
   }
 
   /**
@@ -136,8 +136,8 @@ public class BitsComponent extends Component {
   @SubCommandRoute(command = "notice", parentCommand = "bitstemplates")
   public boolean bitsTemplatesnoticeCommand(User user, Arguments arguments) {
     return new TemplateSetup(templateDao, chat)
-        .withCommandUsageMessage(l10n.getString("ChatCommand.bitsTemplates.notice.usage"))
-        .withTemplatedSavedMessage(l10n.getString("ChatCommand.bitsTemplates.notice.set"))
+        .withCommandUsageMessage(i18n.getString("ChatCommand.bitsTemplates.notice.usage"))
+        .withTemplatedSavedMessage(i18n.getString("ChatCommand.bitsTemplates.notice.set"))
         .apply(user, arguments.toString(), BITS_CHEERED_TEMPLATE_ID);
   }
 
@@ -148,8 +148,8 @@ public class BitsComponent extends Component {
   @SubCommandRoute(command = "payouttocheerer", parentCommand = "bitstemplates")
   public boolean bitsTemplatespayouttocheererCommand(User user, Arguments arguments) {
     return new TemplateSetup(templateDao, chat)
-        .withCommandUsageMessage(l10n.getString("ChatCommand.bitsTemplates.payoutToCheerer.usage"))
-        .withTemplatedSavedMessage(l10n.getString("ChatCommand.bitsTemplates.payoutToCheerer.set"))
+        .withCommandUsageMessage(i18n.getString("ChatCommand.bitsTemplates.payoutToCheerer.usage"))
+        .withTemplatedSavedMessage(i18n.getString("ChatCommand.bitsTemplates.payoutToCheerer.set"))
         .apply(user, arguments.toString(), BITS_PAYOUT_TO_CHEERER_TEMPLATE_ID);
   }
 
@@ -160,8 +160,8 @@ public class BitsComponent extends Component {
   @SubCommandRoute(command = "payouttochatters", parentCommand = "bitstemplates")
   public boolean bitsTemplatespayouttochattersCommand(User user, Arguments arguments) {
     return new TemplateSetup(templateDao, chat)
-        .withCommandUsageMessage(l10n.getString("ChatCommand.bitsTemplates.payoutToChatters.usage"))
-        .withTemplatedSavedMessage(l10n.getString("ChatCommand.bitsTemplates.payoutToChatters.set"))
+        .withCommandUsageMessage(i18n.getString("ChatCommand.bitsTemplates.payoutToChatters.usage"))
+        .withTemplatedSavedMessage(i18n.getString("ChatCommand.bitsTemplates.payoutToChatters.set"))
         .apply(user, arguments.toString(), BITS_PAYOUT_TO_CHATTERS_TEMPLATE_ID);
   }
 }

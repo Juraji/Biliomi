@@ -58,11 +58,11 @@ public class ChannelSettingsComponent extends Component {
     }
 
     if (stream != null) {
-      chat.say(l10n.get("ChatCommand.online.channelOnline")
+      chat.say(i18n.get("ChatCommand.online.channelOnline")
           .add("channelname", targetUser::getDisplayName)
           .add("gamename", stream::getGame));
     } else {
-      chat.say(l10n.get("Common.channels.channelOffline")
+      chat.say(i18n.get("Common.channels.channelOffline")
           .add("channelname", targetUser::getDisplayName));
     }
     return true;
@@ -79,11 +79,11 @@ public class ChannelSettingsComponent extends Component {
 
     if (stream != null) {
       DateTime streamStart = new DateTime(stream.getCreatedAt());
-      chat.say(l10n.get("ChatCommand.uptime.status")
+      chat.say(i18n.get("ChatCommand.uptime.status")
           .add("channelname", caster::getDisplayName)
           .add("uptime", timeFormatter.timeQuantitySince(streamStart)));
     } else {
-      chat.say(l10n.get("Common.channels.channelOffline")
+      chat.say(i18n.get("Common.channels.channelOffline")
           .add("channelname", caster::getDisplayName));
     }
     return true;
@@ -99,11 +99,11 @@ public class ChannelSettingsComponent extends Component {
     TwitchStream stream = channelService.getStream();
 
     if (stream != null) {
-      chat.say(l10n.get("ChatCommand.game.status")
+      chat.say(i18n.get("ChatCommand.game.status")
           .add("channelname", caster::getDisplayName)
           .add("gamename", stream::getGame));
     } else {
-      chat.say(l10n.get("Common.channels.channelOffline")
+      chat.say(i18n.get("Common.channels.channelOffline")
           .add("channelname", caster::getDisplayName));
     }
     return true;
@@ -115,7 +115,7 @@ public class ChannelSettingsComponent extends Component {
    */
   @CommandRoute(command = "channel", systemCommand = true)
   public boolean channelCommand(User user, Arguments arguments) {
-    return captureSubCommands("channel", l10n.supply("ChatCommand.channel.usage"), user, arguments);
+    return captureSubCommands("channel", i18n.supply("ChatCommand.channel.usage"), user, arguments);
   }
 
   /**
@@ -125,18 +125,18 @@ public class ChannelSettingsComponent extends Component {
   @SubCommandRoute(parentCommand = "channel", command = "game")
   public boolean channelCommandGame(User user, Arguments arguments) {
     if (!arguments.assertMinSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.channel.game.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.channel.game.usage"));
       return false;
     }
 
     Game updateGameResult = channelService.updateGame(arguments.toString());
 
     if (updateGameResult != null) {
-      chat.whisper(user, l10n.get("ChatCommand.channel.game.updated")
+      chat.whisper(user, i18n.get("ChatCommand.channel.game.updated")
           .add("gamename", updateGameResult::getName));
       return true;
     } else {
-      chat.whisper(user, l10n.get("Common.channels.updatedfailed"));
+      chat.whisper(user, i18n.get("Common.channels.updatedfailed"));
       return false;
     }
   }
@@ -149,7 +149,7 @@ public class ChannelSettingsComponent extends Component {
   @SubCommandRoute(parentCommand = "channel", command = "status")
   public boolean channelCommandStatus(User user, Arguments arguments) {
     if (!arguments.assertMinSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.channel.status.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.channel.status.usage"));
       return false;
     }
 
@@ -168,11 +168,11 @@ public class ChannelSettingsComponent extends Component {
 
     boolean success = channelService.updateStatus(newStatus);
     if (success) {
-      chat.whisper(user, l10n.get("ChatCommand.channel.status.updated")
+      chat.whisper(user, i18n.get("ChatCommand.channel.status.updated")
           .add("status", newStatus));
       return true;
     } else {
-      chat.whisper(user, l10n.get("Common.channels.updatedfailed"));
+      chat.whisper(user, i18n.get("Common.channels.updatedfailed"));
       return false;
     }
   }
@@ -185,7 +185,7 @@ public class ChannelSettingsComponent extends Component {
   @SubCommandRoute(parentCommand = "channel", command = "titletemplate")
   public boolean channelCommandTitleTemplate(User user, Arguments arguments) {
     if (!arguments.assertMinSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.channel.titletemplate.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.channel.titletemplate.usage"));
       return false;
     }
 
@@ -200,13 +200,13 @@ public class ChannelSettingsComponent extends Component {
     if (EnumUtils.equals(OnOff.OFF, off)) {
       // User wishes to delete the existing template
       template.setTemplate(null);
-      chat.whisper(user, l10n.get("ChatCommand.channel.titletemplate.deleted"));
+      chat.whisper(user, i18n.get("ChatCommand.channel.titletemplate.deleted"));
     } else {
       // User wishes to set or edit the current template
       template.setTemplate(arguments.toString());
       templateDao.save(template);
 
-      chat.whisper(user, l10n.get("ChatCommand.channel.titletemplate.updated")
+      chat.whisper(user, i18n.get("ChatCommand.channel.titletemplate.updated")
           .add("template", template::getTemplate));
     }
 

@@ -2,8 +2,8 @@ package nl.juraji.biliomi.utility.cdi.producers;
 
 import nl.juraji.biliomi.BiliomiContainer;
 import nl.juraji.biliomi.utility.cdi.annotations.modifiers.L10nData;
-import nl.juraji.biliomi.utility.types.collections.L10nMap;
-import nl.juraji.biliomi.utility.types.collections.L10nMapImpl;
+import nl.juraji.biliomi.utility.types.collections.I18NMapImpl;
+import nl.juraji.biliomi.utility.types.collections.I18nMap;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -51,7 +51,7 @@ public final class LocalizationProducer {
   }
 
   @Produces
-  public L10nMap createL10nMap(InjectionPoint injectionPoint) {
+  public I18nMap createL10nMap(InjectionPoint injectionPoint) {
     Annotated annotated = injectionPoint.getAnnotated();
     String baseName;
 
@@ -62,14 +62,14 @@ public final class LocalizationProducer {
     }
 
     File langFile = new File(langBase, baseName + ".properties");
-    L10nMapImpl l10NMap = new L10nMapImpl(commonLang);
+    I18NMapImpl l10NMap = new I18NMapImpl(commonLang);
 
     try (InputStream stream = new FileInputStream(langFile)) {
       l10NMap.load(stream);
     } catch (IOException e) {
       // I18n data will be injected in all components,
       // but a component is not required to have a language definition
-      // This implementation will return an empty L10nMap containing only able to supply common strings
+      // This implementation will return an empty I18nMap containing only able to supply common strings
     }
 
     return l10NMap;

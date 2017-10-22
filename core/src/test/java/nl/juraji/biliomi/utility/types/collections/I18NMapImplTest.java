@@ -15,44 +15,44 @@ import static org.junit.Assert.assertNull;
  * Created by Juraji on 10-5-2017.
  * Biliomi v3
  */
-public class L10nMapImplTest {
+public class I18NMapImplTest {
 
-  private L10nMapImpl l10nMap;
+  private I18NMapImpl i18nMap;
 
   @Before
   public void setUp() throws Exception {
-    // Setup an L10nMapImpl instance with some test data
+    // Setup an I18NMapImpl instance with some test data
 
-    InputStream commonStream = L10nMapImplTest.class.getResourceAsStream("/l10n/Common.properties");
-    InputStream componentStream = L10nMapImplTest.class.getResourceAsStream("/l10n/SomeComponent.properties");
+    InputStream commonStream = I18NMapImplTest.class.getResourceAsStream("/i18n/Common.properties");
+    InputStream componentStream = I18NMapImplTest.class.getResourceAsStream("/i18n/SomeComponent.properties");
 
-    l10nMap = new L10nMapImpl();
-    l10nMap.load(commonStream);
-    l10nMap.load(componentStream);
+    i18nMap = new I18NMapImpl();
+    i18nMap.load(commonStream);
+    i18nMap.load(componentStream);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void getNonExistent() throws Exception {
-    String s = l10nMap.get("Some.nonExistent.Key").apply();
+    String s = i18nMap.get("Some.nonExistent.Key").apply();
     assertNull(s);
   }
 
   @Test
   public void getTemplate() throws Exception {
-    Templater template = l10nMap.get("TestKey.1");
+    Templater template = i18nMap.get("TestKey.1");
     assertEquals("TestKey1", template.apply());
   }
 
   @Test
   public void supply() throws Exception {
-    Supplier<String> supply = l10nMap.supply("TestKey.1");
+    Supplier<String> supply = i18nMap.supply("TestKey.1");
     assertEquals("TestKey1", supply.get());
   }
 
   @Test
   public void getIfElse() throws Exception {
-    String whenTrue = l10nMap.getIfElse(true, "TestKey.1", "TestKey.2");
-    String whenFalse = l10nMap.getIfElse(false, "TestKey.1", "TestKey.2");
+    String whenTrue = i18nMap.getIfElse(true, "TestKey.1", "TestKey.2");
+    String whenFalse = i18nMap.getIfElse(false, "TestKey.1", "TestKey.2");
 
     assertEquals("TestKey1", whenTrue);
     assertEquals("TestKey2", whenFalse);
@@ -60,8 +60,8 @@ public class L10nMapImplTest {
 
   @Test
   public void getEnabledDisabled() throws Exception {
-    String whenTrue = l10nMap.getEnabledDisabled(true);
-    String whenFalse = l10nMap.getEnabledDisabled(false);
+    String whenTrue = i18nMap.getEnabledDisabled(true);
+    String whenFalse = i18nMap.getEnabledDisabled(false);
 
     assertEquals("enabled", whenTrue);
     assertEquals("disabled", whenFalse);
@@ -69,8 +69,8 @@ public class L10nMapImplTest {
 
   @Test
   public void getStreamState() throws Exception {
-    String whenOnline = l10nMap.getStreamState(StreamState.ONLINE);
-    String whenOffline = l10nMap.getStreamState(StreamState.OFFLINE);
+    String whenOnline = i18nMap.getStreamState(StreamState.ONLINE);
+    String whenOffline = i18nMap.getStreamState(StreamState.OFFLINE);
 
     assertEquals("online", whenOnline);
     assertEquals("offline", whenOffline);
@@ -78,19 +78,19 @@ public class L10nMapImplTest {
 
   @Test
   public void getUserNonExistent() throws Exception {
-    String notice = l10nMap.getUserNonExistent("TestUser");
+    String notice = i18nMap.getUserNonExistent("TestUser");
     assertEquals("User TestUser does not exist", notice);
   }
 
   @Test
   public void getCommandNonExistent() throws Exception {
-    String notice = l10nMap.getCommandNonExistent("testcommand");
+    String notice = i18nMap.getCommandNonExistent("testcommand");
     assertEquals("Command !testcommand does not exist", notice);
   }
 
   @Test
   public void getGroupNonExistent() throws Exception {
-    String notice = l10nMap.getGroupNonExistent("TestGroup");
+    String notice = i18nMap.getGroupNonExistent("TestGroup");
     assertEquals("Group with name TestGroup was not found", notice);
   }
 }

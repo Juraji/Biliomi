@@ -16,13 +16,13 @@ import java.util.stream.Collectors;
  * Biliomi v3
  */
 @Vetoed // Do not inject directly, use producer instead
-public class L10nMapImpl extends Properties implements L10nMap {
+public class I18NMapImpl extends Properties implements I18nMap {
 
-  public L10nMapImpl() {
+  public I18NMapImpl() {
     // Default constructor for CDI spec compliance
   }
 
-  public L10nMapImpl(Properties defaults) {
+  public I18NMapImpl(Properties defaults) {
     super.putAll(defaults);
   }
 

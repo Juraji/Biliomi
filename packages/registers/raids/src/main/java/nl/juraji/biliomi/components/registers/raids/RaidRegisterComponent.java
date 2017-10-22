@@ -41,7 +41,7 @@ public class RaidRegisterComponent extends Component {
   @CommandRoute(command = "raid", systemCommand = true, modCanActivate = true)
   public boolean raidCommand(User user, Arguments arguments) {
     if (!arguments.assertSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.raid.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.raid.usage"));
       return false;
     }
 
@@ -50,13 +50,13 @@ public class RaidRegisterComponent extends Component {
     String channelName = arguments.get(0);
     User channel = usersService.getUser(channelName, true);
     if (channel == null) {
-      chat.whisper(user, l10n.getUserNonExistent(channelName));
+      chat.whisper(user, i18n.getUserNonExistent(channelName));
       return false;
     }
 
     RaidRecord raidRecord = raidRecordService.registerOutgoingRaid(channel);
     if (raidRecord == null) {
-      chat.whisper(user, l10n.get("ChatCommand.raid.channelNotOnline")
+      chat.whisper(user, i18n.get("ChatCommand.raid.channelNotOnline")
           .add("channelname", channel::getDisplayName));
       return false;
     }
@@ -75,20 +75,20 @@ public class RaidRegisterComponent extends Component {
   @CommandRoute(command = "raider", systemCommand = true, modCanActivate = true)
   public boolean raiderCommand(User user, Arguments arguments) {
     if (!arguments.assertSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.raider.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.raider.usage"));
       return false;
     }
 
     String channelName = arguments.get(0);
     User channel = usersService.getUser(channelName, true);
     if (channel == null) {
-      chat.whisper(user, l10n.getUserNonExistent(channelName));
+      chat.whisper(user, i18n.getUserNonExistent(channelName));
       return false;
     }
 
     RaidRecord raidRecord = raidRecordService.registerIncomingRaid(channel);
     if (raidRecord == null) {
-      chat.whisper(user, l10n.get("ChatCommand.raider.errorRetrievingChannel"));
+      chat.whisper(user, i18n.get("ChatCommand.raider.errorRetrievingChannel"));
       return false;
     }
 
@@ -109,7 +109,7 @@ public class RaidRegisterComponent extends Component {
    */
   @CommandRoute(command = "raidregister", systemCommand = true)
   public boolean raidRegisterCommand(User user, Arguments arguments) {
-    return captureSubCommands("raidregister", l10n.supply("ChatCommand.raidregister.usage"), user, arguments);
+    return captureSubCommands("raidregister", i18n.supply("ChatCommand.raidregister.usage"), user, arguments);
   }
 
   /**
@@ -119,8 +119,8 @@ public class RaidRegisterComponent extends Component {
   @SubCommandRoute(parentCommand = "raidregister", command = "message")
   public boolean raidRegisterCommandMessage(User user, Arguments arguments) {
     return new TemplateSetup(templateDao, chat)
-        .withCommandUsageMessage(l10n.getString("ChatCommand.raidregister.message.usage"))
-        .withTemplatedSavedMessage(l10n.getString("ChatCommand.raidregister.message.saved"))
+        .withCommandUsageMessage(i18n.getString("ChatCommand.raidregister.message.usage"))
+        .withTemplatedSavedMessage(i18n.getString("ChatCommand.raidregister.message.saved"))
         .apply(user, arguments.toString(), RAID_MESSAGE_TEMPLATE_ID);
   }
 
@@ -131,8 +131,8 @@ public class RaidRegisterComponent extends Component {
   @SubCommandRoute(parentCommand = "raidregister", command = "incomingmessage")
   public boolean raidRegisterIncomingMessageCommand(User user, Arguments arguments) {
     return new TemplateSetup(templateDao, chat)
-        .withCommandUsageMessage(l10n.getString("ChatCommand.raidregister.incomingmessage.usage"))
-        .withTemplatedSavedMessage(l10n.getString("ChatCommand.raidregister.incomingmessage.saved"))
+        .withCommandUsageMessage(i18n.getString("ChatCommand.raidregister.incomingmessage.usage"))
+        .withTemplatedSavedMessage(i18n.getString("ChatCommand.raidregister.incomingmessage.saved"))
         .apply(user, arguments.toString(), INCOMING_RAID_MESSAGE_TEMPLATE_ID);
   }
 }

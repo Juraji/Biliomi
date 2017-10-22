@@ -52,7 +52,7 @@ public class HostWatchComponent extends Component {
   @CommandRoute(command = "host", systemCommand = true)
   public boolean hostCommand(User user, Arguments arguments) {
     if (!arguments.assertSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.hostWatch.host.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.hostWatch.host.usage"));
       return false;
     }
 
@@ -60,7 +60,7 @@ public class HostWatchComponent extends Component {
     User targetUser = usersService.getUser(targetUsername, true);
 
     if (targetUser == null) {
-      chat.whisper(user, l10n.getUserNonExistent(targetUsername));
+      chat.whisper(user, i18n.getUserNonExistent(targetUsername));
       return false;
     }
 
@@ -77,7 +77,7 @@ public class HostWatchComponent extends Component {
    */
   @CommandRoute(command = "hostwatch", systemCommand = true)
   public boolean hostwatchCommand(User user, Arguments arguments) {
-    return captureSubCommands("hostwatch", l10n.supply("ChatCommand.hostWatch.usage"), user, arguments);
+    return captureSubCommands("hostwatch", i18n.supply("ChatCommand.hostWatch.usage"), user, arguments);
   }
 
   /**
@@ -89,13 +89,13 @@ public class HostWatchComponent extends Component {
     Long newReward = Numbers.asNumber(arguments.popSafe()).toLong();
 
     if (newReward == null || newReward < 0) {
-      chat.whisper(user, l10n.get("ChatCommand.hostWatch.reward.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.hostWatch.reward.usage"));
       return false;
     }
 
     settings.setReward(newReward);
     settingsService.save(settings);
-    chat.whisper(user, l10n.get("ChatCommand.hostWatch.reward.saved")
+    chat.whisper(user, i18n.get("ChatCommand.hostWatch.reward.saved")
         .add("points", pointsService.asString(newReward)));
 
     return true;
@@ -108,9 +108,9 @@ public class HostWatchComponent extends Component {
   @SubCommandRoute(parentCommand = "hostwatch", command = "sethostnotice")
   public boolean hostWatchsethostnoticeCommand(User user, Arguments arguments) {
     return new TemplateSetup(templateDao, chat)
-        .withCommandUsageMessage(l10n.getString("ChatCommand.hostWatch.sethostnotice.usage"))
-        .withTemplateDisabledMessage(l10n.getString("ChatCommand.hostWatch.sethostnotice.disabled"))
-        .withTemplatedSavedMessage(l10n.getString("ChatCommand.hostWatch.sethostnotice.saved"))
+        .withCommandUsageMessage(i18n.getString("ChatCommand.hostWatch.sethostnotice.usage"))
+        .withTemplateDisabledMessage(i18n.getString("ChatCommand.hostWatch.sethostnotice.disabled"))
+        .withTemplatedSavedMessage(i18n.getString("ChatCommand.hostWatch.sethostnotice.saved"))
         .apply(user, arguments.toString(), INCOMING_HOST_NOTICE_TEMPLATE);
   }
 }

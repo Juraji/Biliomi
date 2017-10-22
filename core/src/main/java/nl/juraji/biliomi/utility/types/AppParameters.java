@@ -19,7 +19,7 @@ public class AppParameters {
   private String configurationDir = "./config";
 
   @Parameter(names = {"--langdir", "-l"}, description = "Base directory containing language files")
-  private String languageBaseDir = "./l10n";
+  private String languageBaseDir = "./i18n";
 
   @Parameter(names = {"--workingdir", "-w"}, description = "The base directory for component files (e.g. exports, etc.)")
   private String workingDir = "./data";

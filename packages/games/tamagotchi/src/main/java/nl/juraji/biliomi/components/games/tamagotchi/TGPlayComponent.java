@@ -49,12 +49,12 @@ public class TGPlayComponent extends Component {
     Tamagotchi tamagotchi = tamagotchiService.getTamagotchi(user);
 
     if (tamagotchi == null) {
-      chat.whisper(user, l10n.get("Common.tamagotchi.notFound"));
+      chat.whisper(user, i18n.get("Common.tamagotchi.notFound"));
       return false;
     }
 
     if (tamagotchiService.hasNotEnoughFood(tamagotchi, PLAY_FOOD_DECREACE)) {
-      chat.whisper(user, l10n.get("Common.tamagotchi.notEnoughFood")
+      chat.whisper(user, i18n.get("Common.tamagotchi.notEnoughFood")
           .add("name", tamagotchi::getName));
       return false;
     }
@@ -66,14 +66,14 @@ public class TGPlayComponent extends Component {
     tamagotchiService.save(tamagotchi);
 
     // State that the Tamagotchi has been sent off to play
-    chat.say(l10n.get("ChatCommand.tpglay.sentOffToPlay")
+    chat.say(i18n.get("ChatCommand.tpglay.sentOffToPlay")
         .add("username", user::getDisplayName)
         .add("name", tamagotchi::getName));
 
     // Register a delayed message at the end of command cooldown
     Command tgplayCommand = commandService.getCommand("tgplay");
     messageTimerService.scheduleMessage(
-        l10n.get("ChatCommand.tpglay.tamagotchiReturned")
+        i18n.get("ChatCommand.tpglay.tamagotchiReturned")
             .add("name", tamagotchi::getName),
         tgplayCommand.getCooldown(),
         TimeUnit.MILLISECONDS
@@ -91,31 +91,31 @@ public class TGPlayComponent extends Component {
     Tamagotchi tamagotchi = tamagotchiService.getTamagotchi(user);
 
     if (tamagotchi == null) {
-      chat.whisper(user, l10n.get("Common.tamagotchi.notFound"));
+      chat.whisper(user, i18n.get("Common.tamagotchi.notFound"));
       return false;
     }
 
     if (tamagotchiService.hasNotEnoughFood(tamagotchi, PLAYDATE_FOOD_DECREACE)) {
-      chat.whisper(user, l10n.get("Common.tamagotchi.notEnoughFood")
+      chat.whisper(user, i18n.get("Common.tamagotchi.notEnoughFood")
           .add("name", tamagotchi::getName));
       return false;
     }
 
     String otherUsername = arguments.get(0);
     if (otherUsername == null) {
-      chat.whisper(user, l10n.get("ChatCommand.tpglaydate.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.tpglaydate.usage"));
       return false;
     }
 
     User otherUser = usersService.getUser(otherUsername);
     if (otherUser == null) {
-      chat.whisper(user, l10n.getUserNonExistent(otherUsername));
+      chat.whisper(user, i18n.getUserNonExistent(otherUsername));
       return false;
     }
 
     Tamagotchi otherTamagotchi = tamagotchiService.getTamagotchi(otherUser);
     if (otherTamagotchi == null) {
-      chat.whisper(user, l10n.get("ChatCommand.tpglaydate.otherUserHasNoTamagotchi")
+      chat.whisper(user, i18n.get("ChatCommand.tpglaydate.otherUserHasNoTamagotchi")
           .add("otherusername", otherUser::getDisplayName));
       return false;
     } else {
@@ -129,14 +129,14 @@ public class TGPlayComponent extends Component {
       tamagotchiService.increaseAffection(otherTamagotchi);
       tamagotchiService.save(tamagotchi, otherTamagotchi);
 
-      chat.say(l10n.get("ChatCommand.tpglaydate.sentOffOnPlaydate")
+      chat.say(i18n.get("ChatCommand.tpglaydate.sentOffOnPlaydate")
           .add("name", tamagotchi::getName)
           .add("othername", otherTamagotchi::getName));
 
       // Register a delayed message at the end of command cooldown
       Command tgplaydateCommand = commandService.getCommand("tgplaydate");
       messageTimerService.scheduleMessage(
-          l10n.get("ChatCommand.tpglaydate.tamagotchiReturned")
+          i18n.get("ChatCommand.tpglaydate.tamagotchiReturned")
               .add("name", tamagotchi::getName)
               .add("othername", otherTamagotchi::getName),
           tgplaydateCommand.getCooldown(),

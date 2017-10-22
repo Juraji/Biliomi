@@ -72,16 +72,16 @@ public class TamagotchiComponent extends Component {
     Tamagotchi tamagotchi = tamagotchiService.getTamagotchi(user);
 
     if (tamagotchi == null) {
-      chat.whisper(user, l10n.get("Common.tamagotchi.notFound"));
+      chat.whisper(user, i18n.get("Common.tamagotchi.notFound"));
       return false;
     }
 
     if ("toys".equalsIgnoreCase(arguments.getSafe(0))) {
       List<String> toyNames = tamagotchi.getToys().stream().map(TamagotchiToy::getToyName).collect(Collectors.toList());
-      chat.say(l10n.get("ChatCommand.tamagotchi.info.toys")
+      chat.say(i18n.get("ChatCommand.tamagotchi.info.toys")
           .add("list", toyNames));
     } else {
-      chat.say(l10n.get("ChatCommand.tamagotchi.info.info")
+      chat.say(i18n.get("ChatCommand.tamagotchi.info.info")
           .add("name", tamagotchi::getName)
           .add("gender", tamagotchiService.getGenderName(tamagotchi))
           .add("species", tamagotchi::getSpecies)
@@ -89,7 +89,7 @@ public class TamagotchiComponent extends Component {
           .add("posessiverefergender", tamagotchiService.getGenderPosessiveReferal(tamagotchi))
           .add("mood", tamagotchiService.getMoodText(tamagotchi)));
 
-      chat.say(l10n.get("ChatCommand.tamagotchi.info.ageAndHygiene")
+      chat.say(i18n.get("ChatCommand.tamagotchi.info.ageAndHygiene")
           .add("name", tamagotchi::getName)
           .add("age", () -> timeFormatter.timeQuantitySince(tamagotchi.getDateOfBirth()))
           .add("hygienestate", tamagotchiService.getHygieneState(tamagotchi)));
@@ -104,7 +104,7 @@ public class TamagotchiComponent extends Component {
    */
   @CommandRoute(command = "tgstore")
   public boolean tgStoreCommand(User user, Arguments arguments) {
-    return captureSubCommands("tgstore", l10n.supply("ChatCommand.tgStore.usage"), user, arguments);
+    return captureSubCommands("tgstore", i18n.supply("ChatCommand.tgStore.usage"), user, arguments);
   }
 
   /**
@@ -114,15 +114,15 @@ public class TamagotchiComponent extends Component {
   @SubCommandRoute(parentCommand = "tgstore", command = "buy")
   public boolean tgStoreCommandBuy(User user, Arguments arguments) {
     if (!arguments.assertMinSize(2)) {
-      chat.whisper(user, l10n.get("ChatCommand.tgStore.buy.usage"));
-      chat.whisper(user, l10n.get("ChatCommand.tgStore.buy.usage.listSpecies")
+      chat.whisper(user, i18n.get("ChatCommand.tgStore.buy.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.tgStore.buy.usage.listSpecies")
           .add("list", configService::getAvailableSpecies));
       return false;
     }
 
     // Check if the user has the points to buy
     if (user.getPoints() < settings.getNewPrice()) {
-      chat.whisper(user, l10n.get("ChatCommand.tgStore.buy.notEnoughPoints")
+      chat.whisper(user, i18n.get("ChatCommand.tgStore.buy.notEnoughPoints")
           .add("points", () -> pointsService.asString(settings.getNewPrice()))
           .add("balance", () -> pointsService.asString(user.getPoints())));
       return false;
@@ -130,14 +130,14 @@ public class TamagotchiComponent extends Component {
 
     // Check if the user doesn't already own a Tamagotchi
     if (tamagotchiService.userHasTamagotchi(user)) {
-      chat.whisper(user, l10n.get("ChatCommand.tgStore.buy.userHasTamagotchi"));
+      chat.whisper(user, i18n.get("ChatCommand.tgStore.buy.userHasTamagotchi"));
       return false;
     }
 
     // Check if the prefered species exists
     String species = configService.getSpeciesIfExists(arguments.pop());
     if (species == null) {
-      chat.whisper(user, l10n.get("ChatCommand.tgStore.buy.speciesNonExistent")
+      chat.whisper(user, i18n.get("ChatCommand.tgStore.buy.speciesNonExistent")
           .add("list", configService::getAvailableSpecies));
       return false;
     }
@@ -145,21 +145,21 @@ public class TamagotchiComponent extends Component {
     // Check the length of the name
     String name = arguments.toString();
     if (name.length() > settings.getNameMaxLength()) {
-      chat.whisper(user, l10n.get("ChatCommand.tgStore.buy.nameMaxLengthExceeded")
+      chat.whisper(user, i18n.get("ChatCommand.tgStore.buy.nameMaxLengthExceeded")
           .add("max", settings::getNameMaxLength));
       return false;
     }
 
     // Check for bad word usage in the name
     if (badWordsService.containsBadWords(name)) {
-      chat.whisper(user, l10n.getInputContainsBadWords());
+      chat.whisper(user, i18n.getInputContainsBadWords());
       return false;
     }
 
     pointsService.take(user, settings.getNewPrice());
     Tamagotchi tamagotchi = tamagotchiService.createTamagotchi(name, user, species);
 
-    chat.say(l10n.get("ChatCommand.tgStore.buy.newTamagotchi")
+    chat.say(i18n.get("ChatCommand.tgStore.buy.newTamagotchi")
         .add("username", user::getDisplayName)
         .add("gender", tamagotchiService.getGenderName(tamagotchi))
         .add("species", tamagotchi::getSpecies)
@@ -178,13 +178,13 @@ public class TamagotchiComponent extends Component {
     Double amountToAdd = Numbers.asNumber(arg).withDefault(0.0).toDouble();
 
     if (amountToAdd == 0 && !"max".equalsIgnoreCase(arg)) {
-      chat.whisper(user, l10n.get("ChatCommand.tgStore.food.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.tgStore.food.usage"));
       return false;
     }
 
     Tamagotchi tamagotchi = tamagotchiService.getTamagotchi(user);
     if (tamagotchi == null) {
-      chat.whisper(user, l10n.get("Common.tamagotchi.notFound"));
+      chat.whisper(user, i18n.get("Common.tamagotchi.notFound"));
       return false;
     }
 
@@ -197,7 +197,7 @@ public class TamagotchiComponent extends Component {
 
     long cost = (long) (settings.getFoodPrice() * amountToAdd);
     if (user.getPoints() < cost) {
-      chat.whisper(user, l10n.get("ChatCommand.tgStore.food.notEnoughPoints")
+      chat.whisper(user, i18n.get("ChatCommand.tgStore.food.notEnoughPoints")
           .add("addedamount", amountToAdd::intValue)
           .add("points", () -> pointsService.asString(cost))
           .add("balance", () -> pointsService.asString(user.getPoints())));
@@ -208,7 +208,7 @@ public class TamagotchiComponent extends Component {
     tamagotchiService.increaseAffection(tamagotchi);
     tamagotchiService.save(tamagotchi);
 
-    chat.whisper(user, l10n.get("ChatCommand.tgStore.food.added")
+    chat.whisper(user, i18n.get("ChatCommand.tgStore.food.added")
         .add("addedamount", (int) Math.ceil(amountToAdd))
         .add("name", tamagotchi::getName)
         .add("food", (int) tamagotchi.getFoodStack())
@@ -226,12 +226,12 @@ public class TamagotchiComponent extends Component {
     Tamagotchi tamagotchi = tamagotchiService.getTamagotchi(user);
 
     if (tamagotchi == null) {
-      chat.whisper(user, l10n.get("Common.tamagotchi.notFound"));
+      chat.whisper(user, i18n.get("Common.tamagotchi.notFound"));
       return false;
     }
 
     if (user.getPoints() < settings.getSoapPrice()) {
-      chat.whisper(user, l10n.get("ChatCommand.tgStore.soap.notEnoughPoints")
+      chat.whisper(user, i18n.get("ChatCommand.tgStore.soap.notEnoughPoints")
           .add("points", () -> pointsService.asString(settings.getSoapPrice()))
           .add("balance", () -> pointsService.asString(user.getPoints())));
       return false;
@@ -242,7 +242,7 @@ public class TamagotchiComponent extends Component {
     tamagotchiService.increaseAffection(tamagotchi);
     tamagotchiService.save(tamagotchi);
 
-    chat.say(l10n.get("ChatCommand.tgStore.soap.cleaned")
+    chat.say(i18n.get("ChatCommand.tgStore.soap.cleaned")
         .add("name", tamagotchi::getName)
         .add("addressgender", tamagotchiService.getGenderAddress(tamagotchi)));
 
@@ -257,12 +257,12 @@ public class TamagotchiComponent extends Component {
   public boolean tgStoreCommandToyInfo(User user, Arguments arguments) {
     TamagotchiToy toy = toyFactoryService.getToy(arguments.toString());
     if (toy == null) {
-      chat.whisper(user, l10n.get("ChatCommand.tgStore.toyinfo.usage")
+      chat.whisper(user, i18n.get("ChatCommand.tgStore.toyinfo.usage")
           .add("list", toyFactoryService::getToyNameSet));
       return false;
     }
 
-    chat.say(l10n.get("ChatCommand.tgStore.toyinfo.info")
+    chat.say(i18n.get("ChatCommand.tgStore.toyinfo.info")
         .add("toyname", toy::getToyName)
         .add("foodmodpercent", () -> MathUtils.doubleToPercentage(toy.getFoodModifier()))
         .add("moodmodpercent", () -> MathUtils.doubleToPercentage(toy.getMoodModifier()))
@@ -282,19 +282,19 @@ public class TamagotchiComponent extends Component {
     Tamagotchi tamagotchi = tamagotchiService.getTamagotchi(user);
 
     if (tamagotchi == null) {
-      chat.whisper(user, l10n.get("Common.tamagotchi.notFound"));
+      chat.whisper(user, i18n.get("Common.tamagotchi.notFound"));
       return false;
     }
 
     TamagotchiToy toy = toyFactoryService.getToy(arguments.toString());
     if (toy == null) {
-      chat.whisper(user, l10n.get("ChatCommand.tgStore.toy.usage")
+      chat.whisper(user, i18n.get("ChatCommand.tgStore.toy.usage")
           .add("list", toyFactoryService::getToyNameSet));
       return false;
     }
 
     if (toyFactoryService.tamagotchiHasToy(tamagotchi, toy)) {
-      chat.whisper(user, l10n.get("ChatCommand.tgStore.toy.toyAlreadyPresent")
+      chat.whisper(user, i18n.get("ChatCommand.tgStore.toy.toyAlreadyPresent")
           .add("name", tamagotchi::getName)
           .add("toyname", toy::getToyName)
           .add("refergender", tamagotchiService.getGenderReferal(tamagotchi)));
@@ -302,7 +302,7 @@ public class TamagotchiComponent extends Component {
     }
 
     if (user.getPoints() < toy.getCost()) {
-      chat.say(l10n.get("ChatCommand.tgStore.toy.notEnoughPoints")
+      chat.say(i18n.get("ChatCommand.tgStore.toy.notEnoughPoints")
           .add("toyname", toy::getToyName)
           .add("points", () -> pointsService.asString(toy.getCost()))
           .add("balance", () -> pointsService.asString(user.getPoints())));
@@ -314,7 +314,7 @@ public class TamagotchiComponent extends Component {
     tamagotchiService.increaseAffection(tamagotchi);
     tamagotchiService.save(tamagotchi);
 
-    chat.say(l10n.get("ChatCommand.tgStore.toy.toyAdded")
+    chat.say(i18n.get("ChatCommand.tgStore.toy.toyAdded")
         .add("username", user::getDisplayName)
         .add("name", tamagotchi::getName)
         .add("toyname", toy::getToyName));
@@ -331,20 +331,20 @@ public class TamagotchiComponent extends Component {
     Tamagotchi tamagotchi = tamagotchiService.getTamagotchi(user);
 
     if (tamagotchi == null) {
-      chat.whisper(user, l10n.get("Common.tamagotchi.notFound"));
+      chat.whisper(user, i18n.get("Common.tamagotchi.notFound"));
       return false;
     }
 
     String nameValidation = arguments.toString();
     if (!nameValidation.equals(tamagotchi.getName())) {
-      chat.whisper(user, l10n.get("ChatCommand.tgStore.kill.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.tgStore.kill.usage"));
       return false;
     }
 
     tamagotchiService.kill(tamagotchi);
     tamagotchiService.save(tamagotchi);
 
-    chat.say(l10n.get("ChatCommand.tgStore.kill.killed")
+    chat.say(i18n.get("ChatCommand.tgStore.kill.killed")
         .add("username", user::getDisplayName)
         .add("name", tamagotchi::getName)
         .add("refergender", tamagotchiService.getGenderPosessiveReferal(tamagotchi))

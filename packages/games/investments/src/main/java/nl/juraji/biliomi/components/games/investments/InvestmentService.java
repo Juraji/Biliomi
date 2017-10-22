@@ -12,7 +12,7 @@ import nl.juraji.biliomi.model.games.InvestmentSettings;
 import nl.juraji.biliomi.model.games.UserInvestRecordStats;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.modifiers.L10nData;
-import nl.juraji.biliomi.utility.types.collections.L10nMap;
+import nl.juraji.biliomi.utility.types.collections.I18nMap;
 import nl.juraji.biliomi.utility.types.components.TimerService;
 import org.joda.time.DateTime;
 
@@ -40,7 +40,7 @@ public class InvestmentService extends TimerService {
 
   @Inject
   @L10nData(InvestmentGameComponent.class)
-  private L10nMap l10n;
+  private I18nMap i18n;
 
   @Inject
   private PointsService pointsService;
@@ -128,14 +128,14 @@ public class InvestmentService extends TimerService {
       invester.setPoints(invester.getPoints() + fullPayout);
       usersService.save(invester);
 
-      chat.say(l10n.get("Investment.result.success")
+      chat.say(i18n.get("Investment.result.success")
           .add("username", invester::getDisplayName)
           .add("project", record::getProject)
           .add("invested", () -> pointsService.asString(record.getInvested()))
           .add("interest", () -> pointsService.asString(interestAmount))
           .add("payout", () -> pointsService.asString(record.getPayout())));
     } else {
-      chat.say(l10n.get("Investment.result.failed")
+      chat.say(i18n.get("Investment.result.failed")
           .add("username", record.getInvester().getDisplayName())
           .add("project", record::getProject)
           .add("invested", () -> pointsService.asString(record.getInvested())));

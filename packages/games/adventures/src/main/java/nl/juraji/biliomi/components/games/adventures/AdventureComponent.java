@@ -69,7 +69,7 @@ public class AdventureComponent extends Component {
     Long betPoints = Numbers.asNumber(arguments.get(0)).toLong();
 
     if (betPoints == null) {
-      chat.whisper(user, l10n.get("ChatCommand.adventure.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.adventure.usage"));
       return false;
     }
 
@@ -77,7 +77,7 @@ public class AdventureComponent extends Component {
 
     // Check if the adventure is not already running
     if (RUNNING.equals(adventureState)) {
-      chat.whisper(user, l10n.get("ChatCommand.adventure.inProgress"));
+      chat.whisper(user, i18n.get("ChatCommand.adventure.inProgress"));
       return false;
     }
 
@@ -86,7 +86,7 @@ public class AdventureComponent extends Component {
       DateTime nextRun = adventureRunnerService.getNextRun();
       DateTime now = DateTime.now();
       if (now.isBefore(nextRun)) {
-        chat.whisper(user, l10n.get("ChatCommand.adventure.cooldownActive")
+        chat.whisper(user, i18n.get("ChatCommand.adventure.cooldownActive")
             .add("time", () -> timeFormatter.timeQuantityUntil(nextRun)));
         return false;
       }
@@ -94,13 +94,13 @@ public class AdventureComponent extends Component {
 
     // Check if user is not already in adventure
     if (adventureRunnerService.userExists(user)) {
-      chat.whisper(user, l10n.get("ChatCommand.adventure.alreadyJoined"));
+      chat.whisper(user, i18n.get("ChatCommand.adventure.alreadyJoined"));
       return false;
     }
 
     // Check if user has the dosh to bet
     if (user.getPoints() < betPoints) {
-      chat.whisper(user, l10n.get("ChatCommand.adventure.noCredit")
+      chat.whisper(user, i18n.get("ChatCommand.adventure.noCredit")
           .add("betpoints", () -> pointsService.asString(betPoints))
           .add("balance", () -> pointsService.asString(user.getPoints())));
       return false;
@@ -108,7 +108,7 @@ public class AdventureComponent extends Component {
 
     // Bet is above minimum
     if (betPoints < settings.getMinimumBet()) {
-      chat.whisper(user, l10n.get("ChatCommand.adventure.betTooLow")
+      chat.whisper(user, i18n.get("ChatCommand.adventure.betTooLow")
           .add("betpoints", () -> pointsService.asString(betPoints))
           .add("points", () -> pointsService.asString(settings.getMinimumBet())));
       return false;
@@ -116,7 +116,7 @@ public class AdventureComponent extends Component {
 
     // Bet is below maximum
     if (betPoints > settings.getMaximumBet()) {
-      chat.whisper(user, l10n.get("ChatCommand.adventure.betTooHigh")
+      chat.whisper(user, i18n.get("ChatCommand.adventure.betTooHigh")
           .add("betpoints", () -> pointsService.asString(betPoints))
           .add("points", () -> pointsService.asString(settings.getMaximumBet())));
       return false;
@@ -139,10 +139,10 @@ public class AdventureComponent extends Component {
     }
 
     if (NOT_RUNNING.equals(adventureState)) {
-      chat.say(l10n.get("ChatCommand.adventure.newAdventureStarted")
+      chat.say(i18n.get("ChatCommand.adventure.newAdventureStarted")
           .add("username", user::getNameAndTitle));
     } else if (JOIN.equals(adventureState)) {
-      chat.say(l10n.get(langKey)
+      chat.say(i18n.get(langKey)
           .add("username", user::getNameAndTitle)
           .add("tamagotchiname", () -> tamagotchi != null ? tamagotchi.getName() : ""));
     }
@@ -159,19 +159,19 @@ public class AdventureComponent extends Component {
     UserAdventureRecordStats recordInfo = adventureRecordService.getRecordInfo(user);
 
     if (recordInfo == null) {
-      chat.say(l10n.get("ChatCommand.myadventurerecord.noRecords")
+      chat.say(i18n.get("ChatCommand.myadventurerecord.noRecords")
           .add("username", user::getDisplayName));
       return true;
     }
 
-    chat.say(l10n.get("ChatCommand.myadventurerecord.stats")
+    chat.say(i18n.get("ChatCommand.myadventurerecord.stats")
         .add("username", user::getDisplayName)
         .add("total", recordInfo::getRecordCount)
         .add("survivdecount", recordInfo::getWins)
         .add("totalpoints", () -> pointsService.asString(recordInfo.getTotalPayout())));
 
     if (recordInfo.getPercentageByTamagotchi() > 0) {
-      chat.say(l10n.get("ChatCommand.myadventurerecord.stats.byTamagotchi")
+      chat.say(i18n.get("ChatCommand.myadventurerecord.stats.byTamagotchi")
           .add("username", user::getDisplayName)
           .add("percentage", () -> MathUtils.doubleToPercentage(recordInfo.getPercentageByTamagotchi())));
     }

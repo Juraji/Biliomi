@@ -31,7 +31,7 @@ public class EightBallGameComponent extends Component {
   @CommandRoute(command = "8ball")
   public boolean eightBallCommand(User user, Arguments arguments) {
     if (!arguments.assertMinSize(1)) {
-      chat.say(l10n.get("ChatCommand.8ball.noQuestion"));
+      chat.say(i18n.get("ChatCommand.8ball.noQuestion"));
       return false;
     }
 

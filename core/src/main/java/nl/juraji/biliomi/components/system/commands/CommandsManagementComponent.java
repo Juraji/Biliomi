@@ -46,18 +46,18 @@ public class CommandsManagementComponent extends Component {
   @CommandRoute(command = "clearcooldownfor", systemCommand = true)
   public boolean clearCooldownForCommand(User user, Arguments arguments) {
     if (!arguments.assertSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.clearCooldownFor.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.clearCooldownFor.usage"));
       return false;
     }
 
     User targetUser = usersService.getUser(arguments.get(0));
     if (targetUser == null) {
-      chat.whisper(user, l10n.getUserNonExistent(arguments.get(0)));
+      chat.whisper(user, i18n.getUserNonExistent(arguments.get(0)));
       return false;
     }
 
     commandService.clearCooldownFor(targetUser);
-    chat.whisper(user, l10n.get("ChatCommand.clearCooldownFor.cleared")
+    chat.whisper(user, i18n.get("ChatCommand.clearCooldownFor.cleared")
         .add("username", targetUser::getDisplayName));
     return true;
   }
@@ -69,7 +69,7 @@ public class CommandsManagementComponent extends Component {
    */
   @CommandRoute(command = "editcommand", systemCommand = true)
   public boolean editCommandCommand(User user, Arguments arguments) {
-    return captureSubCommands("editcommand", l10n.supply("ChatCommand.editCommand.usage"), user, arguments);
+    return captureSubCommands("editcommand", i18n.supply("ChatCommand.editCommand.usage"), user, arguments);
   }
 
   /**
@@ -79,25 +79,25 @@ public class CommandsManagementComponent extends Component {
   @SubCommandRoute(parentCommand = "editcommand", command = "cooldown")
   public boolean editCommandCommandCooldown(User user, Arguments arguments) {
     if (!arguments.assertSize(2)) {
-      chat.whisper(user, l10n.get("ChatCommand.editCommand.cooldown.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.editCommand.cooldown.usage"));
       return false;
     }
 
     Command command = commandService.getCommand(arguments.get(0));
     if (command == null) {
-      chat.whisper(user, l10n.getCommandNonExistent(arguments.get(0)));
+      chat.whisper(user, i18n.getCommandNonExistent(arguments.get(0)));
       return false;
     }
 
     if (command.isSystemCommand()) {
-      chat.whisper(user, l10n.get("Common.editCommand.failOnSystemCommand")
+      chat.whisper(user, i18n.get("Common.editCommand.failOnSystemCommand")
           .add("command", arguments.get(0)));
       return false;
     }
 
     Integer newCooldownSeconds = Numbers.asNumber(arguments.get(1)).toInteger();
     if (newCooldownSeconds == null) {
-      chat.whisper(user, l10n.get("ChatCommand.editCommand.cooldown.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.editCommand.cooldown.usage"));
       return false;
     }
 
@@ -105,7 +105,7 @@ public class CommandsManagementComponent extends Component {
     command.setCooldown(newCooldown);
     commandService.save(command);
 
-    chat.whisper(user, l10n.get("ChatCommand.editCommand.cooldown.set")
+    chat.whisper(user, i18n.get("ChatCommand.editCommand.cooldown.set")
         .add("command", command::getCommand)
         .add("time", timeFormatter.timeQuantity(command.getCooldown())));
     return true;
@@ -119,18 +119,18 @@ public class CommandsManagementComponent extends Component {
   public boolean editCommandCommandPrice(User user, Arguments arguments) {
     Long newPrice = Numbers.asNumber(arguments.get(1)).toLong();
     if (!arguments.assertSize(2) || newPrice == 0) {
-      chat.whisper(user, l10n.get("ChatCommand.editCommand.price.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.editCommand.price.usage"));
       return false;
     }
 
     Command command = commandService.getCommand(arguments.get(0));
     if (command == null) {
-      chat.whisper(user, l10n.getCommandNonExistent(arguments.get(0)));
+      chat.whisper(user, i18n.getCommandNonExistent(arguments.get(0)));
       return false;
     }
 
     if (command.isSystemCommand()) {
-      chat.whisper(user, l10n.get("Common.editCommand.failOnSystemCommand")
+      chat.whisper(user, i18n.get("Common.editCommand.failOnSystemCommand")
           .add("command", arguments.get(0)));
       return false;
     }
@@ -138,7 +138,7 @@ public class CommandsManagementComponent extends Component {
     command.setPrice(newPrice);
     commandService.save(command);
 
-    chat.whisper(user, l10n.get("ChatCommand.editCommand.price.set")
+    chat.whisper(user, i18n.get("ChatCommand.editCommand.price.set")
         .add("command", command::getCommand)
         .add("points", pointsService.asString(command.getPrice())));
     return true;
@@ -152,25 +152,25 @@ public class CommandsManagementComponent extends Component {
   @SubCommandRoute(parentCommand = "editcommand", command = "group")
   public boolean editCommandCommandGroup(User user, Arguments arguments) {
     if (!arguments.assertSize(2)) {
-      chat.whisper(user, l10n.get("ChatCommand.editCommand.group.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.editCommand.group.usage"));
       return false;
     }
 
     Command command = commandService.getCommand(arguments.get(0));
     if (command == null) {
-      chat.whisper(user, l10n.getCommandNonExistent(arguments.get(0)));
+      chat.whisper(user, i18n.getCommandNonExistent(arguments.get(0)));
       return false;
     }
 
     if (command.isSystemCommand()) {
-      chat.whisper(user, l10n.get("Common.editCommand.failOnSystemCommand")
+      chat.whisper(user, i18n.get("Common.editCommand.failOnSystemCommand")
           .add("command", arguments.get(0)));
       return false;
     }
 
     UserGroup userGroup = userGroupService.getByName(arguments.get(1));
     if (userGroup == null) {
-      chat.whisper(user, l10n.get("ChatCommand.editCommand.group.groupNotFound")
+      chat.whisper(user, i18n.get("ChatCommand.editCommand.group.groupNotFound")
           .add("groupname", arguments.get(1)));
       return false;
     }
@@ -178,7 +178,7 @@ public class CommandsManagementComponent extends Component {
     command.setUserGroup(userGroup);
     commandService.save(command);
 
-    chat.whisper(user, l10n.get("ChatCommand.editCommand.group.set")
+    chat.whisper(user, i18n.get("ChatCommand.editCommand.group.set")
         .add("command", command::getCommand)
         .add("groupname", userGroup::getName));
     return true;
@@ -192,28 +192,28 @@ public class CommandsManagementComponent extends Component {
   @SubCommandRoute(parentCommand = "editcommand", command = "cooldown")
   public boolean editCommandCommandModCanAlwaysActivate(User user, Arguments arguments) {
     if (!arguments.assertSize(2)) {
-      chat.whisper(user, l10n.get("ChatCommand.editCommand.modCanAlwaysActivate.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.editCommand.modCanAlwaysActivate.usage"));
       return false;
     }
 
     Command command = commandService.getCommand(arguments.get(0));
     if (command == null) {
-      chat.whisper(user, l10n.getCommandNonExistent(arguments.get(0)));
+      chat.whisper(user, i18n.getCommandNonExistent(arguments.get(0)));
       return false;
     }
 
     OnOff onOff = EnumUtils.toEnum(arguments.get(1), OnOff.class);
     if (onOff == null) {
-      chat.whisper(user, l10n.get("ChatCommand.editCommand.modCanAlwaysActivate.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.editCommand.modCanAlwaysActivate.usage"));
       return false;
     }
 
     command.setModeratorCanActivate(OnOff.ON.equals(onOff));
     if (command.isModeratorCanActivate()) {
-      chat.whisper(user, l10n.get("ChatCommand.editCommand.modCanAlwaysActivate.set.on")
+      chat.whisper(user, i18n.get("ChatCommand.editCommand.modCanAlwaysActivate.set.on")
           .add("command", command::getCommand));
     } else {
-      chat.whisper(user, l10n.get("ChatCommand.editCommand.modCanAlwaysActivate.set.off")
+      chat.whisper(user, i18n.get("ChatCommand.editCommand.modCanAlwaysActivate.set.off")
           .add("command", command::getCommand));
     }
     return true;
@@ -226,19 +226,19 @@ public class CommandsManagementComponent extends Component {
   @SubCommandRoute(parentCommand = "editcommand", command = "alias")
   public boolean editCommandCommandAlias(User user, Arguments arguments) {
     if (!arguments.assertSize(3) || arguments.getSafe(0).equalsIgnoreCase(arguments.get(2))) {
-      chat.whisper(user, l10n.get("ChatCommand.editCommand.alias.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.editCommand.alias.usage"));
       return false;
     }
 
     AddRemove addRemove = EnumUtils.toEnum(arguments.get(1), AddRemove.class);
     if (addRemove == null) {
-      chat.whisper(user, l10n.get("ChatCommand.editCommand.alias.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.editCommand.alias.usage"));
       return false;
     }
 
     Command command = commandService.getCommand(arguments.get(0));
     if (command == null) {
-      chat.whisper(user, l10n.getCommandNonExistent(arguments.get(0)));
+      chat.whisper(user, i18n.getCommandNonExistent(arguments.get(0)));
       return false;
     }
 
@@ -246,25 +246,25 @@ public class CommandsManagementComponent extends Component {
     if (AddRemove.ADD.equals(addRemove)) {
       // Add alias
       if (!commandService.registerAlias(alias, command)) {
-        chat.whisper(user, l10n.get("ChatCommand.editCommand.alias.add.aliasAlreadyExists")
+        chat.whisper(user, i18n.get("ChatCommand.editCommand.alias.add.aliasAlreadyExists")
             .add("alias", alias));
         return false;
       }
 
-      chat.whisper(user, l10n.get("ChatCommand.editCommand.alias.add.added")
+      chat.whisper(user, i18n.get("ChatCommand.editCommand.alias.add.added")
           .add("alias", alias)
           .add("command", command::getCommand));
     } else if (AddRemove.REMOVE.equals(addRemove)) {
       // Remove alias
       if (!command.getAliasses().contains(alias)) {
-        chat.whisper(user, l10n.get("ChatCommand.editCommand.alias.remove.nonExistent")
+        chat.whisper(user, i18n.get("ChatCommand.editCommand.alias.remove.nonExistent")
             .add("command", command::getCommand)
             .add("alias", alias));
         return false;
       }
 
       commandService.removeAlias(alias, command);
-      chat.whisper(user, l10n.get("ChatCommand.editCommand.alias.remove.removed")
+      chat.whisper(user, i18n.get("ChatCommand.editCommand.alias.remove.removed")
           .add("alias", alias)
           .add("command", command::getCommand));
     }

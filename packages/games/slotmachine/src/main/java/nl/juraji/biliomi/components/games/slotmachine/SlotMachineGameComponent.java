@@ -54,7 +54,7 @@ public class SlotMachineGameComponent extends Component {
       YamlSlotmachineEmote jpEmote = configService.getJackpot();
       payout += Math.round(jpEmote.getValue());
 
-      chat.say(l10n.get("ChatCommand.slot.jackpotSeen")
+      chat.say(i18n.get("ChatCommand.slot.jackpotSeen")
           .add("jackpotemote", jpEmote::getEmote)
           .add("points", pointsService.asString(jpEmote.getValue())));
     }
@@ -69,7 +69,7 @@ public class SlotMachineGameComponent extends Component {
     }
 
     // Post the result
-    chat.say(l10n.get("ChatCommand.slot.result")
+    chat.say(i18n.get("ChatCommand.slot.result")
         .add("username", user::getDisplayName)
         .add("emote1", e1::getEmote)
         .add("emote2", e2::getEmote)

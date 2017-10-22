@@ -11,7 +11,7 @@ import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.commandrouters.types.CommandRouteInvocationException;
 import nl.juraji.biliomi.utility.commandrouters.types.CommandRouteNotFoundException;
 import nl.juraji.biliomi.utility.types.Init;
-import nl.juraji.biliomi.utility.types.collections.L10nMap;
+import nl.juraji.biliomi.utility.types.collections.I18nMap;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -41,7 +41,7 @@ public abstract class Component implements Init {
   protected UsersService usersService;
 
   @Inject
-  protected L10nMap l10n;
+  protected I18nMap i18n;
 
   public Component() {
     subCommandRouter = new SubCommandRouter(this);

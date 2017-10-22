@@ -51,7 +51,7 @@ public class FollowerWatchComponent extends Component {
    */
   @CommandRoute(command = "followerwatch", systemCommand = true)
   public boolean followerWatchCommand(User user, Arguments arguments) {
-    return captureSubCommands("followerwatch", l10n.supply("ChatCommand.followerWatch.usage"), user, arguments);
+    return captureSubCommands("followerwatch", i18n.supply("ChatCommand.followerWatch.usage"), user, arguments);
   }
 
   /**
@@ -64,13 +64,13 @@ public class FollowerWatchComponent extends Component {
     Long newReward = Numbers.asNumber(arguments.popSafe()).toLong();
 
     if (newReward == null || newReward < 0) {
-      chat.whisper(user, l10n.get("ChatCommand.followerWatch.reward.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.followerWatch.reward.usage"));
       return false;
     }
 
     settings.setReward(newReward);
     settingsService.save(settings);
-    chat.whisper(user, l10n.get("ChatCommand.followerWatch.reward.saved")
+    chat.whisper(user, i18n.get("ChatCommand.followerWatch.reward.saved")
         .add("points", pointsService.asString(newReward)));
 
     return true;
@@ -83,9 +83,9 @@ public class FollowerWatchComponent extends Component {
   @SubCommandRoute(parentCommand = "followerwatch", command = "setfollowernotice")
   public boolean followerWatchsetfollowernoticeCommand(User user, Arguments arguments) {
     return new TemplateSetup(templateDao, chat)
-        .withCommandUsageMessage(l10n.getString("ChatCommand.followerWatch.setfollowernotice.usage"))
-        .withTemplateDisabledMessage(l10n.getString("ChatCommand.followerWatch.setfollowernotice.disabled"))
-        .withTemplatedSavedMessage(l10n.getString("ChatCommand.followerWatch.setfollowernotice.saved"))
+        .withCommandUsageMessage(i18n.getString("ChatCommand.followerWatch.setfollowernotice.usage"))
+        .withTemplateDisabledMessage(i18n.getString("ChatCommand.followerWatch.setfollowernotice.disabled"))
+        .withTemplatedSavedMessage(i18n.getString("ChatCommand.followerWatch.setfollowernotice.saved"))
         .apply(user, arguments.toString(), FollowerWatchConstants.INCOMING_FOLLOW_NOTICE);
   }
 }

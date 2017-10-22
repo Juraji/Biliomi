@@ -9,7 +9,7 @@ import nl.juraji.biliomi.model.games.settings.TamagotchiSettings;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.modifiers.L10nData;
 import nl.juraji.biliomi.utility.types.Templater;
-import nl.juraji.biliomi.utility.types.collections.L10nMap;
+import nl.juraji.biliomi.utility.types.collections.I18nMap;
 import org.joda.time.DateTime;
 
 import javax.annotation.PostConstruct;
@@ -28,7 +28,7 @@ public class TamagotchiService {
 
   @Inject
   @L10nData(TamagotchiComponent.class)
-  private L10nMap l10n;
+  private I18nMap i18n;
 
   @Inject
   private SettingsService settingsService;
@@ -116,11 +116,11 @@ public class TamagotchiService {
     Templater templater;
 
     if (moodPercentage < TamagotchiConstants.MOOD_SAD_THRESHOLD) {
-      templater = l10n.get("Common.tamagotchi.mood.sad");
+      templater = i18n.get("Common.tamagotchi.mood.sad");
     } else if (moodPercentage < TamagotchiConstants.MOOD_BORED_THRESHOLD) {
-      templater = l10n.get("Common.tamagotchi.mood.bored");
+      templater = i18n.get("Common.tamagotchi.mood.bored");
     } else {
-      templater = l10n.get("Common.tamagotchi.mood.happy");
+      templater = i18n.get("Common.tamagotchi.mood.happy");
     }
 
     return templater.apply();
@@ -131,11 +131,11 @@ public class TamagotchiService {
     Templater templater;
 
     if (hygienePercentage < TamagotchiConstants.MOOD_SAD_THRESHOLD) {
-      templater = l10n.get("Common.tamagotchi.hygieneState.filthy");
+      templater = i18n.get("Common.tamagotchi.hygieneState.filthy");
     } else if (hygienePercentage < TamagotchiConstants.MOOD_BORED_THRESHOLD) {
-      templater = l10n.get("Common.tamagotchi.hygieneState.aBitDirty");
+      templater = i18n.get("Common.tamagotchi.hygieneState.aBitDirty");
     } else {
-      templater = l10n.get("Common.tamagotchi.hygieneState.clean");
+      templater = i18n.get("Common.tamagotchi.hygieneState.clean");
     }
 
     return templater.apply();

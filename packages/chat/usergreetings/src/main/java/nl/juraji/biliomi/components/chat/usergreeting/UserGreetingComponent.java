@@ -73,7 +73,7 @@ public class UserGreetingComponent extends Component {
   @CommandRoute(command = "setgreeting")
   public boolean setgreetingCommand(User user, Arguments arguments) {
     if (!arguments.assertMinSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.setGreeting.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.setGreeting.usage"));
       return false;
     }
 
@@ -83,7 +83,7 @@ public class UserGreetingComponent extends Component {
     if (off != null) {
       if (OnOff.OFF.equals(off) && greeting != null) {
         userGreetingDao.delete(greeting);
-        chat.whisper(user, l10n.get("ChatCommand.setGreeting.deleted"));
+        chat.whisper(user, i18n.get("ChatCommand.setGreeting.deleted"));
         return true;
       }
       return false;
@@ -91,7 +91,7 @@ public class UserGreetingComponent extends Component {
 
     String message = arguments.toString();
     if (badWordsService.containsBadWords(message)) {
-      chat.whisper(user, l10n.getInputContainsBadWords());
+      chat.whisper(user, i18n.getInputContainsBadWords());
       return false;
     }
 
@@ -103,7 +103,7 @@ public class UserGreetingComponent extends Component {
     greeting.setMessage(message);
     userGreetingDao.save(greeting);
 
-    chat.whisper(user, l10n.get("ChatCommand.setGreeting.saved"));
+    chat.whisper(user, i18n.get("ChatCommand.setGreeting.saved"));
     return true;
   }
 
@@ -113,7 +113,7 @@ public class UserGreetingComponent extends Component {
    */
   @CommandRoute(command = "greetingsettings", systemCommand = true)
   public boolean greetingSettingsCommand(User user, Arguments arguments) {
-    return captureSubCommands("greetingsettings", l10n.supply("ChatCommand.greetingSettings.usage"), user, arguments);
+    return captureSubCommands("greetingsettings", i18n.supply("ChatCommand.greetingSettings.usage"), user, arguments);
   }
 
   /**
@@ -125,15 +125,15 @@ public class UserGreetingComponent extends Component {
     OnOff onOff = EnumUtils.toEnum(arguments.get(0), OnOff.class);
 
     if (onOff == null) {
-      chat.whisper(user, l10n.get("ChatCommand.greetingSettings.enabled.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.greetingSettings.enabled.usage"));
       return false;
     }
 
     settings.setEnableGreetings(OnOff.ON.equals(onOff));
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.greetingSettings.enabled.toggled")
-        .add("state", l10n.getEnabledDisabled(settings.isEnableGreetings())));
+    chat.whisper(user, i18n.get("ChatCommand.greetingSettings.enabled.toggled")
+        .add("state", i18n.getEnabledDisabled(settings.isEnableGreetings())));
     return true;
   }
 
@@ -147,7 +147,7 @@ public class UserGreetingComponent extends Component {
     Integer timeoutHours = Numbers.asNumber(arguments.get(0)).toInteger();
 
     if (timeoutHours == null || timeoutHours < 1) {
-      chat.whisper(user, l10n.get("ChatCommand.greetingSettings.timeout.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.greetingSettings.timeout.usage"));
       return false;
     }
 
@@ -155,7 +155,7 @@ public class UserGreetingComponent extends Component {
     settings.setGreetingTimeout(timeoutHours);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.greetingSettings.timeout.set")
+    chat.whisper(user, i18n.get("ChatCommand.greetingSettings.timeout.set")
         .add("time", () -> timeFormatter.timeQuantity(timeoutMillis)));
     return true;
   }

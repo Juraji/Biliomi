@@ -49,9 +49,9 @@ public class InvestmentGameComponent extends Component {
   @CommandRoute(command = "pollmarket")
   public boolean pollMarketCommand(User user, Arguments arguments) {
     if (investmentService.isMarketStateGood()) {
-      chat.say(l10n.get("ChatCommand.pollMarket.stateGood"));
+      chat.say(i18n.get("ChatCommand.pollMarket.stateGood"));
     } else {
-      chat.say(l10n.get("ChatCommand.pollMarket.stateBad"));
+      chat.say(i18n.get("ChatCommand.pollMarket.stateBad"));
     }
     return true;
   }
@@ -66,12 +66,12 @@ public class InvestmentGameComponent extends Component {
     Integer investPercentage = Numbers.asNumber(arguments.getSafe(1)).toInteger();
 
     if (investAmount == null || investPercentage == null) {
-      chat.whisper(user, l10n.get("ChatCommand.invest.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.invest.usage"));
       return false;
     }
 
     if (user.getPoints() < investAmount) {
-      chat.whisper(user, l10n.get("ChatCommand.invest.notEnoughPoints")
+      chat.whisper(user, i18n.get("ChatCommand.invest.notEnoughPoints")
           .add("pointsname", pointsService::pointsName)
           .add("points", () -> pointsService.asString(user.getPoints())));
       return false;
@@ -79,7 +79,7 @@ public class InvestmentGameComponent extends Component {
 
     double investPercentageReal = (double) investPercentage / 100;
     if (investPercentageReal < settings.getMinInterest() || investPercentageReal > settings.getMaxInterest()) {
-      chat.whisper(user, l10n.get("ChatCommand.invest.usage.maximums")
+      chat.whisper(user, i18n.get("ChatCommand.invest.usage.maximums")
           .add("time", timeFormatter.timeQuantity(settings.getInvestmentDuration()))
           .add("mininterest", MathUtils.doubleToPercentage(settings.getMinInterest()))
           .add("maxinterest", MathUtils.doubleToPercentage(settings.getMinInterest())));
@@ -87,7 +87,7 @@ public class InvestmentGameComponent extends Component {
     }
 
     InvestmentRecord record = investmentService.startInvestment(user, investAmount, investPercentageReal);
-    chat.say(l10n.get("ChatCommand.invest.invested")
+    chat.say(i18n.get("ChatCommand.invest.invested")
         .add("username", user::getNameAndTitle)
         .add("project", record::getProject)
         .add("invested", () -> pointsService.asString(investAmount)));
@@ -103,18 +103,18 @@ public class InvestmentGameComponent extends Component {
     UserInvestRecordStats recordInfo = investmentService.getRecordInfo(user);
 
     if (recordInfo == null) {
-      chat.whisper(user, l10n.get("ChatCommand.myinvestments.noRecords"));
+      chat.whisper(user, i18n.get("ChatCommand.myinvestments.noRecords"));
       return false;
     }
 
-    chat.say(l10n.get("ChatCommand.myinvestments.stat")
+    chat.say(i18n.get("ChatCommand.myinvestments.stat")
         .add("username", user::getNameAndTitle)
         .add("count", recordInfo::getRecordCount)
         .add("totalinvested", () -> pointsService.asString(recordInfo.getTotalInvested()))
         .add("totalearned", () -> pointsService.asString(recordInfo.getTotalEarned()))
         .add("successcount", recordInfo::getWins)
         .add("failedcount", recordInfo::getLosses)
-        .add("comment", () -> l10n.getIfElse(recordInfo.isMoreWins(),
+        .add("comment", () -> i18n.getIfElse(recordInfo.isMoreWins(),
             "ChatCommand.myinvestments.stat.comment.mostlyWins",
             "ChatCommand.myinvestments.stat.comment.mostlyLosses")));
     return true;
@@ -126,7 +126,7 @@ public class InvestmentGameComponent extends Component {
    */
   @CommandRoute(command = "investsettings", systemCommand = true)
   public boolean investSettingsCommand(User user, Arguments arguments) {
-    return captureSubCommands("investsettings", l10n.supply("ChatCommand.investsettings.usage"), user, arguments);
+    return captureSubCommands("investsettings", i18n.supply("ChatCommand.investsettings.usage"), user, arguments);
   }
 
   /**
@@ -138,7 +138,7 @@ public class InvestmentGameComponent extends Component {
     Integer durationMinutes = Numbers.asNumber(arguments.get(0)).toInteger();
 
     if (durationMinutes == null || durationMinutes < 0) {
-      chat.whisper(user, l10n.get("ChatCommand.investsettings.duration.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.investsettings.duration.usage"));
       return false;
     }
 
@@ -147,7 +147,7 @@ public class InvestmentGameComponent extends Component {
     settings.setInvestmentDuration(duration);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.investsettings.duration.set")
+    chat.whisper(user, i18n.get("ChatCommand.investsettings.duration.set")
         .add("time", timeFormatter.timeQuantity(duration)));
     return true;
   }
@@ -161,20 +161,20 @@ public class InvestmentGameComponent extends Component {
     Integer input = Numbers.asNumber(arguments.get(0)).toInteger();
 
     if (input == null || MathUtils.isNotInRange(input, 0, 100)) {
-      chat.whisper(user, l10n.get("ChatCommand.investsettings.mininterest.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.investsettings.mininterest.usage"));
       return false;
     }
 
     double settingValue = input.doubleValue() / 100;
     if (settingValue > settings.getMaxInterest()) {
-      chat.whisper(user, l10n.get("ChatCommand.investsettings.mininterest.higherThanMax")
+      chat.whisper(user, i18n.get("ChatCommand.investsettings.mininterest.higherThanMax")
           .add("percentage", MathUtils.doubleToPercentage(settings.getMaxInterest())));
     }
 
     settings.setMinInterest(settingValue);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.investsettings.mininterest.set")
+    chat.whisper(user, i18n.get("ChatCommand.investsettings.mininterest.set")
         .add("percentage", MathUtils.doubleToPercentage(settingValue)));
     return true;
   }
@@ -188,20 +188,20 @@ public class InvestmentGameComponent extends Component {
     Integer input = Numbers.asNumber(arguments.get(0)).toInteger();
 
     if (input == null || MathUtils.isNotInRange(input, 0, 100)) {
-      chat.whisper(user, l10n.get("ChatCommand.investsettings.maxinterest.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.investsettings.maxinterest.usage"));
       return false;
     }
 
     double settingValue = input.doubleValue() / 100;
     if (settingValue < settings.getMinInterest()) {
-      chat.whisper(user, l10n.get("ChatCommand.investsettings.mininterest.lowerThanMin")
+      chat.whisper(user, i18n.get("ChatCommand.investsettings.mininterest.lowerThanMin")
           .add("percentage", MathUtils.doubleToPercentage(settings.getMinInterest())));
     }
 
     settings.setMaxInterest(settingValue);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.investsettings.maxinterest.set")
+    chat.whisper(user, i18n.get("ChatCommand.investsettings.maxinterest.set")
         .add("percentage", MathUtils.doubleToPercentage(settingValue)));
     return true;
   }

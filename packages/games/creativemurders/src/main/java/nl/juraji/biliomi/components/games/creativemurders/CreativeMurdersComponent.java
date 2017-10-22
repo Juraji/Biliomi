@@ -59,18 +59,18 @@ public class CreativeMurdersComponent extends Component {
     UserKDRRecordStats kdr = killRecordService.getKDR(user);
 
     if (kdr == null) {
-      chat.say(l10n.get("ChatCommand.kdr.noRecords")
+      chat.say(i18n.get("ChatCommand.kdr.noRecords")
           .add("username", user::getNameAndTitle));
     } else {
-      chat.say(l10n.get("ChatCommand.kdr.stat")
+      chat.say(i18n.get("ChatCommand.kdr.stat")
           .add("username", user::getNameAndTitle)
           .add("kdr", kdr::getKdr)
-          .add("comment", l10n.getIfElse(kdr.isMoreWins(), "ChatCommand.kdr.stat.high", "ChatCommand.kdr.stat.low"))
+          .add("comment", i18n.getIfElse(kdr.isMoreWins(), "ChatCommand.kdr.stat.high", "ChatCommand.kdr.stat.low"))
           .add("favoritetarget", () -> {
             if (kdr.getFavoriteTarget()!=null) {
               return kdr.getFavoriteTarget().getDisplayName();
             } else {
-              return l10n.get("ChatCommand.kdr.stat.noFavTarget");
+              return i18n.get("ChatCommand.kdr.stat.noFavTarget");
             }
           }));
     }

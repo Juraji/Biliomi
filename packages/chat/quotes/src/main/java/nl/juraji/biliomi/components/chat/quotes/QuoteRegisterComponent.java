@@ -42,7 +42,7 @@ public class QuoteRegisterComponent extends Component {
       Long quoteId = Numbers.asNumber(arguments.get(0)).toLong();
 
       if (quoteId == null) {
-        chat.whisper(user, l10n.get("ChatCommand.quote.usage"));
+        chat.whisper(user, i18n.get("ChatCommand.quote.usage"));
         return false;
       }
 
@@ -53,11 +53,11 @@ public class QuoteRegisterComponent extends Component {
     }
 
     if (quote == null) {
-      chat.whisper(user, l10n.get("ChatCommand.quote.notFound"));
+      chat.whisper(user, i18n.get("ChatCommand.quote.notFound"));
       return false;
     }
 
-    chat.say(l10n.get("ChatCommand.quote.quoteTemplate")
+    chat.say(i18n.get("ChatCommand.quote.quoteTemplate")
         .add("message", quote::getMessage)
         .add("date", () -> timeFormatter.fullDate(quote.getDate()))
         .add("user", quote.getUser().getNameAndTitle()));
@@ -70,7 +70,7 @@ public class QuoteRegisterComponent extends Component {
    */
   @CommandRoute(command = "quotes", systemCommand = true)
   public boolean managequotesCommand(User user, Arguments arguments) {
-    return captureSubCommands("quotes", l10n.supply("ChatCommand.quotes.usage"), user, arguments);
+    return captureSubCommands("quotes", i18n.supply("ChatCommand.quotes.usage"), user, arguments);
   }
 
   /**
@@ -80,14 +80,14 @@ public class QuoteRegisterComponent extends Component {
   @SubCommandRoute(parentCommand = "quotes", command = "add")
   public boolean managequotesCommandAdd(User user, Arguments arguments) {
     if (!arguments.assertMinSize(2)) {
-      chat.whisper(user, l10n.get("ChatCommand.quotes.add.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.quotes.add.usage"));
       return false;
     }
 
     String qUsername = arguments.pop();
     User qUser = usersService.getUser(qUsername, true);
     if (qUser == null) {
-      chat.whisper(user, l10n.getUserNonExistent(qUsername));
+      chat.whisper(user, i18n.getUserNonExistent(qUsername));
       return false;
     }
 
@@ -95,7 +95,7 @@ public class QuoteRegisterComponent extends Component {
 
     Quote quote = quoteService.registerQuote(qUser, message);
 
-    chat.say(l10n.get("ChatCommand.quotes.add.saved")
+    chat.say(i18n.get("ChatCommand.quotes.add.saved")
         .add("username", user::getNameAndTitle)
         .add("id", quote::getId));
     return true;
@@ -110,18 +110,18 @@ public class QuoteRegisterComponent extends Component {
     Long quoteId = Numbers.asNumber(arguments.get(0)).toLong();
 
     if (quoteId == null) {
-      chat.whisper(user, l10n.get("ChatCommand.quotes.remove.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.quotes.remove.usage"));
       return false;
     }
 
     Quote quote = quoteService.getQuote(quoteId);
     if (quote == null) {
-      chat.whisper(user, l10n.get("ChatCommand.quote.notFound"));
+      chat.whisper(user, i18n.get("ChatCommand.quote.notFound"));
       return false;
     }
 
     quoteService.delete(quote);
-    chat.whisper(user, l10n.get("ChatCommand.quotes.remove.removed")
+    chat.whisper(user, i18n.get("ChatCommand.quotes.remove.removed")
         .add("username", quote.getUser().getDisplayName())
         .add("id", quote::getId));
     return true;

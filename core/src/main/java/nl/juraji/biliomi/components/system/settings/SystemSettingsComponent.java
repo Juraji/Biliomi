@@ -40,7 +40,7 @@ public class SystemSettingsComponent extends Component {
     CommandRouter commandRouter = CDI.current().select(CommandRouter.class).get();
 
     if (!arguments.assertMinSize(2)) {
-      chat.whisper(user, l10n.get("ChatCommand.executeCommand.execute.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.executeCommand.execute.usage"));
       return false;
     }
 
@@ -48,7 +48,7 @@ public class SystemSettingsComponent extends Component {
     User runAsUser = usersService.getUser(runAs);
 
     if (runAsUser == null) {
-      chat.whisper(user, l10n.getUserNonExistent(runAs));
+      chat.whisper(user, i18n.getUserNonExistent(runAs));
       return false;
     }
 
@@ -66,7 +66,7 @@ public class SystemSettingsComponent extends Component {
       muteCommand(user, new Arguments("mute", "off"));
     }
 
-    chat.whisper(user, l10n.get("ChatCommand.executeCommand.execute.done")
+    chat.whisper(user, i18n.get("ChatCommand.executeCommand.execute.done")
         .add("command", commandMessage)
         .add("user", runAsUser::getDisplayName));
 
@@ -95,9 +95,9 @@ public class SystemSettingsComponent extends Component {
     }
 
     settingsService.save(settings);
-    chat.whisper(user, l10n.get("ChatCommand.muteCommand.toggleMute")
+    chat.whisper(user, i18n.get("ChatCommand.muteCommand.toggleMute")
         .add("botname", botName)
-        .add("state", l10n.getIfElse(settings.isMuted(), "ChatCommand.muteCommand.toggleMute.state.muted", "ChatCommand.muteCommand.toggleMute.state.unmuted")));
+        .add("state", i18n.getIfElse(settings.isMuted(), "ChatCommand.muteCommand.toggleMute.state.muted", "ChatCommand.muteCommand.toggleMute.state.unmuted")));
     return true;
   }
 
@@ -122,8 +122,8 @@ public class SystemSettingsComponent extends Component {
     }
 
     settingsService.save(settings);
-    chat.whisper(user, l10n.get("ChatCommand.toggleWhisperModeCommand.toggleWhisperMode")
-        .add("state", l10n.getEnabledDisabled(settings.isMuted())));
+    chat.whisper(user, i18n.get("ChatCommand.toggleWhisperModeCommand.toggleWhisperMode")
+        .add("state", i18n.getEnabledDisabled(settings.isMuted())));
     return true;
   }
 }

@@ -89,7 +89,7 @@ public class TwitterComponent extends Component {
         TwitchStream stream = channelService.getStream();
 
         if (stream == null) {
-          chat.whisper(user, l10n.get("ChatCommand.tweetStatus.channelOffline"));
+          chat.whisper(user, i18n.get("ChatCommand.tweetStatus.channelOffline"));
           return false;
         }
 
@@ -103,9 +103,9 @@ public class TwitterComponent extends Component {
             .apply());
       }
 
-      chat.whisper(user, l10n.get("ChatCommand.tweetStatus.success"));
+      chat.whisper(user, i18n.get("ChatCommand.tweetStatus.success"));
     } catch (UnavailableException e) {
-      chat.whisper(user, l10n.get("ChatCommand.tweetStatus.twitterNotAvailable"));
+      chat.whisper(user, i18n.get("ChatCommand.tweetStatus.twitterNotAvailable"));
       return false;
     } catch (Exception e) {
       logger.error("Error posting twitter update", e);
@@ -121,7 +121,7 @@ public class TwitterComponent extends Component {
    */
   @CommandRoute(command = "twitter", systemCommand = true)
   public boolean twitterCommand(User user, Arguments arguments) {
-    return captureSubCommands("twitter", () -> l10n.getString("ChatCommand.twitter.usage"), user, arguments);
+    return captureSubCommands("twitter", () -> i18n.getString("ChatCommand.twitter.usage"), user, arguments);
   }
 
   /**
@@ -131,8 +131,8 @@ public class TwitterComponent extends Component {
   @SubCommandRoute(parentCommand = "twitter", command = "setupdatetemplate")
   public boolean twitterSetUpdateTemplateCommand(User user, Arguments arguments) {
     return new TemplateSetup(templateDao, chat)
-        .withCommandUsageMessage(l10n.getString("ChatCommand.twitter.setupdatetemplate.usage"))
-        .withTemplatedSavedMessage(l10n.getString("ChatCommand.twitter.setupdatetemplate.set"))
+        .withCommandUsageMessage(i18n.getString("ChatCommand.twitter.setupdatetemplate.usage"))
+        .withTemplatedSavedMessage(i18n.getString("ChatCommand.twitter.setupdatetemplate.set"))
         .apply(user, arguments.toString(), TWITTER_UPDATE_TEMPLATE_ID);
   }
 
@@ -144,7 +144,7 @@ public class TwitterComponent extends Component {
   @SubCommandRoute(parentCommand = "twitter", command = "settrackedwords")
   public boolean twitterSetTrackedWordsCommand(User user, Arguments arguments) {
     if (arguments.isEmpty()) {
-      chat.whisper(user, l10n.get("ChatCommand.twitter.settrackedwords.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.twitter.settrackedwords.usage"));
       return false;
     }
 
@@ -155,16 +155,16 @@ public class TwitterComponent extends Component {
     settings.getTrackedKeywords().clear();
 
     if (OnOff.OFF.equals(onOff)) {
-      chat.whisper(user, l10n.get("ChatCommand.twitter.settrackedwords.disabled"));
+      chat.whisper(user, i18n.get("ChatCommand.twitter.settrackedwords.disabled"));
     } else {
       boolean wordlengthViolated = words.stream().anyMatch(s -> s.length() < TRACKED_WORD_MIN_LENGTH);
       if (wordlengthViolated) {
-        chat.whisper(user, l10n.get("ChatCommand.twitter.settrackedwords.minWordLengthViolated")
+        chat.whisper(user, i18n.get("ChatCommand.twitter.settrackedwords.minWordLengthViolated")
             .add("min", TRACKED_WORD_MIN_LENGTH));
         return false;
       }
       settings.getTrackedKeywords().addAll(words);
-      chat.whisper(user, l10n.get("ChatCommand.twitter.settrackedwords.set")
+      chat.whisper(user, i18n.get("ChatCommand.twitter.settrackedwords.set")
           .add("words", settings::getTrackedKeywords));
     }
 
@@ -180,8 +180,8 @@ public class TwitterComponent extends Component {
   @SubCommandRoute(parentCommand = "twitter", command = "setwordmatchedtemplate")
   public boolean twitterSetWordMatchedTemplateCommand(User user, Arguments arguments) {
     return new TemplateSetup(templateDao, chat)
-        .withCommandUsageMessage(l10n.getString("ChatCommand.twitter.setwordmatchedtemplate.usage"))
-        .withTemplatedSavedMessage(l10n.getString("ChatCommand.twitter.setwordmatchedtemplate.set"))
+        .withCommandUsageMessage(i18n.getString("ChatCommand.twitter.setwordmatchedtemplate.usage"))
+        .withTemplatedSavedMessage(i18n.getString("ChatCommand.twitter.setwordmatchedtemplate.set"))
         .apply(user, arguments.toString(), TWITTER_TWEET_FOUND_TEMPLATE_ID);
   }
 

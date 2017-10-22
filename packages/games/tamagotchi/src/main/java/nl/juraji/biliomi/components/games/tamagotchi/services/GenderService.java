@@ -1,7 +1,7 @@
 package nl.juraji.biliomi.components.games.tamagotchi.services;
 
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.types.collections.L10nMap;
+import nl.juraji.biliomi.utility.types.collections.I18nMap;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -14,79 +14,79 @@ import javax.inject.Inject;
 public class GenderService {
 
   @Inject
-  private L10nMap l10n;
+  private I18nMap i18n;
 
   /**
-   * Retrieve the l10n name for a gender
+   * Retrieve the i18n name for a gender
    *
    * @param gender The gender to retrieve
-   * @return The corresponding name from the L10nMap
+   * @return The corresponding name from the I18nMap
    */
   public String getGenderName(Gender gender) {
     switch (gender) {
       case MALE:
-        return l10n.getString("Gender.gender.male");
+        return i18n.getString("Gender.gender.male");
       case FEMALE:
-        return l10n.getString("Gender.gender.female");
+        return i18n.getString("Gender.gender.female");
       case NEUTRAL:
-        return l10n.getString("Gender.gender.neutral");
+        return i18n.getString("Gender.gender.neutral");
       default:
         return null;
     }
   }
 
   /**
-   * Retrieve the l10n addressing for a gender
+   * Retrieve the i18n addressing for a gender
    *
    * @param gender The gender to retrieve
-   * @return The corresponding name from the L10nMap
+   * @return The corresponding name from the I18nMap
    */
   public String getAddress(Gender gender) {
     switch (gender) {
       case MALE:
-        return l10n.getString("Gender.address.male");
+        return i18n.getString("Gender.address.male");
       case FEMALE:
-        return l10n.getString("Gender.address.female");
+        return i18n.getString("Gender.address.female");
       case NEUTRAL:
-        return l10n.getString("Gender.address.neutral");
+        return i18n.getString("Gender.address.neutral");
       default:
         return null;
     }
   }
 
   /**
-   * Retrieve the l10n referal for a gender
+   * Retrieve the i18n referal for a gender
    *
    * @param gender The gender to retrieve
-   * @return The corresponding name from the L10nMap
+   * @return The corresponding name from the I18nMap
    */
   public String getReferal(Gender gender) {
     switch (gender) {
       case MALE:
-        return l10n.getString("Gender.refer.male");
+        return i18n.getString("Gender.refer.male");
       case FEMALE:
-        return l10n.getString("Gender.refer.female");
+        return i18n.getString("Gender.refer.female");
       case NEUTRAL:
-        return l10n.getString("Gender.refer.neutral");
+        return i18n.getString("Gender.refer.neutral");
       default:
         return null;
     }
   }
 
   /**
-   * Retrieve the l10n posessive referal for a gender
+   * Retrieve the i18n posessive referal for a gender
    *
    * @param gender The gender to retrieve
-   * @return The corresponding name from the L10nMap
+   * @return The corresponding name from the I18nMap
    */
   public String getPosessiveReferal(Gender gender) {
     switch (gender) {
       case MALE:
-        return l10n.getString("Gender.refer.possesive.male");
+        return i18n.getString("Gender.refer.possesive.male");
       case FEMALE:
-        return l10n.getString("Gender.refer.possesive.female");
+        return i18n.getString("Gender.refer.possesive.female");
       case NEUTRAL:
-        return l10n.getString("Gender.refer.possesive.neutral");
+        return i18n.getString("Gender.refer.possesive.neutral");
       default:
         return null;
     }

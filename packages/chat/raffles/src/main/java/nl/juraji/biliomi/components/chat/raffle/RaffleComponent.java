@@ -58,7 +58,7 @@ public class RaffleComponent extends Component {
    */
   @CommandRoute(command = "raffle", systemCommand = true)
   public boolean raffleCommand(User user, Arguments arguments) {
-    return captureSubCommands("raffle", l10n.supply("ChatCommand.raffle.usage"), user, arguments);
+    return captureSubCommands("raffle", i18n.supply("ChatCommand.raffle.usage"), user, arguments);
   }
 
   /**
@@ -68,7 +68,7 @@ public class RaffleComponent extends Component {
   @SubCommandRoute(parentCommand = "raffle", command = "start")
   public boolean raffleCommandStart(User user, Arguments arguments) {
     if (!raffleService.isUnstarted() && !raffleService.isEnded()) {
-      chat.whisper(user, l10n.get("ChatCommand.raffle.start.raffleStillRunning"));
+      chat.whisper(user, i18n.get("ChatCommand.raffle.start.raffleStillRunning"));
       return false;
     }
 
@@ -77,13 +77,13 @@ public class RaffleComponent extends Component {
     OnOff followersOnly = EnumUtils.toEnum(arguments.pop(), OnOff.class);
 
     if (StringUtils.isEmpty(keyword) || cost == null || cost < 0 || followersOnly == null) {
-      chat.whisper(user, l10n.get("ChatCommand.raffle.start.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.raffle.start.usage"));
       return false;
     }
 
     keyword = keyword.toLowerCase();
     if (commandService.commandExists(keyword)) {
-      chat.whisper(user, l10n.get("ChatCommand.raffle.start.keywordIsCommand")
+      chat.whisper(user, i18n.get("ChatCommand.raffle.start.keywordIsCommand")
           .add("keyword", keyword));
       return false;
     }
@@ -97,11 +97,11 @@ public class RaffleComponent extends Component {
 
     commandRouterRegistry.put(keyword, this, raffleKeywordCommandRunnerMethod);
 
-    chat.say(l10n.get("ChatCommand.raffle.start.startedAnnouncement")
+    chat.say(i18n.get("ChatCommand.raffle.start.startedAnnouncement")
         .add("username", user::getDisplayName)
         .add("keyword", keyword)
         .add("points", () -> pointsService.asString(cost))
-        .add("forwho", l10n.getIfElse(raffleService.isFollowersOnly(),
+        .add("forwho", i18n.getIfElse(raffleService.isFollowersOnly(),
             "ChatCommand.raffle.start.startedAnnouncement.followersOnly",
             "ChatCommand.raffle.start.startedAnnouncement.anyone")));
     return true;
@@ -114,12 +114,12 @@ public class RaffleComponent extends Component {
   @SubCommandRoute(parentCommand = "raffle", command = "end")
   public boolean raffleCommandEnd(User user, Arguments arguments) {
     if (raffleService.isUnstarted()) {
-      chat.whisper(user, l10n.get("Common.raffles.unstarted"));
+      chat.whisper(user, i18n.get("Common.raffles.unstarted"));
       return false;
     }
 
     if (raffleService.isEnded()) {
-      chat.whisper(user, l10n.get("ChatCommand.raffle.end.alreadyEndedBefore"));
+      chat.whisper(user, i18n.get("ChatCommand.raffle.end.alreadyEndedBefore"));
       return false;
     }
 
@@ -130,9 +130,9 @@ public class RaffleComponent extends Component {
     commandRouterRegistry.remove(raffleService.getKeyword());
 
     if (pickedUser == null) {
-      chat.say(l10n.get("ChatCommand.raffle.end.ended.noUsers"));
+      chat.say(i18n.get("ChatCommand.raffle.end.ended.noUsers"));
     } else {
-      chat.say(l10n.get("ChatCommand.raffle.end.ended.withUser")
+      chat.say(i18n.get("ChatCommand.raffle.end.ended.withUser")
           .add("username", pickedUser::getDisplayName));
     }
     return true;
@@ -145,26 +145,26 @@ public class RaffleComponent extends Component {
   @SubCommandRoute(parentCommand = "raffle", command = "repick")
   public boolean raffleCommandRepick(User user, Arguments arguments) {
     if (raffleService.isUnstarted()) {
-      chat.whisper(user, l10n.get("Common.raffles.unstarted"));
+      chat.whisper(user, i18n.get("Common.raffles.unstarted"));
       return false;
     }
 
     if (!raffleService.isEnded()) {
-      chat.whisper(user, l10n.get("ChatCommand.raffle.repick.raffleStillRunning"));
+      chat.whisper(user, i18n.get("ChatCommand.raffle.repick.raffleStillRunning"));
       return false;
     }
 
     User repick = raffleService.repick();
 
     if (repick == null) {
-      chat.whisper(user, l10n.get("ChatCommand.raffle.repick.noUsers"));
+      chat.whisper(user, i18n.get("ChatCommand.raffle.repick.noUsers"));
       repick = raffleService.getLastPickedUser();
       if (repick != null) {
-        chat.whisper(user, l10n.get("Common.raffles.lastPickedUser")
+        chat.whisper(user, i18n.get("Common.raffles.lastPickedUser")
             .add("username", repick::getDisplayName));
       }
     } else {
-      chat.say(l10n.get("ChatCommand.raffle.repick.withUser")
+      chat.say(i18n.get("ChatCommand.raffle.repick.withUser")
           .add("username", repick::getDisplayName));
     }
     return true;
@@ -177,17 +177,17 @@ public class RaffleComponent extends Component {
   @SuppressWarnings("unused") // Is used by reflection in init()
   public boolean raffleKeywordCommandRunner(User user, Arguments arguments) {
     if (raffleService.isNonFollowerCannotJoin(user)) {
-      chat.whisper(user, l10n.get("ChatCommand.raffle.onKeyword.raffleIsFollowerOnly"));
+      chat.whisper(user, i18n.get("ChatCommand.raffle.onKeyword.raffleIsFollowerOnly"));
       return false;
     }
 
     if (raffleService.isUserAlreadyJoined(user)) {
-      chat.whisper(user, l10n.get("ChatCommand.raffle.onKeyword.alreadyJoined"));
+      chat.whisper(user, i18n.get("ChatCommand.raffle.onKeyword.alreadyJoined"));
       return false;
     }
 
     if (raffleService.isUserNotHasEnoughPoints(user)) {
-      chat.whisper(user, l10n.get("ChatCommand.raffle.onKeyword.notEnoughPoints")
+      chat.whisper(user, i18n.get("ChatCommand.raffle.onKeyword.notEnoughPoints")
           .add("points", () -> pointsService.asString(raffleService.getJoinCost()))
           .add("balance", () -> pointsService.asString(user.getPoints())));
     }
@@ -197,7 +197,7 @@ public class RaffleComponent extends Component {
     }
 
     int count = raffleService.addUser(user);
-    chat.say(l10n.get("ChatCommand.raffle.onKeyword.userJoined")
+    chat.say(i18n.get("ChatCommand.raffle.onKeyword.userJoined")
         .add("username", user::getNameAndTitle)
         .add("count", count));
     return true;

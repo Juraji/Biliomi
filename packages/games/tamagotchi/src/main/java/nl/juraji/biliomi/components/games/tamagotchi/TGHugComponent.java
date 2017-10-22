@@ -34,24 +34,24 @@ public class TGHugComponent extends Component {
     Tamagotchi tamagotchi = tamagotchiService.getTamagotchi(user);
 
     if (tamagotchi == null) {
-      chat.whisper(user, l10n.get("Common.tamagotchi.notFound"));
+      chat.whisper(user, i18n.get("Common.tamagotchi.notFound"));
       return false;
     }
 
     String otherUsername = arguments.get(0);
     if (otherUsername == null) {
-      chat.whisper(user, l10n.get("ChatCommand.tgHug.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.tgHug.usage"));
       return false;
     }
 
     User otherUser = usersService.getUser(otherUsername, true);
     if (otherUser == null) {
-      chat.whisper(user, l10n.getUserNonExistent(otherUsername));
+      chat.whisper(user, i18n.getUserNonExistent(otherUsername));
       return false;
     }
 
     Tamagotchi otherTamagotchi = tamagotchiService.getTamagotchi(otherUser);
-    chat.say(l10n.get("ChatCommand.tgHug.hug")
+    chat.say(i18n.get("ChatCommand.tgHug.hug")
         .add("name", tamagotchi::getName)
         .add("othername", () -> (otherTamagotchi == null ? otherUser.getNameAndTitle() : otherTamagotchi.getName())));
 

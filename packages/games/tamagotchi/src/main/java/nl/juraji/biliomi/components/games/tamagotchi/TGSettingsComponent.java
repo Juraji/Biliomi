@@ -47,7 +47,7 @@ public class TGSettingsComponent extends Component {
    */
   @CommandRoute(command = "tamagotchisettings", systemCommand = true)
   public boolean tamagotchisettingsCommand(User user, Arguments arguments) {
-    return captureSubCommands("tamagotchisettings", l10n.supply("ChatCommand.tamagotchisettings.usage"), user, arguments);
+    return captureSubCommands("tamagotchisettings", i18n.supply("ChatCommand.tamagotchisettings.usage"), user, arguments);
   }
 
   /**
@@ -59,14 +59,14 @@ public class TGSettingsComponent extends Component {
     Long points = Numbers.asNumber(arguments.get(0)).toLong();
 
     if (points == null || points < 0) {
-      chat.whisper(user, l10n.get("ChatCommand.tamagotchisettings.newprice.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.newprice.usage"));
       return false;
     }
 
     settings.setNewPrice(points);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.tamagotchisettings.newprice.updated")
+    chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.newprice.updated")
         .add("points", pointsService.asString(points)));
     return true;
   }
@@ -80,14 +80,14 @@ public class TGSettingsComponent extends Component {
     Long points = Numbers.asNumber(arguments.get(0)).toLong();
 
     if (points == null || points < 0) {
-      chat.whisper(user, l10n.get("ChatCommand.tamagotchisettings.foodprice.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.foodprice.usage"));
       return false;
     }
 
     settings.setFoodPrice(points);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.tamagotchisettings.foodprice.updated")
+    chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.foodprice.updated")
         .add("points", pointsService.asString(points)));
     return true;
   }
@@ -101,14 +101,14 @@ public class TGSettingsComponent extends Component {
     Long points = Numbers.asNumber(arguments.get(0)).toLong();
 
     if (points == null || points < 0) {
-      chat.whisper(user, l10n.get("ChatCommand.tamagotchisettings.soapprice.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.soapprice.usage"));
       return false;
     }
 
     settings.setSoapPrice(points);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.tamagotchisettings.soapprice.updated")
+    chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.soapprice.updated")
         .add("points", pointsService.asString(points)));
     return true;
   }
@@ -123,7 +123,7 @@ public class TGSettingsComponent extends Component {
     Double max = Numbers.asNumber(arguments.get(0)).toDouble();
 
     if (max == null || max < 0) {
-      chat.whisper(user, l10n.get("ChatCommand.tamagotchisettings.maxfood.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxfood.usage"));
       return false;
     }
 
@@ -131,7 +131,7 @@ public class TGSettingsComponent extends Component {
     settingsService.save(settings);
 
     int maxAbs = max.intValue();
-    chat.whisper(user, l10n.get("ChatCommand.tamagotchisettings.maxfood.updated")
+    chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxfood.updated")
         .add("max", maxAbs)
         .add("ttl", this.getTimeToLiveString(maxAbs)));
     return true;
@@ -147,14 +147,14 @@ public class TGSettingsComponent extends Component {
     Double max = Numbers.asNumber(arguments.get(0)).toDouble();
 
     if (max == null || max < 0) {
-      chat.whisper(user, l10n.get("ChatCommand.tamagotchisettings.maxmood.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxmood.usage"));
       return false;
     }
 
     settings.setMaxMood(max);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.tamagotchisettings.maxmood.updated")
+    chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxmood.updated")
         .add("max", max::intValue)
         .add("ttl", this.getTimeToLiveString(max))
         .add("boredaftertime", this.getBoredAfterTime(max))
@@ -172,7 +172,7 @@ public class TGSettingsComponent extends Component {
     Double max = Numbers.asNumber(arguments.get(0)).toDouble();
 
     if (max == null || max < 0) {
-      chat.whisper(user, l10n.get("ChatCommand.tamagotchisettings.maxhygiene.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxhygiene.usage"));
       return false;
     }
 
@@ -180,7 +180,7 @@ public class TGSettingsComponent extends Component {
     settingsService.save(settings);
 
     int maxAbs = max.intValue();
-    chat.whisper(user, l10n.get("ChatCommand.tamagotchisettings.maxhygiene.updated")
+    chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxhygiene.updated")
         .add("max", maxAbs)
         .add("ttl", this.getTimeToLiveString(maxAbs)));
     return true;
@@ -195,14 +195,14 @@ public class TGSettingsComponent extends Component {
     Integer maxLength = Numbers.asNumber(arguments.get(0)).toInteger();
 
     if (maxLength == null || maxLength < 0) {
-      chat.whisper(user, l10n.get("ChatCommand.tamagotchisettings.namemaxlength.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.namemaxlength.usage"));
       return false;
     }
 
     settings.setNameMaxLength(maxLength);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.tamagotchisettings.namemaxlength.updated")
+    chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.namemaxlength.updated")
         .add("length", maxLength));
     return true;
   }

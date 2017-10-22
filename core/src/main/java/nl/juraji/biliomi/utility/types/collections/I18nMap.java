@@ -11,7 +11,7 @@ import java.util.function.Supplier;
  * Created by Juraji on 17-4-2017.
  * Biliomi v3
  */
-public interface L10nMap {
+public interface I18nMap {
   Templater get(String key);
   String getString(String key);
   Supplier<String> supply(String key);

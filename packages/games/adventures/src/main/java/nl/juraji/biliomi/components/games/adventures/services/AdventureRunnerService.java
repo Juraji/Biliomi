@@ -16,7 +16,7 @@ import nl.juraji.biliomi.utility.estreams.EBiStream;
 import nl.juraji.biliomi.utility.factories.concurrent.ThreadPools;
 import nl.juraji.biliomi.utility.types.Counter;
 import nl.juraji.biliomi.utility.types.Templater;
-import nl.juraji.biliomi.utility.types.collections.L10nMap;
+import nl.juraji.biliomi.utility.types.collections.I18nMap;
 import org.joda.time.DateTime;
 
 import javax.annotation.PostConstruct;
@@ -65,7 +65,7 @@ public class AdventureRunnerService {
 
   @Inject
   @L10nData(AdventureComponent.class)
-  private L10nMap l10n;
+  private I18nMap i18n;
 
   private AdventureSettings settings;
   private AdventureState state = NOT_RUNNING;
@@ -125,7 +125,7 @@ public class AdventureRunnerService {
   private void runAdventure() {
     state = RUNNING;
 
-    chat.say(l10n.get("Adventure.runAdventure")
+    chat.say(i18n.get("Adventure.runAdventure")
         .add("title", story::getTitle)
         .add("count", () -> survivors.size() + victims.size()));
 
@@ -187,7 +187,7 @@ public class AdventureRunnerService {
           .toMap();
 
       usersService.save(userLongMap.keySet());
-      chat.say(l10n.get("Adventure.payouts")
+      chat.say(i18n.get("Adventure.payouts")
           .add("list", () -> EBiStream.from(userLongMap)
               .mapKey(User::getDisplayName)
               .mapValue(payout -> pointsService.asString(payout))

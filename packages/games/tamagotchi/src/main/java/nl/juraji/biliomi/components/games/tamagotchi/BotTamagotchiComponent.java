@@ -55,7 +55,7 @@ public class BotTamagotchiComponent extends Component {
    */
   @CommandRoute(command = "bottamagotchi", systemCommand = true)
   public boolean botTamagotchiCommand(User user, Arguments arguments) {
-    return captureSubCommands("bottamagotchi", l10n.supply("ChatCommand.botTamagotchi.usage"), user, arguments);
+    return captureSubCommands("bottamagotchi", i18n.supply("ChatCommand.botTamagotchi.usage"), user, arguments);
   }
 
   /**
@@ -67,7 +67,7 @@ public class BotTamagotchiComponent extends Component {
     OnOff onOff = EnumUtils.toEnum(arguments.get(0), OnOff.class);
 
     if (onOff == null) {
-      chat.whisper(user, l10n.get("ChatCommand.botTamagotchi.enabled.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.botTamagotchi.enabled.usage"));
       return false;
     }
 
@@ -82,8 +82,8 @@ public class BotTamagotchiComponent extends Component {
       killBotTgIfExists();
     }
 
-    chat.whisper(user, l10n.get("ChatCommand.botTamagotchi.enabled.toggled")
-        .add("state", l10n.getEnabledDisabled(settings.isBotTamagotchiEnabled())));
+    chat.whisper(user, i18n.get("ChatCommand.botTamagotchi.enabled.toggled")
+        .add("state", i18n.getEnabledDisabled(settings.isBotTamagotchiEnabled())));
 
     return true;
   }

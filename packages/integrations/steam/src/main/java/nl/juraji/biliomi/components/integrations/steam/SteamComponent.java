@@ -48,7 +48,7 @@ public class SteamComponent extends Component {
    */
   @CommandRoute(command = "steam", systemCommand = true)
   public boolean steamCommand(User user, Arguments arguments) {
-    return captureSubCommands("steam", () -> l10n.getString("ChatCommand.steam.usage"), user, arguments);
+    return captureSubCommands("steam", () -> i18n.getString("ChatCommand.steam.usage"), user, arguments);
   }
 
   /**
@@ -60,13 +60,13 @@ public class SteamComponent extends Component {
     OnOff onOff = EnumUtils.toEnum(arguments.getSafe(0), OnOff.class);
 
     if (onOff == null) {
-      chat.whisper(user, l10n.get("ChatCommand.steam.autoGameSync.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.steam.autoGameSync.usage"));
       return false;
     }
 
     boolean doEnableWatch = OnOff.ON.equals(onOff);
     if (doEnableWatch && !steamGameWatch.isAvailable()) {
-      chat.whisper(user, l10n.get("Common.steam.unavailable"));
+      chat.whisper(user, i18n.get("Common.steam.unavailable"));
       return false;
     }
 
@@ -82,8 +82,8 @@ public class SteamComponent extends Component {
     settings.setAutoUpdateChannelGame(doEnableWatch);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.steam.autoGameSync.set")
-        .add("state", l10n.getEnabledDisabled(doEnableWatch)));
+    chat.whisper(user, i18n.get("ChatCommand.steam.autoGameSync.set")
+        .add("state", i18n.getEnabledDisabled(doEnableWatch)));
     return true;
   }
 
@@ -96,16 +96,16 @@ public class SteamComponent extends Component {
 
     try {
       Game syncedGame = steamGameWatch.syncToTwitchNow();
-      chat.whisper(user, l10n.get("ChatCommand.steam.syncNow.success")
+      chat.whisper(user, i18n.get("ChatCommand.steam.syncNow.success")
           .add("game", syncedGame::getName));
 
       return true;
     } catch (UnavailableException e) {
       logger.error(e);
-      chat.whisper(user, l10n.get("Common.steam.unavailable"));
+      chat.whisper(user, i18n.get("Common.steam.unavailable"));
     } catch (Exception e) {
       logger.error(e);
-      chat.whisper(user, l10n.get("ChatCommand.steam.syncNow.failed"));
+      chat.whisper(user, i18n.get("ChatCommand.steam.syncNow.failed"));
     }
 
     return false;

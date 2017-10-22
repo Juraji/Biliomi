@@ -36,7 +36,7 @@ public class TimeTrackingComponent extends Component {
    */
   @CommandRoute(command = "timetracker", systemCommand = true)
   public boolean timeTrackerCommand(User user, Arguments arguments) {
-    return captureSubCommands("timetracker", l10n.supply("ChatCommand.timeTrackerCommand.usage"), user, arguments);
+    return captureSubCommands("timetracker", i18n.supply("ChatCommand.timeTrackerCommand.usage"), user, arguments);
   }
 
   /**
@@ -48,7 +48,7 @@ public class TimeTrackingComponent extends Component {
     OnOff onOff = EnumUtils.toEnum(arguments.getSafe(0), OnOff.class);
 
     if (onOff == null) {
-      chat.whisper(user, l10n.get("ChatCommand.timeTrackerCommand.trackOnlineTime.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.timeTrackerCommand.trackOnlineTime.usage"));
       return false;
     }
 
@@ -56,8 +56,8 @@ public class TimeTrackingComponent extends Component {
     settings.setTrackOnline(OnOff.ON.equals(onOff));
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.timeTrackerCommand.trackOnlineTime.set")
-        .add("state", l10n.getEnabledDisabled(settings.isTrackOnline())));
+    chat.whisper(user, i18n.get("ChatCommand.timeTrackerCommand.trackOnlineTime.set")
+        .add("state", i18n.getEnabledDisabled(settings.isTrackOnline())));
     return true;
   }
 
@@ -70,7 +70,7 @@ public class TimeTrackingComponent extends Component {
     OnOff onOff = EnumUtils.toEnum(arguments.getSafe(0), OnOff.class);
 
     if (onOff == null) {
-      chat.whisper(user, l10n.get("ChatCommand.timeTrackerCommand.trackOfflineTime.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.timeTrackerCommand.trackOfflineTime.usage"));
       return false;
     }
 
@@ -78,8 +78,8 @@ public class TimeTrackingComponent extends Component {
     settings.setTrackOffline(OnOff.ON.equals(onOff));
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.timeTrackerCommand.trackOfflineTime.set")
-        .add("state", l10n.getEnabledDisabled(settings.isTrackOffline())));
+    chat.whisper(user, i18n.get("ChatCommand.timeTrackerCommand.trackOfflineTime.set")
+        .add("state", i18n.getEnabledDisabled(settings.isTrackOffline())));
     return true;
   }
 }

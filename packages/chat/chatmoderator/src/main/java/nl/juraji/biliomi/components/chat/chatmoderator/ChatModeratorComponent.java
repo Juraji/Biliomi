@@ -61,7 +61,7 @@ public class ChatModeratorComponent extends Component {
   @CommandRoute(command = "purge", systemCommand = true, modCanActivate = true)
   public boolean purgeCommand(User user, Arguments arguments) {
     if (!arguments.assertSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.purge.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.purge.usage"));
       return false;
     }
 
@@ -69,14 +69,14 @@ public class ChatModeratorComponent extends Component {
     User targetUser = usersService.getUser(username, true);
 
     if (targetUser == null) {
-      chat.whisper(user, l10n.getUserNonExistent(username));
+      chat.whisper(user, i18n.getUserNonExistent(username));
       return false;
     }
 
     chat.purgeUser(targetUser.getUsername());
     recordService.recordModeration(targetUser, ModerationAction.PURGE);
 
-    chat.say(l10n.get("ChatCommand.purge.purged")
+    chat.say(i18n.get("ChatCommand.purge.purged")
         .add("username", targetUser.getDisplayName()));
     return true;
   }
@@ -88,7 +88,7 @@ public class ChatModeratorComponent extends Component {
   @CommandRoute(command = "timeout", systemCommand = true, modCanActivate = true)
   public boolean timeoutCommand(User user, Arguments arguments) {
     if (!arguments.assertSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.timout.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.timout.usage"));
       return false;
     }
 
@@ -96,14 +96,14 @@ public class ChatModeratorComponent extends Component {
     User targetUser = usersService.getUser(username, true);
 
     if (targetUser == null) {
-      chat.whisper(user, l10n.getUserNonExistent(username));
+      chat.whisper(user, i18n.getUserNonExistent(username));
       return false;
     }
 
     chat.timeoutUser(targetUser.getUsername());
     recordService.recordModeration(targetUser, ModerationAction.TIMEOUT);
 
-    chat.say(l10n.get("ChatCommand.timout.timedOut")
+    chat.say(i18n.get("ChatCommand.timout.timedOut")
         .add("username", targetUser.getDisplayName()));
     return true;
   }
@@ -115,7 +115,7 @@ public class ChatModeratorComponent extends Component {
   @CommandRoute(command = "ban", systemCommand = true, modCanActivate = true)
   public boolean banCommand(User user, Arguments arguments) {
     if (!arguments.assertSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.ban.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.ban.usage"));
       return false;
     }
 
@@ -123,14 +123,14 @@ public class ChatModeratorComponent extends Component {
     User targetUser = usersService.getUser(username, true);
 
     if (targetUser == null) {
-      chat.whisper(user, l10n.getUserNonExistent(username));
+      chat.whisper(user, i18n.getUserNonExistent(username));
       return false;
     }
 
     chat.banUser(targetUser.getUsername());
     recordService.recordModeration(targetUser, ModerationAction.BAN);
 
-    chat.say(l10n.get("ChatCommand.ban.banned")
+    chat.say(i18n.get("ChatCommand.ban.banned")
         .add("username", targetUser.getDisplayName()));
     return true;
   }
@@ -142,7 +142,7 @@ public class ChatModeratorComponent extends Component {
   @CommandRoute(command = "unban", systemCommand = true, modCanActivate = true)
   public boolean unbanCommand(User user, Arguments arguments) {
     if (!arguments.assertSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.unban.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.unban.usage"));
       return false;
     }
 
@@ -150,12 +150,12 @@ public class ChatModeratorComponent extends Component {
     User targetUser = usersService.getUser(username, true);
 
     if (targetUser == null) {
-      chat.whisper(user, l10n.getUserNonExistent(username));
+      chat.whisper(user, i18n.getUserNonExistent(username));
       return false;
     }
 
     chat.unbanUser(targetUser.getUsername());
-    chat.say(l10n.get("ChatCommand.unban.unbanned")
+    chat.say(i18n.get("ChatCommand.unban.unbanned")
         .add("username", targetUser.getDisplayName()));
     return true;
   }
@@ -168,7 +168,7 @@ public class ChatModeratorComponent extends Component {
   @CommandRoute(command = "permit", systemCommand = true, modCanActivate = true)
   public boolean permitCommand(User user, Arguments arguments) {
     if (!arguments.assertSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.permit.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.permit.usage"));
       return false;
     }
 
@@ -176,14 +176,14 @@ public class ChatModeratorComponent extends Component {
     User targetUser = usersService.getUser(username, true);
 
     if (targetUser == null) {
-      chat.whisper(user, l10n.getUserNonExistent(username));
+      chat.whisper(user, i18n.getUserNonExistent(username));
       return false;
     }
 
     long duration = settings.getLinkPermitDuration();
     linkPermitService.addPermit(targetUser.getUsername(), duration);
 
-    chat.say(l10n.get("ChatCommand.permit.granted")
+    chat.say(i18n.get("ChatCommand.permit.granted")
         .add("username", targetUser::getDisplayName)
         .add("time", timeFormatter.timeQuantity(duration)));
     return true;
@@ -196,7 +196,7 @@ public class ChatModeratorComponent extends Component {
    */
   @CommandRoute(command = "linkwhitelist", systemCommand = true)
   public boolean linkWhitelistCommand(User user, Arguments arguments) {
-    return captureSubCommands("linkwhitelist", l10n.supply("ChatCommand.linkWhitelist.usage"), user, arguments);
+    return captureSubCommands("linkwhitelist", i18n.supply("ChatCommand.linkWhitelist.usage"), user, arguments);
   }
 
   /**
@@ -205,7 +205,7 @@ public class ChatModeratorComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "linkwhitelist", command = "view")
   public boolean linkWhitelistCommandView(User user, Arguments arguments) {
-    chat.whisper(user, l10n.get("ChatCommand.linkWhitelist.view.list")
+    chat.whisper(user, i18n.get("ChatCommand.linkWhitelist.view.list")
         .add("list", settings.getLinkWhitelist()));
     return true;
   }
@@ -218,14 +218,14 @@ public class ChatModeratorComponent extends Component {
   @SubCommandRoute(parentCommand = "linkwhitelist", command = "add")
   public boolean linkWhitelistCommandAdd(User user, Arguments arguments) {
     if (!arguments.assertSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.linkWhitelist.add.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.linkWhitelist.add.usage"));
       return false;
     }
 
     String uri = arguments.toString();
     settings.getLinkWhitelist().add(uri);
     settingsService.save(settings);
-    chat.whisper(user, l10n.get("ChatCommand.linkWhitelist.add.added")
+    chat.whisper(user, i18n.get("ChatCommand.linkWhitelist.add.added")
         .add("link", uri));
     return true;
   }
@@ -238,20 +238,20 @@ public class ChatModeratorComponent extends Component {
   @SubCommandRoute(parentCommand = "linkwhitelist", command = "remove")
   public boolean linkWhitelistCommandRemove(User user, Arguments arguments) {
     if (!arguments.assertSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.linkWhitelist.remove.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.linkWhitelist.remove.usage"));
       return false;
     }
 
     String uri = arguments.toString();
     if (!settings.getLinkWhitelist().contains(uri)) {
-      chat.whisper(user, l10n.get("ChatCommand.linkWhitelist.remove.notFound")
+      chat.whisper(user, i18n.get("ChatCommand.linkWhitelist.remove.notFound")
           .add("link", uri));
       return false;
     }
 
     settings.getLinkWhitelist().remove(uri);
     settingsService.save(settings);
-    chat.whisper(user, l10n.get("ChatCommand.linkWhitelist.remove.removed")
+    chat.whisper(user, i18n.get("ChatCommand.linkWhitelist.remove.removed")
         .add("link", uri));
     return true;
   }
@@ -262,7 +262,7 @@ public class ChatModeratorComponent extends Component {
    */
   @CommandRoute(command = "chatmoderator", systemCommand = true)
   public boolean chatmoderatorCommand(User user, Arguments arguments) {
-    return captureSubCommands("chatmoderator", l10n.supply("ChatCommand.chatmoderator.usage"), user, arguments);
+    return captureSubCommands("chatmoderator", i18n.supply("ChatCommand.chatmoderator.usage"), user, arguments);
   }
 
   /**
@@ -274,15 +274,15 @@ public class ChatModeratorComponent extends Component {
     OnOff onOff = EnumUtils.toEnum(arguments.get(0), OnOff.class);
 
     if (onOff == null) {
-      chat.whisper(user, l10n.get("ChatCommand.chatmoderator.linksAllowed.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.chatmoderator.linksAllowed.usage"));
       return false;
     }
 
     settings.setLinksAllowed(OnOff.ON.equals(onOff));
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.chatmoderator.linksAllowed.saved")
-        .add("state", l10n.getAllowedDisallowed(settings.isLinksAllowed())));
+    chat.whisper(user, i18n.get("ChatCommand.chatmoderator.linksAllowed.saved")
+        .add("state", i18n.getAllowedDisallowed(settings.isLinksAllowed())));
     return true;
   }
 
@@ -295,7 +295,7 @@ public class ChatModeratorComponent extends Component {
     Long minutes = Numbers.asNumber(arguments.get(0)).toLong();
 
     if (minutes == null) {
-      chat.whisper(user, l10n.get("ChatCommand.chatmoderator.linkPermitTime.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.chatmoderator.linkPermitTime.usage"));
       return false;
     }
 
@@ -303,7 +303,7 @@ public class ChatModeratorComponent extends Component {
     settings.setLinkPermitDuration(timeInMillis);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.chatmoderator.linkPermitTime.saved")
+    chat.whisper(user, i18n.get("ChatCommand.chatmoderator.linkPermitTime.saved")
         .add("time", timeFormatter.timeQuantity(timeInMillis)));
     return true;
   }
@@ -317,15 +317,15 @@ public class ChatModeratorComponent extends Component {
     OnOff onOff = EnumUtils.toEnum(arguments.get(0), OnOff.class);
 
     if (onOff == null) {
-      chat.whisper(user, l10n.get("ChatCommand.chatmoderator.capsAllowed.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.chatmoderator.capsAllowed.usage"));
       return false;
     }
 
     settings.setExcessiveCapsAllowed(OnOff.ON.equals(onOff));
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.chatmoderator.capsAllowed.saved")
-        .add("state", l10n.getAllowedDisallowed(settings.isExcessiveCapsAllowed())));
+    chat.whisper(user, i18n.get("ChatCommand.chatmoderator.capsAllowed.saved")
+        .add("state", i18n.getAllowedDisallowed(settings.isExcessiveCapsAllowed())));
     return true;
   }
 
@@ -338,14 +338,14 @@ public class ChatModeratorComponent extends Component {
     Integer count = Numbers.asNumber(arguments.get(0)).toInteger();
 
     if (count == null) {
-      chat.whisper(user, l10n.get("ChatCommand.chatmoderator.capsTrigger.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.chatmoderator.capsTrigger.usage"));
       return false;
     }
 
     settings.setCapsTrigger(count);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.chatmoderator.capsTrigger.saved")
+    chat.whisper(user, i18n.get("ChatCommand.chatmoderator.capsTrigger.saved")
         .add("count", count));
     return true;
   }
@@ -359,7 +359,7 @@ public class ChatModeratorComponent extends Component {
     Integer percentage = Numbers.asNumber(arguments.get(0)).toInteger();
 
     if (percentage == null || percentage < 0 || percentage > 100) {
-      chat.whisper(user, l10n.get("ChatCommand.chatmoderator.capsRatio.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.chatmoderator.capsRatio.usage"));
       return false;
     }
 
@@ -367,7 +367,7 @@ public class ChatModeratorComponent extends Component {
     settings.setCapsTriggerRatio(ratio);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.chatmoderator.capsRatio.saved")
+    chat.whisper(user, i18n.get("ChatCommand.chatmoderator.capsRatio.saved")
         .add("percentage", MathUtils.doubleToPercentage(ratio)));
     return true;
   }
@@ -381,15 +381,15 @@ public class ChatModeratorComponent extends Component {
     OnOff onOff = EnumUtils.toEnum(arguments.get(0), OnOff.class);
 
     if (onOff == null) {
-      chat.whisper(user, l10n.get("ChatCommand.chatmoderator.repititionAllowed.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.chatmoderator.repititionAllowed.usage"));
       return false;
     }
 
     settings.setRepeatedCharactersAllowed(OnOff.ON.equals(onOff));
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.chatmoderator.repititionAllowed.saved")
-        .add("state", l10n.getAllowedDisallowed(settings.isRepeatedCharactersAllowed())));
+    chat.whisper(user, i18n.get("ChatCommand.chatmoderator.repititionAllowed.saved")
+        .add("state", i18n.getAllowedDisallowed(settings.isRepeatedCharactersAllowed())));
     return true;
   }
 
@@ -402,14 +402,14 @@ public class ChatModeratorComponent extends Component {
     Integer count = Numbers.asNumber(arguments.get(0)).toInteger();
 
     if (count == null) {
-      chat.whisper(user, l10n.get("ChatCommand.chatmoderator.repititionTrigger.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.chatmoderator.repititionTrigger.usage"));
       return false;
     }
 
     settings.setRepeatedCharacterTrigger(count);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.chatmoderator.repititionTrigger.saved")
+    chat.whisper(user, i18n.get("ChatCommand.chatmoderator.repititionTrigger.saved")
         .add("count", count));
     return true;
   }
@@ -422,7 +422,7 @@ public class ChatModeratorComponent extends Component {
   @SubCommandRoute(parentCommand = "chatmoderator", command = "exemptgroup")
   public boolean chatmoderatorCommandExemptGroupWeight(User user, Arguments arguments) {
     if (!arguments.assertSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.chatmoderator.exemptGroup.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.chatmoderator.exemptGroup.usage"));
       return false;
     }
 
@@ -431,20 +431,20 @@ public class ChatModeratorComponent extends Component {
       settings.setExemptedGroup(null);
       settingsService.save(settings);
 
-      chat.whisper(user, l10n.get("ChatCommand.chatmoderator.exemptGroup.disabled"));
+      chat.whisper(user, i18n.get("ChatCommand.chatmoderator.exemptGroup.disabled"));
       return true;
     }
 
     UserGroup targetGroup = userGroupService.getByName(groupName);
     if (targetGroup == null) {
-      chat.whisper(user, l10n.get("ChatCommand.chatmoderator.exemptGroup.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.chatmoderator.exemptGroup.usage"));
       return false;
     }
 
     settings.setExemptedGroup(targetGroup);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.chatmoderator.exemptGroup.saved")
+    chat.whisper(user, i18n.get("ChatCommand.chatmoderator.exemptGroup.saved")
         .add("group", targetGroup::getName));
     return true;
   }
@@ -464,7 +464,7 @@ public class ChatModeratorComponent extends Component {
     ModerationAction strike3 = EnumUtils.toEnum(arguments.get(2), ModerationAction.class);
 
     if (strike1 == null || strike2 == null || strike3 == null) {
-      chat.whisper(user, l10n.get("ChatCommand.chatmoderator.setStrikes.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.chatmoderator.setStrikes.usage"));
       return false;
     }
 
@@ -473,7 +473,7 @@ public class ChatModeratorComponent extends Component {
     settings.setThirdStrike(strike3);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.chatmoderator.setStrikes.saved")
+    chat.whisper(user, i18n.get("ChatCommand.chatmoderator.setStrikes.saved")
         .add("firststrike", EnumUtils.pretty(strike1))
         .add("secondstrike", EnumUtils.pretty(strike2))
         .add("thirdstrike", EnumUtils.pretty(strike1)));

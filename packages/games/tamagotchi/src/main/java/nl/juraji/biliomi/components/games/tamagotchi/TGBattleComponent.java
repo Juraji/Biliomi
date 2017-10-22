@@ -54,42 +54,42 @@ public class TGBattleComponent extends Component {
   @CommandRoute(command = "tgbattle")
   public boolean tgbattleCommand(User user, Arguments arguments) {
     if (requests.containsValue(user.getId())) {
-      chat.whisper(user, l10n.get("ChatCommand.tgbattle.outgoingRequestStillWaiting"));
+      chat.whisper(user, i18n.get("ChatCommand.tgbattle.outgoingRequestStillWaiting"));
       return false;
     }
 
     if (requests.containsKey(user.getId())) {
-      chat.whisper(user, l10n.get("ChatCommand.tgbattle.incomingRequestStillWaiting"));
+      chat.whisper(user, i18n.get("ChatCommand.tgbattle.incomingRequestStillWaiting"));
       return false;
     }
 
     Tamagotchi tamagotchi = tamagotchiService.getTamagotchi(user);
     if (tamagotchi == null) {
-      chat.whisper(user, l10n.get("Common.tamagotchi.notFound"));
+      chat.whisper(user, i18n.get("Common.tamagotchi.notFound"));
       return false;
     }
 
     if (tamagotchiService.hasNotEnoughFood(tamagotchi, LOST_FOOD_DECREASE)) {
-      chat.whisper(user, l10n.get("common.tgbattle.notEnoughFood")
+      chat.whisper(user, i18n.get("common.tgbattle.notEnoughFood")
           .add("name", tamagotchi::getName));
       return false;
     }
 
     String otherUsername = arguments.get(0);
     if (otherUsername == null) {
-      chat.whisper(user, l10n.get("ChatCommand.tgbattle.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.tgbattle.usage"));
       return false;
     }
 
     User otherUser = usersService.getUser(otherUsername);
     if (otherUser == null) {
-      chat.whisper(user, l10n.getUserNonExistent(otherUsername));
+      chat.whisper(user, i18n.getUserNonExistent(otherUsername));
       return false;
     }
 
     Tamagotchi otherTamagotchi = tamagotchiService.getTamagotchi(otherUser);
     if (otherTamagotchi == null) {
-      chat.whisper(user, l10n.get("ChatCommand.tgbattle.otherUserHasNoTamagotchi")
+      chat.whisper(user, i18n.get("ChatCommand.tgbattle.otherUserHasNoTamagotchi")
           .add("otherusername", otherUser::getDisplayName));
       return false;
     }
@@ -101,7 +101,7 @@ public class TGBattleComponent extends Component {
         throw new IllegalStateException("Failed accepting battle for " + botName);
       }
     } else {
-      chat.say(l10n.get("ChatCommand.tgbattle.stateBattleRequest")
+      chat.say(i18n.get("ChatCommand.tgbattle.stateBattleRequest")
           .add("username", user::getDisplayName)
           .add("otherusername", otherUser::getDisplayName)
           .add("name", tamagotchi::getName)
@@ -134,12 +134,12 @@ public class TGBattleComponent extends Component {
     }
 
     if (tamagotchiService.hasNotEnoughFood(tamagotchi2, LOST_FOOD_DECREASE)) {
-      chat.whisper(user, l10n.get("common.tgbattle.notEnoughFood")
+      chat.whisper(user, i18n.get("common.tgbattle.notEnoughFood")
           .add("name", tamagotchi2::getName));
       return false;
     }
 
-    chat.say(l10n.get("ChatCommand.tgbaccept.accepted")
+    chat.say(i18n.get("ChatCommand.tgbaccept.accepted")
         .add("username", user::getDisplayName)
         .add("name1", tamagotchi1::getName)
         .add("name2", tamagotchi2::getName));
@@ -164,7 +164,7 @@ public class TGBattleComponent extends Component {
     tamagotchiService.save(tamagotchi1, tamagotchi2);
 
     messageTimerService.scheduleMessage(
-        l10n.get("Common.tgbattle.result")
+        i18n.get("Common.tgbattle.result")
             .add("victorname", () -> (decision ? tamagotchi1.getName() : tamagotchi2.getName()))
             .add("losername", () -> (decision ? tamagotchi2.getName() : tamagotchi1.getName())),
         BATTLE_DURATION_MINUTES, TimeUnit.MINUTES);

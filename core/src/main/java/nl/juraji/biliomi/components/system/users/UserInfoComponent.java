@@ -37,7 +37,7 @@ public class UserInfoComponent extends Component {
    */
   @CommandRoute(command = "mygroup")
   public boolean groupCommand(User user, Arguments arguments) {
-    chat.whisper(user, l10n.get("ChatCommand.myGroup.message")
+    chat.whisper(user, i18n.get("ChatCommand.myGroup.message")
         .add("groupname", user.getUserGroup().getName()));
     return true;
   }
@@ -50,9 +50,9 @@ public class UserInfoComponent extends Component {
   public boolean myTitleCommand(User user, Arguments arguments) {
     if (arguments.isEmpty()) {
       if (StringUtils.isEmpty(user.getTitle())) {
-        chat.whisper(user, l10n.get("ChatCommand.myTitle.noTitle"));
+        chat.whisper(user, i18n.get("ChatCommand.myTitle.noTitle"));
       } else {
-        chat.say(l10n.get("ChatCommand.myTitle.message")
+        chat.say(i18n.get("ChatCommand.myTitle.message")
             .add("titledusername", user::getNameAndTitle));
       }
     }
@@ -66,20 +66,20 @@ public class UserInfoComponent extends Component {
   @CommandRoute(command = "changemytitle")
   public boolean changeTitleCommand(User user, Arguments arguments) {
     if (!arguments.assertMinSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.changeMyTitle.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.changeMyTitle.usage"));
       return false;
     }
 
     String newTitle = arguments.toString();
     if (badWordsService.containsBadWords(newTitle)) {
-      chat.say(l10n.getInputContainsBadWords());
+      chat.say(i18n.getInputContainsBadWords());
       return false;
     }
 
     user.setTitle(newTitle);
     usersService.save(user);
 
-    chat.say(l10n.get("ChatCommand.changeMyTitle.changed")
+    chat.say(i18n.get("ChatCommand.changeMyTitle.changed")
         .add("username", user::getDisplayName)
         .add("titledusername", user::getNameAndTitle));
     return true;
@@ -99,7 +99,7 @@ public class UserInfoComponent extends Component {
     user.setTitle(null);
     usersService.save(user);
 
-    chat.say(l10n.get("ChatCommand.removeMyTitle.removed")
+    chat.say(i18n.get("ChatCommand.removeMyTitle.removed")
         .add("username", user::getDisplayName));
     return true;
   }
@@ -111,7 +111,7 @@ public class UserInfoComponent extends Component {
    */
   @CommandRoute(command = "mypoints")
   public boolean myPointsCommand(User user, Arguments arguments) {
-    chat.say(l10n.get("ChatCommand.myPoints.message")
+    chat.say(i18n.get("ChatCommand.myPoints.message")
         .add("username", user::getDisplayName)
         .add("points", () -> pointsService.asString(user.getPoints()))
         .add("time", () -> timeFormatter.timeQuantity(user.getRecordedTime(), TimeUnit.HOURS)));
@@ -125,7 +125,7 @@ public class UserInfoComponent extends Component {
    */
   @CommandRoute(command = "mytime")
   public boolean myTimeCommand(User user, Arguments arguments) {
-    chat.say(l10n.get("ChatCommand.myTime.message")
+    chat.say(i18n.get("ChatCommand.myTime.message")
         .add("username", user::getDisplayName)
         .add("points", () -> pointsService.asString(user.getPoints()))
         .add("time", () -> timeFormatter.timeQuantity(user.getRecordedTime(), TimeUnit.HOURS)));

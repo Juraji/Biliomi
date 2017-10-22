@@ -46,7 +46,7 @@ public class TemplateSetup {
   }
 
   /**
-   * @param templatedSavedMessage The l10n key to whisper to the user when the template has been updated
+   * @param templatedSavedMessage The i18n key to whisper to the user when the template has been updated
    * @return this
    */
   public TemplateSetup withTemplatedSavedMessage(String templatedSavedMessage) {

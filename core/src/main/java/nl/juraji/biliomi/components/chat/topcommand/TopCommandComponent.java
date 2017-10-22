@@ -71,7 +71,7 @@ public class TopCommandComponent extends Component {
         .mapValue(time -> timeFormatter.timeQuantity(time))
         .toMap();
 
-    chat.say(l10n.get("ChatCommand.topTime.message")
+    chat.say(i18n.get("ChatCommand.topTime.message")
         .add("list", map));
     return true;
   }
@@ -90,7 +90,7 @@ public class TopCommandComponent extends Component {
         .mapValue(points -> pointsService.asString(points))
         .toMap();
 
-    chat.say(l10n.get("ChatCommand.topPoints.message")
+    chat.say(i18n.get("ChatCommand.topPoints.message")
         .add("pointsname", pointsService::pointsName)
         .add("list", map));
     return true;

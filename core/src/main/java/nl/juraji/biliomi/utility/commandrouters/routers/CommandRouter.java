@@ -13,7 +13,7 @@ import nl.juraji.biliomi.utility.commandrouters.types.CommandCall;
 import nl.juraji.biliomi.utility.commandrouters.types.RegistryEntry;
 import nl.juraji.biliomi.utility.estreams.EBiStream;
 import nl.juraji.biliomi.utility.estreams.EStream;
-import nl.juraji.biliomi.utility.types.collections.L10nMap;
+import nl.juraji.biliomi.utility.types.collections.I18nMap;
 import org.apache.logging.log4j.Logger;
 
 import javax.enterprise.inject.Default;
@@ -40,7 +40,7 @@ public class CommandRouter {
   private Logger logger;
 
   @Inject
-  private L10nMap l10n;
+  private I18nMap i18n;
 
   @Inject
   private CommandService commandService;
@@ -80,7 +80,7 @@ public class CommandRouter {
     if (!calledByApi) {
       // Check permissions
       if (isPermissionDenied(user, command)) {
-        chat.whisper(user, l10n.get("CommandCheck.notEligible.noRights")
+        chat.whisper(user, i18n.get("CommandCheck.notEligible.noRights")
             .add("command", command::getCommand));
         return false;
       }
@@ -89,7 +89,7 @@ public class CommandRouter {
       long remaining = getCooldown(user, command);
       if (command.getCooldown() > 0 && remaining > 0) {
         // The command has a cooldown, check the service if a cooldown exists for this user
-        chat.whisper(user, l10n.get("CommandCheck.notEligible.cooldownActive")
+        chat.whisper(user, i18n.get("CommandCheck.notEligible.cooldownActive")
             .add("command", command::getCommand)
             .add("remaining", timeFormatter.timeQuantity(remaining)));
         return false;
@@ -100,7 +100,7 @@ public class CommandRouter {
         // Command has a price, check if user has enough to proceed
         // Cooldown might be set, revert it
         commandService.clearCooldown(user, command);
-        chat.whisper(user, l10n.get("CommandCheck.notEligible.notEnoughPoints")
+        chat.whisper(user, i18n.get("CommandCheck.notEligible.notEnoughPoints")
             .add("command", command::getCommand)
             .add("cost", pointsService.asString(command.getPrice()))
             .add("balance", pointsService.asString(user.getPoints())));
@@ -120,7 +120,7 @@ public class CommandRouter {
       // No worries about method interface here, since it has already been asserted when it was registered
       commandSuccess = (boolean) entry.getMethod().invoke(entry.getComponentInstance(), user, commandCall.getArguments());
     } catch (Exception e) {
-      chat.say(l10n.get("Common.errors.catchedFatalError")
+      chat.say(i18n.get("Common.errors.catchedFatalError")
           .add("username", user::getDisplayName)
           .add("command", command::getCommand)
           .add("errormessage", e::getMessage));

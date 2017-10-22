@@ -80,7 +80,7 @@ public class CustomCommandsComponent extends Component {
    */
   @CommandRoute(command = "customcommand", systemCommand = true)
   public boolean customCommandCommand(User user, Arguments arguments) {
-    return captureSubCommands("customcommand", l10n.supply("ChatCommand.customCommand.usage"), user, arguments);
+    return captureSubCommands("customcommand", i18n.supply("ChatCommand.customCommand.usage"), user, arguments);
   }
 
   /**
@@ -89,7 +89,7 @@ public class CustomCommandsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "customcommand", command = "help")
   public boolean customCommandCommandHelp(User user, Arguments arguments) {
-    chat.whisper(user, l10n.get("ChatCommand.customCommand.help.message"));
+    chat.whisper(user, i18n.get("ChatCommand.customCommand.help.message"));
     return true;
   }
 
@@ -100,14 +100,14 @@ public class CustomCommandsComponent extends Component {
   @SubCommandRoute(parentCommand = "customcommand", command = "add")
   public boolean customCommandCommandAdd(User user, Arguments arguments) {
     if (!arguments.assertMinSize(2)) {
-      chat.whisper(user, l10n.get("ChatCommand.customCommand.add.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.customCommand.add.usage"));
       return false;
     }
 
     // Pop the first argument as command key
     String newCommand = arguments.popSafe().toLowerCase();
     if (commandService.commandExists(newCommand)) {
-      chat.whisper(user, l10n.get("ChatCommand.customCommand.add.commandAlreadyExists")
+      chat.whisper(user, i18n.get("ChatCommand.customCommand.add.commandAlreadyExists")
           .add("command", newCommand));
       return false;
     }
@@ -124,7 +124,7 @@ public class CustomCommandsComponent extends Component {
     // Register the new command so it is known and can be used immediately
     commandRouterRegistry.put(customCommand.getCommand(), this, customCommandRunnerMethod);
 
-    chat.whisper(user, l10n.get("ChatCommand.customCommand.add.added")
+    chat.whisper(user, i18n.get("ChatCommand.customCommand.add.added")
         .add("command", customCommand::getCommand)
         .add("message", customCommand::getMessage));
     return true;
@@ -137,14 +137,14 @@ public class CustomCommandsComponent extends Component {
   @SubCommandRoute(parentCommand = "customcommand", command = "edit")
   public boolean customCommandCommandEditmessage(User user, Arguments arguments) {
     if (!arguments.assertMinSize(2)) {
-      chat.whisper(user, l10n.get("ChatCommand.customCommand.edit.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.customCommand.edit.usage"));
       return false;
     }
 
     String targetCommand = arguments.pop();
     CustomCommand customCommand = commandService.getCustomCommand(targetCommand);
     if (customCommand == null) {
-      chat.whisper(user, l10n.getCommandNonExistent(targetCommand));
+      chat.whisper(user, i18n.getCommandNonExistent(targetCommand));
       return false;
     }
 
@@ -154,7 +154,7 @@ public class CustomCommandsComponent extends Component {
 
     commandService.save(customCommand);
 
-    chat.whisper(user, l10n.get("ChatCommand.customCommand.edit.edited")
+    chat.whisper(user, i18n.get("ChatCommand.customCommand.edit.edited")
         .add("command", customCommand::getCommand)
         .add("message", customCommand::getMessage));
     return true;
@@ -167,13 +167,13 @@ public class CustomCommandsComponent extends Component {
   @SubCommandRoute(parentCommand = "customcommand", command = "remove")
   public boolean customCommandCommandRemove(User user, Arguments arguments) {
     if (!arguments.assertSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.customCommand.remove.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.customCommand.remove.usage"));
       return false;
     }
 
     CustomCommand customCommand = commandService.getCustomCommand(arguments.get(0));
     if (customCommand == null) {
-      chat.whisper(user, l10n.getCommandNonExistent(arguments.get(0)));
+      chat.whisper(user, i18n.getCommandNonExistent(arguments.get(0)));
       return false;
     }
 
@@ -181,7 +181,7 @@ public class CustomCommandsComponent extends Component {
     commandRouterRegistry.remove(customCommand.getCommand());
     commandService.delete(customCommand);
 
-    chat.whisper(user, l10n.get("ChatCommand.customCommand.remove.removed")
+    chat.whisper(user, i18n.get("ChatCommand.customCommand.remove.removed")
         .add("command", customCommand::getCommand));
     return true;
   }

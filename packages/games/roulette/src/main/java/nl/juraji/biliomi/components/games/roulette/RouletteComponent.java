@@ -60,7 +60,7 @@ public class RouletteComponent extends Component {
 
       if (settings.isTimeoutOnDeathEnabled() && !user.isCaster() && !user.isModerator()) {
         chat.timeoutUser(user.getUsername(), settings.getTimeoutOnDeath());
-        chat.whisper(user, l10n.get("ChatCommand.roulette.timoutNotice")
+        chat.whisper(user, i18n.get("ChatCommand.roulette.timoutNotice")
             .add("time", timeFormatter.timeQuantity(settings.getTimeoutOnDeath())));
       }
     } else {
@@ -83,9 +83,9 @@ public class RouletteComponent extends Component {
     UserRecordStats recordInfo = rouletteRecordService.getRecordInfo(user);
 
     if (recordInfo.getRecordCount() == 0) {
-      chat.whisper(user, l10n.get("ChatCommand.myrouletterecord.noRecords"));
+      chat.whisper(user, i18n.get("ChatCommand.myrouletterecord.noRecords"));
     } else {
-      chat.say(l10n.get("ChatCommand.myrouletterecord.stat")
+      chat.say(i18n.get("ChatCommand.myrouletterecord.stat")
           .add("username", user::getNameAndTitle)
           .add("totalcount", recordInfo::getRecordCount)
           .add("wincount", recordInfo::getWins)
@@ -100,7 +100,7 @@ public class RouletteComponent extends Component {
    */
   @CommandRoute(command = "roulettesettings", systemCommand = true)
   public boolean roulettesettingsCommand(User user, Arguments arguments) {
-    return captureSubCommands("roulettesettings", l10n.supply("ChatCommand.roulettesettings.usage"), user, arguments);
+    return captureSubCommands("roulettesettings", i18n.supply("ChatCommand.roulettesettings.usage"), user, arguments);
   }
 
   /**
@@ -112,16 +112,16 @@ public class RouletteComponent extends Component {
     OnOff onOff = EnumUtils.toEnum(arguments.get(0), OnOff.class);
 
     if (onOff == null) {
-      chat.whisper(user, l10n.get("ChatCommand.roulettesettings.timoutEnabled.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.roulettesettings.timoutEnabled.usage"));
       return false;
     }
 
     settings.setTimeoutOnDeathEnabled(OnOff.ON.equals(onOff));
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.roulettesettings.timoutOnDeathOrTimoutEnabled.set")
+    chat.whisper(user, i18n.get("ChatCommand.roulettesettings.timoutOnDeathOrTimoutEnabled.set")
         .add("time", timeFormatter.timeQuantity(settings.getTimeoutOnDeath()))
-        .add("state", l10n.getEnabledDisabled(settings.isTimeoutOnDeathEnabled())));
+        .add("state", i18n.getEnabledDisabled(settings.isTimeoutOnDeathEnabled())));
     return true;
   }
 
@@ -135,7 +135,7 @@ public class RouletteComponent extends Component {
     Integer timeoutMinutes = Numbers.asNumber(arguments.get(0)).toInteger();
 
     if (timeoutMinutes == null) {
-      chat.whisper(user, l10n.get("ChatCommand.roulettesettings.timoutOnDeath.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.roulettesettings.timoutOnDeath.usage"));
       return false;
     }
 
@@ -143,9 +143,9 @@ public class RouletteComponent extends Component {
     settings.setTimeoutOnDeath(timeoutMillis);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.roulettesettings.timoutOnDeathOrTimoutEnabled.set")
+    chat.whisper(user, i18n.get("ChatCommand.roulettesettings.timoutOnDeathOrTimoutEnabled.set")
         .add("time", timeFormatter.timeQuantity(settings.getTimeoutOnDeath()))
-        .add("state", l10n.getEnabledDisabled(settings.isTimeoutOnDeathEnabled())));
+        .add("state", i18n.getEnabledDisabled(settings.isTimeoutOnDeathEnabled())));
     return true;
   }
 }

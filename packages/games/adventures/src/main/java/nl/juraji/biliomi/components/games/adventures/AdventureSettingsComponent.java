@@ -45,7 +45,7 @@ public class AdventureSettingsComponent extends Component {
    */
   @CommandRoute(command = "adventuresettings", systemCommand = true)
   public boolean adventuresettingsCommand(User user, Arguments arguments) {
-    return captureSubCommands("adventuresettings", l10n.supply("ChatCommand.adventuresettings.usage"), user, arguments);
+    return captureSubCommands("adventuresettings", i18n.supply("ChatCommand.adventuresettings.usage"), user, arguments);
   }
 
   /**
@@ -57,7 +57,7 @@ public class AdventureSettingsComponent extends Component {
     Integer minutes = Numbers.asNumber(arguments.get(0)).toInteger();
 
     if (minutes == null || minutes < 1 || minutes > 10) {
-      chat.whisper(user, l10n.get("ChatCommand.adventuresettings.jointimeout.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.adventuresettings.jointimeout.usage"));
       return false;
     }
 
@@ -65,7 +65,7 @@ public class AdventureSettingsComponent extends Component {
     settings.setJoinTimeout(miliseconds);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.adventuresettings.jointimeout.saved")
+    chat.whisper(user, i18n.get("ChatCommand.adventuresettings.jointimeout.saved")
         .add("time", () -> timeFormatter.timeQuantity(miliseconds, TimeUnit.MINUTES)));
     return true;
   }
@@ -79,14 +79,14 @@ public class AdventureSettingsComponent extends Component {
     Long minPoints = Numbers.asNumber(arguments.get(0)).toLong();
 
     if (minPoints == null || minPoints < 1) {
-      chat.whisper(user, l10n.get("ChatCommand.adventuresettings.minimumbet.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.adventuresettings.minimumbet.usage"));
       return false;
     }
 
     settings.setMinimumBet(minPoints);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.adventuresettings.minimumbet.saved")
+    chat.whisper(user, i18n.get("ChatCommand.adventuresettings.minimumbet.saved")
         .add("points", () -> pointsService.asString(minPoints)));
     return true;
   }
@@ -100,14 +100,14 @@ public class AdventureSettingsComponent extends Component {
     Long maxPoints = Numbers.asNumber(arguments.get(0)).toLong();
 
     if (maxPoints == null || maxPoints < 1) {
-      chat.whisper(user, l10n.get("ChatCommand.adventuresettings.maximumbet.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.adventuresettings.maximumbet.usage"));
       return false;
     }
 
     settings.setMaximumBet(maxPoints);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.adventuresettings.maximumbet.saved")
+    chat.whisper(user, i18n.get("ChatCommand.adventuresettings.maximumbet.saved")
         .add("points", () -> pointsService.asString(maxPoints)));
     return true;
   }
@@ -121,7 +121,7 @@ public class AdventureSettingsComponent extends Component {
     Integer cooldownMinutes = Numbers.asNumber(arguments.get(0)).toInteger();
 
     if (cooldownMinutes == null || cooldownMinutes < 0) {
-      chat.whisper(user, l10n.get("ChatCommand.adventuresettings.cooldown.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.adventuresettings.cooldown.usage"));
       return false;
     }
 
@@ -129,7 +129,7 @@ public class AdventureSettingsComponent extends Component {
     settings.setCooldown(cooldownMillis);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.adventuresettings.cooldown.saved")
+    chat.whisper(user, i18n.get("ChatCommand.adventuresettings.cooldown.saved")
         .add("time", () -> timeFormatter.timeQuantity(cooldownMillis)));
     return true;
   }
@@ -143,14 +143,14 @@ public class AdventureSettingsComponent extends Component {
     Double multiplier = Numbers.asNumber(arguments.get(0)).toDouble();
 
     if (multiplier == null || multiplier < 0 || multiplier > 1) {
-      chat.whisper(user, l10n.get("ChatCommand.adventuresettings.multiplier.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.adventuresettings.multiplier.usage"));
       return false;
     }
 
     settings.setWinMultiplier(multiplier);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.adventuresettings.multiplier.saved")
+    chat.whisper(user, i18n.get("ChatCommand.adventuresettings.multiplier.saved")
         .add("pointsname", pointsService::pointsName)
         .add("percentage", () -> MathUtils.doubleToPercentage(multiplier)));
     return true;

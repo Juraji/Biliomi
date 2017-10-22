@@ -49,7 +49,7 @@ public class AnnouncementsComponent extends Component {
    */
   @CommandRoute(command = "announcement", systemCommand = true)
   public boolean announcementCommand(User user, Arguments arguments) {
-    return captureSubCommands("announcement", l10n.supply("ChatCommand.announcement.usage"), user, arguments);
+    return captureSubCommands("announcement", i18n.supply("ChatCommand.announcement.usage"), user, arguments);
   }
 
   /**
@@ -59,7 +59,7 @@ public class AnnouncementsComponent extends Component {
   @SubCommandRoute(parentCommand = "announcement", command = "add")
   public boolean announcementCommandAdd(User user, Arguments arguments) {
     if (!arguments.assertMinSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.announcement.add.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.announcement.add.usage"));
       return false;
     }
 
@@ -67,7 +67,7 @@ public class AnnouncementsComponent extends Component {
     announcementDao.create(message);
     announcementTimerService.restart();
 
-    chat.whisper(user, l10n.get("ChatCommand.announcement.add.added")
+    chat.whisper(user, i18n.get("ChatCommand.announcement.add.added")
         .add("message", message));
     return true;
   }
@@ -81,13 +81,13 @@ public class AnnouncementsComponent extends Component {
     Long id = Numbers.asNumber(arguments.get(0)).toLong();
 
     if (id == null) {
-      chat.whisper(user, l10n.get("ChatCommand.announcement.remove.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.announcement.remove.usage"));
       return false;
     }
 
     Announcement announcement = announcementDao.get(id);
     if (announcement == null) {
-      chat.whisper(user, l10n.get("ChatCommand.announcement.remove.notFound")
+      chat.whisper(user, i18n.get("ChatCommand.announcement.remove.notFound")
           .add("id", id));
       return false;
     }
@@ -95,7 +95,7 @@ public class AnnouncementsComponent extends Component {
     announcementDao.delete(announcement);
     announcementTimerService.restart();
 
-    chat.whisper(user, l10n.get("ChatCommand.announcement.remove.deleted")
+    chat.whisper(user, i18n.get("ChatCommand.announcement.remove.deleted")
         .add("message", announcement::getMessage));
     return true;
   }
@@ -109,7 +109,7 @@ public class AnnouncementsComponent extends Component {
     Integer intervalMinutes = Numbers.asNumber(arguments.get(0)).toInteger();
 
     if (intervalMinutes == null || intervalMinutes < 1) {
-      chat.whisper(user, l10n.get("ChatCommand.announcement.interval.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.announcement.interval.usage"));
       return false;
     }
 
@@ -118,7 +118,7 @@ public class AnnouncementsComponent extends Component {
     settingsService.save(settings);
     announcementTimerService.restart();
 
-    chat.whisper(user, l10n.get("ChatCommand.announcement.interval.set")
+    chat.whisper(user, i18n.get("ChatCommand.announcement.interval.set")
         .add("time", () -> timeFormatter.timeQuantity(settings.getRunInterval())));
     return true;
   }
@@ -132,14 +132,14 @@ public class AnnouncementsComponent extends Component {
     Integer minMsgs = Numbers.asNumber(arguments.get(0)).toInteger();
 
     if (minMsgs == null || minMsgs < 0) {
-      chat.whisper(user, l10n.get("ChatCommand.announcement.minMsgs.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.announcement.minMsgs.usage"));
       return false;
     }
 
     settings.setMinChatMessages(minMsgs);
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.announcement.minMsgs.set")
+    chat.whisper(user, i18n.get("ChatCommand.announcement.minMsgs.set")
         .add("amount", settings::getMinChatMessages));
     return true;
   }

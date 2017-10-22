@@ -13,7 +13,7 @@ import nl.juraji.biliomi.utility.calculate.PatternUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.modifiers.L10nData;
 import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
 import nl.juraji.biliomi.utility.types.Init;
-import nl.juraji.biliomi.utility.types.collections.L10nMap;
+import nl.juraji.biliomi.utility.types.collections.I18nMap;
 
 import javax.annotation.PreDestroy;
 import javax.enterprise.inject.Default;
@@ -37,7 +37,7 @@ public class ChatModeratorWorkerService implements Init {
 
   @Inject
   @L10nData(ChatModeratorComponent.class)
-  private L10nMap l10n;
+  private I18nMap i18n;
 
   @Inject
   private UsersService usersService;
@@ -206,12 +206,12 @@ public class ChatModeratorWorkerService implements Init {
         executeAction(action, user);
 
         if (ModerationAction.WARN.equals(action)) {
-          chatService.whisper(user, l10n.get(L10N_MODERATION_WARN_MESSAGE_PREFIX + reason.toString())
+          chatService.whisper(user, i18n.get(L10N_MODERATION_WARN_MESSAGE_PREFIX + reason.toString())
               .add("strike", strike));
         } else {
-          chatService.say(l10n.get(L10N_MODERATION_ACTION_MESSAGE_PREFIX + reason.toString())
+          chatService.say(i18n.get(L10N_MODERATION_ACTION_MESSAGE_PREFIX + reason.toString())
               .add("username", user::getDisplayName)
-              .add("action", l10n.get(L10N_MODERATION_ACTION_PREFIX + action.toString()).apply())
+              .add("action", i18n.get(L10N_MODERATION_ACTION_PREFIX + action.toString()).apply())
               .add("strike", strike));
         }
       }

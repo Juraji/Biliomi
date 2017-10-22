@@ -35,7 +35,7 @@ public class FindUpdatesSetupTask implements SetupTask {
   private static final String DOWNLOAD_CONTENT_TYPE = "application/x-gzip";
   private static final String GH_REPO_OWNER = "Juraji";
   private static final String GH_REPO_NAME = "Biliomi";
-  private static final String[] INSTALLER_DIRS = {"l10n", "lib", "default-config"};
+  private static final String[] INSTALLER_DIRS = {"i18n", "lib", "default-config"};
 
   @Inject
   @CoreSetting("biliomi.core.checkForUpdates")
@@ -132,7 +132,7 @@ public class FindUpdatesSetupTask implements SetupTask {
 
     String coreConfigFile = BiliomiContainer.getParameters().getConfigurationDir().getAbsolutePath() + "/core.yml";
     console.println("The following actions are up to you:");
-    console.println("- The l10n directory has been replaced, if you were using a custom language I recommend you download the latest and replace the l10n directory.");
+    console.println("- The i18n directory has been replaced, if you were using a custom language I recommend you download the latest and replace the i18n directory.");
     console.println("- Check if there are any new settings you need to copy over from the default-config.");
     console.println("- Set the update mode to UPDATE in " + coreConfigFile + " in order to run database updates.");
     console.println();

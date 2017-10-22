@@ -57,7 +57,7 @@ public class SubscriberWatchComponent extends Component {
    */
   @CommandRoute(command = "subscriberwatch", systemCommand = true)
   public boolean followerWatchCommand(User user, Arguments arguments) {
-    return captureSubCommands("subscriberwatch", l10n.supply("ChatCommand.subscriberWatch.usage"), user, arguments);
+    return captureSubCommands("subscriberwatch", i18n.supply("ChatCommand.subscriberWatch.usage"), user, arguments);
   }
 
   /**
@@ -71,7 +71,7 @@ public class SubscriberWatchComponent extends Component {
     Long newReward = Numbers.asNumber(arguments.popSafe()).toLong();
 
     if (tier == null || newReward == null || newReward < 0) {
-      chat.whisper(user, l10n.get("ChatCommand.subscriberWatch.reward.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.subscriberWatch.reward.usage"));
       return false;
     }
 
@@ -93,8 +93,8 @@ public class SubscriberWatchComponent extends Component {
     }
 
     settingsService.save(settings);
-    chat.whisper(user, l10n.get("ChatCommand.subscriberWatch.reward.saved")
-        .add("tier", l10n.getString(tierL10nKey))
+    chat.whisper(user, i18n.get("ChatCommand.subscriberWatch.reward.saved")
+        .add("tier", i18n.getString(tierL10nKey))
         .add("points", pointsService.asString(newReward)));
 
     return true;
@@ -107,9 +107,9 @@ public class SubscriberWatchComponent extends Component {
   @SubCommandRoute(parentCommand = "subscriberwatch", command = "setsubnotice")
   public boolean subscriberWatchsetsubnoticeTemplateCommand(User user, Arguments arguments) {
     return new TemplateSetup(templateDao, chat)
-        .withCommandUsageMessage(l10n.getString("ChatCommand.subscriberWatch.setsubnotice.usage"))
-        .withTemplateDisabledMessage(l10n.getString("ChatCommand.followerWatch.setsubnotice.disabled"))
-        .withTemplatedSavedMessage(l10n.getString("ChatCommand.followerWatch.setsubnotice.saved"))
+        .withCommandUsageMessage(i18n.getString("ChatCommand.subscriberWatch.setsubnotice.usage"))
+        .withTemplateDisabledMessage(i18n.getString("ChatCommand.followerWatch.setsubnotice.disabled"))
+        .withTemplatedSavedMessage(i18n.getString("ChatCommand.followerWatch.setsubnotice.saved"))
         .apply(user, arguments.toString(), SUB_NOTICE_TEMPLATE);
   }
 
@@ -120,9 +120,9 @@ public class SubscriberWatchComponent extends Component {
   @SubCommandRoute(parentCommand = "subscriberwatch", command = "setresubnotice")
   public boolean subscriberWatchsetresubnoticeTemplateCommand(User user, Arguments arguments) {
     return new TemplateSetup(templateDao, chat)
-        .withCommandUsageMessage(l10n.getString("ChatCommand.subscriberWatch.setresubnotice.usage"))
-        .withTemplateDisabledMessage(l10n.getString("ChatCommand.followerWatch.setresubnotice.disabled"))
-        .withTemplatedSavedMessage(l10n.getString("ChatCommand.followerWatch.setresubnotice.saved"))
+        .withCommandUsageMessage(i18n.getString("ChatCommand.subscriberWatch.setresubnotice.usage"))
+        .withTemplateDisabledMessage(i18n.getString("ChatCommand.followerWatch.setresubnotice.disabled"))
+        .withTemplatedSavedMessage(i18n.getString("ChatCommand.followerWatch.setresubnotice.saved"))
         .apply(user, arguments.toString(), RESUB_NOTICE_TEMPLATE);
   }
 }

@@ -52,7 +52,7 @@ A WADL for Biliomi's REST Api is available under `http://localhost:30000/applica
 * ./
   * Biliomi v3/ `Installation root`
     * lib `Libraries used by Biliomi`
-    * l10n `Language files, feel free to edit`
+    * i18n `Language files, feel free to edit`
     * biliomi-x.x.x.jar `The main Java executable`
     * start-biliomi.sh `Start script for linux/MacOS`
     * start-biliomi.bat `Start script for Windows`
@@ -94,8 +94,8 @@ On successful setup Biliomi will immediately connect to Twitch and start listeni
 
 ### Updating
 Biliomi now has an automated update. The update takes care of step 1 to 3 for you.<br>
-*Note: The automatic updater will overwrite your l10n files. If you've made any changes to them they will be lost.*
-*You might want to make a backup of the `./l10n` directory*
+*Note: The automatic updater will overwrite your i18n files. If you've made any changes to them they will be lost.*
+*You might want to make a backup of the `./i18n` directory*
 
 1. Grab the latest version from [the releases page](https://github.com/Juraji/Biliomi/releases).
 1. Shut down any currently running instance of Biliomi.
@@ -117,7 +117,7 @@ Localization files are available [here](https://github.com/Juraji/Biliomi-L10N).
 
 1. Download the localization pack.
 1. Shut down any currently running instance of Biliomi.
-1. Replace the `l10n` directory, with the installation root, with the preferred `l10n` directory from the language pack.
+1. Replace the `i18n` directory, with the installation root, with the preferred `i18n` directory from the language pack.
 1. Now start Biliomi again and enjoy.
 
 ## Usage

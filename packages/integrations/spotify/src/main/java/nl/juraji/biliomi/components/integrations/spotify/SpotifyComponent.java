@@ -68,7 +68,7 @@ public class SpotifyComponent extends Component {
     }
 
     if (channelService.isStreamOffline()) {
-      chat.whisper(user, l10n.get("ChatCommand.currentSong.playerInactive"));
+      chat.whisper(user, i18n.get("ChatCommand.currentSong.playerInactive"));
       return false;
     }
 
@@ -81,20 +81,20 @@ public class SpotifyComponent extends Component {
       SpotifyCurrentTrack currentTrack = response.getData();
       if (currentTrack.isPlaying()) {
         SpotifyTrack item = currentTrack.getItem();
-        chat.say(l10n.get("ChatCommand.currentSong.nowPlaying")
+        chat.say(i18n.get("ChatCommand.currentSong.nowPlaying")
             .add("artist", item::getCombinedArtists)
             .add("title", item::getName)
             .add("link", item::getUri)
             .add("progress", () -> timeFormatter.digitalClockQuantity(currentTrack.getProgressMs()))
             .add("duration", () -> timeFormatter.digitalClockQuantity(currentTrack.getItem().getDurationMs())));
       } else {
-        chat.whisper(user, l10n.get("ChatCommand.currentSong.playerInactive"));
+        chat.whisper(user, i18n.get("ChatCommand.currentSong.playerInactive"));
       }
 
       return true;
     } catch (Exception e) {
       logger.error("Failed retrieving information from Spotify", e);
-      chat.whisper(user, l10n.get("Common.failedCommunication"));
+      chat.whisper(user, i18n.get("Common.failedCommunication"));
       return false;
     }
   }
@@ -108,7 +108,7 @@ public class SpotifyComponent extends Component {
   @CommandRoute(command = "requestsong", defaultCooldown = 300000, defaultPrice = 20)
   public boolean requestSongCommand(User user, Arguments arguments) {
     if (!settings.isSongrequestsEnabled()) {
-      chat.whisper(user, l10n.get("ChatCommand.requestSong.requestsDisabled"));
+      chat.whisper(user, i18n.get("ChatCommand.requestSong.requestsDisabled"));
       return false;
     }
 
@@ -118,7 +118,7 @@ public class SpotifyComponent extends Component {
 
     String input = arguments.toString();
     if (StringUtils.isEmpty(input)) {
-      chat.whisper(user, l10n.get("ChatCommand.requestSong.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.requestSong.usage"));
       return false;
     }
 
@@ -131,13 +131,13 @@ public class SpotifyComponent extends Component {
       }
 
       if (track == null || !track.isPlayable()) {
-        chat.whisper(user, l10n.get("ChatCommand.requestSong.notFound")
+        chat.whisper(user, i18n.get("ChatCommand.requestSong.notFound")
             .add("input", input));
         return false;
       }
 
       if (settings.getMaxDuration() > 0 && track.getDurationMs() > settings.getMaxDuration()) {
-        chat.whisper(user, l10n.get("ChatCommand.requestSong.exceedsMaxDuration")
+        chat.whisper(user, i18n.get("ChatCommand.requestSong.exceedsMaxDuration")
             .add("title", track::getName)
             .add("artist", track::getCombinedArtists)
             .add("maxduration", () -> timeFormatter.timeQuantity(settings.getMaxDuration())));
@@ -150,7 +150,7 @@ public class SpotifyComponent extends Component {
       }
 
       SpotifyTrack finalTrack = track;
-      chat.say(l10n.get("ChatCommand.requestSong.added")
+      chat.say(i18n.get("ChatCommand.requestSong.added")
           .add("username", user::getDisplayName)
           .add("artist", finalTrack::getCombinedArtists)
           .add("title", finalTrack::getName)
@@ -158,7 +158,7 @@ public class SpotifyComponent extends Component {
       return true;
     } catch (Exception e) {
       logger.error("Failed retrieving information from Spotify", e);
-      chat.whisper(user, l10n.get("Common.failedCommunication"));
+      chat.whisper(user, i18n.get("Common.failedCommunication"));
       return false;
     }
   }
@@ -169,7 +169,7 @@ public class SpotifyComponent extends Component {
    */
   @CommandRoute(command = "spotify", systemCommand = true)
   public boolean spotifyCommand(User user, Arguments arguments) {
-    return captureSubCommands("spotify", () -> l10n.getString("ChatCommand.spotify.usage"), user, arguments);
+    return captureSubCommands("spotify", () -> i18n.getString("ChatCommand.spotify.usage"), user, arguments);
   }
 
   /**
@@ -183,22 +183,22 @@ public class SpotifyComponent extends Component {
     }
 
     if (StringUtils.isEmpty(settings.getSongRequestPlaylistId())) {
-      chat.whisper(user, l10n.get("ChatCommand.spotify.requests.noPlaylistSet"));
+      chat.whisper(user, i18n.get("ChatCommand.spotify.requests.noPlaylistSet"));
       return false;
     }
 
     OnOff onOff = EnumUtils.toEnum(arguments.getSafe(0), OnOff.class);
 
     if (onOff == null) {
-      chat.whisper(user, l10n.get("ChatCommand.spotify.requests.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.spotify.requests.usage"));
       return false;
     }
 
     settings.setSongrequestsEnabled(OnOff.ON.equals(onOff));
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.spotify.requests.set")
-        .add("state", () -> l10n.getEnabledDisabled(onOff)));
+    chat.whisper(user, i18n.get("ChatCommand.spotify.requests.set")
+        .add("state", () -> i18n.getEnabledDisabled(onOff)));
     return true;
   }
 
@@ -215,7 +215,7 @@ public class SpotifyComponent extends Component {
 
     String playlistUrl = arguments.getSafe(0);
     if (!isSpotifyPlaylistUrl(playlistUrl)) {
-      chat.whisper(user, l10n.get("ChatCommand.spotify.setRequestsPlaylist.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.spotify.setRequestsPlaylist.usage"));
       return false;
     }
 
@@ -228,12 +228,12 @@ public class SpotifyComponent extends Component {
       }
     } catch (Exception e) {
       logger.error("Failed retrieving information from Spotify", e);
-      chat.whisper(user, l10n.get("Common.failedCommunication"));
+      chat.whisper(user, i18n.get("Common.failedCommunication"));
       return false;
     }
 
     if (spotifyPlaylist == null) {
-      chat.whisper(user, l10n.get("ChatCommand.spotify.setRequestsPlaylist.playlistNotFound")
+      chat.whisper(user, i18n.get("ChatCommand.spotify.setRequestsPlaylist.playlistNotFound")
           .add("id", playlistUrl));
       return false;
     }
@@ -241,7 +241,7 @@ public class SpotifyComponent extends Component {
     settings.setSongRequestPlaylistId(spotifyPlaylist.getId());
     settingsService.save(settings);
 
-    chat.whisper(user, l10n.get("ChatCommand.spotify.setRequestsPlaylist.linked")
+    chat.whisper(user, i18n.get("ChatCommand.spotify.setRequestsPlaylist.linked")
         .add("name", spotifyPlaylist::getName));
     return true;
   }
@@ -255,7 +255,7 @@ public class SpotifyComponent extends Component {
     Long maxDuration = Numbers.asNumber(arguments.get(0)).toLong();
 
     if (maxDuration == null || MathUtils.isNotInRange(maxDuration, 0, Long.MAX_VALUE)) {
-      chat.whisper(user, l10n.get("ChatCommand.spotify.setMaxDuration.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.spotify.setMaxDuration.usage"));
       return false;
     }
 
@@ -264,10 +264,10 @@ public class SpotifyComponent extends Component {
     settingsService.save(settings);
 
     if (settings.getMaxDuration() > 0) {
-      chat.whisper(user, l10n.get("ChatCommand.spotify.setMaxDuration.set")
+      chat.whisper(user, i18n.get("ChatCommand.spotify.setMaxDuration.set")
           .add("maxduration", () -> timeFormatter.timeQuantity(settings.getMaxDuration())));
     } else {
-      chat.whisper(user, l10n.get("ChatCommand.spotify.setMaxDuration.disabled"));
+      chat.whisper(user, i18n.get("ChatCommand.spotify.setMaxDuration.disabled"));
     }
     return true;
   }
@@ -300,12 +300,12 @@ public class SpotifyComponent extends Component {
   private boolean apiAvailabilityCheck(User user) {
     try {
       if (!spotifyApi.isAvailable()) {
-        chat.whisper(user, l10n.get("Common.notAvailable"));
+        chat.whisper(user, i18n.get("Common.notAvailable"));
         return false;
       }
     } catch (Exception e) {
       logger.error("Failed retrieving information from Spotify", e);
-      chat.whisper(user, l10n.get("Common.failedCommunication"));
+      chat.whisper(user, i18n.get("Common.failedCommunication"));
       return false;
     }
 

@@ -50,12 +50,12 @@ public class UserGroupManagementComponent extends Component {
           .map(userGroup -> userGroup.getName() + " (" + userGroup.getWeight() + ")")
           .collect(Collectors.toList());
 
-      chat.whisper(user, l10n.get("ChatCommand.groups.list")
+      chat.whisper(user, i18n.get("ChatCommand.groups.list")
           .add("grouplist", groupList));
       return true;
     }
 
-    return captureSubCommands("groups", l10n.supply("ChatCommand.groups.usage"), user, arguments);
+    return captureSubCommands("groups", i18n.supply("ChatCommand.groups.usage"), user, arguments);
   }
 
   /**
@@ -64,7 +64,7 @@ public class UserGroupManagementComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "groups", command = "help")
   public boolean helpCommand(User user, Arguments arguments) {
-    chat.whisper(user, l10n.get("ChatCommand.groups.help"));
+    chat.whisper(user, i18n.get("ChatCommand.groups.help"));
     return true;
   }
 
@@ -75,31 +75,31 @@ public class UserGroupManagementComponent extends Component {
   @SubCommandRoute(parentCommand = "groups", command = "add")
   public boolean groupsCommandAdd(User user, Arguments arguments) {
     if (!arguments.assertSize(2)) {
-      chat.whisper(user, l10n.get("ChatCommand.groups.add.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.groups.add.usage"));
       return false;
     }
 
     Integer newGroupWeight = Numbers.asNumber(arguments.get(1)).toInteger();
     String newGroupName = arguments.getSafe(0);
     if (newGroupWeight == null || NUMBER_AT_START_PATTERN.matcher(newGroupName).matches()) {
-      chat.whisper(user, l10n.get("ChatCommand.groups.help"));
+      chat.whisper(user, i18n.get("ChatCommand.groups.help"));
       return false;
     }
 
     if (userGroupService.groupExists(newGroupWeight)) {
-      chat.whisper(user, l10n.get("Common.groups.duplicateGroupWeight")
+      chat.whisper(user, i18n.get("Common.groups.duplicateGroupWeight")
           .add("weight", newGroupWeight));
       return false;
     }
 
     if (userGroupService.groupExists(newGroupName)) {
-      chat.whisper(user, l10n.get("Common.groups.duplicateGroupName")
+      chat.whisper(user, i18n.get("Common.groups.duplicateGroupName")
           .add("groupname", newGroupName));
       return false;
     }
 
     UserGroup newUserGroup = userGroupService.createNewGroup(newGroupName, newGroupWeight);
-    chat.whisper(user, l10n.get("ChatCommand.groups.add.created")
+    chat.whisper(user, i18n.get("ChatCommand.groups.add.created")
         .add("groupname", newUserGroup::getName)
         .add("weight", newUserGroup::getWeight));
     return true;
@@ -113,18 +113,18 @@ public class UserGroupManagementComponent extends Component {
   @SubCommandRoute(parentCommand = "groups", command = "edit")
   public boolean groupsCommandEdit(User user, Arguments arguments) {
     if (!arguments.assertSize(2)) {
-      chat.whisper(user, l10n.get("ChatCommand.groups.edit.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.groups.edit.usage"));
       return false;
     }
 
     UserGroup userGroup = userGroupService.getByName(arguments.get(0));
     if (userGroup == null) {
-      chat.whisper(user, l10n.getGroupNonExistent(arguments.get(0)));
+      chat.whisper(user, i18n.getGroupNonExistent(arguments.get(0)));
       return false;
     }
 
     if (userGroup.isDefaultGroup()) {
-      chat.whisper(user, l10n.get("Common.groups.defaultGroupNotEditable"));
+      chat.whisper(user, i18n.get("Common.groups.defaultGroupNotEditable"));
       return false;
     }
 
@@ -146,18 +146,18 @@ public class UserGroupManagementComponent extends Component {
   @SubCommandRoute(parentCommand = "groups", command = "remove")
   public boolean groupsCommandRemove(User user, Arguments arguments) {
     if (!arguments.assertSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.groups.remove.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.groups.remove.usage"));
       return false;
     }
 
     UserGroup userGroup = userGroupService.getByName(arguments.get(0));
     if (userGroup == null) {
-      chat.whisper(user, l10n.getGroupNonExistent(arguments.get(0)));
+      chat.whisper(user, i18n.getGroupNonExistent(arguments.get(0)));
       return false;
     }
 
     if (userGroup.isDefaultGroup()) {
-      chat.whisper(user, l10n.get("Common.groups.defaultGroupNotEditable"));
+      chat.whisper(user, i18n.get("Common.groups.defaultGroupNotEditable"));
       return false;
     }
 
@@ -169,13 +169,13 @@ public class UserGroupManagementComponent extends Component {
       usersByGroup.forEach(user1 -> user.setUserGroup(defaultGroup));
       usersService.save(usersByGroup);
 
-      chat.whisper(user, l10n.get("ChatCommand.groups.remove.movedUsersToDefault")
+      chat.whisper(user, i18n.get("ChatCommand.groups.remove.movedUsersToDefault")
           .add("count", usersByGroup::size)
           .add("defaultgroupname", defaultGroup::getName));
     }
 
     userGroupService.delete(userGroup);
-    chat.whisper(user, l10n.get("ChatCommand.groups.remove.removed")
+    chat.whisper(user, i18n.get("ChatCommand.groups.remove.removed")
         .add("groupname", userGroup::getName));
     return true;
   }
@@ -193,28 +193,28 @@ public class UserGroupManagementComponent extends Component {
     Integer newHours = Numbers.asNumber(arguments.get(1)).toInteger();
 
     if (!arguments.assertSize(2) || newHours == null) {
-      chat.whisper(user, l10n.get("ChatCommand.groups.timebased.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.groups.timebased.usage"));
       return false;
     }
 
     UserGroup targetGroup = userGroupService.getByName(arguments.get(0));
     if (targetGroup == null) {
-      chat.whisper(user, l10n.getGroupNonExistent(arguments.get(0)));
+      chat.whisper(user, i18n.getGroupNonExistent(arguments.get(0)));
       return false;
     }
 
     if (targetGroup.isDefaultGroup()) {
-      chat.whisper(user, l10n.get("Common.groups.defaultGroupNotEditable"));
+      chat.whisper(user, i18n.get("Common.groups.defaultGroupNotEditable"));
       return false;
     }
 
     if (newHours <= 0) {
       targetGroup.setLevelUpHours(null);
-      chat.whisper(user, l10n.get("ChatCommand.groups.timebased.edited.unset")
+      chat.whisper(user, i18n.get("ChatCommand.groups.timebased.edited.unset")
           .add("groupname", targetGroup::getName));
     } else {
       targetGroup.setLevelUpHours(newHours);
-      chat.whisper(user, l10n.get("ChatCommand.groups.timebased.edited")
+      chat.whisper(user, i18n.get("ChatCommand.groups.timebased.edited")
           .add("groupname", targetGroup::getName)
           .add("time", timeFormatter.timeQuantity(Duration.standardHours(newHours), TimeUnit.HOURS)));
     }
@@ -225,12 +225,12 @@ public class UserGroupManagementComponent extends Component {
 
   private boolean editUserGroupName(User user, UserGroup targetUserGroup, String newName) {
     if (NUMBER_AT_START_PATTERN.matcher(newName).matches()) {
-      chat.whisper(user, l10n.get("ChatCommand.groups.help"));
+      chat.whisper(user, i18n.get("ChatCommand.groups.help"));
       return false;
     }
 
     if (targetUserGroup.getName().equalsIgnoreCase(newName) || userGroupService.groupExists(newName)) {
-      chat.whisper(user, l10n.get("Common.groups.duplicateGroupName")
+      chat.whisper(user, i18n.get("Common.groups.duplicateGroupName")
           .add("groupname", newName));
       return false;
     }
@@ -239,7 +239,7 @@ public class UserGroupManagementComponent extends Component {
     targetUserGroup.setName(newName);
     userGroupService.save(targetUserGroup);
 
-    chat.whisper(user, l10n.get("ChatCommand.groups.edit.changedName")
+    chat.whisper(user, i18n.get("ChatCommand.groups.edit.changedName")
         .add("oldgroupname", oldGroupName)
         .add("newgroupname", targetUserGroup::getName));
 
@@ -251,12 +251,12 @@ public class UserGroupManagementComponent extends Component {
     Integer newGroupWeight = Numbers.asNumber(newWeightString).toInteger();
 
     if (newGroupWeight == null || MathUtils.isNotInRange(newGroupWeight, UserGroupService.MIN_WEIGHT, UserGroupService.MAX_WEIGHT)) {
-      chat.whisper(user, l10n.get("ChatCommand.groups.help"));
+      chat.whisper(user, i18n.get("ChatCommand.groups.help"));
       return false;
     }
 
     if (targetUserGroup.getWeight() == newGroupWeight || userGroupService.groupExists(newGroupWeight)) {
-      chat.whisper(user, l10n.get("Common.groups.duplicateGroupWeight")
+      chat.whisper(user, i18n.get("Common.groups.duplicateGroupWeight")
           .add("weight", newWeightString));
       return false;
     }
@@ -265,7 +265,7 @@ public class UserGroupManagementComponent extends Component {
     targetUserGroup.setWeight(newGroupWeight);
     userGroupService.save(targetUserGroup);
 
-    chat.whisper(user, l10n.get("ChatCommand.groups.edit.changedWeight")
+    chat.whisper(user, i18n.get("ChatCommand.groups.edit.changedWeight")
         .add("groupname", targetUserGroup::getName)
         .add("oldweight", oldWeight)
         .add("newweight", targetUserGroup::getWeight));
@@ -281,19 +281,19 @@ public class UserGroupManagementComponent extends Component {
   @CommandRoute(command = "setusergroup", systemCommand = true, modCanActivate = true)
   public boolean setUserGroupCommand(User user, Arguments arguments) {
     if (!arguments.assertSize(2)) {
-      chat.whisper(user, l10n.get("ChatCommand.setusergroup.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.setusergroup.usage"));
       return false;
     }
 
     User targetUser = usersService.getUser(arguments.get(0));
     if (targetUser == null) {
-      chat.whisper(user, l10n.getUserNonExistent(arguments.get(0)));
+      chat.whisper(user, i18n.getUserNonExistent(arguments.get(0)));
       return false;
     }
 
     UserGroup targetUserGroup = userGroupService.getByName(arguments.get(1));
     if (targetUserGroup == null) {
-      chat.whisper(user, l10n.getGroupNonExistent(arguments.get(1)));
+      chat.whisper(user, i18n.getGroupNonExistent(arguments.get(1)));
       return false;
     }
 
@@ -301,7 +301,7 @@ public class UserGroupManagementComponent extends Component {
     targetUser.setUserGroup(targetUserGroup);
     usersService.save(targetUser);
 
-    chat.whisper(user, l10n.get("ChatCommand.setusergroup.changed")
+    chat.whisper(user, i18n.get("ChatCommand.setusergroup.changed")
         .add("username", targetUser::getDisplayName)
         .add("oldgroupname", currentUserGroup::getName)
         .add("newgroupname", targetUserGroup::getName));

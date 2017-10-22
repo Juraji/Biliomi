@@ -56,7 +56,7 @@ public class PointsComponent extends Component {
    */
   @CommandRoute(command = "pointssettings", systemCommand = true)
   public boolean pointsSettingsCommand(User user, Arguments arguments) {
-    return captureSubCommands("pointssettings", l10n.supply("ChatCommand.pointsSettingsCommand.usage"), user, arguments);
+    return captureSubCommands("pointssettings", i18n.supply("ChatCommand.pointsSettingsCommand.usage"), user, arguments);
   }
 
   /**
@@ -66,7 +66,7 @@ public class PointsComponent extends Component {
   @SubCommandRoute(parentCommand = "pointssettings", command = "pointsnames")
   public boolean pointsSettingsCommandPointsNameSingular(User user, Arguments arguments) {
     if (!arguments.assertSize(2)) {
-      chat.whisper(user, l10n.get("ChatCommand.pointsSettingsCommand.pointsNames.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.pointsNames.usage"));
       return false;
     }
 
@@ -82,11 +82,11 @@ public class PointsComponent extends Component {
     commandService.removeAlias(oldAlias);
     commandService.registerAlias(newAlias, "mypoints");
 
-    chat.whisper(user, l10n.get("ChatCommand.pointsSettingsCommand.pointsNames.set")
+    chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.pointsNames.set")
         .add("singular", settings::getPointsNameSingular)
         .add("plural", settings::getPointsNamePlural));
 
-    chat.whisper(user, l10n.get("ChatCommand.pointsSettingsCommand.pointsNames.set.newPointsAlias")
+    chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.pointsNames.set.newPointsAlias")
         .add("alias", newAlias));
     return true;
   }
@@ -101,7 +101,7 @@ public class PointsComponent extends Component {
     OnOff onOff = EnumUtils.toEnum(arguments.get(1), OnOff.class);
 
     if (streamState == null || onOff == null) {
-      chat.whisper(user, l10n.get("ChatCommand.pointsSettingsCommand.enablepayouts.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.enablepayouts.usage"));
       return false;
     }
 
@@ -112,9 +112,9 @@ public class PointsComponent extends Component {
     }
 
     settingsService.save(settings);
-    chat.whisper(user, l10n.get("ChatCommand.pointsSettingsCommand.enablepayouts.set")
-        .add("streamstate", l10n.getStreamState(streamState))
-        .add("state", l10n.getEnabledDisabled(onOff)));
+    chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.enablepayouts.set")
+        .add("streamstate", i18n.getStreamState(streamState))
+        .add("state", i18n.getEnabledDisabled(onOff)));
 
     return true;
   }
@@ -129,7 +129,7 @@ public class PointsComponent extends Component {
     Integer intervalMinutes = Numbers.asNumber(arguments.getSafe(1)).toInteger();
 
     if (when == null || intervalMinutes == null || intervalMinutes < 5) {
-      chat.whisper(user, l10n.get("ChatCommand.pointsSettingsCommand.interval.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.interval.usage"));
       return false;
     }
 
@@ -142,8 +142,8 @@ public class PointsComponent extends Component {
     }
 
     settingsService.save(settings);
-    chat.whisper(user, l10n.get("ChatCommand.pointsSettingsCommand.interval.set")
-        .add("streamstate", l10n.getStreamState(when))
+    chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.interval.set")
+        .add("streamstate", i18n.getStreamState(when))
         .add("interval", timeFormatter.timeQuantity(duration.getMillis())));
     return true;
   }
@@ -158,7 +158,7 @@ public class PointsComponent extends Component {
     Long amount = Numbers.asNumber(arguments.getSafe(1)).toLong();
 
     if (when == null || amount == null || amount < 1) {
-      chat.whisper(user, l10n.get("ChatCommand.pointsSettingsCommand.amount.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.amount.usage"));
       return false;
     }
 
@@ -169,8 +169,8 @@ public class PointsComponent extends Component {
     }
 
     settingsService.save(settings);
-    chat.whisper(user, l10n.get("ChatCommand.pointsSettingsCommand.amount.set")
-        .add("streamstate", l10n.getStreamState(when))
+    chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.amount.set")
+        .add("streamstate", i18n.getStreamState(when))
         .add("amount", amount));
 
     return true;
@@ -183,7 +183,7 @@ public class PointsComponent extends Component {
    */
   @CommandRoute(command = "managepoints", systemCommand = true)
   public boolean managepointsCommand(User user, Arguments arguments) {
-    return captureSubCommands("managepoints", l10n.supply("ChatCommand.managePoints.usage"), user, arguments);
+    return captureSubCommands("managepoints", i18n.supply("ChatCommand.managePoints.usage"), user, arguments);
   }
 
   /**
@@ -193,13 +193,13 @@ public class PointsComponent extends Component {
   @SubCommandRoute(parentCommand = "managepoints", command = "give")
   public boolean managepointsCommandGive(User user, Arguments arguments) {
     if (!arguments.assertSize(2) || Numbers.asNumber(arguments.get(1)).isNaN()) {
-      chat.whisper(user, l10n.get("ChatCommand.managePoints.give.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.managePoints.give.usage"));
       return false;
     }
 
     User targetUser = usersService.getUser(arguments.get(0));
     if (targetUser == null) {
-      chat.whisper(user, l10n.getUserNonExistent(arguments.get(0)));
+      chat.whisper(user, i18n.getUserNonExistent(arguments.get(0)));
       return false;
     }
 
@@ -207,7 +207,7 @@ public class PointsComponent extends Component {
     targetUser.addPoints(amount);
     usersService.save(targetUser);
 
-    chat.say(l10n.get("ChatCommand.managePoints.give.given")
+    chat.say(i18n.get("ChatCommand.managePoints.give.given")
         .add("casterusername", user::getDisplayName)
         .add("targetusername", targetUser::getDisplayName)
         .add("points", pointsService.asString(amount))
@@ -222,13 +222,13 @@ public class PointsComponent extends Component {
   @SubCommandRoute(parentCommand = "managepoints", command = "take")
   public boolean managepointsCommandTake(User user, Arguments arguments) {
     if (!arguments.assertSize(2) || Numbers.asNumber(arguments.get(1)).isNaN()) {
-      chat.whisper(user, l10n.get("ChatCommand.managePoints.take.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.managePoints.take.usage"));
       return false;
     }
 
     User targetUser = usersService.getUser(arguments.get(0));
     if (targetUser == null) {
-      chat.whisper(user, l10n.getUserNonExistent(arguments.get(0)));
+      chat.whisper(user, i18n.getUserNonExistent(arguments.get(0)));
       return false;
     }
 
@@ -236,7 +236,7 @@ public class PointsComponent extends Component {
     targetUser.takePoints(amount);
     usersService.save(targetUser);
 
-    chat.say(l10n.get("ChatCommand.managePoints.take.taken")
+    chat.say(i18n.get("ChatCommand.managePoints.take.taken")
         .add("casterusername", user::getDisplayName)
         .add("targetusername", targetUser::getDisplayName)
         .add("points", pointsService.asString(amount))
@@ -251,7 +251,7 @@ public class PointsComponent extends Component {
   @SubCommandRoute(parentCommand = "managepoints", command = "everyone")
   public boolean managepointsCommandToall(User user, Arguments arguments) {
     if (!arguments.assertSize(1) || Numbers.asNumber(arguments.get(0)).isNaN()) {
-      chat.whisper(user, l10n.get("ChatCommand.managePoints.everyone.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.managePoints.everyone.usage"));
       return false;
     }
 
@@ -264,7 +264,7 @@ public class PointsComponent extends Component {
     currentViewers.forEach(viewer -> viewer.addPoints(amount));
     usersService.save(currentViewers);
 
-    chat.say(l10n.get("")
+    chat.say(i18n.get("")
         .add("casterusername", user::getDisplayName)
         .add("points", pointsService.asString(amount)));
     return true;

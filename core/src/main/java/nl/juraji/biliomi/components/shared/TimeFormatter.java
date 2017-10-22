@@ -1,7 +1,7 @@
 package nl.juraji.biliomi.components.shared;
 
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.types.collections.L10nMap;
+import nl.juraji.biliomi.utility.types.collections.I18nMap;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
@@ -36,7 +36,7 @@ public class TimeFormatter {
   private static final String TIMEUNIT_YEARS = "TimeUnit.years";
 
   @Inject
-  private L10nMap l10n;
+  private I18nMap i18n;
 
   public DateTime now() {
     return DateTime.now();
@@ -49,7 +49,7 @@ public class TimeFormatter {
    * @return A string formatted to DateTimePatterns.FullDateTime
    */
   public String fullDateTime(DateTime source) {
-    return source.toString(l10n.getString("DateTimePatterns.DateTime"));
+    return source.toString(i18n.getString("DateTimePatterns.DateTime"));
   }
 
   /**
@@ -59,7 +59,7 @@ public class TimeFormatter {
    * @return A string formatted to DateTimePatterns.FullDate
    */
   public String fullDate(DateTime source) {
-    return source.toString(l10n.getString("DateTimePatterns.Date"));
+    return source.toString(i18n.getString("DateTimePatterns.Date"));
   }
 
   /**
@@ -91,22 +91,22 @@ public class TimeFormatter {
    *
    * @param duration   The period to format
    * @param targetUnit The target unit
-   * @return A string formatted as [amount] [l10n scalar descriptor]
+   * @return A string formatted as [amount] [i18n scalar descriptor]
    */
   public String timeQuantity(Duration duration, TimeUnit targetUnit) {
     switch (targetUnit) {
       case DAYS:
         long days = duration.getStandardDays();
-        return days + " " + l10n.getIfElse(MathUtils.isPlural(days), TIMEUNIT_DAYS, TIMEUNIT_DAY);
+        return days + " " + i18n.getIfElse(MathUtils.isPlural(days), TIMEUNIT_DAYS, TIMEUNIT_DAY);
       case HOURS:
         long hours = duration.getStandardHours();
-        return hours + " " + l10n.getIfElse(MathUtils.isPlural(hours), TIMEUNIT_HOURS, TIMEUNIT_HOUR);
+        return hours + " " + i18n.getIfElse(MathUtils.isPlural(hours), TIMEUNIT_HOURS, TIMEUNIT_HOUR);
       case MINUTES:
         long minutes = duration.getStandardMinutes();
-        return minutes + " " + l10n.getIfElse(MathUtils.isPlural(minutes), TIMEUNIT_MINUTES, TIMEUNIT_MINUTE);
+        return minutes + " " + i18n.getIfElse(MathUtils.isPlural(minutes), TIMEUNIT_MINUTES, TIMEUNIT_MINUTE);
       case SECONDS:
         long seconds = duration.getStandardSeconds();
-        return seconds + " " + l10n.getIfElse(MathUtils.isPlural(seconds), TIMEUNIT_SECONDS, TIMEUNIT_SECOND);
+        return seconds + " " + i18n.getIfElse(MathUtils.isPlural(seconds), TIMEUNIT_SECONDS, TIMEUNIT_SECOND);
       default:
         throw new UnsupportedOperationException("Quantifying " + targetUnit.toString() + " is not supported");
     }
@@ -164,7 +164,7 @@ public class TimeFormatter {
   public String timeQuantityBetween(DateTime since, DateTime until) {
     long diff = new Duration(since, until).getMillis();
     if (diff <= 1000) {
-      return "0 " + l10n.getString("TimeUnit.seconds");
+      return "0 " + i18n.getString("TimeUnit.seconds");
     }
 
     if (diff < MILLIS_IN_MONTH) {
@@ -185,22 +185,22 @@ public class TimeFormatter {
         .printZeroNever()
         .appendDays()
         .appendSuffix(" ")
-        .appendSuffix(l10n.getString(TIMEUNIT_DAY), l10n.getString(TIMEUNIT_DAYS))
+        .appendSuffix(i18n.getString(TIMEUNIT_DAY), i18n.getString(TIMEUNIT_DAYS))
         .appendSeparator(", ")
         .appendHours()
         .appendSuffix(" ")
-        .appendSuffix(l10n.getString(TIMEUNIT_HOUR), l10n.getString(TIMEUNIT_HOURS))
+        .appendSuffix(i18n.getString(TIMEUNIT_HOUR), i18n.getString(TIMEUNIT_HOURS))
         .appendSeparator(", ")
         .appendMinutes()
         .appendSuffix(" ")
-        .appendSuffix(l10n.getString(TIMEUNIT_MINUTE), l10n.getString(TIMEUNIT_MINUTES));
+        .appendSuffix(i18n.getString(TIMEUNIT_MINUTE), i18n.getString(TIMEUNIT_MINUTES));
 
     if (period.toStandardHours().getHours() == 0) {
       // Do not append seconds if the period is larger than one hour
       builder.appendSeparator(", ")
           .appendSeconds()
           .appendSuffix(" ")
-          .appendSuffix(l10n.getString(TIMEUNIT_SECOND), l10n.getString(TIMEUNIT_SECONDS));
+          .appendSuffix(i18n.getString(TIMEUNIT_SECOND), i18n.getString(TIMEUNIT_SECONDS));
     }
 
     return builder.toFormatter().print(period);
@@ -217,15 +217,15 @@ public class TimeFormatter {
         .printZeroNever()
         .appendYears()
         .appendSuffix(" ")
-        .appendSuffix(l10n.getString(TIMEUNIT_YEAR), l10n.getString(TIMEUNIT_YEARS))
+        .appendSuffix(i18n.getString(TIMEUNIT_YEAR), i18n.getString(TIMEUNIT_YEARS))
         .appendSeparator(", ")
         .appendMonths()
         .appendSuffix(" ")
-        .appendSuffix(l10n.getString(TIMEUNIT_MONTH), l10n.getString(TIMEUNIT_MONTHS))
+        .appendSuffix(i18n.getString(TIMEUNIT_MONTH), i18n.getString(TIMEUNIT_MONTHS))
         .appendSeparator(", ")
         .appendDays()
         .appendSuffix(" ")
-        .appendSuffix(l10n.getString(TIMEUNIT_DAY), l10n.getString(TIMEUNIT_DAYS))
+        .appendSuffix(i18n.getString(TIMEUNIT_DAY), i18n.getString(TIMEUNIT_DAYS))
         .toFormatter()
         .print(period);
   }

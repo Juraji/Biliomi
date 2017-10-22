@@ -45,7 +45,7 @@
       <includes>
         <include>biliomi-*.jar</include>
         <include>start-biliomi.*</include>
-        <include>l10n/**/*</include>
+        <include>i18n/**/*</include>
         <include>default-config/**/*</include>
         <include>lib/*</include>
       </includes>

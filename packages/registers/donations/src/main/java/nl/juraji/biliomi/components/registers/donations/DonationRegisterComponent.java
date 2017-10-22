@@ -45,7 +45,7 @@ public class DonationRegisterComponent extends Component {
    */
   @CommandRoute(command = "donations", systemCommand = true)
   public boolean donationsCommand(User user, Arguments arguments) {
-    return captureSubCommands("donations", l10n.supply("ChatCommand.donations.usage"), user, arguments);
+    return captureSubCommands("donations", i18n.supply("ChatCommand.donations.usage"), user, arguments);
   }
 
   /**
@@ -55,14 +55,14 @@ public class DonationRegisterComponent extends Component {
   @SubCommandRoute(parentCommand = "donations", command = "add")
   public boolean donationsCommandAdd(User user, Arguments arguments) {
     if (!arguments.assertMinSize(2)) {
-      chat.whisper(user, l10n.get("ChatCommand.donations.add.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.donations.add.usage"));
       return false;
     }
 
     String donatorUsername = arguments.pop();
     User donator = usersService.getUser(donatorUsername, true);
     if (donator == null) {
-      chat.whisper(user, l10n.getUserNonExistent(donatorUsername));
+      chat.whisper(user, i18n.getUserNonExistent(donatorUsername));
       return false;
     }
 
@@ -70,11 +70,11 @@ public class DonationRegisterComponent extends Component {
     Donation donation = donationsService.registerDonation(donator, donationString);
     long count = donationsService.getCurrentDonationCount(donator);
 
-    chat.say(l10n.get("ChatCommand.donations.add.added")
+    chat.say(i18n.get("ChatCommand.donations.add.added")
         .add("username", donator::getNameAndTitle)
         .add("donation", donation::getDonation));
 
-    chat.say(l10n.get("ChatCommand.donations.add.added.donationCount")
+    chat.say(i18n.get("ChatCommand.donations.add.added.donationCount")
         .add("ordinalcount", MathUtils.getOrdinal(count))
         .add("username", donator::getNameAndTitle));
     return true;
@@ -87,23 +87,23 @@ public class DonationRegisterComponent extends Component {
   @SubCommandRoute(parentCommand = "donations", command = "list")
   public boolean donationsCommandList(User user, Arguments arguments) {
     if (!arguments.assertSize(1)) {
-      chat.whisper(user, l10n.get("ChatCommand.donations.list.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.donations.list.usage"));
       return false;
     }
 
     String donatorUsername = arguments.get(0);
     User donator = usersService.getUser(donatorUsername);
     if (donator == null) {
-      chat.whisper(user, l10n.getUserNonExistent(donatorUsername));
+      chat.whisper(user, i18n.getUserNonExistent(donatorUsername));
       return false;
     }
 
     String donationList = donationsService.getDonationList(donator);
     if (donationList == null) {
-      chat.whisper(user, l10n.get("ChatCommand.donations.list.noDonations")
+      chat.whisper(user, i18n.get("ChatCommand.donations.list.noDonations")
           .add("username", donator::getDisplayName));
     } else {
-      chat.say(l10n.get("ChatCommand.donations.list.list")
+      chat.say(i18n.get("ChatCommand.donations.list.list")
           .add("username", donator::getNameAndTitle)
           .add("donationlist", donationList));
     }
@@ -120,17 +120,17 @@ public class DonationRegisterComponent extends Component {
     Long donationId = Numbers.asNumber(arguments.get(0)).toLong();
 
     if (donationId == null) {
-      chat.whisper(user, l10n.get("ChatCommand.donations.remove.usage"));
+      chat.whisper(user, i18n.get("ChatCommand.donations.remove.usage"));
       return false;
     }
 
     Donation donation = donationsService.removeDonation(donationId);
     if (donation == null) {
-      chat.whisper(user, l10n.get("ChatCommand.donations.remove.notFound")
+      chat.whisper(user, i18n.get("ChatCommand.donations.remove.notFound")
           .add("id", donationId));
       return false;
     } else {
-      chat.whisper(user, l10n.get("ChatCommand.donations.remove.removed")
+      chat.whisper(user, i18n.get("ChatCommand.donations.remove.removed")
           .add("id", donation::getId)
           .add("username", donation.getUser().getDisplayName()));
     }
@@ -145,8 +145,8 @@ public class DonationRegisterComponent extends Component {
   @SubCommandRoute(command = "setmanualnotice", parentCommand = "donations")
   public boolean donationsSetNoticeCommand(User user, Arguments arguments) {
     return new TemplateSetup(templateDao, chat)
-        .withCommandUsageMessage(l10n.getString("ChatCommand.donations.setManualNotice.usage"))
-        .withTemplatedSavedMessage(l10n.getString("Common.noticeTemplate.saved"))
+        .withCommandUsageMessage(i18n.getString("ChatCommand.donations.setManualNotice.usage"))
+        .withTemplatedSavedMessage(i18n.getString("Common.noticeTemplate.saved"))
         .apply(user, arguments.toString(), DonationRegisterConstants.MANUAL_DONATION_NOTICE);
   }
 
@@ -157,8 +157,8 @@ public class DonationRegisterComponent extends Component {
   @SubCommandRoute(command = "setexternalnotice", parentCommand = "donations")
   public boolean donationsSetStreamLabsNoticeCommand(User user, Arguments arguments) {
     return new TemplateSetup(templateDao, chat)
-        .withCommandUsageMessage(l10n.getString("ChatCommand.donations.setExternalNotice.usage"))
-        .withTemplatedSavedMessage(l10n.getString("Common.noticeTemplate.saved"))
+        .withCommandUsageMessage(i18n.getString("ChatCommand.donations.setExternalNotice.usage"))
+        .withTemplatedSavedMessage(i18n.getString("Common.noticeTemplate.saved"))
         .apply(user, arguments.toString(), DonationRegisterConstants.INCOMING_DONATION_NOTICE);
   }
 }
