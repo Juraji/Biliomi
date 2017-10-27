@@ -29,7 +29,7 @@ public class AchievementRecord {
   @XmlElement(name = "User")
   private User user;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   @XmlElement(name = "AchievementId")
   private String achievementId;
 
