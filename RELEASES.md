@@ -1,4 +1,11 @@
 # Biliomi v3.12.0
+Date: 30th october 2017
+
+## Release Notes
+* Biliomi now has various achievements in games. Check out the [wiki](https://github.com/Juraji/Biliomi/wiki/Achievements) for more info.
+* l10n has been migrated to i18n, this is a pure aesthetic change.
+
+# Biliomi v3.12.0
 Date: 21th october 2017
 
 ## Release Notes
