@@ -1,3 +1,9 @@
+# Biliomi v3.12.1
+Date: 30th october 2017
+
+## Release Notes
+* Fixed an issue with the automatic update, with incorrect paths (oops).
+
 # Biliomi v3.12.0
 Date: 30th october 2017
 

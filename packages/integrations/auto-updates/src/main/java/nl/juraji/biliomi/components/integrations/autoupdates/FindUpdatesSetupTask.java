@@ -123,7 +123,7 @@ public class FindUpdatesSetupTask implements SetupTask {
     TarArchiveUtils.extract(archiveFile);
 
     console.println("Finalizing installation...");
-    FileUtils.copyDirectory(new File(archiveFile.getParent(), "Biliomi v3"), installDir);
+    FileUtils.copyDirectory(new File(archiveFile.getParent(), "Biliomi"), installDir);
     FileUtils.deleteDirectory(downloadDir);
 
     console.println();
