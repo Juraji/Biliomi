@@ -59,6 +59,7 @@ public class AchievementsComponent extends Component {
 
         chat.say(i18n.get("ChatCommand.myachievements.stateAchievements")
             .add("username", user::getDisplayName)
+            .add("count", records::size)
             .add("list", list));
       }
     }
