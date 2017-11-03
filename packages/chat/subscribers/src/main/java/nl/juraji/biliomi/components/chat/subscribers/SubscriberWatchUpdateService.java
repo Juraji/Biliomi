@@ -182,7 +182,7 @@ public class SubscriberWatchUpdateService extends TimerService {
       if (response.getStatus() == 422) {
         throw new UnavailableException();
       } else {
-        throw new Exception("Retrieving follower count failed, Status: " + response.getStatus() + ", Message: " + response.getRawData());
+        throw new Exception("Retrieving subscriber count failed, Status: " + response.getStatus() + ", Message: " + response.getRawData());
       }
     }
 
