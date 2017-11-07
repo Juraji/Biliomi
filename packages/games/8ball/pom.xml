@@ -18,5 +18,10 @@
       <artifactId>biliomi-core</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>nl.juraji</groupId>
+      <artifactId>biliomi-games-achievements</artifactId>
+      <version>3.13.1</version>
+    </dependency>
   </dependencies>
 </project>

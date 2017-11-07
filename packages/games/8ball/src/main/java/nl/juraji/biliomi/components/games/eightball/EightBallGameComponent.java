@@ -2,6 +2,7 @@ package nl.juraji.biliomi.components.games.eightball;
 
 import nl.juraji.biliomi.config.eightball.EightballConfigService;
 import nl.juraji.biliomi.model.core.User;
+import nl.juraji.biliomi.model.internal.events.bot.AchievementEvent;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
@@ -34,6 +35,8 @@ public class EightBallGameComponent extends Component {
       chat.say(i18n.get("ChatCommand.8ball.noQuestion"));
       return false;
     }
+
+    eventBus.post(new AchievementEvent(user, "USE_EIGHTBALL", i18n.getString("Achievement.use8ball")));
 
     String message = MathUtils.listRand(configService.getEightballMessages());
     chat.say(message);
