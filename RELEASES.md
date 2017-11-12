@@ -1,3 +1,10 @@
+# Biliomi v3.12.2
+Date: 12th november 2017
+
+## Release Notes
+* Fixed language file error in investments where it would state the minimum percentage as maximum.
+* Fixed bug in data model where an achievement could not occur twice over all users.
+
 # Biliomi v3.12.1
 Date: 30th october 2017
 
