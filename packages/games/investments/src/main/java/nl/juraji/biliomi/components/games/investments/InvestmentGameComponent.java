@@ -82,7 +82,7 @@ public class InvestmentGameComponent extends Component {
       chat.whisper(user, i18n.get("ChatCommand.invest.usage.maximums")
           .add("time", timeFormatter.timeQuantity(settings.getInvestmentDuration()))
           .add("mininterest", MathUtils.doubleToPercentage(settings.getMinInterest()))
-          .add("maxinterest", MathUtils.doubleToPercentage(settings.getMinInterest())));
+          .add("maxinterest", MathUtils.doubleToPercentage(settings.getMaxInterest())));
       return false;
     }
 
