@@ -45,10 +45,14 @@ public class SortDirectiveQueryProcessor<T> implements QueryProcessor<List<T>> {
         // The model is in title case, but the pojo properties are in plain camel case
         String sortBy = CaseFormat.UPPER_CAMEL.converterTo(CaseFormat.LOWER_CAMEL).convert(sortDirective.getProperty());
 
-        Transformer transformer = o -> (o == null ? "" : ((String) o).toLowerCase());
-        TransformingComparator comparator = new TransformingComparator(transformer);
-        //noinspection unchecked TransformingComparator implements comparator
-        comparatorChain.addComparator(new BeanComparator(sortBy, comparator), sortDirective.isDescending());
+        if (sortDirective.isCaseInsensitive()) {
+          Transformer transformer = o -> (o == null ? "" : ((String) o).toLowerCase());
+          TransformingComparator comparator = new TransformingComparator(transformer);
+          //noinspection unchecked TransformingComparator implements comparator
+          comparatorChain.addComparator(new BeanComparator(sortBy, comparator), sortDirective.isDescending());
+        } else {
+          comparatorChain.addComparator(new BeanComparator(sortBy), sortDirective.isDescending());
+        }
       });
 
       //noinspection unchecked ComparatorChain implements Comparator
