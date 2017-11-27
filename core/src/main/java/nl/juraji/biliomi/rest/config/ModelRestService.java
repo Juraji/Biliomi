@@ -40,12 +40,7 @@ public abstract class ModelRestService<T> {
   @Produces(MediaType.APPLICATION_JSON)
   public Response restGetEntities(@QueryParam(SortDirectiveQueryProcessor.PARAM_NAME) String sortDirectiveQuery) throws Exception {
     List<T> entities = getEntities();
-
-    try {
-      entities = new SortDirectiveQueryProcessor<T>().process(sortDirectiveQuery, entities);
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-    }
+    entities = new SortDirectiveQueryProcessor<T>().process(sortDirectiveQuery, entities);
 
     return Responses.okOrEmpty(entities);
   }
