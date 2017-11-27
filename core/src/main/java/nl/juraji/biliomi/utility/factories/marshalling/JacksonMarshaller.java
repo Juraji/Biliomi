@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 
 import java.io.IOException;
+import java.util.Collection;
 
 /**
  * Created by Juraji on 15-6-2017.
@@ -33,6 +34,10 @@ public final class JacksonMarshaller {
 
   public static String marshal(Object object) throws JsonProcessingException {
     return getObjectMapper().writeValueAsString(object);
+  }
+
+  public static <T> Collection<T> unmarshalCollection(String json, Class<T> elementClass) throws IOException {
+    return getObjectMapper().readValue(json, mapper.getTypeFactory().constructCollectionType(Collection.class, elementClass));
   }
 
   public static <T> T unmarshal(String json, Class<T> type) throws IOException {

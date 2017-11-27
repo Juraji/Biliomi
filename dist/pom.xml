@@ -36,7 +36,7 @@
       <plugin>
         <groupId>cz.habarta.typescript-generator</groupId>
         <artifactId>typescript-generator-maven-plugin</artifactId>
-        <version>1.25.322</version>
+        <version>1.29.366</version>
         <executions>
           <execution>
             <id>generate</id>
@@ -47,7 +47,7 @@
           </execution>
         </executions>
         <configuration>
-          <jsonLibrary>jackson2</jsonLibrary>
+          <jsonLibrary>jaxb</jsonLibrary>
           <classPatterns>nl.juraji.biliomi.model.**</classPatterns>
           <excludeClassPatterns>
             <pattern>nl.juraji.biliomi.model.**Dao</pattern>
@@ -60,6 +60,8 @@
           <outputKind>module</outputKind>
           <namespace>Biliomi</namespace>
           <sortTypeDeclarations>true</sortTypeDeclarations>
+          <mapEnum>asEnum</mapEnum>
+          <nonConstEnums>true</nonConstEnums>
           <addTypeNamePrefix>I</addTypeNamePrefix>
           <outputFileType>implementationFile</outputFileType>
           <outputFile>${project.build.directory}/Biliomi.ts</outputFile>

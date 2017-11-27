@@ -15,7 +15,7 @@ import java.io.IOException;
  */
 @Provider
 @Priority(Priorities.HEADER_DECORATOR)
-public class CORSFilter implements ContainerResponseFilter {
+public class InCORSFilter implements ContainerResponseFilter {
   @Override
   public void filter(ContainerRequestContext containerRequestContext, ContainerResponseContext containerResponseContext) throws IOException {
     MultivaluedMap<String, Object> headers = containerResponseContext.getHeaders();

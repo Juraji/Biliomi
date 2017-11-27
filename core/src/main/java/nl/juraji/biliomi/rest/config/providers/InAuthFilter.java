@@ -32,7 +32,7 @@ import java.lang.reflect.Method;
  */
 @Provider
 @Priority(Priorities.AUTHORIZATION)
-public class AuthFilter implements ContainerRequestFilter {
+public class InAuthFilter implements ContainerRequestFilter {
   protected static final String OPTIONS_METHOD = HttpMethod.OPTIONS.toString();
   private static final String APPLICATION_WADL_PATH = "application.wadl";
 
