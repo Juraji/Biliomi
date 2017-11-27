@@ -46,7 +46,7 @@ public class SortDirectiveQueryProcessor<T> implements QueryProcessor<List<T>> {
         String sortBy = CaseFormat.UPPER_CAMEL.converterTo(CaseFormat.LOWER_CAMEL).convert(sortDirective.getProperty());
 
         if (sortDirective.isCaseInsensitive()) {
-          Transformer transformer = o -> (o == null ? "" : ((String) o).toLowerCase());
+          Transformer transformer = o -> (o == null ? "" : String.valueOf(o).toLowerCase());
           TransformingComparator comparator = new TransformingComparator(transformer);
           //noinspection unchecked TransformingComparator implements comparator
           comparatorChain.addComparator(new BeanComparator(sortBy, comparator), sortDirective.isDescending());
