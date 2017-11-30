@@ -8,6 +8,7 @@ import org.apache.commons.collections.Transformer;
 import org.apache.commons.collections.comparators.ComparatorChain;
 import org.apache.commons.collections.comparators.TransformingComparator;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -32,31 +33,36 @@ public class SortDirectiveQueryProcessor<T> implements QueryProcessor<List<T>> {
    */
   @Override
   public List<T> process(String queryParamValue, List<T> entities) throws IOException {
-    Collection<RestSortDirective> sortDirectives = null;
+    try {
+      Collection<RestSortDirective> sortDirectives = null;
 
-    if (StringUtils.isNotEmpty(queryParamValue)) {
-      sortDirectives = JacksonMarshaller.unmarshalCollection(queryParamValue, RestSortDirective.class);
-    }
+      if (StringUtils.isNotEmpty(queryParamValue)) {
+        sortDirectives = JacksonMarshaller.unmarshalCollection(queryParamValue, RestSortDirective.class);
+      }
 
-    if (sortDirectives != null && sortDirectives.size() > 0) {
-      final ComparatorChain comparatorChain = new ComparatorChain();
+      if (sortDirectives != null && sortDirectives.size() > 0) {
+        final ComparatorChain comparatorChain = new ComparatorChain();
 
-      sortDirectives.forEach(sortDirective -> {
-        // The model is in title case, but the pojo properties are in plain camel case
-        String sortBy = CaseFormat.UPPER_CAMEL.converterTo(CaseFormat.LOWER_CAMEL).convert(sortDirective.getProperty());
+        sortDirectives.forEach(sortDirective -> {
+          // The model is in title case, but the pojo properties are in plain camel case
+          String sortBy = CaseFormat.UPPER_CAMEL.converterTo(CaseFormat.LOWER_CAMEL).convert(sortDirective.getProperty());
 
-        if (sortDirective.isCaseInsensitive()) {
-          Transformer transformer = o -> (o == null ? "" : String.valueOf(o).toLowerCase());
-          TransformingComparator comparator = new TransformingComparator(transformer);
-          //noinspection unchecked TransformingComparator implements comparator
-          comparatorChain.addComparator(new BeanComparator(sortBy, comparator), sortDirective.isDescending());
-        } else {
-          comparatorChain.addComparator(new BeanComparator(sortBy), sortDirective.isDescending());
-        }
-      });
+          if (sortDirective.isCaseInsensitive()) {
+            Transformer transformer = o -> (o == null ? "" : String.valueOf(o).toLowerCase());
+            TransformingComparator comparator = new TransformingComparator(transformer);
+            //noinspection unchecked TransformingComparator implements comparator
+            comparatorChain.addComparator(new BeanComparator(sortBy, comparator), sortDirective.isDescending());
+          } else {
+            comparatorChain.addComparator(new BeanComparator(sortBy), sortDirective.isDescending());
+          }
+        });
 
-      //noinspection unchecked ComparatorChain implements Comparator
-      entities.sort(comparatorChain);
+        //noinspection unchecked ComparatorChain implements Comparator
+        entities.sort(comparatorChain);
+      }
+    } catch (Exception e) {
+      LogManager.getLogger(this.getClass()).error(e);
+      throw e;
     }
 
     return entities;

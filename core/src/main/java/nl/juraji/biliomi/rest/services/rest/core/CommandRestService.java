@@ -52,7 +52,6 @@ public class CommandRestService extends ModelRestService<Command> {
     command.setPrice(e.getPrice());
     command.setCooldown(e.getCooldown());
     command.setModeratorCanActivate(e.isModeratorCanActivate());
-    command.setSystemCommand(e.isSystemCommand());
 
     if (e.getUserGroup() != null) {
       command.setUserGroup(e.getUserGroup());
