@@ -24,6 +24,9 @@ public class ChannelInfo {
   @XmlElement(name = "PreviewUri")
   private String previewUri;
 
+  @XmlElement(name = "Affiliate")
+  private boolean affiliate;
+
   @XmlElement(name = "Partner")
   private boolean partner;
 
@@ -65,6 +68,14 @@ public class ChannelInfo {
 
   public void setPreviewUri(String previewUri) {
     this.previewUri = previewUri;
+  }
+
+  public boolean isAffiliate() {
+    return affiliate;
+  }
+
+  public void setAffiliate(boolean affiliate) {
+    this.affiliate = affiliate;
   }
 
   public boolean isPartner() {

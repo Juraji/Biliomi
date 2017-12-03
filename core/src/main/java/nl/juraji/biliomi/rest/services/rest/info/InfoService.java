@@ -70,6 +70,7 @@ public class InfoService {
       info.setGame(gameService.getByName(channel.getGame(), true));
       info.setStatus(channel.getStatus());
       info.setLogoUri(channel.getLogo());
+      info.setAffiliate(info.getSubscriberCount() > 0);
       info.setPartner(channel.isPartner());
       info.getViewers().addAll(chatService.getViewersAsUsers());
 
