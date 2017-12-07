@@ -13,9 +13,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -43,7 +40,7 @@ public class ChatLogRestService {
     }
 
     LogInfo logInfo = new LogInfo();
-    logInfo.setLogDate(getFileCreationDate(currentChatLogFile));
+    logInfo.setLogDate(DateTime.now());
     logInfo.getLines().addAll(FileUtils.readLines(currentChatLogFile, "UTF-8"));
 
     return Responses.ok(logInfo);
@@ -100,10 +97,5 @@ public class ChatLogRestService {
 
   private DateTime getFileCreationDateFromName(File file) {
     return new DateTime(file.getName().substring(5, 15));
-  }
-
-  private DateTime getFileCreationDate(File file) throws IOException {
-    BasicFileAttributes attributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
-    return new DateTime(attributes.creationTime().toMillis());
   }
 }
