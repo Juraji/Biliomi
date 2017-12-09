@@ -11,6 +11,7 @@ import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
 import nl.juraji.biliomi.utility.types.Templater;
 import nl.juraji.biliomi.utility.types.components.Component;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -38,7 +39,7 @@ public class PMResponseComponent extends Component {
     }
 
     Template template = templateDao.getByKey(PM_RESPONSE_TEMPLATE_ID);
-    if (template == null || template.getTemplate() == null) {
+    if (template == null || StringUtils.isEmpty(template.getTemplate())) {
       return;
     }
     chat.whisper(event.getUsername(), Templater.template(template.getTemplate())
