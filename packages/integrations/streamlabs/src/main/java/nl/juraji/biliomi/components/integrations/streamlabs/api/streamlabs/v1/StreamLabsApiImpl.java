@@ -91,6 +91,6 @@ public class StreamLabsApiImpl implements StreamLabsApi {
       }
     }
 
-    return ModelUtils.mapWith("access_token", token.getToken());
+    return ModelUtils.mapWith(new ModelUtils.MapEntry<>("access_token", token.getToken()));
   }
 }

@@ -2,13 +2,12 @@ package nl.juraji.biliomi.io.api.twitch.v5;
 
 import com.google.common.base.Joiner;
 import com.google.common.net.MediaType;
-import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchChannel;
-import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchGame;
-import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchUser;
+import nl.juraji.biliomi.io.api.twitch.v5.model.*;
 import nl.juraji.biliomi.io.api.twitch.v5.model.wrappers.*;
 import nl.juraji.biliomi.io.web.Response;
 import nl.juraji.biliomi.io.web.Url;
 import nl.juraji.biliomi.io.web.WebClient;
+import nl.juraji.biliomi.model.core.Community;
 import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
@@ -25,6 +24,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Juraji on 19-4-2017.
@@ -99,8 +99,29 @@ public class TwitchApiImpl implements TwitchApi {
   }
 
   @Override
+  public Response<TwitchCommunity> getCommunityByName(String communityName) throws Exception {
+    HashMap<String, Object> query = new HashMap<>();
+    query.put("name", communityName);
+    return webClient.get(Url.url(API_BASE_URI, "communities").withQuery(query), headers, TwitchCommunity.class);
+  }
+
+  @Override
   public Response<TwitchCommunities> getChannelCommunities(long twitchId) throws Exception {
     return webClient.get(Url.url(API_BASE_URI, "channels", twitchId, "communities"), headers, TwitchCommunities.class);
+  }
+
+  @Override
+  public Response<Void> updateChannelCommunities(long twitchId, Set<Community> communities) throws Exception {
+    TwitchCommunitiesUpdate update = new TwitchCommunitiesUpdate();
+
+    communities.stream()
+        .limit(3)
+        .map(Community::getTwitchId)
+        .forEach(id -> update.getCommunityIds().add(id));
+
+    String body = JacksonMarshaller.marshal(update);
+
+    return webClient.put(Url.url(API_BASE_URI, "channels", twitchId, "communities"), headers, body, MediaType.JSON_UTF_8, Void.class);
   }
 
   @Override

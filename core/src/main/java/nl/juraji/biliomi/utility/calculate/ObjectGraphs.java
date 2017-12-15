@@ -25,7 +25,7 @@ public final class ObjectGraphs {
    * @param <T>    The POJO type
    * @return The merge result
    */
-  public static <T> T mergeObjects(T target, T source) throws Exception {
+  public static <T> T mergeObjects(T target, T source) {
     // Check that target and source are of the same type
     Preconditions.checkArgument(
         target.getClass().equals(source.getClass()),
@@ -98,6 +98,7 @@ public final class ObjectGraphs {
     return (ClassUtils.isPrimitiveOrWrapper(type)
         || Class.class.equals(type)
         || String.class.equals(type)
-        || Collection.class.isAssignableFrom(type));
+        || Collection.class.isAssignableFrom(type)
+        || Void.class.isAssignableFrom(type));
   }
 }

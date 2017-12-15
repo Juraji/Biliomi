@@ -22,9 +22,6 @@ public class TwitchCommunity {
   @XmlElement(name = "name")
   private String name;
 
-  @XmlElement(name = "display_name")
-  private String displayName;
-
   @XmlElement(name = "avatar_image_url")
   private String avatarImageUrl;
 
@@ -71,14 +68,6 @@ public class TwitchCommunity {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public String getDisplayName() {
-    return displayName;
-  }
-
-  public void setDisplayName(String displayName) {
-    this.displayName = displayName;
   }
 
   public String getAvatarImageUrl() {

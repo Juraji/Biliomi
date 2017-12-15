@@ -1,5 +1,6 @@
 package nl.juraji.biliomi.model.core;
 
+import nl.juraji.biliomi.utility.factories.ModelUtils;
 import nl.juraji.biliomi.utility.types.hibernatetypes.DateTimeISO8601Type;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -10,6 +11,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Set;
 
 /**
  * Created by Juraji on 13-5-2017.
@@ -39,6 +41,10 @@ public class Game {
   @Column
   @XmlElement(name = "SteamId")
   private Long steamId;
+
+  @ManyToMany(fetch = FetchType.EAGER)
+  @XmlElement(name = "Communities")
+  private Set<Community> communities;
 
   public long getId() {
     return id;
@@ -70,5 +76,10 @@ public class Game {
 
   public void setSteamId(Long steamId) {
     this.steamId = steamId;
+  }
+
+  public Set<Community> getCommunities() {
+    communities = ModelUtils.initCollection(communities);
+    return communities;
   }
 }

@@ -40,9 +40,45 @@ public class ModelUtils {
     return Arrays.stream(entries).collect(Collectors.toList());
   }
 
-  public static <K, V> Map<K, V> mapWith(K key, V value) {
-    Map<K, V> map = new HashMap<>();
-    map.put(key, value);
+  @SafeVarargs
+  public static <K, V> Map<K, V> mapWith(Map.Entry<K, V>... entries) {
+    Map<K, V> map = new HashMap<>(entries.length);
+    Arrays.stream(entries).forEach(entry -> map.put(entry.getKey(), entry.getValue()));
     return map;
+  }
+
+  public static class MapEntry<K, V> implements Map.Entry<K, V> {
+    private K key;
+    private V value;
+
+    public MapEntry(K key, V value) {
+      this.key = key;
+      this.value = value;
+    }
+
+    @Override
+    public K getKey() {
+      return key;
+    }
+
+    @Override
+    public V getValue() {
+      return value;
+    }
+
+    @Override
+    public V setValue(V value) {
+      return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      return (o instanceof MapEntry && ((MapEntry) o).key == key && ((MapEntry) o).value == value);
+    }
+
+    @Override
+    public int hashCode() {
+      return key.hashCode() + value.hashCode() / 2;
+    }
   }
 }

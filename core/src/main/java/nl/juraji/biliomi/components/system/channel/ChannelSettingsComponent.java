@@ -1,11 +1,10 @@
 package nl.juraji.biliomi.components.system.channel;
 
 import nl.juraji.biliomi.components.shared.TimeFormatter;
+import nl.juraji.biliomi.components.system.settings.SettingsService;
 import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchStream;
-import nl.juraji.biliomi.model.core.Game;
-import nl.juraji.biliomi.model.core.Template;
-import nl.juraji.biliomi.model.core.TemplateDao;
-import nl.juraji.biliomi.model.core.User;
+import nl.juraji.biliomi.model.core.*;
+import nl.juraji.biliomi.model.core.settings.CommunitiesSettings;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
@@ -18,6 +17,7 @@ import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Set;
 
 /**
  * Created by Juraji on 13-5-2017.
@@ -33,10 +33,16 @@ public class ChannelSettingsComponent extends Component {
   private ChannelService channelService;
 
   @Inject
+  private CommunitiesService communitiesService;
+
+  @Inject
   private TimeFormatter timeFormatter;
 
   @Inject
   private TemplateDao templateDao;
+
+  @Inject
+  private SettingsService settingsService;
 
   /**
    * Check wether the caster or another channel is streaming or not
@@ -134,11 +140,32 @@ public class ChannelSettingsComponent extends Component {
     if (updateGameResult != null) {
       chat.whisper(user, i18n.get("ChatCommand.channel.game.updated")
           .add("gamename", updateGameResult::getName));
-      return true;
     } else {
       chat.whisper(user, i18n.get("Common.channels.updatedfailed"));
       return false;
     }
+
+    CommunitiesSettings communitiesSettings = settingsService.getSettings(CommunitiesSettings.class);
+    if (communitiesSettings.isAutoUpdateCommunities()) {
+      Set<Community> communities = updateGameResult.getCommunities();
+
+      if (communities.size() == 0) {
+        communities = communitiesSettings.getDefaultCommunities();
+      }
+
+      if (communities.size() > 0) {
+        boolean communitiesUpdated = communitiesService.updateTwitchCommunities(communities);
+        if (communitiesUpdated) {
+          chat.whisper(user, i18n.get("ChatCommand.channel.game.communities.updated")
+              .add("communities", updateGameResult::getCommunities));
+        } else {
+          chat.whisper(user, i18n.get("ChatCommand.channel.game.communities.updatedFailed"));
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 
   /**

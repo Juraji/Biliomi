@@ -1,10 +1,14 @@
 package nl.juraji.biliomi.io.api.twitch.v5;
 
 import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchChannel;
+import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchCommunity;
 import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchGame;
 import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchUser;
 import nl.juraji.biliomi.io.api.twitch.v5.model.wrappers.*;
 import nl.juraji.biliomi.io.web.Response;
+import nl.juraji.biliomi.model.core.Community;
+
+import java.util.Set;
 
 /**
  * Created by Juraji on 20-4-2017.
@@ -72,6 +76,15 @@ public interface TwitchApi {
   Response<TwitchTeams> getChannelTeams(long twitchId) throws Exception;
 
   /**
+   * Retrieves a single community by its name
+   *
+   * @param communityName The name of the community to search for
+   * @return A Response with a TwitchCommunty object
+   * @see <a href="https://dev.twitch.tv/docs/v5/reference/communities#get-community-by-name">Get Community by Name</a>
+   */
+  Response<TwitchCommunity> getCommunityByName(String communityName) throws Exception;
+
+  /**
    * Retrieves a list of communities the channel is currently in
    *
    * @param twitchId The user id of the channel to fetch communities for
@@ -79,6 +92,13 @@ public interface TwitchApi {
    * @see <a href="https://dev.twitch.tv/docs/v5/reference/channels/#get-channel-communities">Twitch API docs</a>
    */
   Response<TwitchCommunities> getChannelCommunities(long twitchId) throws Exception;
+
+  /**
+   * Set communities for the current channel (max 3)
+   * @param communities A set of 3 communities at maximum
+   * @return A Response with no object
+   */
+  Response<Void> updateChannelCommunities(long twitchId, Set<Community> communities) throws Exception;
 
   /**
    * Retrieve current streams of a Twitch user
