@@ -1,3 +1,14 @@
+# Biliomi v3.14.0
+Date: 16th december 2017
+
+## Release Notes
+* Biliomi now differentiates between normal channels, affiliates and partners. (Implemented for panel useablility).
+* Fixed PM responses triggering when the template is empty. Empty templates will now disable the pm's.
+* Enable optionally binding communities to games, when the game is changed via Biliomi the bound communities will be set on the channel.
+If the game does not have any communities bound the default communities will be used and if those are unset nothing happens  (obviously).
+This feature is disabled by default and can not be set up via commands (for now), instead you will be able to set up this feature in the upcoming panel.
+* Add sorting to the REST API. Details will follow soon in the [wiki](https://github.com/Juraji/Biliomi/wiki).
+
 # Biliomi v3.12.2
 Date: 12th november 2017
 
