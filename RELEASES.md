@@ -1,3 +1,9 @@
+# Biliomi v3.14.1
+Date: 16th december 2017
+
+## Release Notes
+* Fix Communities not updating due to failure in checks.
+
 # Biliomi v3.14.0
 Date: 16th december 2017
 
