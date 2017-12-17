@@ -48,7 +48,7 @@ public class Response<T> {
   }
 
   public boolean isOK() {
-    return status == 200 || status == 201;
+    return status >= 200 && status <= 299;
   }
 
   @Override
