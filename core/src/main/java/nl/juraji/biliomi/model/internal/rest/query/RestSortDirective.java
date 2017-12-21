@@ -16,9 +16,6 @@ public class RestSortDirective {
   @XmlElement(name = "Descending")
   private boolean descending;
 
-  @XmlElement(name = "CaseInsensitive")
-  private boolean caseInsensitive;
-
   public String getProperty() {
     return property;
   }
@@ -33,13 +30,5 @@ public class RestSortDirective {
 
   public void setDescending(boolean descending) {
     this.descending = descending;
-  }
-
-  public boolean isCaseInsensitive() {
-    return caseInsensitive;
-  }
-
-  public void setCaseInsensitive(boolean caseInsensitive) {
-    this.caseInsensitive = caseInsensitive;
   }
 }
