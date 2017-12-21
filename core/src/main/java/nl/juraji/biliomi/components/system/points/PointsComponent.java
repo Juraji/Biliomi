@@ -264,7 +264,7 @@ public class PointsComponent extends Component {
     currentViewers.forEach(viewer -> viewer.addPoints(amount));
     usersService.save(currentViewers);
 
-    chat.say(i18n.get("")
+    chat.say(i18n.get("ChatCommand.managePoints.everyone.given")
         .add("casterusername", user::getDisplayName)
         .add("points", pointsService.asString(amount)));
     return true;
