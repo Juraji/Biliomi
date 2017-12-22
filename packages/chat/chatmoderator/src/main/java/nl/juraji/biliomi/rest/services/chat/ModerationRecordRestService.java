@@ -22,7 +22,7 @@ public class ModerationRecordRestService extends ModelRestService<ModerationReco
   @GET
   @Path("/user/{userid}")
   @Produces(MediaType.APPLICATION_JSON)
-  public List<ModerationRecord> getForUser(@PathParam("userid") Long userId) throws Exception {
+  public List<ModerationRecord> getForUser(@PathParam("userid") Long userId) {
     return moderationRecordDao.getRecords(userId);
   }
 
@@ -48,6 +48,13 @@ public class ModerationRecordRestService extends ModelRestService<ModerationReco
 
   @Override
   public boolean deleteEntity(long id) {
-    throw new ForbiddenException();
+    ModerationRecord moderationRecord = this.moderationRecordDao.get(id);
+
+    if (moderationRecord == null) {
+      return false;
+    }
+
+    moderationRecordDao.delete(moderationRecord);
+    return true;
   }
 }
