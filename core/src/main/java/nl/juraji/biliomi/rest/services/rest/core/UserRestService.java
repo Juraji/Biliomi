@@ -50,11 +50,11 @@ public class UserRestService extends ModelRestService<User> {
 
     // Only some of the properties can be changed
     user.setFollower(e.isFollower());
-    if (user.getFollowDate() == null) {
+    if (user.isFollower()) {
       user.setFollowDate(e.getFollowDate());
     }
     user.setFollower(e.isSubscriber());
-    if (user.getSubscribeDate() == null) {
+    if (user.isSubscriber()) {
       user.setFollowDate(e.getSubscribeDate());
     }
 
