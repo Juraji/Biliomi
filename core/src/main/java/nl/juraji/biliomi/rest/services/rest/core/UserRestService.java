@@ -55,10 +55,10 @@ public class UserRestService extends ModelRestService<User> {
     user.setBlacklistedSince(e.getBlacklistedSince());
 
     // These can only be changed if
-    if (user.isFollower()) {
+    if (user.isFollower() && e.getFollowDate() != null) {
       user.setFollowDate(e.getFollowDate());
     }
-    if (user.isSubscriber()) {
+    if (user.isSubscriber() && e.getSubscribeDate() != null) {
       user.setFollowDate(e.getSubscribeDate());
     }
 
