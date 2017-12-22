@@ -53,6 +53,7 @@ public class GameRestService extends ModelRestService<Game> {
 
     game.setName(e.getName());
     game.setFirstPlayedOn(e.getFirstPlayedOn());
+    game.setSteamId(e.getSteamId());
 
     if (e.getCommunities() != null) {
       game.getCommunities().clear();
