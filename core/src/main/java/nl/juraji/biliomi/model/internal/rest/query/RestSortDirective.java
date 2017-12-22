@@ -1,5 +1,7 @@
 package nl.juraji.biliomi.model.internal.rest.query;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -8,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Biliomi
  */
 @XmlRootElement(name = "RestSortDirective")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class RestSortDirective {
 
   @XmlElement(name = "Property")

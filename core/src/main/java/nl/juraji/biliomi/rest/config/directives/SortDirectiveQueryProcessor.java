@@ -2,7 +2,7 @@ package nl.juraji.biliomi.rest.config.directives;
 
 import nl.juraji.biliomi.model.internal.rest.query.RestSortDirective;
 import nl.juraji.biliomi.utility.factories.marshalling.JacksonMarshaller;
-import nl.juraji.biliomi.utility.types.XmlElementPathBeanComparator;
+import nl.juraji.biliomi.utility.types.xml.XmlElementPathBeanComparator;
 import org.apache.commons.collections.comparators.ComparatorChain;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -30,7 +30,7 @@ public class SortDirectiveQueryProcessor<T> implements QueryProcessor<List<T>> {
    */
   @Override
   public List<T> process(String queryParamValue, List<T> entities) throws IOException {
-    if (entities.size() != 0) {
+    if (entities.size() > 1) {
       try {
         Collection<RestSortDirective> sortDirectives = null;
         Class<?> rootClass = entities.get(0).getClass();
@@ -43,7 +43,7 @@ public class SortDirectiveQueryProcessor<T> implements QueryProcessor<List<T>> {
           final ComparatorChain comparatorChain = new ComparatorChain();
 
           sortDirectives.forEach(sortDirective ->
-              comparatorChain.addComparator(new XmlElementPathBeanComparator(sortDirective.getProperty(), rootClass), sortDirective.isDescending()));
+              comparatorChain.addComparator(new XmlElementPathBeanComparator<>(sortDirective.getProperty(), rootClass), sortDirective.isDescending()));
 
           //noinspection unchecked ComparatorChain implements Comparator
           entities.sort(comparatorChain);

@@ -1,5 +1,6 @@
 package nl.juraji.biliomi.rest.config;
 
+import nl.juraji.biliomi.rest.config.directives.FilterDirectiveQueryProcessor;
 import nl.juraji.biliomi.rest.config.directives.SortDirectiveQueryProcessor;
 import nl.juraji.biliomi.utility.estreams.EStream;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -38,8 +39,10 @@ public abstract class ModelRestService<T> {
    */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public Response restGetEntities(@QueryParam(SortDirectiveQueryProcessor.PARAM_NAME) String sortDirectiveQuery) throws Exception {
+  public Response restGetEntities(@QueryParam(SortDirectiveQueryProcessor.PARAM_NAME) String sortDirectiveQuery,
+                                  @QueryParam(FilterDirectiveQueryProcessor.PARAM_NAME) String filterDirectiveQuery) throws Exception {
     List<T> entities = getEntities();
+    entities = new FilterDirectiveQueryProcessor<T>().process(filterDirectiveQuery, entities);
     entities = new SortDirectiveQueryProcessor<T>().process(sortDirectiveQuery, entities);
 
     return Responses.okOrEmpty(entities);
