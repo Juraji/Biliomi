@@ -49,19 +49,18 @@ public class UserRestService extends ModelRestService<User> {
     }
 
     // Only some of the properties can be changed
-    user.setFollower(e.isFollower());
-    if (user.isFollower()) {
-      user.setFollowDate(e.getFollowDate());
-    }
-    user.setFollower(e.isSubscriber());
-    if (user.isSubscriber()) {
-      user.setFollowDate(e.getSubscribeDate());
-    }
-
     user.setUserGroup(e.getUserGroup());
     user.setTitle(e.getTitle());
     user.setPoints(e.getPoints());
     user.setBlacklistedSince(e.getBlacklistedSince());
+
+    // These can only be changed if
+    if (user.isFollower()) {
+      user.setFollowDate(e.getFollowDate());
+    }
+    if (user.isSubscriber()) {
+      user.setFollowDate(e.getSubscribeDate());
+    }
 
     userDao.save(user);
 
