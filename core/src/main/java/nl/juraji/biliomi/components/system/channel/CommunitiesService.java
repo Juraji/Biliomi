@@ -3,6 +3,7 @@ package nl.juraji.biliomi.components.system.channel;
 import nl.juraji.biliomi.components.system.users.UsersService;
 import nl.juraji.biliomi.io.api.twitch.v5.TwitchApi;
 import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchCommunity;
+import nl.juraji.biliomi.io.api.twitch.v5.model.wrappers.TwitchCommunities;
 import nl.juraji.biliomi.io.web.Response;
 import nl.juraji.biliomi.model.core.Community;
 import nl.juraji.biliomi.model.core.CommunityDao;
@@ -10,6 +11,7 @@ import nl.juraji.biliomi.model.core.User;
 import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -42,6 +44,23 @@ public class CommunitiesService {
     return communityDao.getList();
   }
 
+  public List<Community> getChannelCommunities() {
+    List<Community> communities = new ArrayList<>();
+
+    try {
+      Response<TwitchCommunities> response = twitchApi.getChannelCommunities(channelService.getChannelId());
+      if (response.isOK()) {
+        response.getData().getCommunities().stream()
+            .map(this::convertTwitchCommunity)
+            .forEach(communities::add);
+      }
+    } catch (Exception e) {
+      logger.error("Failed retrieving current channel communities", e);
+    }
+
+    return communities;
+  }
+
   public Community getCommunityByName(String communityName) {
     Community community = communityDao.getByName(communityName);
 
@@ -50,15 +69,7 @@ public class CommunitiesService {
         Response<TwitchCommunity> response = twitchApi.getCommunityByName(communityName);
 
         if (response.isOK()) {
-          User userByTwitchId = usersService.getUserByTwitchId(response.getData().getOwnerId());
-
-          if (userByTwitchId != null) {
-            community = new Community();
-            community.setTwitchId(response.getData().getId());
-            community.setName(response.getData().getName());
-            community.setOwner(userByTwitchId);
-            communityDao.save(community);
-          }
+          community = convertTwitchCommunity(response.getData());
         }
       } catch (Exception e) {
         logger.error("Could not find a community by the name " + communityName, e);
@@ -78,5 +89,19 @@ public class CommunitiesService {
     }
 
     return (response != null && response.isOK());
+  }
+
+  private Community convertTwitchCommunity(TwitchCommunity twitchCommunity) {
+    User userByTwitchId = usersService.getUserByTwitchId(twitchCommunity.getOwnerId());
+    Community community = new Community();
+
+    if (userByTwitchId != null) {
+      community.setTwitchId(twitchCommunity.getId());
+      community.setName(twitchCommunity.getName());
+      community.setOwner(userByTwitchId);
+      communityDao.save(community);
+    }
+
+    return community;
   }
 }
