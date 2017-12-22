@@ -6,7 +6,7 @@ import org.eclipse.jetty.http.HttpFields;
 /**
  * Created by Juraji on 20-4-2017.
  * Biliomi v3
- *
+ * <p>
  * Note: If the given model class is a Java type the response data will not be set.
  * The response raw data will always contain a string of the response contents.
  */
@@ -59,6 +59,18 @@ public interface WebClient {
    */
   <T> Response<T> put(String uri, HttpFields headers, String body, MediaType bodyMediaType, Class<T> model) throws Exception;
 
+  /**
+   * Perform a DELETE request
+   *
+   * @param <T>     Generictype model class, to assign a type to the response
+   * @param uri     The uri to the webresource
+   * @param headers A HttpFields object containing headers to use
+   * @param model   The model class expected to be returned by the webresource
+   * @return A Response object containing status information and any returned data
+   * @throws Exception When the request fails to execute due to insufficient parameters or an internal error
+   */
+  <T> Response<T> delete(String uri, HttpFields headers, Class<T> model) throws Exception;
+
   default <T> Response<T> get(Url url, HttpFields headers, Class<T> model) throws Exception {
     return get(url.toString(), headers, model);
   }
@@ -69,5 +81,9 @@ public interface WebClient {
 
   default <T> Response<T> put(Url url, HttpFields headers, String body, MediaType bodyMediaType, Class<T> model) throws Exception {
     return put(url.toString(), headers, body, bodyMediaType, model);
+  }
+
+  default <T> Response<T> delete(Url url, HttpFields headers, Class<T> model) throws Exception {
+    return delete(url.toString(), headers, model);
   }
 }

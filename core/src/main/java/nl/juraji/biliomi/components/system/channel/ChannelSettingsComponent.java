@@ -17,7 +17,6 @@ import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -151,19 +150,14 @@ public class ChannelSettingsComponent extends Component {
     if (communitiesSettings.isAutoUpdateCommunities()) {
       Set<Community> communities = updateGameResult.getCommunities();
 
+      // Todo: clear communities results in a 500 error
+      // communitiesService.clearChannelCommunities();
+
       if (communities.size() == 0) {
         communities = communitiesSettings.getDefaultCommunities();
       }
 
-      boolean doUpdate;
       if (communities.size() > 0) {
-        doUpdate = true;
-      } else {
-        List<Community> channelCommunities = communitiesService.getChannelCommunities();
-        doUpdate = channelCommunities.size() > 0;
-      }
-
-      if (doUpdate) {
         boolean communitiesUpdated = communitiesService.updateTwitchCommunities(communities);
         if (communitiesUpdated) {
           chat.whisper(user, i18n.get("ChatCommand.channel.game.communities.updated")

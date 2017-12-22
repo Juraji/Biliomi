@@ -108,4 +108,16 @@ public class CommunitiesService {
 
     return community;
   }
+
+  public boolean clearChannelCommunities() {
+    Response<Void> response;
+
+    try {
+      response = twitchApi.clearChannelCommunities(channelService.getChannelId());
+    } catch (Exception e) {
+      return false;
+    }
+
+    return response.isOK();
+  }
 }

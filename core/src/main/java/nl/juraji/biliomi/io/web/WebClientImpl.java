@@ -103,6 +103,13 @@ public class WebClientImpl implements WebClient {
     return execute(request, headers, model);
   }
 
+  @Override
+  public <T> Response<T> delete(String uri, HttpFields headers, Class<T> model) throws Exception {
+    Request request = newRequest(uri);
+    request.method(HttpMethod.DELETE);
+    return execute(request, headers, model);
+  }
+
   private Charset mediaTypeToCharset(MediaType mediaType) {
     return mediaType.charset().or(Charset.forName("UTF-8"));
   }

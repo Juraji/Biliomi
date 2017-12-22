@@ -95,10 +95,19 @@ public interface TwitchApi {
 
   /**
    * Set communities for the current channel (max 3)
+   *
    * @param communities A set of 3 communities at maximum
    * @return A Response with no object
    */
   Response<Void> updateChannelCommunities(long twitchId, Set<Community> communities) throws Exception;
+
+  /**
+   * Remove a community from a channel
+   *
+   * @param twitchId The user id of the channel to fetch communities for
+   * @return A Response with no object
+   */
+  Response<Void> clearChannelCommunities(long twitchId) throws Exception;
 
   /**
    * Retrieve current streams of a Twitch user
