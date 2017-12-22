@@ -8,6 +8,7 @@ import nl.juraji.biliomi.io.web.Response;
 import nl.juraji.biliomi.model.core.Community;
 import nl.juraji.biliomi.model.core.CommunityDao;
 import nl.juraji.biliomi.model.core.User;
+import nl.juraji.biliomi.utility.estreams.EStream;
 import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
@@ -49,11 +50,14 @@ public class CommunitiesService {
 
     try {
       Response<TwitchCommunities> response = twitchApi.getChannelCommunities(channelService.getChannelId());
+
       if (response.isOK()) {
-        response.getData().getCommunities().stream()
-            .map(this::convertTwitchCommunity)
+        EStream.from(response.getData().getCommunities())
+            .mapToBiEStream(twitchCommunity -> communityDao.getByTwitchID(twitchCommunity.getId()))
+            .map((tc, c) -> (c == null ? convertTwitchCommunity(tc) : c))
             .forEach(communities::add);
       }
+
     } catch (Exception e) {
       logger.error("Failed retrieving current channel communities", e);
     }
