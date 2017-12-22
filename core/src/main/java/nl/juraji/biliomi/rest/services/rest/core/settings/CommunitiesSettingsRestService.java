@@ -31,6 +31,8 @@ public class CommunitiesSettingsRestService extends SettingsModelRestService<Com
     settings.getDefaultCommunities().clear();
     settings.getDefaultCommunities().addAll(e.getDefaultCommunities());
 
+    settingsService.save(settings);
+
     return settings;
   }
 }
