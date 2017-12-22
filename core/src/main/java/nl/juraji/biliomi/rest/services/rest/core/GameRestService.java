@@ -35,6 +35,10 @@ public class GameRestService extends ModelRestService<Game> {
     game.setName(e.getName());
     game.setFirstPlayedOn(e.getFirstPlayedOn());
 
+    if (e.getCommunities() != null) {
+      game.getCommunities().addAll(e.getCommunities());
+    }
+
     gameDao.save(game);
     return game;
   }
@@ -49,6 +53,12 @@ public class GameRestService extends ModelRestService<Game> {
 
     game.setName(e.getName());
     game.setFirstPlayedOn(e.getFirstPlayedOn());
+
+    if (e.getCommunities() != null) {
+      game.getCommunities().clear();
+      game.getCommunities().addAll(e.getCommunities());
+    }
+
     gameDao.save(game);
     return game;
   }
