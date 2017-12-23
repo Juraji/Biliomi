@@ -105,7 +105,7 @@ public class XmlElementPathBeanPredicate<T> implements Predicate<T> {
     // noinspection unchecked I tried
     switch (operator) {
       case EQUALS:
-        return a == b;
+        return a.equals(b);
       default:
         return false;
     }
