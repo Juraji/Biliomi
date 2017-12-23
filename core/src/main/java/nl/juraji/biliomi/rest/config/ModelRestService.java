@@ -1,6 +1,7 @@
 package nl.juraji.biliomi.rest.config;
 
 import nl.juraji.biliomi.rest.config.directives.FilterDirectiveQueryProcessor;
+import nl.juraji.biliomi.rest.config.directives.LimitQueryProcessor;
 import nl.juraji.biliomi.rest.config.directives.SortDirectiveQueryProcessor;
 import nl.juraji.biliomi.utility.estreams.EStream;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -40,10 +41,13 @@ public abstract class ModelRestService<T> {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response restGetEntities(@QueryParam(SortDirectiveQueryProcessor.PARAM_NAME) String sortDirectiveQuery,
-                                  @QueryParam(FilterDirectiveQueryProcessor.PARAM_NAME) String filterDirectiveQuery) throws Exception {
+                                  @QueryParam(FilterDirectiveQueryProcessor.PARAM_NAME) String filterDirectiveQuery,
+                                  @QueryParam(LimitQueryProcessor.PARAM_NAME) String limitQuery) throws Exception {
+
     List<T> entities = getEntities();
     entities = new FilterDirectiveQueryProcessor<T>().process(filterDirectiveQuery, entities);
     entities = new SortDirectiveQueryProcessor<T>().process(sortDirectiveQuery, entities);
+    entities = new LimitQueryProcessor<T>().process(sortDirectiveQuery, entities);
 
     return Responses.okOrEmpty(entities);
   }
@@ -53,12 +57,11 @@ public abstract class ModelRestService<T> {
    *
    * @param id The database identifier for the requested entity
    * @return An OK response with the entity or NO_CONTENT on empty result
-   * @throws Exception When an internal error occurs
    */
   @GET
   @Path("/{id}")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response restGetEntity(@PathParam("id") long id) throws Exception {
+  public Response restGetEntity(@PathParam("id") long id) {
     return Responses.okOrEmpty(getEntity(id));
   }
 
@@ -103,13 +106,12 @@ public abstract class ModelRestService<T> {
    * @param e  The entity body with updated values
    * @param id The database identifier for the updated entity
    * @return An OK response with the entity or NOT_MODIFIED when no modification took place
-   * @throws Exception When an internal error occurs
    */
   @PUT
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response restUpdateEntity(T e, @PathParam("id") long id) throws Exception {
+  public Response restUpdateEntity(T e, @PathParam("id") long id) {
     if (e == null || checkNotNullProperties(e)) {
       return Responses.badRequest();
     }
@@ -128,12 +130,11 @@ public abstract class ModelRestService<T> {
    *
    * @param id The database identifier for the entity to delete
    * @return An OK response with the entity or NOT_MODIFIED when no modification took place
-   * @throws Exception When an internal error occurs or when deletion is not supported for this entity
    */
   @DELETE
   @Path("/{id}")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response restDeleteEntity(@PathParam("id") long id) throws Exception {
+  public Response restDeleteEntity(@PathParam("id") long id) {
     boolean success = false;
 
     try {

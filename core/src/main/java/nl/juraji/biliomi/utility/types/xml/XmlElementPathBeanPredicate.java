@@ -24,22 +24,23 @@ public class XmlElementPathBeanPredicate<T> implements Predicate<T> {
   private final Class<?> valueClass;
   private final RestFilterOperator operator;
 
-  public XmlElementPathBeanPredicate(RestFilterDirective filterDirective, Class<T> rootBeanType) {
-    Objects.requireNonNull(filterDirective);
+  public XmlElementPathBeanPredicate(String propertyPath, RestFilterOperator operator, Object value, Class<T> rootBeanType) {
+    Objects.requireNonNull(propertyPath);
+    Objects.requireNonNull(operator);
 
-    this.value = filterDirective.getValue();
+    this.value = value;
     this.valueClass = (value == null ? null : value.getClass());
-    this.operator = filterDirective.getOperator();
+    this.operator = operator;
 
     try {
-      this.propertyPath = new XmlPathConverter<>(rootBeanType).convert(filterDirective.getProperty());
+      this.propertyPath = new XmlPathConverter<>(rootBeanType).convert(propertyPath);
     } catch (XmlPathConverter.XmlPathException e) {
       throw new IllegalArgumentException(e);
     }
   }
 
   public static <T> Predicate<T> forFilterDirective(RestFilterDirective filterDirective, Class<T> rootBeanType) {
-    Predicate<T> predicate = new XmlElementPathBeanPredicate<>(filterDirective, rootBeanType);
+    Predicate<T> predicate = new XmlElementPathBeanPredicate<>(filterDirective.getProperty(), filterDirective.getOperator(), filterDirective.getValue(), rootBeanType);
     return (filterDirective.isNegative() ? predicate.negate() : predicate);
   }
 
@@ -60,6 +61,8 @@ public class XmlElementPathBeanPredicate<T> implements Predicate<T> {
     // NULL values
     if (value == null) {
       return (tValue == null);
+    } else if (tValue == null) {
+      return false;
     }
 
     // Test DateTime
@@ -109,10 +112,6 @@ public class XmlElementPathBeanPredicate<T> implements Predicate<T> {
   }
 
   private static boolean testDateTime(DateTime a, String b, RestFilterOperator operator) {
-    if (!b.matches("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}.*$")) {
-      return false;
-    }
-
     DateTime bdt = new DateTime(b);
     switch (operator) {
       case EQUALS:

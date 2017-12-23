@@ -33,14 +33,20 @@ public class FilterDirectiveQueryProcessor<T> implements QueryProcessor<List<T>>
    */
   @Override
   public List<T> process(String queryParamValue, List<T> entities) throws Exception {
-    if (entities.size() != 0) {
+    if (StringUtils.isNotEmpty(queryParamValue) && entities.size() != 0) {
       try {
         Collection<RestFilterDirective> filterDirectives = null;
         // noinspection unchecked This error is inevitable depending on user input
         Class<T> rootClass = (Class<T>) entities.get(0).getClass();
 
         if (StringUtils.isNotEmpty(queryParamValue)) {
-          filterDirectives = JacksonMarshaller.unmarshalCollection(queryParamValue, RestFilterDirective.class);
+          if (queryParamValue.startsWith("[") && queryParamValue.endsWith("]")) {
+            // This looks like a JSON-array, use Jackson to parse it
+            filterDirectives = JacksonMarshaller.unmarshalCollection(queryParamValue, RestFilterDirective.class);
+          } else {
+            // Maybe it's a query, parse it to find out
+            filterDirectives = RestFilterQueryParser.parseQuery(queryParamValue);
+          }
         }
 
         Predicate<T> predicateChain = buildPredicateChain(filterDirectives, rootClass);
@@ -59,7 +65,7 @@ public class FilterDirectiveQueryProcessor<T> implements QueryProcessor<List<T>>
     return entities;
   }
 
-  public Predicate<T> buildPredicateChain(Collection<RestFilterDirective> filterDirectives, Class<T> rootClass) {
+  public static <T> Predicate<T> buildPredicateChain(Collection<RestFilterDirective> filterDirectives, Class<T> rootClass) {
     AtomicReference<Predicate<T>> predicateChainRef = new AtomicReference<>();
 
     if (filterDirectives != null && filterDirectives.size() > 0) {

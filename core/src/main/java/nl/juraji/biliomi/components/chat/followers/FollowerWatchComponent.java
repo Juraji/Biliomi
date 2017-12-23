@@ -5,7 +5,7 @@ import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.settings.FollowerWatchSettings;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
@@ -61,7 +61,7 @@ public class FollowerWatchComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "followerwatch", command = "reward")
   public boolean followerWatchCommandReward(User user, Arguments arguments) {
-    Long newReward = Numbers.asNumber(arguments.popSafe()).toLong();
+    Long newReward = NumberConverter.asNumber(arguments.popSafe()).toLong();
 
     if (newReward == null || newReward < 0) {
       chat.whisper(user, i18n.get("ChatCommand.followerWatch.reward.usage"));

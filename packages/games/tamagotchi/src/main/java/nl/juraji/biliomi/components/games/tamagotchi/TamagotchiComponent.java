@@ -13,7 +13,7 @@ import nl.juraji.biliomi.model.games.TamagotchiToy;
 import nl.juraji.biliomi.model.games.settings.TamagotchiSettings;
 import nl.juraji.biliomi.model.internal.events.bot.AchievementEvent;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
@@ -178,7 +178,7 @@ public class TamagotchiComponent extends Component {
   @SubCommandRoute(parentCommand = "tgstore", command = "food")
   public boolean tgStoreCommandFood(User user, Arguments arguments) {
     String arg = arguments.get(0);
-    Double amountToAdd = Numbers.asNumber(arg).withDefault(0.0).toDouble();
+    Double amountToAdd = NumberConverter.asNumber(arg).withDefault(0.0).toDouble();
 
     if (amountToAdd == 0 && !"max".equalsIgnoreCase(arg)) {
       chat.whisper(user, i18n.get("ChatCommand.tgStore.food.usage"));

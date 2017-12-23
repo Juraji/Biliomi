@@ -5,7 +5,7 @@ import nl.juraji.biliomi.components.system.commands.CommandService;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.settings.PointsSettings;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
@@ -126,7 +126,7 @@ public class PointsComponent extends Component {
   @SubCommandRoute(parentCommand = "pointssettings", command = "interval")
   public boolean pointsSettingsCommandInterval(User user, Arguments arguments) {
     StreamState when = EnumUtils.toEnum(arguments.get(0), StreamState.class);
-    Integer intervalMinutes = Numbers.asNumber(arguments.getSafe(1)).toInteger();
+    Integer intervalMinutes = NumberConverter.asNumber(arguments.getSafe(1)).toInteger();
 
     if (when == null || intervalMinutes == null || intervalMinutes < 5) {
       chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.interval.usage"));
@@ -155,7 +155,7 @@ public class PointsComponent extends Component {
   @SubCommandRoute(parentCommand = "pointssettings", command = "amount")
   public boolean pointsSettingsCommandAmount(User user, Arguments arguments) {
     StreamState when = EnumUtils.toEnum(arguments.get(0), StreamState.class);
-    Long amount = Numbers.asNumber(arguments.getSafe(1)).toLong();
+    Long amount = NumberConverter.asNumber(arguments.getSafe(1)).toLong();
 
     if (when == null || amount == null || amount < 1) {
       chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.amount.usage"));
@@ -192,7 +192,7 @@ public class PointsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "managepoints", command = "give")
   public boolean managepointsCommandGive(User user, Arguments arguments) {
-    if (!arguments.assertSize(2) || Numbers.asNumber(arguments.get(1)).isNaN()) {
+    if (!arguments.assertSize(2) || NumberConverter.asNumber(arguments.get(1)).isNaN()) {
       chat.whisper(user, i18n.get("ChatCommand.managePoints.give.usage"));
       return false;
     }
@@ -203,7 +203,7 @@ public class PointsComponent extends Component {
       return false;
     }
 
-    long amount = Numbers.asNumber(arguments.get(1)).toLong();
+    long amount = NumberConverter.asNumber(arguments.get(1)).toLong();
     targetUser.addPoints(amount);
     usersService.save(targetUser);
 
@@ -221,7 +221,7 @@ public class PointsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "managepoints", command = "take")
   public boolean managepointsCommandTake(User user, Arguments arguments) {
-    if (!arguments.assertSize(2) || Numbers.asNumber(arguments.get(1)).isNaN()) {
+    if (!arguments.assertSize(2) || NumberConverter.asNumber(arguments.get(1)).isNaN()) {
       chat.whisper(user, i18n.get("ChatCommand.managePoints.take.usage"));
       return false;
     }
@@ -232,7 +232,7 @@ public class PointsComponent extends Component {
       return false;
     }
 
-    long amount = Numbers.asNumber(arguments.get(1)).toLong();
+    long amount = NumberConverter.asNumber(arguments.get(1)).toLong();
     targetUser.takePoints(amount);
     usersService.save(targetUser);
 
@@ -250,12 +250,12 @@ public class PointsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "managepoints", command = "everyone")
   public boolean managepointsCommandToall(User user, Arguments arguments) {
-    if (!arguments.assertSize(1) || Numbers.asNumber(arguments.get(0)).isNaN()) {
+    if (!arguments.assertSize(1) || NumberConverter.asNumber(arguments.get(0)).isNaN()) {
       chat.whisper(user, i18n.get("ChatCommand.managePoints.everyone.usage"));
       return false;
     }
 
-    long amount = Numbers.asNumber(arguments.get(0)).toLong();
+    long amount = NumberConverter.asNumber(arguments.get(0)).toLong();
     List<User> currentViewers = chat.getViewers().stream()
         .map(viewer -> usersService.getUser(viewer, true))
         .filter(Objects::nonNull)

@@ -14,7 +14,7 @@ import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.integrations.SpotifySettings;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
@@ -252,7 +252,7 @@ public class SpotifyComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "spotify", command = "setmaxduration")
   public boolean spotifyMaxDurationCommand(User user, Arguments arguments) {
-    Long maxDuration = Numbers.asNumber(arguments.get(0)).toLong();
+    Long maxDuration = NumberConverter.asNumber(arguments.get(0)).toLong();
 
     if (maxDuration == null || MathUtils.isNotInRange(maxDuration, 0, Long.MAX_VALUE)) {
       chat.whisper(user, i18n.get("ChatCommand.spotify.setMaxDuration.usage"));

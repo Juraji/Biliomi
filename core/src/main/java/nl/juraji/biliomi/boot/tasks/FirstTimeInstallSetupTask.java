@@ -10,7 +10,7 @@ import nl.juraji.biliomi.config.core.biliomi.USTwitch;
 import nl.juraji.biliomi.config.core.biliomi.database.USMySQL;
 import nl.juraji.biliomi.io.console.ConsoleApi;
 import nl.juraji.biliomi.io.web.oauthflow.grants.code.CallbackResources;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.types.AppParameters;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -168,7 +168,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
       if (StringUtils.isEmpty(input)) {
         usMySQL.setPort(3306);
       } else {
-        usMySQL.setPort(Numbers.asNumber(input).toInteger());
+        usMySQL.setPort(NumberConverter.asNumber(input).toInteger());
       }
       console.println();
 

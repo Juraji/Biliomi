@@ -4,7 +4,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.net.MediaType;
 import nl.juraji.biliomi.model.core.VersionInfo;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.calculate.ObjectGraphs;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
 import nl.juraji.biliomi.utility.factories.marshalling.JacksonMarshaller;
@@ -54,7 +54,7 @@ public class WebClientImpl implements WebClient {
   private void initWebClient() {
     String userAgent = versionInfo.getUserAgent();
 
-    long cacheDurationL = Numbers.asNumber(cacheDuration).toLong();
+    long cacheDurationL = NumberConverter.asNumber(cacheDuration).toLong();
     this.cache = CacheBuilder.newBuilder()
         .expireAfterWrite(cacheDurationL, TimeUnit.MILLISECONDS)
         .build();

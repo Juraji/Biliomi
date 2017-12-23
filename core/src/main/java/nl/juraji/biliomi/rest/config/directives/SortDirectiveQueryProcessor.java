@@ -31,7 +31,7 @@ public class SortDirectiveQueryProcessor<T> implements QueryProcessor<List<T>> {
    */
   @Override
   public List<T> process(String queryParamValue, List<T> entities) throws IOException {
-    if (entities.size() > 1) {
+    if (StringUtils.isNotEmpty(queryParamValue) && entities.size() > 1) {
       try {
         Collection<RestSortDirective> sortDirectives = null;
         // noinspection unchecked This error is inevitable depending on user input
@@ -56,7 +56,7 @@ public class SortDirectiveQueryProcessor<T> implements QueryProcessor<List<T>> {
     return entities;
   }
 
-  public Comparator<T> buildComparatorChain(Collection<RestSortDirective> sortDirectives, Class<T> rootClass) {
+  public static <T> Comparator<T> buildComparatorChain(Collection<RestSortDirective> sortDirectives, Class<T> rootClass) {
     AtomicReference<Comparator<T>> comparatorChainRef = new AtomicReference<>();
 
     if (sortDirectives != null && sortDirectives.size() > 0) {

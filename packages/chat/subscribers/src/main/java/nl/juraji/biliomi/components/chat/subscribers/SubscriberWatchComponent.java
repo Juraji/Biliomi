@@ -8,7 +8,7 @@ import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.internal.events.twitch.subscribers.SubscriberPlanType;
 import nl.juraji.biliomi.model.subscribers.SubscriberWatchSettings;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
@@ -68,7 +68,7 @@ public class SubscriberWatchComponent extends Component {
   @SubCommandRoute(parentCommand = "subscriberwatch", command = "reward")
   public boolean followerWatchCommandReward(User user, Arguments arguments) {
     SubscriberPlanType tier = EnumUtils.toEnum(arguments.popSafe(), SubscriberPlanType.class);
-    Long newReward = Numbers.asNumber(arguments.popSafe()).toLong();
+    Long newReward = NumberConverter.asNumber(arguments.popSafe()).toLong();
 
     if (tier == null || newReward == null || newReward < 0) {
       chat.whisper(user, i18n.get("ChatCommand.subscriberWatch.reward.usage"));

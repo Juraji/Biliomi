@@ -8,7 +8,7 @@ import nl.juraji.biliomi.model.games.UserRecordStats;
 import nl.juraji.biliomi.model.internal.events.bot.AchievementEvent;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
@@ -134,7 +134,7 @@ public class RouletteComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "roulettesettings", command = "timeoutondeath")
   public boolean roulettesettingsCommandTimoutOnDeath(User user, Arguments arguments) {
-    Integer timeoutMinutes = Numbers.asNumber(arguments.get(0)).toInteger();
+    Integer timeoutMinutes = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
     if (timeoutMinutes == null) {
       chat.whisper(user, i18n.get("ChatCommand.roulettesettings.timoutOnDeath.usage"));

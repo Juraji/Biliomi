@@ -6,7 +6,7 @@ import nl.juraji.biliomi.components.system.users.UserGroupService;
 import nl.juraji.biliomi.model.core.Command;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
@@ -73,7 +73,7 @@ public class RaffleComponent extends Component {
     }
 
     String keyword = arguments.pop();
-    Long cost = Numbers.asNumber(arguments.pop()).toLong();
+    Long cost = NumberConverter.asNumber(arguments.pop()).toLong();
     OnOff followersOnly = EnumUtils.toEnum(arguments.pop(), OnOff.class);
 
     if (StringUtils.isEmpty(keyword) || cost == null || cost < 0 || followersOnly == null) {

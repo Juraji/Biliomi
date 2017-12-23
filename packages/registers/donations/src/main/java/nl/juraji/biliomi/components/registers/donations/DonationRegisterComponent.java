@@ -5,7 +5,7 @@ import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.registers.Donation;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
@@ -117,7 +117,7 @@ public class DonationRegisterComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "donations", command = "remove")
   public boolean donationsCommandRemove(User user, Arguments arguments) {
-    Long donationId = Numbers.asNumber(arguments.get(0)).toLong();
+    Long donationId = NumberConverter.asNumber(arguments.get(0)).toLong();
 
     if (donationId == null) {
       chat.whisper(user, i18n.get("ChatCommand.donations.remove.usage"));

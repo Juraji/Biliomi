@@ -9,7 +9,7 @@ import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.UserGroup;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
@@ -292,7 +292,7 @@ public class ChatModeratorComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "chatmoderator", command = "linkpermittime")
   public boolean chatmoderatorCommandLinkPermitTime(User user, Arguments arguments) {
-    Long minutes = Numbers.asNumber(arguments.get(0)).toLong();
+    Long minutes = NumberConverter.asNumber(arguments.get(0)).toLong();
 
     if (minutes == null) {
       chat.whisper(user, i18n.get("ChatCommand.chatmoderator.linkPermitTime.usage"));
@@ -335,7 +335,7 @@ public class ChatModeratorComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "chatmoderator", command = "capstrigger")
   public boolean chatmoderatorCommandCapsTrigger(User user, Arguments arguments) {
-    Integer count = Numbers.asNumber(arguments.get(0)).toInteger();
+    Integer count = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
     if (count == null) {
       chat.whisper(user, i18n.get("ChatCommand.chatmoderator.capsTrigger.usage"));
@@ -356,7 +356,7 @@ public class ChatModeratorComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "chatmoderator", command = "capsratio")
   public boolean chatmoderatorCommandCapsRatio(User user, Arguments arguments) {
-    Integer percentage = Numbers.asNumber(arguments.get(0)).toInteger();
+    Integer percentage = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
     if (percentage == null || percentage < 0 || percentage > 100) {
       chat.whisper(user, i18n.get("ChatCommand.chatmoderator.capsRatio.usage"));
@@ -399,7 +399,7 @@ public class ChatModeratorComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "chatmoderator", command = "repititiontrigger")
   public boolean chatmoderatorCommandRepititionTrigger(User user, Arguments arguments) {
-    Integer count = Numbers.asNumber(arguments.get(0)).toInteger();
+    Integer count = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
     if (count == null) {
       chat.whisper(user, i18n.get("ChatCommand.chatmoderator.repititionTrigger.usage"));

@@ -11,7 +11,7 @@ import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
 import nl.juraji.biliomi.model.integrations.TwitterSettings;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.types.Restartable;
 import nl.juraji.biliomi.utility.types.Templater;
 import org.apache.logging.log4j.Logger;
@@ -55,7 +55,7 @@ public class TweetTrackerService implements Restartable {
       try {
         AuthToken token = authTokenDao.get(TokenGroup.INTEGRATIONS, "twitter");
         Template template = templateDao.getByKey(TwitterComponent.TWITTER_TWEET_FOUND_TEMPLATE_ID);
-        Long filteredUserId = Numbers.asNumber(token.getUserId()).withDefault(0).toLong();
+        Long filteredUserId = NumberConverter.asNumber(token.getUserId()).withDefault(0).toLong();
 
         assert template != null; // Template cannot be null as it is initialized on install/update
         TweetListener listener = createTweetListener(template.getTemplate(), filteredUserId);

@@ -5,7 +5,7 @@ import nl.juraji.biliomi.model.chat.Announcement;
 import nl.juraji.biliomi.model.chat.AnnouncementDao;
 import nl.juraji.biliomi.model.chat.AnnouncementsSettings;
 import nl.juraji.biliomi.model.core.User;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
@@ -78,7 +78,7 @@ public class AnnouncementsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "announcement", command = "remove")
   public boolean announcementCommandRemove(User user, Arguments arguments) {
-    Long id = Numbers.asNumber(arguments.get(0)).toLong();
+    Long id = NumberConverter.asNumber(arguments.get(0)).toLong();
 
     if (id == null) {
       chat.whisper(user, i18n.get("ChatCommand.announcement.remove.usage"));
@@ -106,7 +106,7 @@ public class AnnouncementsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "announcement", command = "interval")
   public boolean announcementCommandInterval(User user, Arguments arguments) {
-    Integer intervalMinutes = Numbers.asNumber(arguments.get(0)).toInteger();
+    Integer intervalMinutes = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
     if (intervalMinutes == null || intervalMinutes < 1) {
       chat.whisper(user, i18n.get("ChatCommand.announcement.interval.usage"));
@@ -129,7 +129,7 @@ public class AnnouncementsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "announcement", command = "minmsgs")
   public boolean announcementCommandMinMsgs(User user, Arguments arguments) {
-    Integer minMsgs = Numbers.asNumber(arguments.get(0)).toInteger();
+    Integer minMsgs = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
     if (minMsgs == null || minMsgs < 0) {
       chat.whisper(user, i18n.get("ChatCommand.announcement.minMsgs.usage"));

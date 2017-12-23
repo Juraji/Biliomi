@@ -3,7 +3,7 @@ package nl.juraji.biliomi.components.chat.quotes;
 import nl.juraji.biliomi.components.shared.TimeFormatter;
 import nl.juraji.biliomi.model.chat.Quote;
 import nl.juraji.biliomi.model.core.User;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
@@ -39,7 +39,7 @@ public class QuoteRegisterComponent extends Component {
 
     if (arguments.assertSize(1)) {
       // If quoteId is present in args, try and retrieve it that way
-      Long quoteId = Numbers.asNumber(arguments.get(0)).toLong();
+      Long quoteId = NumberConverter.asNumber(arguments.get(0)).toLong();
 
       if (quoteId == null) {
         chat.whisper(user, i18n.get("ChatCommand.quote.usage"));
@@ -107,7 +107,7 @@ public class QuoteRegisterComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "quotes", command = "remove")
   public boolean managequotesCommandRemove(User user, Arguments arguments) {
-    Long quoteId = Numbers.asNumber(arguments.get(0)).toLong();
+    Long quoteId = NumberConverter.asNumber(arguments.get(0)).toLong();
 
     if (quoteId == null) {
       chat.whisper(user, i18n.get("ChatCommand.quotes.remove.usage"));

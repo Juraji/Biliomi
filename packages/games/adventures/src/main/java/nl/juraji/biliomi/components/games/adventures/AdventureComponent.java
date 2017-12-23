@@ -12,7 +12,7 @@ import nl.juraji.biliomi.model.games.AdventureSettings;
 import nl.juraji.biliomi.model.games.Tamagotchi;
 import nl.juraji.biliomi.model.games.UserAdventureRecordStats;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
@@ -66,7 +66,7 @@ public class AdventureComponent extends Component {
    */
   @CommandRoute(command = "adventure")
   public boolean adventureCommand(User user, Arguments arguments) {
-    Long betPoints = Numbers.asNumber(arguments.get(0)).toLong();
+    Long betPoints = NumberConverter.asNumber(arguments.get(0)).toLong();
 
     if (betPoints == null) {
       chat.whisper(user, i18n.get("ChatCommand.adventure.usage"));
