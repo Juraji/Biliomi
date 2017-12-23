@@ -6,7 +6,7 @@ import nl.juraji.biliomi.model.chat.BitsSettings;
 import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
@@ -104,7 +104,7 @@ public class BitsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "bitstopoints", command = "multiplier")
   public boolean bitsToPointsCommmandMultiplier(User user, Arguments arguments) {
-    Double newMultiplier = Numbers.asNumber(arguments.getSafe(0)).toDouble();
+    Double newMultiplier = NumberConverter.asNumber(arguments.getSafe(0)).toDouble();
 
     if (newMultiplier == null || newMultiplier <= 0) {
       chat.whisper(user, i18n.get("ChatCommand.bitsToPoints.multiplier.usage"));

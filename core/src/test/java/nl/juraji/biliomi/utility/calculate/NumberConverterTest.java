@@ -2,14 +2,14 @@ package nl.juraji.biliomi.utility.calculate;
 
 import org.junit.Test;
 
-import static nl.juraji.biliomi.utility.calculate.Numbers.asNumber;
+import static nl.juraji.biliomi.utility.calculate.NumberConverter.asNumber;
 import static org.junit.Assert.*;
 
 /**
  * Created by Juraji on 21-4-2017.
  * Biliomi v3
  */
-public class NumbersTest {
+public class NumberConverterTest {
 
   @Test
   public void withDefault() throws Exception {

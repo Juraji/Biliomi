@@ -6,11 +6,11 @@ import nl.juraji.biliomi.utility.estreams.einterface.ESupplier;
  * Created by Juraji on 21-4-2017.
  * Biliomi v3
  */
-public final class Numbers {
+public final class NumberConverter {
   private final String input;
   private Number defaultValue = null;
 
-  private Numbers(String input) {
+  private NumberConverter(String input) {
     this.input = input;
   }
 
@@ -18,17 +18,17 @@ public final class Numbers {
    * Instanciate a new Parser object with the given string
    *
    * @param input A string representing a number
-   * @return A new Numbers instance
+   * @return A new NumberConverter instance
    */
-  public static Numbers asNumber(String input) {
-    return new Numbers(input);
+  public static NumberConverter asNumber(String input) {
+    return new NumberConverter(input);
   }
 
   /**
    * @param defaultValue A default value to return if parsing fails
    * @return this
    */
-  public Numbers withDefault(Number defaultValue) {
+  public NumberConverter withDefault(Number defaultValue) {
     this.defaultValue = defaultValue;
     return this;
   }

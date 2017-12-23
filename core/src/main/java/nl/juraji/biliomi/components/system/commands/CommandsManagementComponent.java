@@ -7,7 +7,7 @@ import nl.juraji.biliomi.model.core.Command;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.UserGroup;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
@@ -95,7 +95,7 @@ public class CommandsManagementComponent extends Component {
       return false;
     }
 
-    Integer newCooldownSeconds = Numbers.asNumber(arguments.get(1)).toInteger();
+    Integer newCooldownSeconds = NumberConverter.asNumber(arguments.get(1)).toInteger();
     if (newCooldownSeconds == null) {
       chat.whisper(user, i18n.get("ChatCommand.editCommand.cooldown.usage"));
       return false;
@@ -117,7 +117,7 @@ public class CommandsManagementComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "editcommand", command = "price")
   public boolean editCommandCommandPrice(User user, Arguments arguments) {
-    Long newPrice = Numbers.asNumber(arguments.get(1)).toLong();
+    Long newPrice = NumberConverter.asNumber(arguments.get(1)).toLong();
     if (!arguments.assertSize(2) || newPrice == 0) {
       chat.whisper(user, i18n.get("ChatCommand.editCommand.price.usage"));
       return false;

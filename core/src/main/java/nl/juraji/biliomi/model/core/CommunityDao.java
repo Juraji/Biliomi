@@ -21,4 +21,10 @@ public class CommunityDao extends JpaDao<Community> {
         .add(Restrictions.eq("name", name).ignoreCase())
         .getResult();
   }
+
+  public Community getByTwitchID(String name) {
+    return criteria()
+        .add(Restrictions.eq("twitchId", name))
+        .getResult();
+  }
 }

@@ -7,7 +7,7 @@ import nl.juraji.biliomi.model.games.InvestmentRecord;
 import nl.juraji.biliomi.model.games.InvestmentSettings;
 import nl.juraji.biliomi.model.games.UserInvestRecordStats;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
@@ -62,8 +62,8 @@ public class InvestmentGameComponent extends Component {
    */
   @CommandRoute(command = "invest", defaultCooldown = 900000)
   public boolean investCommand(User user, Arguments arguments) {
-    Long investAmount = Numbers.asNumber(arguments.getSafe(0)).toLong();
-    Integer investPercentage = Numbers.asNumber(arguments.getSafe(1)).toInteger();
+    Long investAmount = NumberConverter.asNumber(arguments.getSafe(0)).toLong();
+    Integer investPercentage = NumberConverter.asNumber(arguments.getSafe(1)).toInteger();
 
     if (investAmount == null || investPercentage == null) {
       chat.whisper(user, i18n.get("ChatCommand.invest.usage"));
@@ -135,7 +135,7 @@ public class InvestmentGameComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "investsettings", command = "duration")
   public boolean investSettingsCommandDuration(User user, Arguments arguments) {
-    Integer durationMinutes = Numbers.asNumber(arguments.get(0)).toInteger();
+    Integer durationMinutes = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
     if (durationMinutes == null || durationMinutes < 0) {
       chat.whisper(user, i18n.get("ChatCommand.investsettings.duration.usage"));
@@ -158,7 +158,7 @@ public class InvestmentGameComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "investsettings", command = "mininterest")
   public boolean investSettingsCommandMinInterest(User user, Arguments arguments) {
-    Integer input = Numbers.asNumber(arguments.get(0)).toInteger();
+    Integer input = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
     if (input == null || MathUtils.isNotInRange(input, 0, 100)) {
       chat.whisper(user, i18n.get("ChatCommand.investsettings.mininterest.usage"));
@@ -185,7 +185,7 @@ public class InvestmentGameComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "investsettings", command = "maxinterest")
   public boolean investSettingsCommandMaxInterest(User user, Arguments arguments) {
-    Integer input = Numbers.asNumber(arguments.get(0)).toInteger();
+    Integer input = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
     if (input == null || MathUtils.isNotInRange(input, 0, 100)) {
       chat.whisper(user, i18n.get("ChatCommand.investsettings.maxinterest.usage"));

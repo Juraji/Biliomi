@@ -5,7 +5,7 @@ import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.AdventureSettings;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
@@ -54,7 +54,7 @@ public class AdventureSettingsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "adventuresettings", command = "jointimeout")
   public boolean adventuresettingsCommandJoinTimeout(User user, Arguments arguments) {
-    Integer minutes = Numbers.asNumber(arguments.get(0)).toInteger();
+    Integer minutes = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
     if (minutes == null || minutes < 1 || minutes > 10) {
       chat.whisper(user, i18n.get("ChatCommand.adventuresettings.jointimeout.usage"));
@@ -76,7 +76,7 @@ public class AdventureSettingsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "adventuresettings", command = "minimumbet")
   public boolean adventuresettingsCommandMinimumBet(User user, Arguments arguments) {
-    Long minPoints = Numbers.asNumber(arguments.get(0)).toLong();
+    Long minPoints = NumberConverter.asNumber(arguments.get(0)).toLong();
 
     if (minPoints == null || minPoints < 1) {
       chat.whisper(user, i18n.get("ChatCommand.adventuresettings.minimumbet.usage"));
@@ -97,7 +97,7 @@ public class AdventureSettingsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "adventuresettings", command = "maximumbet")
   public boolean adventuresettingsCommandMaximumBet(User user, Arguments arguments) {
-    Long maxPoints = Numbers.asNumber(arguments.get(0)).toLong();
+    Long maxPoints = NumberConverter.asNumber(arguments.get(0)).toLong();
 
     if (maxPoints == null || maxPoints < 1) {
       chat.whisper(user, i18n.get("ChatCommand.adventuresettings.maximumbet.usage"));
@@ -118,7 +118,7 @@ public class AdventureSettingsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "adventuresettings", command = "cooldown")
   public boolean adventuresettingsCommandCooldown(User user, Arguments arguments) {
-    Integer cooldownMinutes = Numbers.asNumber(arguments.get(0)).toInteger();
+    Integer cooldownMinutes = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
     if (cooldownMinutes == null || cooldownMinutes < 0) {
       chat.whisper(user, i18n.get("ChatCommand.adventuresettings.cooldown.usage"));
@@ -140,7 +140,7 @@ public class AdventureSettingsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "adventuresettings", command = "multiplier")
   public boolean adventuresettingsCommandWinMultiplier(User user, Arguments arguments) {
-    Double multiplier = Numbers.asNumber(arguments.get(0)).toDouble();
+    Double multiplier = NumberConverter.asNumber(arguments.get(0)).toDouble();
 
     if (multiplier == null || multiplier < 0 || multiplier > 1) {
       chat.whisper(user, i18n.get("ChatCommand.adventuresettings.multiplier.usage"));

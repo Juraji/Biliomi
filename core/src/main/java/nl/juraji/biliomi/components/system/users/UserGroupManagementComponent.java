@@ -4,7 +4,7 @@ import nl.juraji.biliomi.components.shared.TimeFormatter;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.UserGroup;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
@@ -79,7 +79,7 @@ public class UserGroupManagementComponent extends Component {
       return false;
     }
 
-    Integer newGroupWeight = Numbers.asNumber(arguments.get(1)).toInteger();
+    Integer newGroupWeight = NumberConverter.asNumber(arguments.get(1)).toInteger();
     String newGroupName = arguments.getSafe(0);
     if (newGroupWeight == null || NUMBER_AT_START_PATTERN.matcher(newGroupName).matches()) {
       chat.whisper(user, i18n.get("ChatCommand.groups.help"));
@@ -130,7 +130,7 @@ public class UserGroupManagementComponent extends Component {
 
     String userInput = arguments.getSafe(1);
 
-    if (Numbers.asNumber(userInput).isNaN()) {
+    if (NumberConverter.asNumber(userInput).isNaN()) {
       // Input is not a number, so must be a new name
       return editUserGroupName(user, userGroup, userInput);
     } else {
@@ -190,7 +190,7 @@ public class UserGroupManagementComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "groups", command = "timebased")
   public boolean groupsCommandTimeBased(User user, Arguments arguments) {
-    Integer newHours = Numbers.asNumber(arguments.get(1)).toInteger();
+    Integer newHours = NumberConverter.asNumber(arguments.get(1)).toInteger();
 
     if (!arguments.assertSize(2) || newHours == null) {
       chat.whisper(user, i18n.get("ChatCommand.groups.timebased.usage"));
@@ -248,7 +248,7 @@ public class UserGroupManagementComponent extends Component {
 
   private boolean editUserGroupWeight(User user, UserGroup targetUserGroup, String newWeightString) {
     // Input is a number is must be a new weight
-    Integer newGroupWeight = Numbers.asNumber(newWeightString).toInteger();
+    Integer newGroupWeight = NumberConverter.asNumber(newWeightString).toInteger();
 
     if (newGroupWeight == null || MathUtils.isNotInRange(newGroupWeight, UserGroupService.MIN_WEIGHT, UserGroupService.MAX_WEIGHT)) {
       chat.whisper(user, i18n.get("ChatCommand.groups.help"));

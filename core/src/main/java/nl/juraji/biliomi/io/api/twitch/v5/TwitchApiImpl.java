@@ -125,6 +125,11 @@ public class TwitchApiImpl implements TwitchApi {
   }
 
   @Override
+  public Response<Void> clearChannelCommunities(long twitchId) throws Exception {
+    return webClient.delete(Url.url(API_BASE_URI, "channels", twitchId, "community"), headers, Void.class);
+  }
+
+  @Override
   public Response<TwitchStreamInfo> getStream(long twitchId) throws Exception {
     return webClient.get(Url.url(API_BASE_URI, "streams", twitchId), headers, TwitchStreamInfo.class);
   }

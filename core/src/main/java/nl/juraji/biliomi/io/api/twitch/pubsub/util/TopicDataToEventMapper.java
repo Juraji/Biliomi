@@ -6,7 +6,7 @@ import nl.juraji.biliomi.io.api.twitch.pubsub.model.message.topics.PubSubSubscri
 import nl.juraji.biliomi.model.internal.events.twitch.TwitchEvent;
 import nl.juraji.biliomi.model.internal.events.twitch.bits.TwitchBitsEvent;
 import nl.juraji.biliomi.model.internal.events.twitch.subscribers.TwitchSubscriberEvent;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
@@ -22,7 +22,7 @@ public class TopicDataToEventMapper {
   public static TwitchEvent bits(String message) throws IOException {
     PubSubBitsTopicData topicData = unmarshal(message, PubSubBitsTopicData.class);
     PubSubBitsTopicDataData data = topicData.getData();
-    Long userId = Numbers.asNumber(data.getUserId()).toLong();
+    Long userId = NumberConverter.asNumber(data.getUserId()).toLong();
 
     return new TwitchBitsEvent(
         data.getUsername(),
@@ -36,7 +36,7 @@ public class TopicDataToEventMapper {
     PubSubSubscriptionTopicData topicData = unmarshal(message, PubSubSubscriptionTopicData.class);
     return new TwitchSubscriberEvent(
         topicData.getUsername(),
-        Numbers.asNumber(topicData.getUserId()).toLong(),
+        NumberConverter.asNumber(topicData.getUserId()).toLong(),
         new DateTime(topicData.getTime()),
         topicData.getSubPlan(),
         "resub".equals(topicData.getContext())

@@ -5,7 +5,7 @@ import nl.juraji.biliomi.components.shared.TimeFormatter;
 import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.settings.TamagotchiSettings;
-import nl.juraji.biliomi.utility.calculate.Numbers;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
@@ -56,7 +56,7 @@ public class TGSettingsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "tamagotchisettings", command = "newprice")
   public boolean tamagotchisettingsCommandNewPrice(User user, Arguments arguments) {
-    Long points = Numbers.asNumber(arguments.get(0)).toLong();
+    Long points = NumberConverter.asNumber(arguments.get(0)).toLong();
 
     if (points == null || points < 0) {
       chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.newprice.usage"));
@@ -77,7 +77,7 @@ public class TGSettingsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "tamagotchisettings", command = "foodprice")
   public boolean tamagotchisettingsCommandFoodPrice(User user, Arguments arguments) {
-    Long points = Numbers.asNumber(arguments.get(0)).toLong();
+    Long points = NumberConverter.asNumber(arguments.get(0)).toLong();
 
     if (points == null || points < 0) {
       chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.foodprice.usage"));
@@ -98,7 +98,7 @@ public class TGSettingsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "tamagotchisettings", command = "soapprice")
   public boolean tamagotchisettingsCommandSoapPrice(User user, Arguments arguments) {
-    Long points = Numbers.asNumber(arguments.get(0)).toLong();
+    Long points = NumberConverter.asNumber(arguments.get(0)).toLong();
 
     if (points == null || points < 0) {
       chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.soapprice.usage"));
@@ -120,7 +120,7 @@ public class TGSettingsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "tamagotchisettings", command = "maxfood")
   public boolean tamagotchisettingsCommandMaxFood(User user, Arguments arguments) {
-    Double max = Numbers.asNumber(arguments.get(0)).toDouble();
+    Double max = NumberConverter.asNumber(arguments.get(0)).toDouble();
 
     if (max == null || max < 0) {
       chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxfood.usage"));
@@ -144,7 +144,7 @@ public class TGSettingsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "tamagotchisettings", command = "maxmood")
   public boolean tamagotchisettingsCommandMaxMood(User user, Arguments arguments) {
-    Double max = Numbers.asNumber(arguments.get(0)).toDouble();
+    Double max = NumberConverter.asNumber(arguments.get(0)).toDouble();
 
     if (max == null || max < 0) {
       chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxmood.usage"));
@@ -169,7 +169,7 @@ public class TGSettingsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "tamagotchisettings", command = "maxhygiene")
   public boolean tamagotchisettingsCommandMaxHygiene(User user, Arguments arguments) {
-    Double max = Numbers.asNumber(arguments.get(0)).toDouble();
+    Double max = NumberConverter.asNumber(arguments.get(0)).toDouble();
 
     if (max == null || max < 0) {
       chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxhygiene.usage"));
@@ -192,7 +192,7 @@ public class TGSettingsComponent extends Component {
    */
   @SubCommandRoute(parentCommand = "tamagotchisettings", command = "namemaxlength")
   public boolean tamagotchisettingsCommandNameMaxLength(User user, Arguments arguments) {
-    Integer maxLength = Numbers.asNumber(arguments.get(0)).toInteger();
+    Integer maxLength = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
     if (maxLength == null || maxLength < 0) {
       chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.namemaxlength.usage"));

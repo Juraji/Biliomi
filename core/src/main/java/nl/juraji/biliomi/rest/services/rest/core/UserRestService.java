@@ -54,6 +54,14 @@ public class UserRestService extends ModelRestService<User> {
     user.setPoints(e.getPoints());
     user.setBlacklistedSince(e.getBlacklistedSince());
 
+    // These can only be changed if
+    if (user.isFollower() && e.getFollowDate() != null) {
+      user.setFollowDate(e.getFollowDate());
+    }
+    if (user.isSubscriber() && e.getSubscribeDate() != null) {
+      user.setFollowDate(e.getSubscribeDate());
+    }
+
     userDao.save(user);
 
     return user;
