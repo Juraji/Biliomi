@@ -6,6 +6,7 @@ import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.estreams.EStream;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -61,6 +62,11 @@ public class XmlElementPathBeanPredicate<T> implements Predicate<T> {
       return (tValue == null);
     }
 
+    if (DateTime.class.isAssignableFrom(tValue.getClass())
+        && String.class.isAssignableFrom(valueClass)) {
+      return testDateTime((DateTime) tValue, (String) value, operator);
+    }
+
     // Test enums
     if (Enum.class.isAssignableFrom(tValue.getClass()) && String.class.isAssignableFrom(valueClass)) {
       // noinspection unchecked
@@ -101,8 +107,25 @@ public class XmlElementPathBeanPredicate<T> implements Predicate<T> {
     return value.equals(tValue);
   }
 
-  private boolean testBoolean(Boolean a, Boolean b, RestFilterOperator operator) {
-    // noinspection unchecked I tried
+  private static boolean testDateTime(DateTime a, String b, RestFilterOperator operator) {
+    if (!b.matches("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}.*$")) {
+      return false;
+    }
+
+    DateTime bdt = new DateTime(b);
+    switch (operator) {
+      case EQUALS:
+        return a.equals(bdt);
+      case LESSER_THAN:
+        return a.isBefore(bdt);
+      case GREATER_THAN:
+        return a.isAfter(bdt);
+      default:
+        return false;
+    }
+  }
+
+  private static boolean testBoolean(Boolean a, Boolean b, RestFilterOperator operator) {
     switch (operator) {
       case EQUALS:
         return a.equals(b);
@@ -112,7 +135,7 @@ public class XmlElementPathBeanPredicate<T> implements Predicate<T> {
   }
 
   private static <E extends Enum<E>> boolean testEnum(Enum<E> tEnum, String value, RestFilterOperator operator) {
-    // noinspection unchecked I tried
+    // noinspection unchecked
     Enum<E> vEnum = EnumUtils.toEnum(value, tEnum.getClass());
     switch (operator) {
       case EQUALS:
