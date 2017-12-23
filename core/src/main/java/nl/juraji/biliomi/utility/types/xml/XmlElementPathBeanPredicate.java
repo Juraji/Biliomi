@@ -162,15 +162,15 @@ public class XmlElementPathBeanPredicate<T> implements Predicate<T> {
     switch (operator) {
       case CONTAINS:
         if (!a.isEmpty()) {
-          a.stream().anyMatch(o -> {
-            if (String.class.isAssignableFrom(o.getClass())){
-              return b.equalsIgnoreCase((String) o);
+          return a.stream().anyMatch(o -> {
+            if (String.class.isAssignableFrom(o.getClass())) {
+              return StringUtils.containsIgnoreCase((CharSequence) o, b);
             } else {
               return EStream.from(o.getClass().getDeclaredFields())
                   .filter(field -> String.class.isAssignableFrom(field.getType()))
                   .map(field -> PropertyUtils.getProperty(o, field.getName()))
                   .filter(Objects::nonNull)
-                  .anyMatch(v -> ((String) v).equalsIgnoreCase(b));
+                  .anyMatch(v -> StringUtils.containsIgnoreCase((CharSequence) v, b));
             }
           });
         }
