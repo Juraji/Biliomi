@@ -1,5 +1,6 @@
 package nl.juraji.biliomi.utility.types.xml;
 
+import nl.juraji.biliomi.model.internal.rest.query.RestSortDirective;
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +27,11 @@ public class XmlElementPathBeanComparator<T> implements Comparator<T> {
     } catch (XmlPathConverter.XmlPathException e) {
       throw new IllegalArgumentException(e);
     }
+  }
+
+  public static <T> Comparator<T> forSortDirective(RestSortDirective sortDirective, Class<T> rootClass) {
+    Comparator<T> comparator = new XmlElementPathBeanComparator<>(sortDirective.getProperty(), rootClass);
+    return (sortDirective.isDescending() ? comparator.reversed() : comparator);
   }
 
   @Override

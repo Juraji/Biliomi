@@ -62,6 +62,7 @@ public class XmlElementPathBeanPredicate<T> implements Predicate<T> {
       return (tValue == null);
     }
 
+    // Test DateTime
     if (DateTime.class.isAssignableFrom(tValue.getClass())
         && String.class.isAssignableFrom(valueClass)) {
       return testDateTime((DateTime) tValue, (String) value, operator);

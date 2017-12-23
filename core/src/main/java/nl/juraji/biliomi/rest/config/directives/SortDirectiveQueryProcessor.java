@@ -3,13 +3,14 @@ package nl.juraji.biliomi.rest.config.directives;
 import nl.juraji.biliomi.model.internal.rest.query.RestSortDirective;
 import nl.juraji.biliomi.utility.factories.marshalling.JacksonMarshaller;
 import nl.juraji.biliomi.utility.types.xml.XmlElementPathBeanComparator;
-import org.apache.commons.collections.comparators.ComparatorChain;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Created by Juraji on 27-11-2017.
@@ -33,17 +34,15 @@ public class SortDirectiveQueryProcessor<T> implements QueryProcessor<List<T>> {
     if (entities.size() > 1) {
       try {
         Collection<RestSortDirective> sortDirectives = null;
-        Class<?> rootClass = entities.get(0).getClass();
+        // noinspection unchecked This error is inevitable depending on user input
+        Class<T> rootClass = (Class<T>) entities.get(0).getClass();
 
         if (StringUtils.isNotEmpty(queryParamValue)) {
           sortDirectives = JacksonMarshaller.unmarshalCollection(queryParamValue, RestSortDirective.class);
         }
 
         if (sortDirectives != null && sortDirectives.size() > 0) {
-          final ComparatorChain comparatorChain = new ComparatorChain();
-
-          sortDirectives.forEach(sortDirective ->
-              comparatorChain.addComparator(new XmlElementPathBeanComparator<>(sortDirective.getProperty(), rootClass), sortDirective.isDescending()));
+          Comparator<T> comparatorChain = buildComparatorChain(sortDirectives, rootClass);
 
           //noinspection unchecked ComparatorChain implements Comparator
           entities.sort(comparatorChain);
@@ -55,5 +54,24 @@ public class SortDirectiveQueryProcessor<T> implements QueryProcessor<List<T>> {
     }
 
     return entities;
+  }
+
+  public Comparator<T> buildComparatorChain(Collection<RestSortDirective> sortDirectives, Class<T> rootClass) {
+    AtomicReference<Comparator<T>> comparatorChainRef = new AtomicReference<>();
+
+    if (sortDirectives != null && sortDirectives.size() > 0) {
+
+      sortDirectives.forEach(sortDirective -> {
+        Comparator<T> comparator = XmlElementPathBeanComparator.forSortDirective(sortDirective, rootClass);
+
+        if (comparatorChainRef.get() == null) {
+          comparatorChainRef.set(comparator);
+        } else {
+          comparatorChainRef.updateAndGet(p -> p.thenComparing(comparator));
+        }
+      });
+
+    }
+    return comparatorChainRef.get();
   }
 }
