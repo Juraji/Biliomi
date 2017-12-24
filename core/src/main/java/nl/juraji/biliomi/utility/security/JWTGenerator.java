@@ -34,8 +34,12 @@ public class JWTGenerator {
   private String channelName;
 
   @Inject
-  @AppDataValue("rest.security.jwt.expiresin")
-  private String jwtExpiresIn;
+  @AppDataValue("rest.security.token.auth.expiresaftermillis")
+  private String authTokenExpiry;
+
+  @Inject
+  @AppDataValue("rest.security.token.refresh.expiresaftermillis")
+  private String refreshTokenExpiry;
 
   private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
@@ -47,7 +51,7 @@ public class JWTGenerator {
    * @return The generated token as string
    */
   public String generateAuthorizationToken(@NotNull byte[] secretBytes, @NotNull User user) {
-    long jwtExpiresIn = Long.parseLong(this.jwtExpiresIn);
+    long expiresAfterMillis = Long.parseLong(this.authTokenExpiry);
     Claims claims = new DefaultClaims();
     claims.put(CLAIMS_TOKEN_TYPE, TokenType.AUTH);
 
@@ -59,14 +63,15 @@ public class JWTGenerator {
       throw new IllegalStateException("User \"" + user.getDisplayName() + "\" is not a caster nor a moderator");
     }
 
-    return generateToken(secretBytes, claims, user, jwtExpiresIn);
+    return generateToken(secretBytes, claims, user, expiresAfterMillis);
   }
 
   public String generateRefreshToken(byte[] secretBytes, User user) {
+    long expiresAfterMillis = Long.parseLong(this.refreshTokenExpiry);
     DefaultClaims claims = new DefaultClaims();
     claims.put(CLAIMS_TOKEN_TYPE, TokenType.REFRESH);
 
-    return generateToken(secretBytes, claims, user, Long.MAX_VALUE);
+    return generateToken(secretBytes, claims, user, expiresAfterMillis);
   }
 
   public Claims validateToken(@NotNull byte[] secretBytes, @NotNull String token, TokenType requiredTokenType) throws JwtException {

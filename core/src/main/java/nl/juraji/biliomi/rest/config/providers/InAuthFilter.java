@@ -67,7 +67,7 @@ public class InAuthFilter implements ContainerRequestFilter {
       Claims claims = jwtGenerator.validateToken(settings.getSecret(), authorizationToken, TokenType.AUTH);
 
       boolean userNonExistent = settings.getLogins().stream()
-          .noneMatch(apiLogin -> apiLogin.getUser().getDisplayName().equals(claims.getSubject()));
+          .noneMatch(apiLogin -> apiLogin.getUser().getUsername().equals(claims.getSubject()));
 
       if (userNonExistent) {
         throw new JwtException("No login known for user " + claims.getSubject());
