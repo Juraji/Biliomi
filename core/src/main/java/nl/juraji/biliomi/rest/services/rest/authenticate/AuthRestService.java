@@ -9,10 +9,10 @@ import nl.juraji.biliomi.model.core.settings.SettingsDao;
 import nl.juraji.biliomi.model.internal.rest.auth.RestAuthorizationRequest;
 import nl.juraji.biliomi.model.internal.rest.auth.RestAuthorizationResponse;
 import nl.juraji.biliomi.model.internal.rest.auth.RestRefreshTokenRequest;
+import nl.juraji.biliomi.model.internal.rest.auth.TokenType;
 import nl.juraji.biliomi.rest.config.Responses;
 import nl.juraji.biliomi.utility.security.JWTGenerator;
 import nl.juraji.biliomi.utility.security.PasswordEncryptor;
-import nl.juraji.biliomi.utility.security.TokenType;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.security.PermitAll;

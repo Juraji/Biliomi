@@ -5,6 +5,7 @@ import io.jsonwebtoken.impl.DefaultClaims;
 import io.jsonwebtoken.impl.DefaultJwsHeader;
 import nl.juraji.biliomi.Biliomi;
 import nl.juraji.biliomi.model.core.User;
+import nl.juraji.biliomi.model.internal.rest.auth.TokenType;
 import nl.juraji.biliomi.model.internal.rest.auth.TokenUserType;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;

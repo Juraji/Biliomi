@@ -1,4 +1,4 @@
-package nl.juraji.biliomi.utility.security;
+package nl.juraji.biliomi.model.internal.rest.auth;
 
 /**
  * Created by Juraji on 24-12-2017.
