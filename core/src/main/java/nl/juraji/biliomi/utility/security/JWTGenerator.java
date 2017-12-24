@@ -6,6 +6,7 @@ import io.jsonwebtoken.impl.DefaultJwsHeader;
 import nl.juraji.biliomi.Biliomi;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.internal.rest.auth.TokenUserType;
+import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.ChannelName;
 
@@ -23,7 +24,9 @@ import java.util.Map;
 @Default
 public class JWTGenerator {
   private static final String CLAIMS_CHANNEL = "chn";
+  private static final String CLAIMS_USER_DISPLAY_NAME = "usr";
   private static final String CLAIMS_USER_TYPE = "utp";
+  private static final String CLAIMS_TOKEN_TYPE = "ttp";
 
   @Inject
   @ChannelName
@@ -42,22 +45,10 @@ public class JWTGenerator {
    * @param user        The user to encode the token for
    * @return The generated token as string
    */
-  public String generateToken(@NotNull byte[] secretBytes, @NotNull User user) {
-    DefaultJwsHeader jwsHeader = new DefaultJwsHeader();
-    Claims claims = new DefaultClaims();
+  public String generateAuthorizationToken(@NotNull byte[] secretBytes, @NotNull User user) {
     long jwtExpiresIn = Long.parseLong(this.jwtExpiresIn);
-    Date now = new Date();
-    Date expiresAt = new Date();
-
-    jwsHeader.setAlgorithm(signatureAlgorithm.getValue());
-    jwsHeader.setType(Header.JWT_TYPE);
-
-    expiresAt.setTime(now.getTime() + jwtExpiresIn);
-    claims.setSubject(user.getDisplayName());
-    claims.setIssuedAt(now);
-    claims.setIssuer(Biliomi.class.getSimpleName());
-    claims.setExpiration(expiresAt);
-    claims.put(CLAIMS_CHANNEL, channelName);
+    Claims claims = new DefaultClaims();
+    claims.put(CLAIMS_TOKEN_TYPE, TokenType.AUTH);
 
     if (user.isCaster()) {
       claims.put(CLAIMS_USER_TYPE, TokenUserType.CASTER);
@@ -67,15 +58,17 @@ public class JWTGenerator {
       throw new IllegalStateException("User \"" + user.getDisplayName() + "\" is not a caster nor a moderator");
     }
 
-    JwtBuilder builder = Jwts.builder()
-        .setHeader((Map<String, Object>) jwsHeader)
-        .setClaims(claims)
-        .signWith(signatureAlgorithm, secretBytes);
-
-    return builder.compact();
+    return generateToken(secretBytes, claims, user, jwtExpiresIn);
   }
 
-  public Claims validateToken(@NotNull byte[] secretBytes, @NotNull String token) throws JwtException {
+  public String generateRefreshToken(byte[] secretBytes, User user) {
+    DefaultClaims claims = new DefaultClaims();
+    claims.put(CLAIMS_TOKEN_TYPE, TokenType.REFRESH);
+
+    return generateToken(secretBytes, claims, user, Long.MAX_VALUE);
+  }
+
+  public Claims validateToken(@NotNull byte[] secretBytes, @NotNull String token, TokenType requiredTokenType) throws JwtException {
     SecretKeySpec secretKeySpec = new SecretKeySpec(secretBytes, signatureAlgorithm.getJcaName());
 
     Claims claims = Jwts.parser()
@@ -83,11 +76,46 @@ public class JWTGenerator {
         .parseClaimsJws(token)
         .getBody();
 
+    Object claimedTokenType = claims.getOrDefault(CLAIMS_TOKEN_TYPE, null);
+    if (claimedTokenType == null) {
+      throw new JwtException("Token is missing token type claim");
+    } else {
+      TokenType tokenType = EnumUtils.toEnum((String) claimedTokenType, TokenType.class);
+      if (!requiredTokenType.equals(tokenType)) {
+        throw new JwtException("Wanted token type " + requiredTokenType.toString() + " but got " + tokenType.toString());
+      }
+    }
+
     Object claimedChannel = claims.getOrDefault(CLAIMS_CHANNEL, null);
-    if (claimedChannel == null || !String.class.isAssignableFrom(claimedChannel.getClass()) || !channelName.equals(claimedChannel)) {
-      throw new JwtException("This token is not for channel " + channelName);
+    if (claimedChannel == null || !channelName.equals(claimedChannel)) {
+      throw new JwtException("Token is not for channel " + channelName);
     }
 
     return claims;
+  }
+
+  private String generateToken(byte[] secretBytes, Claims claims, User user, long expiresInMillis) {
+    DefaultJwsHeader jwsHeader = new DefaultJwsHeader();
+    Date now = new Date();
+    Date expiresAt = new Date();
+
+    jwsHeader.setAlgorithm(signatureAlgorithm.getValue());
+    jwsHeader.setType(Header.JWT_TYPE);
+
+
+    expiresAt.setTime(now.getTime() + expiresInMillis);
+    claims.setIssuedAt(now);
+    claims.setSubject(user.getUsername());
+    claims.setIssuer(Biliomi.class.getSimpleName());
+    claims.setExpiration(expiresAt);
+    claims.put(CLAIMS_CHANNEL, channelName);
+    claims.put(CLAIMS_USER_DISPLAY_NAME, user.getDisplayName());
+
+    JwtBuilder builder = Jwts.builder()
+        .setHeader((Map<String, Object>) jwsHeader)
+        .setClaims(claims)
+        .signWith(signatureAlgorithm, secretBytes);
+
+    return builder.compact();
   }
 }

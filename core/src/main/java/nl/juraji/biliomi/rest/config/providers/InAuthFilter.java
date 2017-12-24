@@ -8,6 +8,7 @@ import nl.juraji.biliomi.model.internal.rest.auth.RestAuthorizationResponse;
 import nl.juraji.biliomi.rest.config.RestRequestInfoHolder;
 import nl.juraji.biliomi.utility.factories.marshalling.JacksonMarshaller;
 import nl.juraji.biliomi.utility.security.JWTGenerator;
+import nl.juraji.biliomi.utility.security.TokenType;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.http.HttpHeader;
 import org.eclipse.jetty.http.HttpMethod;
@@ -63,7 +64,7 @@ public class InAuthFilter implements ContainerRequestFilter {
 
     try {
       RestRequestInfoHolder.RequestInfo requestInfo = RestRequestInfoHolder.getRequestInfo();
-      Claims claims = jwtGenerator.validateToken(settings.getSecret(), authorizationToken);
+      Claims claims = jwtGenerator.validateToken(settings.getSecret(), authorizationToken, TokenType.AUTH);
 
       boolean userNonExistent = settings.getLogins().stream()
           .noneMatch(apiLogin -> apiLogin.getUser().getDisplayName().equals(claims.getSubject()));
@@ -75,7 +76,7 @@ public class InAuthFilter implements ContainerRequestFilter {
       requestInfo.setUsername(claims.getSubject());
     } catch (IllegalArgumentException e) {
       fault = new RestAuthorizationResponse();
-      fault.setMessage(RestAuthorizationResponse.MSG_FAULT_AUTHORIZATION_MISSING);
+      fault.setMessage(RestAuthorizationResponse.getFaultAuthorizationMissingMsg());
     } catch (JwtException e) {
       // The JWT is invalid, let the requester know what's wrong
       fault = new RestAuthorizationResponse();
