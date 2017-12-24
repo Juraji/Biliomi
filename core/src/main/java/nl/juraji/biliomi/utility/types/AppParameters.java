@@ -60,11 +60,7 @@ public class AppParameters {
 
   public File getWorkingDir(String... path) {
     File file = new File(workingDir, Joiner.on("/").join(path));
-
-    if (!file.mkdirs()) {
-      throw new RuntimeException("Unable to create directory " + file.getAbsolutePath());
-    }
-
+    file.mkdirs();
     return file;
   }
 
