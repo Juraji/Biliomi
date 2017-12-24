@@ -1,10 +1,9 @@
 package nl.juraji.biliomi.rest.config.providers;
 
+import nl.juraji.biliomi.BiliomiContainer;
 import nl.juraji.biliomi.model.internal.rest.ServerErrorResponse;
 import nl.juraji.biliomi.rest.config.Responses;
-import org.apache.logging.log4j.Logger;
 
-import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -16,13 +15,9 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class ExceptionResponseMapper implements ExceptionMapper<Throwable> {
 
-  @Inject
-  private Logger logger;
-
   @Override
   public Response toResponse(Throwable throwable) {
-
-    if (logger.isDebugEnabled()) {
+    if (BiliomiContainer.getParameters().isDebugMode()) {
       ServerErrorResponse response = new ServerErrorResponse();
 
       response.setErrorMessage(throwable.getMessage());

@@ -33,7 +33,7 @@ public class AppParameters {
   @Parameter(names = "--resetauth", description = "Reset authentication for Twitch and ALL other integrations")
   private boolean resetAuth = false;
 
-  @Parameter(names = {"--debug"}, description = "Start Biliomi in debug mode, more information is shown in the console")
+  @Parameter(names = {"--debug", "-D"}, description = "Start Biliomi in debug mode, more information is shown in the console")
   private boolean debugMode = false;
 
   public AppParameters(String[] args) {
@@ -61,8 +61,9 @@ public class AppParameters {
   public File getWorkingDir(String... path) {
     File file = new File(workingDir, Joiner.on("/").join(path));
 
-    //noinspection ResultOfMethodCallIgnored
-    file.mkdirs();
+    if (!file.mkdirs()) {
+      throw new RuntimeException("Unable to create directory " + file.getAbsolutePath());
+    }
 
     return file;
   }
