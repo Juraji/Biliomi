@@ -59,17 +59,15 @@ public class SubscriberWatchUpdateService extends TimerService {
 
   private void update() {
     ExecutorService chunkExecutor = ThreadPools.newExecutorService(8, "SubscriberWatchTimerServiceFullUpdateChunks");
-    int pageSize = 100;
-
     try {
       // Calculate how many pages to fetch (A page can have a max of 100 users)
-      int pageCount = (int) Math.ceil(getSubscriberCount() / pageSize);
+      int pageCount = (int) Math.ceil(getSubscriberCount() / 100.0);
       List<Future<Response<TwitchSubscriptions>>> futures = new ArrayList<>();
 
       // Fetch subscribers from Twitch (8 pages of 100 at a time)
       IntStream.range(0, pageCount)
-          .mapToObj(page -> page * pageSize)
-          .map(offset -> chunkExecutor.submit(() -> twitchApi.getChannelSubscriptions(channelService.getChannelId(), pageSize, offset)))
+          .mapToObj(page -> page * 100)
+          .map(offset -> chunkExecutor.submit(() -> twitchApi.getChannelSubscriptions(channelService.getChannelId(), 100, offset)))
           .forEachOrdered(futures::add);
 
       // Map all requests to a single list of subscribed twitch user ids
