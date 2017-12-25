@@ -201,10 +201,6 @@ public interface EBiStream<K, V, E extends Exception> {
     entries().forEachOrdered(e -> RethrowEInterface.biConsumber(biConsumer).accept(e.getKey(), e.getValue()));
   }
 
-  default <R> EStream<R, E> toExceptionalStream(EBiFunction<K, V, R, E> valueMapper) {
-    return EStream.from(entries().map(e -> RethrowEInterface.biFunction(valueMapper).apply(e.getKey(), e.getValue())));
-  }
-
   default Map<K, V> toMap() {
     return entries().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }

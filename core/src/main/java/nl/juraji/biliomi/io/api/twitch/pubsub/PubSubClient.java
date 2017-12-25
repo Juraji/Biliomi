@@ -43,7 +43,7 @@ public class PubSubClient extends SocketClient {
     this.oAuth = oAuth;
 
     this.pingPong.setOnPongTimeout(this::reconnect);
-    oAuthState = new TokenGenerator(10, true).generate();
+    oAuthState = new TokenGenerator(10, false).generate();
   }
 
   @Override

@@ -1,5 +1,6 @@
 package nl.juraji.biliomi.utility.types.collections;
 
+import nl.juraji.biliomi.utility.estreams.EBiStream;
 import nl.juraji.biliomi.utility.factories.concurrent.DefaultThreadFactory;
 
 import java.util.Objects;
@@ -52,16 +53,16 @@ public class TimedMap<K, V> {
    * @param key        A unique identifier
    * @param value      The value
    * @param timeToLive The time to live
-   * @param sourceUnit The time unit of the timeToLive parameter
+   * @param timeUnit   The time unit of the timeToLive parameter
    * @return The value that has been set
    */
-  public V put(K key, V value, long timeToLive, TimeUnit sourceUnit) {
+  public V put(K key, V value, long timeToLive, TimeUnit timeUnit) {
     final ExpiringObject object;
 
     try {
       writeLock.lock();
 
-      long millsTtl = TimeUnit.MILLISECONDS.convert(timeToLive, sourceUnit);
+      long millsTtl = TimeUnit.MILLISECONDS.convert(timeToLive, timeUnit);
       object = map.put(key, new ExpiringObject(key, value, millsTtl));
       if (object != null) {
         object.getTask().cancel();
@@ -166,6 +167,25 @@ public class TimedMap<K, V> {
     return map.containsKey(key);
   }
 
+  public K findKey(V value) {
+    if (isEmpty()) {
+      return null;
+    }
+
+    try {
+      writeLock.lock();
+      return EBiStream.from(map)
+          .mapValue(ExpiringObject::getValue)
+          .filterValue(Objects::nonNull)
+          .filterValue(v -> v.equals(value))
+          .map((k, v) -> k)
+          .findFirst()
+          .orElse(null);
+    } finally {
+      writeLock.unlock();
+    }
+  }
+
   public boolean isEmpty() {
     return map.isEmpty();
   }
@@ -195,13 +215,6 @@ public class TimedMap<K, V> {
   public void stop() {
     timer.purge();
     timer.cancel();
-  }
-
-  public boolean containsValue(V value) {
-    return map.values().stream()
-        .map(ExpiringObject::getValue)
-        .filter(Objects::nonNull)
-        .anyMatch(v -> v.equals(value));
   }
 
   private class ExpiringObject {

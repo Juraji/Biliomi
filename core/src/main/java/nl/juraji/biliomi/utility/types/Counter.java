@@ -61,9 +61,4 @@ public class Counter extends Number {
   public void reset() {
     counter = 0;
   }
-
-  @Override
-  public String toString() {
-    return "Counter{counter=" + counter + '}';
-  }
 }

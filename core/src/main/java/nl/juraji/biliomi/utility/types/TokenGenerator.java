@@ -12,14 +12,14 @@ public class TokenGenerator {
 
   private final SecureRandom random;
   private final int length;
-  private final boolean noSymbols;
+  private final boolean includeSymbols;
 
   public TokenGenerator(int length) {
-    this(length, false);
+    this(length, true);
   }
 
-  public TokenGenerator(int length, boolean noSymbols) {
-    this.noSymbols = noSymbols;
+  public TokenGenerator(int length, boolean includeSymbols) {
+    this.includeSymbols = includeSymbols;
     this.random = new SecureRandom();
     this.length = length;
   }
@@ -28,10 +28,10 @@ public class TokenGenerator {
     final MutableString token = new MutableString();
     final String chars;
 
-    if (noSymbols) {
-      chars = CHARS;
-    } else {
+    if (includeSymbols) {
       chars = CHARS + SYMBOLS;
+    } else {
+      chars = CHARS;
     }
 
     final int charCount = chars.length();

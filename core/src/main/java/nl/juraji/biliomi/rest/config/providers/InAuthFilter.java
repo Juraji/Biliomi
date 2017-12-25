@@ -9,7 +9,6 @@ import nl.juraji.biliomi.model.internal.rest.auth.TokenType;
 import nl.juraji.biliomi.rest.config.RestRequestInfoHolder;
 import nl.juraji.biliomi.utility.factories.marshalling.JacksonMarshaller;
 import nl.juraji.biliomi.utility.security.JWTGenerator;
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.http.HttpHeader;
 import org.eclipse.jetty.http.HttpMethod;
 
@@ -21,7 +20,6 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
@@ -53,12 +51,6 @@ public class InAuthFilter implements ContainerRequestFilter {
     }
 
     String authorizationToken = requestContext.getHeaders().getFirst(HttpHeader.AUTHORIZATION.asString());
-    if (StringUtils.isEmpty(authorizationToken)) {
-      // If no token was present in the header, try the token query parameter
-      MultivaluedMap<String, String> queryParameters = requestContext.getUriInfo().getQueryParameters();
-      authorizationToken = queryParameters.getFirst("token");
-    }
-
     ApiSecuritySettings settings = settingsDao.getSettings(ApiSecuritySettings.class);
     RestAuthorizationResponse fault = null;
 
