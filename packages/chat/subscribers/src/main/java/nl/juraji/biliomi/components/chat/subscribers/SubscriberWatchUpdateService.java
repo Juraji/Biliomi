@@ -68,7 +68,7 @@ public class SubscriberWatchUpdateService extends TimerService {
       // Fetch subscribers from Twitch (8 pages of 100 at a time)
       IntStream.range(0, pageCount)
           .mapToObj(page -> page * 100)
-          .map(offset -> chunkExecutor.submit(() -> twitchApi.getChannelSubscriptions(channelService.getChannelId(), 100, offset)))
+          .map(offset -> chunkExecutor.submit(() -> twitchApi.getChannelSubscriptions(channelService.getChannelId(), 20, offset)))
           .forEachOrdered(futures::add);
 
       // Map all requests to a single list of subscribed twitch user ids

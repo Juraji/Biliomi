@@ -60,7 +60,7 @@ public class FollowerWatchUpdateService extends TimerService {
   @Deprecated
   private void incrementalUpdate() {
     try {
-      Response<TwitchFollows> followsResponse = twitchApi.getChannelFollowers(channelService.getChannelId(), 100, 0);
+      Response<TwitchFollows> followsResponse = twitchApi.getChannelFollowers(channelService.getChannelId(), 20, 0);
 
       if (followsResponse.isOK()) {
         List<TwitchFollower> twitchFollowers = followsResponse.getData().getFollows();
