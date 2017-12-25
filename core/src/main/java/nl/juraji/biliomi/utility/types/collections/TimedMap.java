@@ -20,7 +20,7 @@ import java.util.function.Function;
  */
 public class TimedMap<K, V> {
   private static final String THREAD_SUFFIX = "TimedMapEvictionTimer";
-  private static final AtomicInteger SERIAL_GENERATOR = new AtomicInteger(0);
+  private static final AtomicInteger SERIAL_GENERATOR = new AtomicInteger();
 
   private final ConcurrentMap<K, ExpiringObject> map;
   private final Lock writeLock;

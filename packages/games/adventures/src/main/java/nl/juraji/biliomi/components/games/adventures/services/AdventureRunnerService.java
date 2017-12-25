@@ -141,7 +141,7 @@ public class AdventureRunnerService {
         .map(Templater::template)
         .forEach(templater -> {
           executor.schedule(() -> formatAndPostChapter(templater), counter.get() * configService.getNextChapterInterval(), TimeUnit.MILLISECONDS);
-          counter.increment();
+          counter.getAndIncrement();
         });
 
     executor.schedule(() -> {

@@ -21,7 +21,7 @@ public class SlotmachineConfigService extends ConfigService<YamlSlotmachineConfi
     super("games/slotmachine.yml", YamlSlotmachineConfig.class);
 
     Counter counter = new Counter();
-    config.getEmotes().forEach(emote -> emote.setIndex(counter.increment()));
+    config.getEmotes().forEach(emote -> emote.setIndex(counter.getAndIncrement()));
     jackpot = config.getEmotes().get(config.getEmotes().size() - 1);
   }
 
