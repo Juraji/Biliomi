@@ -59,8 +59,10 @@ public class FollowerWatchUpdateService extends TimerService {
   // Twitch Trello card: https://trello.com/c/HJvZ8sVP
   @Deprecated
   private void incrementalUpdate() {
+    int pageSize = 20;
+
     try {
-      Response<TwitchFollows> followsResponse = twitchApi.getChannelFollowers(channelService.getChannelId(), 20, 0);
+      Response<TwitchFollows> followsResponse = twitchApi.getChannelFollowers(channelService.getChannelId(), pageSize, 0);
 
       if (followsResponse.isOK()) {
         List<TwitchFollower> twitchFollowers = followsResponse.getData().getFollows();
