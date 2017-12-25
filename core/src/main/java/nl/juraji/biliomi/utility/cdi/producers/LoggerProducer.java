@@ -1,6 +1,7 @@
 package nl.juraji.biliomi.utility.cdi.producers;
 
 import nl.juraji.biliomi.BiliomiContainer;
+import nl.juraji.biliomi.utility.cdi.annotations.modifiers.LoggerFor;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,6 +24,14 @@ public final class LoggerProducer {
 
   @Produces
   public Logger getLogger(InjectionPoint injectionPoint) {
-    return LogManager.getLogger(injectionPoint.getBean().getBeanClass());
+    Class loggerClass;
+
+    if (injectionPoint.getAnnotated().isAnnotationPresent(LoggerFor.class)) {
+      loggerClass = injectionPoint.getAnnotated().getAnnotation(LoggerFor.class).value();
+    } else {
+      loggerClass = injectionPoint.getBean().getBeanClass();
+    }
+
+    return LogManager.getLogger(loggerClass);
   }
 }

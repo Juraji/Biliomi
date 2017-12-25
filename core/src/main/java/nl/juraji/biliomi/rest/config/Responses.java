@@ -78,4 +78,16 @@ public final class Responses {
   public static Response alreadyExists() {
     return Response.status(Response.Status.CONFLICT).build();
   }
+
+  public static Response serverError() {
+    return serverError(null);
+  }
+
+  public static Response serverError(Object entity) {
+    if (entity == null) {
+      return Response.serverError().build();
+    } else {
+      return Response.status(500).entity(entity).build();
+    }
+  }
 }

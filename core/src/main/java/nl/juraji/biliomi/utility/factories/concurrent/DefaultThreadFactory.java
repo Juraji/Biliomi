@@ -12,7 +12,7 @@ public final class DefaultThreadFactory implements ThreadFactory {
 
   private final String threadName;
   private final boolean isSingleThread;
-  private final AtomicInteger serialNumber = new AtomicInteger(0);
+  private final AtomicInteger serialNumber = new AtomicInteger();
 
   private DefaultThreadFactory(String name, boolean isSingleThread) {
     this.threadName = name;

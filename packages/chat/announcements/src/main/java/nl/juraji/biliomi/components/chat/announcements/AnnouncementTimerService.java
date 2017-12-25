@@ -10,14 +10,13 @@ import nl.juraji.biliomi.model.internal.events.irc.user.messages.IrcChatMessageE
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.BotName;
 import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
 import nl.juraji.biliomi.utility.types.Counter;
-import nl.juraji.biliomi.utility.types.LoopCounter;
 import nl.juraji.biliomi.utility.types.Templater;
+import nl.juraji.biliomi.utility.types.collections.NeverEndingList;
 import nl.juraji.biliomi.utility.types.components.TimerService;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -43,9 +42,8 @@ public class AnnouncementTimerService extends TimerService {
   @BotName
   private String botName;
 
-  private final LoopCounter indexCounter = new LoopCounter(0);
   private final Counter messageCounter = new Counter();
-  private List<Announcement> announcements;
+  private NeverEndingList<Announcement> announcements;
   private AnnouncementsSettings settings;
 
   @Override
@@ -56,11 +54,9 @@ public class AnnouncementTimerService extends TimerService {
       settings = settingsService.getSettings(AnnouncementsSettings.class, s -> settings = s);
     }
 
-    this.announcements = announcementDao.getList();
-    this.indexCounter.setSize(this.announcements.size());
+    this.announcements = new NeverEndingList<>(announcementDao.getList());
 
-    if (announcements.size() > 0) {
-      indexCounter.rand();
+    if (!announcements.isEmpty()) {
       scheduleAtFixedRate(this::runAnnouncements, settings.getRunInterval(), TimeUnit.MILLISECONDS);
     }
   }
@@ -68,7 +64,7 @@ public class AnnouncementTimerService extends TimerService {
   @Subscribe
   public void onIrcChatMessageEvent(IrcChatMessageEvent event) {
     if (!botName.equalsIgnoreCase(event.getUsername())) {
-      messageCounter.increment();
+      messageCounter.getAndIncrement();
     }
   }
 
@@ -77,9 +73,9 @@ public class AnnouncementTimerService extends TimerService {
       Announcement announcement;
 
       if (settings.isShuffle()) {
-        announcement = announcements.get(indexCounter.rand());
+        announcement = announcements.random();
       } else {
-        announcement = announcements.get(indexCounter.increment());
+        announcement = announcements.next();
       }
 
       chat.say(Templater.template(ANNOUNTEMENT_TEMPLATE)

@@ -5,10 +5,10 @@ import io.jsonwebtoken.JwtException;
 import nl.juraji.biliomi.model.core.security.ApiSecuritySettings;
 import nl.juraji.biliomi.model.core.settings.SettingsDao;
 import nl.juraji.biliomi.model.internal.rest.auth.RestAuthorizationResponse;
+import nl.juraji.biliomi.model.internal.rest.auth.TokenType;
 import nl.juraji.biliomi.rest.config.RestRequestInfoHolder;
 import nl.juraji.biliomi.utility.factories.marshalling.JacksonMarshaller;
 import nl.juraji.biliomi.utility.security.JWTGenerator;
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.http.HttpHeader;
 import org.eclipse.jetty.http.HttpMethod;
 
@@ -20,7 +20,6 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
@@ -52,21 +51,15 @@ public class InAuthFilter implements ContainerRequestFilter {
     }
 
     String authorizationToken = requestContext.getHeaders().getFirst(HttpHeader.AUTHORIZATION.asString());
-    if (StringUtils.isEmpty(authorizationToken)) {
-      // If no token was present in the header, try the token query parameter
-      MultivaluedMap<String, String> queryParameters = requestContext.getUriInfo().getQueryParameters();
-      authorizationToken = queryParameters.getFirst("token");
-    }
-
     ApiSecuritySettings settings = settingsDao.getSettings(ApiSecuritySettings.class);
     RestAuthorizationResponse fault = null;
 
     try {
       RestRequestInfoHolder.RequestInfo requestInfo = RestRequestInfoHolder.getRequestInfo();
-      Claims claims = jwtGenerator.validateToken(settings.getSecret(), authorizationToken);
+      Claims claims = jwtGenerator.validateToken(settings.getSecret(), authorizationToken, TokenType.AUTH);
 
       boolean userNonExistent = settings.getLogins().stream()
-          .noneMatch(apiLogin -> apiLogin.getUser().getDisplayName().equals(claims.getSubject()));
+          .noneMatch(apiLogin -> apiLogin.getUser().getUsername().equals(claims.getSubject()));
 
       if (userNonExistent) {
         throw new JwtException("No login known for user " + claims.getSubject());
@@ -75,7 +68,7 @@ public class InAuthFilter implements ContainerRequestFilter {
       requestInfo.setUsername(claims.getSubject());
     } catch (IllegalArgumentException e) {
       fault = new RestAuthorizationResponse();
-      fault.setMessage(RestAuthorizationResponse.MSG_FAULT_AUTHORIZATION_MISSING);
+      fault.setMessage(RestAuthorizationResponse.getFaultAuthorizationMissingMsg());
     } catch (JwtException e) {
       // The JWT is invalid, let the requester know what's wrong
       fault = new RestAuthorizationResponse();

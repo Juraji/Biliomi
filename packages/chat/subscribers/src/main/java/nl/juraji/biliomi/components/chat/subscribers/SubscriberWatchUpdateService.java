@@ -59,7 +59,6 @@ public class SubscriberWatchUpdateService extends TimerService {
 
   private void update() {
     ExecutorService chunkExecutor = ThreadPools.newExecutorService(8, "SubscriberWatchTimerServiceFullUpdateChunks");
-
     try {
       // Calculate how many pages to fetch (A page can have a max of 100 users)
       int pageCount = (int) Math.ceil(getSubscriberCount() / 100.0);

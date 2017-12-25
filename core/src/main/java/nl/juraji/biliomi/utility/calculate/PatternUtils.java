@@ -3,7 +3,6 @@ package nl.juraji.biliomi.utility.calculate;
 import nl.juraji.biliomi.utility.types.Counter;
 import nl.juraji.biliomi.utility.types.MutableString;
 import nl.juraji.biliomi.utility.types.collections.FastList;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,17 +13,6 @@ public final class PatternUtils {
   private static final Pattern LINK = Pattern.compile("([^\\s]+[a-z0-9-@]+\\.[a-z0-9]+[^\\s]+)", Pattern.CASE_INSENSITIVE);
 
   private PatternUtils() {
-  }
-
-  /**
-   * Check a message for links
-   * Note: Does not deobfuscate links
-   *
-   * @param message The message to scan
-   * @return True if links are found, else false
-   */
-  public static boolean hasLinks(String message) {
-    return StringUtils.isNotEmpty(message) && LINK.matcher(message).matches();
   }
 
   /**
@@ -57,7 +45,7 @@ public final class PatternUtils {
 
     for (int c : chars) {
       if (c == previous || (!Character.isLetterOrDigit(c) && !Character.isLetterOrDigit(previous))) {
-        counter.increment();
+        counter.getAndIncrement();
       } else if (counter.isMoreThan(1)) {
         repititionCounts.add(counter.get());
         counter.set(1);
