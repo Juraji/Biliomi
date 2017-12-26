@@ -56,9 +56,18 @@ public abstract class ModelRestService<T> {
     List<T> entities = getEntities();
     int total = entities.size();
 
-    entities = new FilterDirectiveQueryProcessor<T>().process(entities, queryParams);
-    entities = new SortDirectiveQueryProcessor<T>().process(entities, queryParams);
-    entities = new LimitQueryProcessor<T>().process(entities, queryParams);
+    if (queryParams.containsKey(FilterDirectiveQueryProcessor.PARAM_NAME_FILTER)) {
+      entities = new FilterDirectiveQueryProcessor<T>().process(entities, queryParams);
+      total = entities.size();
+    }
+
+    if (queryParams.containsKey(SortDirectiveQueryProcessor.PARAM_NAME_SORT)) {
+      entities = new SortDirectiveQueryProcessor<T>().process(entities, queryParams);
+    }
+
+    if (queryParams.containsKey(LimitQueryProcessor.PARAM_NAME_LIMIT)) {
+      entities = new LimitQueryProcessor<T>().process(entities, queryParams);
+    }
 
     return toPaginatedResponse(entities, total);
   }
