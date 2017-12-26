@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -17,28 +18,30 @@ import java.util.concurrent.atomic.AtomicReference;
  * Biliomi
  */
 public class SortDirectiveQueryProcessor<T> implements QueryProcessor<List<T>> {
-  public static final String PARAM_NAME = "sort";
+  public static final String PARAM_NAME_SORT = "sort";
 
   /**
    * Use the "sort" query parameter to sort a list of entities.
    * - Chains sorting directives in order of appearance
    * - Supports sorting on sub-properties by providing the path as "Property.SubProperty".
    *
-   * @param queryParamValue The value of the "sort" query parameter
-   * @param entities        The list of entities to sort
+   * @param entities    The list of entities to sort
+   * @param queryParams A map with the value of the "sort" query parameter
    * @return The sorted list of entities
    * @throws IOException When Jackson is unnable to unmarshal the sorting directives
    */
+
   @Override
-  public List<T> process(String queryParamValue, List<T> entities) throws IOException {
-    if (StringUtils.isNotEmpty(queryParamValue) && entities.size() > 1) {
+  public List<T> process(List<T> entities, Map<String, Object> queryParams) throws Exception {
+    if (entities.size() > 1 && queryParams.containsKey(PARAM_NAME_SORT)) {
       try {
+        String sorters = (String) queryParams.get(PARAM_NAME_SORT);
         Collection<RestSortDirective> sortDirectives = null;
         // noinspection unchecked This error is inevitable depending on user input
         Class<T> rootClass = (Class<T>) entities.get(0).getClass();
 
-        if (StringUtils.isNotEmpty(queryParamValue)) {
-          sortDirectives = JacksonMarshaller.unmarshalCollection(queryParamValue, RestSortDirective.class);
+        if (StringUtils.isNotEmpty(sorters)) {
+          sortDirectives = JacksonMarshaller.unmarshalCollection(sorters, RestSortDirective.class);
         }
 
         if (sortDirectives != null && sortDirectives.size() > 0) {

@@ -49,8 +49,7 @@ public class InvestmentRecordRestService extends ModelRestService<InvestmentReco
     User user = new User();
     user.setId(id);
     List<InvestmentRecord> records = investmentRecordDao.getRecords(user, 10);
-
-    return Responses.okOrEmpty(records);
+    return toPaginatedResponse(records);
   }
 
   @Override

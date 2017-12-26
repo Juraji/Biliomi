@@ -50,7 +50,7 @@ public class KillRecordRestService extends ModelRestService<KillRecord> {
     user.setId(id);
     List<KillRecord> records = killRecordDao.getRecords(user, 10);
 
-    return Responses.okOrEmpty(records);
+    return toPaginatedResponse(records);
   }
 
   @Override

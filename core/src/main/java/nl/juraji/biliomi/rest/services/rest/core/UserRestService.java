@@ -75,17 +75,17 @@ public class UserRestService extends ModelRestService<User> {
   @GET
   @Path("/latest/followers")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getLatestFollowers(@QueryParam("limit") Integer limit) {
-    List<User> followers = userDao.getFollowers(limit == null ? 20 : limit);
-    return Responses.okOrEmpty(followers);
+  public Response getLatestFollowers() {
+    List<User> followers = userDao.getFollowers(20);
+    return toPaginatedResponse(followers);
   }
 
   @GET
   @Path("/latest/subscribers")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getLatestSubscribers(@QueryParam("limit") Integer limit) {
-    List<User> subscribers = userDao.getSubscribers(limit == null ? 20 : limit);
-    return Responses.okOrEmpty(subscribers);
+  public Response getLatestSubscribers() {
+    List<User> subscribers = userDao.getSubscribers(20);
+    return toPaginatedResponse(subscribers);
   }
 
   @GET

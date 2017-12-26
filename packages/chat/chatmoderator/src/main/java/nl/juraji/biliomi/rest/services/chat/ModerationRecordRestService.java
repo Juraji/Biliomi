@@ -5,8 +5,8 @@ import nl.juraji.biliomi.model.chat.ModerationRecordDao;
 import nl.juraji.biliomi.rest.config.ModelRestService;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.Path;
 import java.util.List;
 
 /**
@@ -18,13 +18,6 @@ public class ModerationRecordRestService extends ModelRestService<ModerationReco
 
   @Inject
   private ModerationRecordDao moderationRecordDao;
-
-  @GET
-  @Path("/user/{userid}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public List<ModerationRecord> getForUser(@PathParam("userid") Long userId) {
-    return moderationRecordDao.getRecords(userId);
-  }
 
   @Override
   public List<ModerationRecord> getEntities() {

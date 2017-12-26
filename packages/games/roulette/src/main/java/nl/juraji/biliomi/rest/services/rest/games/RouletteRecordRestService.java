@@ -48,8 +48,7 @@ public class RouletteRecordRestService extends ModelRestService<RouletteRecord> 
     User user = new User();
     user.setId(id);
     List<RouletteRecord> records = RouletteRecordDao.getRecords(user, 10);
-
-    return Responses.okOrEmpty(records);
+    return toPaginatedResponse(records);
   }
 
   @Override

@@ -36,6 +36,12 @@ public class CIMap<V> extends HashMap<String, V> {
     super.putAll(map);
   }
 
+  public void putIfNotNull(String key, V value) {
+    if (value!=null) {
+      put(key, value);
+    }
+  }
+
   @Override
   public V remove(Object key) {
     return super.remove(lcKey(key));

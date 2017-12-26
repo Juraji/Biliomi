@@ -3,7 +3,6 @@ package nl.juraji.biliomi.rest.services.rest.core;
 import nl.juraji.biliomi.model.core.CommandHistoryRecord;
 import nl.juraji.biliomi.model.core.CommandHistoryRecordDao;
 import nl.juraji.biliomi.rest.config.ModelRestService;
-import nl.juraji.biliomi.rest.config.Responses;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -26,7 +25,7 @@ public class CommandHistoryRecordRestService extends ModelRestService<CommandHis
   @Produces(MediaType.APPLICATION_JSON)
   public Response getHistoryForCommand(@PathParam("command") String command) {
     List<CommandHistoryRecord> records = commandHistoryRecordDao.getLatestHistoryForCommand(command);
-    return Responses.okOrEmpty(records);
+    return toPaginatedResponse(records);
   }
 
   @Override

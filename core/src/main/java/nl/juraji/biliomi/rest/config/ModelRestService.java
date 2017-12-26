@@ -1,9 +1,11 @@
 package nl.juraji.biliomi.rest.config;
 
+import nl.juraji.biliomi.model.internal.rest.PaginatedResponse;
 import nl.juraji.biliomi.rest.config.directives.FilterDirectiveQueryProcessor;
 import nl.juraji.biliomi.rest.config.directives.LimitQueryProcessor;
 import nl.juraji.biliomi.rest.config.directives.SortDirectiveQueryProcessor;
 import nl.juraji.biliomi.utility.estreams.EStream;
+import nl.juraji.biliomi.utility.types.collections.CIMap;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.HibernateException;
@@ -40,16 +42,25 @@ public abstract class ModelRestService<T> {
    */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public Response restGetEntities(@QueryParam(SortDirectiveQueryProcessor.PARAM_NAME) String sortDirectiveQuery,
-                                  @QueryParam(FilterDirectiveQueryProcessor.PARAM_NAME) String filterDirectiveQuery,
-                                  @QueryParam(LimitQueryProcessor.PARAM_NAME) String limitQuery) throws Exception {
+  public Response restGetEntities(@QueryParam(SortDirectiveQueryProcessor.PARAM_NAME_SORT) String sortDirectiveQuery,
+                                  @QueryParam(FilterDirectiveQueryProcessor.PARAM_NAME_FILTER) String filterDirectiveQuery,
+                                  @QueryParam(LimitQueryProcessor.PARAM_NAME_LIMIT) Integer limitQuery,
+                                  @QueryParam(LimitQueryProcessor.PARAM_NAME_OFFSET) Integer offsetQuery) throws Exception {
+
+    CIMap<Object> queryParams = new CIMap<>();
+    queryParams.putIfNotNull(SortDirectiveQueryProcessor.PARAM_NAME_SORT, sortDirectiveQuery);
+    queryParams.putIfNotNull(FilterDirectiveQueryProcessor.PARAM_NAME_FILTER, filterDirectiveQuery);
+    queryParams.putIfNotNull(LimitQueryProcessor.PARAM_NAME_LIMIT, limitQuery);
+    queryParams.putIfNotNull(LimitQueryProcessor.PARAM_NAME_OFFSET, offsetQuery);
 
     List<T> entities = getEntities();
-    entities = new FilterDirectiveQueryProcessor<T>().process(filterDirectiveQuery, entities);
-    entities = new SortDirectiveQueryProcessor<T>().process(sortDirectiveQuery, entities);
-    entities = new LimitQueryProcessor<T>().process(sortDirectiveQuery, entities);
+    int total = entities.size();
 
-    return Responses.okOrEmpty(entities);
+    entities = new FilterDirectiveQueryProcessor<T>().process(entities, queryParams);
+    entities = new SortDirectiveQueryProcessor<T>().process(entities, queryParams);
+    entities = new LimitQueryProcessor<T>().process(entities, queryParams);
+
+    return toPaginatedResponse(entities, total);
   }
 
   /**
@@ -163,5 +174,23 @@ public abstract class ModelRestService<T> {
           Object property = PropertyUtils.getProperty(object, field.getName());
           return property == null || (String.class.isAssignableFrom(property.getClass()) && StringUtils.isEmpty((String) property));
         });
+  }
+
+  protected Response toPaginatedResponse(List<T> entities) {
+    return toPaginatedResponse(entities, entities.size());
+  }
+
+  protected Response toPaginatedResponse(List<T> entities, int totalAvailable) {
+
+    if (entities.isEmpty()) {
+      return Responses.noContent();
+    } else {
+      PaginatedResponse<T> response = new PaginatedResponse<>();
+
+      response.setEntities(entities);
+      response.setTotalAvailable(totalAvailable);
+
+      return Responses.ok(response);
+    }
   }
 }

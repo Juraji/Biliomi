@@ -55,7 +55,7 @@ public class AdventureRecordRestService extends ModelRestService<AdventureRecord
     user.setId(id);
     List<AdventureRecord> records = adventureRecordDao.getRecords(user, 10);
 
-    return Responses.okOrEmpty(records);
+    return toPaginatedResponse(records);
   }
 
   @Override
