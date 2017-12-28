@@ -61,8 +61,7 @@ public class TemplateRestService extends ModelRestService<Template> {
   }
 
   @GET
-  @Path("/{key}")
-  @Consumes(MediaType.TEXT_PLAIN)
+  @Path("/bykey/{key}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getTemplateByKey(@PathParam("key") String key) {
     Template template = templateDao.getByKey(key);
