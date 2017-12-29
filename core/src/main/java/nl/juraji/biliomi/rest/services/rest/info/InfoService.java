@@ -1,6 +1,7 @@
 package nl.juraji.biliomi.rest.services.rest.info;
 
 import nl.juraji.biliomi.components.shared.ChatService;
+import nl.juraji.biliomi.components.system.channel.ChannelSettingsComponent;
 import nl.juraji.biliomi.components.system.channel.GameService;
 import nl.juraji.biliomi.components.system.users.UsersService;
 import nl.juraji.biliomi.io.api.twitch.v5.TwitchApi;
@@ -9,10 +10,13 @@ import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchChannel;
 import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchImageInfo;
 import nl.juraji.biliomi.io.api.twitch.v5.model.wrappers.TmiHosts;
 import nl.juraji.biliomi.io.api.twitch.v5.model.wrappers.TwitchStreamInfo;
+import nl.juraji.biliomi.model.core.Template;
+import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.VersionInfo;
 import nl.juraji.biliomi.model.internal.rest.ChannelInfo;
 import nl.juraji.biliomi.rest.config.Responses;
+import nl.juraji.biliomi.utility.types.Templater;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -43,6 +47,9 @@ public class InfoService {
   private UsersService usersService;
 
   @Inject
+  private TemplateDao templateDao;
+
+  @Inject
   private VersionInfo versionInfo;
 
   @GET
@@ -61,6 +68,7 @@ public class InfoService {
     nl.juraji.biliomi.io.web.Response<TwitchChannel> channelResponse = twitchApi.getChannel();
 
     if (channelResponse.isOK()) {
+      Template statusTemplate = templateDao.getByKey(ChannelSettingsComponent.CHANNEL_TITLE_TEMPLATE_KEY);
       TwitchChannel channel = channelResponse.getData();
       info = new ChannelInfo();
 
@@ -69,6 +77,7 @@ public class InfoService {
       info.setSubscriberCount(usersService.getSubscriberCount());
       info.setGame(gameService.getByName(channel.getGame(), true));
       info.setStatus(channel.getStatus());
+      info.setStatusWithoutTemplate(Templater.removeTemplate(channel.getStatus(), statusTemplate.getTemplate()));
       info.setLogoUri(channel.getLogo());
       info.setAffiliate(info.getSubscriberCount() > 0 || channel.isPartner());
       info.setPartner(channel.isPartner());

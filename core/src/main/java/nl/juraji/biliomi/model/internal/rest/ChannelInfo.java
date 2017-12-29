@@ -39,6 +39,9 @@ public class ChannelInfo {
   @XmlElement(name = "Status")
   private String status;
 
+  @XmlElement(name = "StatusWithoutTemplate")
+  private String statusWithoutTemplate;
+
   @XmlElement(name = "CurrentGame")
   private Game game;
 
@@ -108,6 +111,14 @@ public class ChannelInfo {
 
   public void setStatus(String status) {
     this.status = status;
+  }
+
+  public String getStatusWithoutTemplate() {
+    return statusWithoutTemplate;
+  }
+
+  public void setStatusWithoutTemplate(String statusWithoutTemplate) {
+    this.statusWithoutTemplate = statusWithoutTemplate;
   }
 
   public Game getGame() {
