@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import nl.juraji.biliomi.utility.estreams.EBiStream;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -112,20 +113,24 @@ public final class Templater {
 
   /**
    * Removes any template text
-   * @param subject The String to strip
+   *
+   * @param subject  The String to strip
    * @param template The template to remove
    * @return The stripped subject
    */
   public static String removeTemplate(String subject, String template) {
-    if (StringUtils.isNotEmpty(subject) && StringUtils.isNotEmpty(template)) {
+    if (StringUtils.isEmpty(subject) && StringUtils.isEmpty(template)) {
+      return subject;
+    } else {
       String[] templateParts = template.split("\\s?\\{\\{[a-zA-Z0-9]+}}\\s?");
+      MutableString mutableSubject = new MutableString(subject);
 
-      for (String part : templateParts) {
-        subject = subject.replaceAll(part, " ");
-      }
+      Arrays.stream(templateParts)
+          .filter(StringUtils::isNotEmpty)
+          .forEach(part -> mutableSubject.replace(part, " "));
+
+      return mutableSubject.toString().trim();
     }
-
-    return subject;
   }
 
   /**
