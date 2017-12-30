@@ -4,7 +4,10 @@ import com.google.common.collect.Iterators;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -70,28 +73,5 @@ public final class TextUtils {
     return stream
         .reduce((l, r) -> l + COMMA_LIST_SEPARATOR + r)
         .orElse("");
-  }
-
-  /**
-   * Split a string on the given delimiters while also placing the delimiters themselves in the result array.
-   *
-   * @param originalString The string to splut
-   * @param delimiters     One or more delimiters
-   * @return The resulting array
-   */
-  public static String[] splitKeepDelimiter(String originalString, boolean caseInsensitive, String... delimiters) {
-    final String delimiterTemplate = "(?<=%1$s)|(?=%1$s)";
-
-    if (caseInsensitive) {
-      delimiters = Arrays.stream(delimiters)
-          .map(s -> "(" + s + "|" + s.toUpperCase() + ")")
-          .toArray(String[]::new);
-    }
-
-    return Arrays.stream(delimiters)
-        .map(s -> String.format(delimiterTemplate, s))
-        .reduce((l, r) -> l + "|" + r)
-        .map(s -> originalString.split("(" + s + ")"))
-        .orElse(new String[]{});
   }
 }

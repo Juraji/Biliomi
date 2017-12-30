@@ -3,7 +3,6 @@ package nl.juraji.biliomi.rest.config.directives;
 import nl.juraji.biliomi.model.internal.rest.query.RestFilterDirective;
 import nl.juraji.biliomi.model.internal.rest.query.RestFilterOperator;
 import nl.juraji.biliomi.utility.calculate.NumberConverter;
-import nl.juraji.biliomi.utility.calculate.TextUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,17 +30,17 @@ public class RestFilterQueryParser {
   }
 
   public Collection<RestFilterDirective> parse(String query) throws RestFilterQueryException {
-    String[] queryArray = TextUtils.splitKeepDelimiter(query, true, "and", "or");
+    String[] queryArray = this.splitQuery(query);
     final List<RestFilterDirective> directives = new ArrayList<>(queryArray.length);
 
     for (int i = 0; i < queryArray.length; i++) {
       RestFilterDirective directive = new RestFilterDirective();
-      String predicate = queryArray[i].trim();
+      String predicate = queryArray[i];
 
       if (QUERY_AND_DELIMITER.equalsIgnoreCase(predicate) || QUERY_OR_DELIMITER.equalsIgnoreCase(predicate)) {
         directive.setOrPrevious(QUERY_OR_DELIMITER.equalsIgnoreCase(predicate));
         try {
-          predicate = queryArray[++i].trim();
+          predicate = queryArray[++i];
         } catch (ArrayIndexOutOfBoundsException e) {
           throw new RestFilterQueryException("Got " + predicate.toUpperCase() + " operator but missing next predicate");
         }
@@ -61,6 +60,17 @@ public class RestFilterQueryParser {
     }
 
     return directives;
+  }
+
+  private String[] splitQuery(String query) {
+    Pattern delimiterPattern = Pattern.compile("((?<= and )|(?= and )|(?<= or )|(?= or ))", Pattern.CASE_INSENSITIVE);
+    String[] parts = delimiterPattern.split(query);
+
+    for (int i = 0; i < parts.length; i++) {
+      parts[i] = parts[i].trim();
+    }
+
+    return parts;
   }
 
   private RestFilterOperator convertOperator(String opGroup) throws RestFilterQueryException {
