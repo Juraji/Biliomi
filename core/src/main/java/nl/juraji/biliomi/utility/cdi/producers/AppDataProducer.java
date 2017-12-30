@@ -1,5 +1,6 @@
 package nl.juraji.biliomi.utility.cdi.producers;
 
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppData;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
 import org.apache.logging.log4j.LogManager;
@@ -42,7 +43,7 @@ public final class AppDataProducer {
 
   @Produces
   @AppDataValue("PRODUCER")
-  public String getAppDataValue(InjectionPoint injectionPoint) {
+  public String getAppDataValueAsString(InjectionPoint injectionPoint) {
     Annotated annotated = injectionPoint.getAnnotated();
     String key = null;
     String value = null;
@@ -58,5 +59,12 @@ public final class AppDataProducer {
     }
 
     return value;
+  }
+
+  @Produces
+  @AppDataValue("PRODUCER")
+  public Long getAppDataValueAsLong(InjectionPoint injectionPoint) {
+    String appDataValueAsString = getAppDataValueAsString(injectionPoint);
+    return NumberConverter.asNumber(appDataValueAsString).toLong();
   }
 }
