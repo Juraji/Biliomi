@@ -62,7 +62,9 @@ public class ManagedCriteria<T> extends Managed {
   }
 
   public T getRandom() {
-    criteria.add(Restrictions.sqlRestriction(RAND_SQL_RESTRICTION));
+    criteria
+        .setMaxResults(1)
+        .add(Restrictions.sqlRestriction(RAND_SQL_RESTRICTION));
     return getResult();
   }
 
