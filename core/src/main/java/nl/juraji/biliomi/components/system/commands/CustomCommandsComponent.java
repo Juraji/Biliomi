@@ -41,7 +41,7 @@ public class CustomCommandsComponent extends Component {
       BiliomiContainer.getContainer().shutdownInError();
     }
 
-    customCommandRunnerMethod =  customCommandRunner;
+    customCommandRunnerMethod = customCommandRunner;
   }
 
   @Inject
@@ -203,22 +203,27 @@ public class CustomCommandsComponent extends Component {
 
     // Caller information
     template.add("callername", user::getNameAndTitle);
-    template.add("callerpoints", pointsService.asString(user.getPoints()));
-    template.add("callertime", timeFormatter.timeQuantity(user.getRecordedTime()));
-    template.add("callergroup", user.getUserGroup().getName());
+    template.add("callerpoints", () -> pointsService.asString(user.getPoints()));
+    template.add("callertime", () -> timeFormatter.timeQuantity(user.getRecordedTime()));
+    template.add("callergroup", user.getUserGroup()::getName);
 
     // Command Arguments
     template.add("firstargument", arguments.getSafe(0));
     template.add("allarguments", arguments::toString);
 
-    template.add("firstargumentasuser", () -> {
-      User argUser = usersService.getUser(arguments.get(0), true);
+    if (template.templateContainsKey("firstargumentasuser")) {
+      // Not in lambda, since it needs to fail on unknown user
+      String username = arguments.get(0);
+      User argUser = usersService.getUser(username, true);
       if (argUser == null) {
-        return "!!!UnknownUser";
+        chat.whisper(user, i18n.get("ChatCommand.customCommandRunner.firstArgurmentAsUserNotFound")
+            .add("command", arguments::getCommand)
+            .add("argument", username));
+        return false;
       } else {
-        return argUser.getDisplayName();
+        template.add("firstargumentasuser", argUser::getDisplayName);
       }
-    });
+    }
 
     chat.say(template);
     return true;
