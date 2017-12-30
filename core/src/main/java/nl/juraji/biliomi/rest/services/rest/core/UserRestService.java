@@ -52,6 +52,7 @@ public class UserRestService extends ModelRestService<User> {
     user.setUserGroup(e.getUserGroup());
     user.setTitle(e.getTitle());
     user.setPoints(e.getPoints());
+    user.setRecordedTime(e.getRecordedTime());
     user.setBlacklistedSince(e.getBlacklistedSince());
 
     // These can only be changed if
