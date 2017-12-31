@@ -29,9 +29,6 @@ import java.util.Map;
 @NormalComponent
 public class TopCommandComponent extends Component {
   private static final int RESULT_SIZE = 5;
-  private static final String TIME_FIELD = "recordedTime";
-  private static final String POINTS_FIELD = "points";
-  private static final String TOP_POINTS_COMMAND = "toppoints";
 
   @Inject
   private PointsService pointsService;
@@ -64,12 +61,12 @@ public class TopCommandComponent extends Component {
    */
   @CommandRoute(command = "toptime")
   public boolean topTimeCommand(User user, Arguments arguments) {
-    List<User> topUsers = usersService.getTopUsersByField(TIME_FIELD, RESULT_SIZE, channelName, botName);
+    List<User> topUsers = usersService.getTopUsersByField("recordedTime", RESULT_SIZE, channelName, botName);
 
     Map<String, String> map = EStream.from(topUsers)
         .mapToBiEStream(User::getDisplayName, User::getRecordedTime)
         .mapValue(time -> timeFormatter.timeQuantity(time))
-        .toMap();
+        .toOrderedMap();
 
     chat.say(i18n.get("ChatCommand.topTime.message")
         .add("list", map));
@@ -81,14 +78,14 @@ public class TopCommandComponent extends Component {
    * Excludes caster and bot
    * Usage: !toppoints
    */
-  @CommandRoute(command = TOP_POINTS_COMMAND)
+  @CommandRoute(command = "toppoints")
   public boolean topPointsCommand(User user, Arguments arguments) {
-    List<User> topUsers = usersService.getTopUsersByField(POINTS_FIELD, RESULT_SIZE, channelName, botName);
+    List<User> topUsers = usersService.getTopUsersByField("points", RESULT_SIZE, channelName, botName);
 
     Map<String, String> map = EStream.from(topUsers)
         .mapToBiEStream(User::getDisplayName, User::getPoints)
         .mapValue(points -> pointsService.asString(points))
-        .toMap();
+        .toOrderedMap();
 
     chat.say(i18n.get("ChatCommand.topPoints.message")
         .add("pointsname", pointsService::pointsName)
@@ -106,7 +103,7 @@ public class TopCommandComponent extends Component {
       String requiredAlias = "top" + settings.getPointsNamePlural().toLowerCase();
 
       if (!commandService.commandExists(requiredAlias)) {
-        Command topPointsCommand = commandService.getCommand(TOP_POINTS_COMMAND);
+        Command topPointsCommand = commandService.getCommand("toppoints");
         commandService.removeAllAliasses(topPointsCommand);
         commandService.registerAlias(requiredAlias, topPointsCommand);
       }

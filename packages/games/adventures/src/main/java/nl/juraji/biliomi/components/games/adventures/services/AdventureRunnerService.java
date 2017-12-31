@@ -198,8 +198,9 @@ public class AdventureRunnerService {
       chat.say(i18n.get("Adventure.payouts")
           .add("list", () -> EBiStream.from(userLongMap)
               .mapKey(User::getDisplayName)
+              .sortedByValue((a, b) -> Long.compare(b, a))
               .mapValue(payout -> pointsService.asString(payout))
-              .toMap()));
+              .toOrderedMap()));
     }
 
     victims.forEach((adventurer -> adventureRecordService.recordAdventureRun(

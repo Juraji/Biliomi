@@ -4,7 +4,6 @@ import nl.juraji.biliomi.utility.estreams.einterface.*;
 import nl.juraji.biliomi.utility.estreams.types.RethrowEInterface;
 
 import java.util.*;
-import java.util.function.BinaryOperator;
 import java.util.function.ToDoubleBiFunction;
 import java.util.function.ToIntBiFunction;
 import java.util.function.ToLongBiFunction;
@@ -205,7 +204,15 @@ public interface EBiStream<K, V, E extends Exception> {
     return entries().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 
-  default Map<K, V> toMap(BinaryOperator<V> valAccum) {
-    return entries().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, valAccum));
+  default Map<K, V> toOrderedMap() {
+    return entries().collect(Collectors.toMap(
+        Map.Entry::getKey,
+        Map.Entry::getValue,
+        (u, v) -> {
+          throw new IllegalStateException(String.format("Duplicate key %s", u));
+        },
+        LinkedHashMap::new
+
+    ));
   }
 }
