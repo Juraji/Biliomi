@@ -54,7 +54,22 @@ public class SubscriberWatchUpdateService extends TimerService {
   public void start() {
     super.start();
     schedule(this::update, SubscriberWatchConstants.FULL_UPDATE_INIT_WAIT, SubscriberWatchConstants.FULL_UPDATE_INIT_WAIT_TU);
+    scheduleAtFixedRate(this::incrementalUpdate, SubscriberWatchConstants.INCR_UPDATE_INTERVAL, SubscriberWatchConstants.INCR_UPDATE_INTERVAL_TU);
     scheduleAtFixedRate(this::update, SubscriberWatchConstants.FULL_UPDATE_INTERVAL, SubscriberWatchConstants.FULL_UPDATE_INTERVAL_TU);
+  }
+
+  private void incrementalUpdate() {
+    try {
+      Response<TwitchSubscriptions> followsResponse = twitchApi.getChannelSubscriptions(channelService.getChannelId(), 20, 0);
+
+      if (followsResponse.isOK()) {
+        List<TwitchSubscription> twitchSubscriptions = followsResponse.getData().getSubscriptions();
+        updateChangedUsernames(twitchSubscriptions);
+        updateNewSubscribers(twitchSubscriptions);
+      }
+    } catch (Exception e) {
+      logger.error("Failed incremental update of followers", e);
+    }
   }
 
   private void update() {

@@ -12,8 +12,10 @@ public class SubscriberWatchConstants {
   public static final String RESUB_NOTICE_TEMPLATE = "SubscriberResubNotice";
 
   // Timer service
-  static final long FULL_UPDATE_INIT_WAIT = 10;
+  public static final long FULL_UPDATE_INIT_WAIT = 10;
   public static final TimeUnit FULL_UPDATE_INIT_WAIT_TU = TimeUnit.SECONDS;
-  static final long FULL_UPDATE_INTERVAL = 6;
-  static final TimeUnit FULL_UPDATE_INTERVAL_TU = TimeUnit.HOURS;
+  public static final long FULL_UPDATE_INTERVAL = 6;
+  public static final TimeUnit FULL_UPDATE_INTERVAL_TU = TimeUnit.HOURS;
+  public static final long INCR_UPDATE_INTERVAL = 30;
+  public static final TimeUnit INCR_UPDATE_INTERVAL_TU = TimeUnit.SECONDS;
 }

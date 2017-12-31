@@ -3,7 +3,6 @@ package nl.juraji.biliomi;
 import nl.juraji.biliomi.boot.SystemBoot;
 import nl.juraji.biliomi.components.ComponentManager;
 import nl.juraji.biliomi.io.api.twitch.irc.IrcSession;
-import nl.juraji.biliomi.io.api.twitch.pubsub.PubSubSession;
 import nl.juraji.biliomi.io.console.ConsoleApi;
 import nl.juraji.biliomi.rest.RestServerController;
 
@@ -37,9 +36,6 @@ public class Biliomi implements Runnable {
 
     // Start IrcSession
     cdi.select(IrcSession.class).get().start();
-
-    // Start PubSubSession
-    cdi.select(PubSubSession.class).get().start();
 
     // Start REST API
     cdi.select(RestServerController.class).get().start();
