@@ -57,8 +57,7 @@ public class FollowerWatchEventsService implements Init {
 
   @Subscribe
   public void onTwitchFollowEvent(TwitchFollowEvent event) {
-    // At this point we retrieve the user by twitch Id, so the users service can correct possibly changed username and display name
-    User user = usersService.getUserByTwitchId(event.getTwitchId());
+    User user = usersService.getUser(event.getUsername(), true);
     user.setFollower(true);
 
     // If the follow date is not null the user has followed before.

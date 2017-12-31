@@ -55,9 +55,6 @@ public class FollowerWatchUpdateService extends TimerService {
     scheduleAtFixedRate(this::update, FollowerWatchConstants.FULL_UPDATE_INTERVAL, FollowerWatchConstants.FULL_UPDATE_INTERVAL_TU);
   }
 
-  // Todo: Remove when Twitch PubSub supports followers and is implemented in PubSub client
-  // Twitch Trello card: https://trello.com/c/HJvZ8sVP
-  @Deprecated
   private void incrementalUpdate() {
     int pageSize = 20;
 
@@ -66,6 +63,7 @@ public class FollowerWatchUpdateService extends TimerService {
 
       if (followsResponse.isOK()) {
         List<TwitchFollower> twitchFollowers = followsResponse.getData().getFollows();
+        updateChangedUsernames(twitchFollowers);
         updateNewFollowers(twitchFollowers);
       }
     } catch (Exception e) {
@@ -99,9 +97,9 @@ public class FollowerWatchUpdateService extends TimerService {
           .flatMap(response -> response.getData().getFollows().stream())
           .collect(Collectors.toList());
 
-      updateUnfollowers(twitchFollowers);
-      updateNewFollowers(twitchFollowers);
       updateChangedUsernames(twitchFollowers);
+      updateNewFollowers(twitchFollowers);
+      updateUnfollowers(twitchFollowers);
     } catch (Exception e) {
       logger.error("Failed full update of followers", e);
     } finally {

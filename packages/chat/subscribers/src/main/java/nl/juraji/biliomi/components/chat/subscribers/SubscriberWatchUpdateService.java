@@ -82,9 +82,9 @@ public class SubscriberWatchUpdateService extends TimerService {
           .flatMap(r -> r.getData().getSubscriptions().stream())
           .collect(Collectors.toList());
 
+      updateChangedUsernames(twitchSubscriptions);
       updateUnsubscribers(twitchSubscriptions);
       updateNewSubscribers(twitchSubscriptions);
-      updateChangedUsernames(twitchSubscriptions);
     } catch (UnavailableException e) {
       logger.info("Subscriptions are not available for this channel, the SubscriberWatch will be disabled");
       this.stop();

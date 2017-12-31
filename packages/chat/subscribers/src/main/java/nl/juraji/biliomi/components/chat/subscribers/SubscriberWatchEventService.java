@@ -53,8 +53,7 @@ public class SubscriberWatchEventService implements Init {
 
   @Subscribe
   public void onTwitchSubscriberEvent(TwitchSubscriberEvent event) {
-    // At this point we retrieve the user by twitch Id, so the users service can correct possibly changed username and display name
-    User user = usersService.getUserByTwitchId(event.getUserId());
+    User user = usersService.getUser(event.getUsername(), true);
     long reward = getReward(event.getSubPlan());
     user.setSubscriber(true);
 
