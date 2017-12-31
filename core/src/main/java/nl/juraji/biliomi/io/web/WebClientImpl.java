@@ -75,37 +75,37 @@ public class WebClientImpl implements WebClient {
   }
 
   @Override
-  public <T> Response<T> get(String uri, HttpFields headers, Class<T> model) throws Exception {
+  public <T> Response<T> get(String uri, HttpFields headers, Class<T> expectedModel) throws Exception {
     Request request = newRequest(uri);
     request.method(HttpMethod.GET);
-    return execute(request, headers, model);
+    return execute(request, headers, expectedModel);
   }
 
   @Override
-  public <T> Response<T> post(String uri, HttpFields headers, String body, MediaType bodyMediaType, Class<T> model) throws Exception {
+  public <T> Response<T> post(String uri, HttpFields headers, String body, MediaType bodyMediaType, Class<T> expectedModel) throws Exception {
     Request request = newRequest(uri);
     request.method(HttpMethod.POST);
     request.content(new StringContentProvider(body, mediaTypeToCharset(bodyMediaType)));
 
     headers = appendDefaultPostHeaders(headers, body, bodyMediaType);
-    return execute(request, headers, model);
+    return execute(request, headers, expectedModel);
   }
 
   @Override
-  public <T> Response<T> put(String uri, HttpFields headers, String body, MediaType bodyMediaType, Class<T> model) throws Exception {
+  public <T> Response<T> put(String uri, HttpFields headers, String body, MediaType bodyMediaType, Class<T> expectedModel) throws Exception {
     Request request = newRequest(uri);
     request.method(HttpMethod.PUT);
     request.content(new StringContentProvider(body, mediaTypeToCharset(bodyMediaType)));
 
     headers = appendDefaultPostHeaders(headers, body, bodyMediaType);
-    return execute(request, headers, model);
+    return execute(request, headers, expectedModel);
   }
 
   @Override
-  public <T> Response<T> delete(String uri, HttpFields headers, Class<T> model) throws Exception {
+  public <T> Response<T> delete(String uri, HttpFields headers, Class<T> expectedModel) throws Exception {
     Request request = newRequest(uri);
     request.method(HttpMethod.DELETE);
-    return execute(request, headers, model);
+    return execute(request, headers, expectedModel);
   }
 
   private Charset mediaTypeToCharset(MediaType mediaType) {
