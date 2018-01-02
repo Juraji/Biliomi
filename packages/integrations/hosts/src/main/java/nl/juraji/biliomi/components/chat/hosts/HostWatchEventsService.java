@@ -9,7 +9,7 @@ import nl.juraji.biliomi.model.chat.HostWatchSettings;
 import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
-import nl.juraji.biliomi.model.internal.events.twitch.hosting.TwitchHostInEvent;
+import nl.juraji.biliomi.model.internal.twitch.hosting.TwitchHostInEvent;
 import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
 import nl.juraji.biliomi.utility.types.Init;
 import nl.juraji.biliomi.utility.types.Templater;

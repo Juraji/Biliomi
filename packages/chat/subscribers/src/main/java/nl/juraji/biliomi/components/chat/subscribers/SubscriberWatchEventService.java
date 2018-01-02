@@ -69,9 +69,9 @@ public class SubscriberWatchEventService implements Init {
 
     Template template;
     if (event.isResub()) {
-      template = templateDao.getByKey(SubscriberWatchConstants.RESUB_NOTICE_TEMPLATE);
+      template = templateDao.getByKey(SubscriberWatchComponent.RESUB_NOTICE_TEMPLATE);
     } else {
-      template = templateDao.getByKey(SubscriberWatchConstants.SUB_NOTICE_TEMPLATE);
+      template = templateDao.getByKey(SubscriberWatchComponent.SUB_NOTICE_TEMPLATE);
     }
 
     assert template != null; // Template cannot be null since they're set during install/update

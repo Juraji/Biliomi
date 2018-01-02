@@ -69,7 +69,7 @@ public class FollowerWatchEventsService implements Init {
         user.setPoints(user.getPoints() + settings.getReward());
       }
 
-      Template template = templateDao.getByKey(FollowerWatchConstants.INCOMING_FOLLOW_NOTICE);
+      Template template = templateDao.getByKey(FollowerWatchComponent.INCOMING_FOLLOW_NOTICE);
       assert template != null; // Template cannot be null since it's set during install/update
       if (StringUtils.isNotEmpty(template.getTemplate())) {
         chat.say(Templater.template(template.getTemplate())

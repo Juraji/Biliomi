@@ -18,9 +18,6 @@ import nl.juraji.biliomi.utility.types.components.Component;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import static nl.juraji.biliomi.components.chat.subscribers.SubscriberWatchConstants.RESUB_NOTICE_TEMPLATE;
-import static nl.juraji.biliomi.components.chat.subscribers.SubscriberWatchConstants.SUB_NOTICE_TEMPLATE;
-
 /**
  * Created by Juraji on 3-9-2017.
  * Biliomi v3
@@ -28,6 +25,8 @@ import static nl.juraji.biliomi.components.chat.subscribers.SubscriberWatchConst
 @SystemComponent
 @Singleton
 public class SubscriberWatchComponent extends Component {
+  public static final String SUB_NOTICE_TEMPLATE = "SubscriberSubNotice";
+  public static final String RESUB_NOTICE_TEMPLATE = "SubscriberResubNotice";
 
   @Inject
   private PointsService pointsService;

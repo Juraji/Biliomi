@@ -22,6 +22,7 @@ import javax.inject.Singleton;
 @SystemComponent
 @Singleton
 public class FollowerWatchComponent extends Component {
+  public static final String INCOMING_FOLLOW_NOTICE = "IncomingFollowNotice";
 
   @Inject
   private PointsService pointsService;
@@ -86,6 +87,6 @@ public class FollowerWatchComponent extends Component {
         .withCommandUsageMessage(i18n.getString("ChatCommand.followerWatch.setfollowernotice.usage"))
         .withTemplateDisabledMessage(i18n.getString("ChatCommand.followerWatch.setfollowernotice.disabled"))
         .withTemplatedSavedMessage(i18n.getString("ChatCommand.followerWatch.setfollowernotice.saved"))
-        .apply(user, arguments.toString(), FollowerWatchConstants.INCOMING_FOLLOW_NOTICE);
+        .apply(user, arguments.toString(), INCOMING_FOLLOW_NOTICE);
   }
 }

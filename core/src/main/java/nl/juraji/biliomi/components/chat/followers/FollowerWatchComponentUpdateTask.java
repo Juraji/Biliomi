@@ -19,9 +19,9 @@ public class FollowerWatchComponentUpdateTask implements SetupTask {
 
   @Override
   public void install() {
-    if (!templateDao.templateExists(FollowerWatchConstants.INCOMING_FOLLOW_NOTICE)) {
+    if (!templateDao.templateExists(FollowerWatchComponent.INCOMING_FOLLOW_NOTICE)) {
       Template template = new Template();
-      template.setTemplateKey(FollowerWatchConstants.INCOMING_FOLLOW_NOTICE);
+      template.setTemplateKey(FollowerWatchComponent.INCOMING_FOLLOW_NOTICE);
       template.setTemplate("Welcome @{{username}}, thank you for the follow! I've rewarded you {{points}} for use in botgames!");
       template.setDescription("Posted in the chat when a new follower registers");
       template.getKeyDescriptions().put("username", "The username of the new follower");

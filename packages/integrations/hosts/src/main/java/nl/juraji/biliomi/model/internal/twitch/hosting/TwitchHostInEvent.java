@@ -1,4 +1,4 @@
-package nl.juraji.biliomi.model.internal.events.twitch.hosting;
+package nl.juraji.biliomi.model.internal.twitch.hosting;
 
 import nl.juraji.biliomi.model.internal.events.twitch.TwitchEvent;
 
@@ -18,16 +18,24 @@ public class TwitchHostInEvent extends TwitchEvent {
   @XmlElement(name = "ChannelName")
   private final String channelName;
 
+  @XmlElement(name = "ChannelId")
+  private final Integer channelId;
+
   @XmlElement(name = "IsAuto")
   private final boolean isAuto;
 
-  public TwitchHostInEvent(String channelName, boolean isAuto) {
+  public TwitchHostInEvent(String channelName, Integer channelId, boolean isAuto) {
     this.channelName = channelName;
+    this.channelId = channelId;
     this.isAuto = isAuto;
   }
 
   public String getChannelName() {
     return channelName;
+  }
+
+  public Integer getChannelId() {
+    return channelId;
   }
 
   public boolean isAuto() {

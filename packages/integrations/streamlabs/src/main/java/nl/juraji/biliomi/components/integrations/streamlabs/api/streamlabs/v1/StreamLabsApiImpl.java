@@ -3,7 +3,7 @@ package nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.v1;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.oauth.StreamLabsOAuthDirector;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.v1.model.StreamLabsSocketToken;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.v1.model.StreamLabsTwitchUser;
-import nl.juraji.biliomi.config.spotify.StreamLabsConfigService;
+import nl.juraji.biliomi.config.streamlabs.StreamLabsConfigService;
 import nl.juraji.biliomi.io.web.Response;
 import nl.juraji.biliomi.io.web.Url;
 import nl.juraji.biliomi.io.web.WebClient;

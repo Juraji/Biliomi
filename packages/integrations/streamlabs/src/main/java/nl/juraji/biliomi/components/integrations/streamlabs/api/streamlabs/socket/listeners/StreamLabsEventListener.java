@@ -2,11 +2,8 @@ package nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.sock
 
 import io.socket.emitter.Emitter;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.socket.model.SocketEvent;
-import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.socket.model.SocketEventForType;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.socket.model.message.DonationMessage;
-import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.socket.model.message.HostMessage;
 import nl.juraji.biliomi.model.internal.events.StreamLabsDonationEvent;
-import nl.juraji.biliomi.model.internal.events.twitch.hosting.TwitchHostInEvent;
 import nl.juraji.biliomi.utility.events.EventBus;
 
 import java.io.IOException;
@@ -43,14 +40,6 @@ public class StreamLabsEventListener implements Emitter.Listener {
               .map(node -> convertJsonNode(node, DonationMessage.class))
               .forEach(this::handleDonationMessage);
           break;
-        case HOST:
-          //  Make sure the host events are for Twitch
-          if (SocketEventForType.TWITCH_ACCOUNT.equals(event.getForAccountType())) {
-            event.getMessage().stream()
-                .map(node -> convertJsonNode(node, HostMessage.class))
-                .forEach(this::handleTwitchHostMessage);
-          }
-          break;
         default:
           break;
       }
@@ -67,11 +56,6 @@ public class StreamLabsEventListener implements Emitter.Listener {
         donationMessage.getMessage()
     );
 
-    eventBus.post(event);
-  }
-
-  private void handleTwitchHostMessage(HostMessage hostMessage) {
-    TwitchHostInEvent event = new TwitchHostInEvent(hostMessage.getName(), HostMessage.HostType.AUTO.equals(hostMessage.getType()));
     eventBus.post(event);
   }
 }

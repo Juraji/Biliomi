@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -50,9 +51,10 @@ public class FollowerWatchUpdateService extends TimerService {
   @Override
   public void start() {
     super.start();
-    schedule(this::update, FollowerWatchConstants.FULL_UPDATE_INIT_WAIT, FollowerWatchConstants.FULL_UPDATE_INIT_WAIT_TU);
-    scheduleAtFixedRate(this::incrementalUpdate, FollowerWatchConstants.INCR_UPDATE_INTERVAL, FollowerWatchConstants.INCR_UPDATE_INTERVAL_TU);
-    scheduleAtFixedRate(this::update, FollowerWatchConstants.FULL_UPDATE_INTERVAL, FollowerWatchConstants.FULL_UPDATE_INTERVAL_TU);
+    // Incrementals at 30 seconds intervals
+    scheduleAtFixedRate(this::incrementalUpdate, 30, TimeUnit.SECONDS);
+    // Full at 10 seconds and every 6 hours after that
+    scheduleAtFixedRate(this::update, 10,21600, TimeUnit.SECONDS);
   }
 
   private void incrementalUpdate() {

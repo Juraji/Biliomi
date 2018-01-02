@@ -54,9 +54,6 @@ public class ChannelInfo {
   @XmlElement(name = "Viewers")
   private Set<User> viewers;
 
-  @XmlElement(name = "Hosters")
-  private Set<User> hosters;
-
   public String getLogoUri() {
     return logoUri;
   }
@@ -148,10 +145,5 @@ public class ChannelInfo {
   public Set<User> getViewers() {
     viewers = ModelUtils.initCollection(viewers);
     return viewers;
-  }
-
-  public Set<User> getHosters() {
-    hosters = ModelUtils.initCollection(hosters);
-    return hosters;
   }
 }

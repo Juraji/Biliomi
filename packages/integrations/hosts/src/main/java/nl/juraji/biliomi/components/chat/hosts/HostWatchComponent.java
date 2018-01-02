@@ -26,6 +26,9 @@ public class HostWatchComponent extends Component {
   public static final String INCOMING_HOST_NOTICE_TEMPLATE = "IncomingHostNotice";
 
   @Inject
+  private HostWatchUpdateService hostWatchUpdateService;
+
+  @Inject
   private HostWatchEventsService hostWatchEventsService;
 
   @Inject
@@ -42,6 +45,7 @@ public class HostWatchComponent extends Component {
   @Override
   public void init() {
     settings = settingsService.getSettings(HostWatchSettings.class, s -> settings = s);
+    hostWatchUpdateService.start();
     hostWatchEventsService.init();
   }
 

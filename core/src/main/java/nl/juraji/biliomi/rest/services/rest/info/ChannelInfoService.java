@@ -5,14 +5,11 @@ import nl.juraji.biliomi.components.system.channel.ChannelSettingsComponent;
 import nl.juraji.biliomi.components.system.channel.GameService;
 import nl.juraji.biliomi.components.system.users.UsersService;
 import nl.juraji.biliomi.io.api.twitch.v5.TwitchApi;
-import nl.juraji.biliomi.io.api.twitch.v5.model.TmiHost;
 import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchChannel;
 import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchImageInfo;
-import nl.juraji.biliomi.io.api.twitch.v5.model.wrappers.TmiHosts;
 import nl.juraji.biliomi.io.api.twitch.v5.model.wrappers.TwitchStreamInfo;
 import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
-import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.VersionInfo;
 import nl.juraji.biliomi.model.internal.rest.ChannelInfo;
 import nl.juraji.biliomi.rest.config.Responses;
@@ -24,15 +21,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Juraji on 25-6-2017.
  * Biliomi v3
  */
 @Path("/info")
-public class InfoService {
+public class ChannelInfoService {
 
   @Inject
   private TwitchApi twitchApi;
@@ -84,7 +79,6 @@ public class InfoService {
       info.getViewers().addAll(chatService.getViewersAsUsers());
 
       insertTwitchStreamInfo(info, channel);
-      insertTwitchHostUsers(info, channel);
     }
 
     return Responses.okOrEmpty(info);
@@ -99,21 +93,6 @@ public class InfoService {
 
         TwitchImageInfo preview = streamInfo.getStream().getPreview();
         info.setPreviewUri(preview.getMedium());
-      }
-    }
-  }
-
-  private void insertTwitchHostUsers(ChannelInfo info, TwitchChannel channel) throws Exception {
-    nl.juraji.biliomi.io.web.Response<TmiHosts> hostsResponse = twitchApi.getHostUsers(String.valueOf(channel.getId()));
-    if (hostsResponse.isOK()) {
-      TmiHosts tmiHosts = hostsResponse.getData();
-      if (tmiHosts.getHosts() != null) {
-        List<User> collect = tmiHosts.getHosts().stream()
-            .map(TmiHost::getHostUsername)
-            .map(hostId -> usersService.getUser(hostId, true))
-            .collect(Collectors.toList());
-
-        info.getHosters().addAll(collect);
       }
     }
   }
