@@ -140,12 +140,6 @@
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>biliomi-chat-bits</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
       <artifactId>biliomi-chat-chatmoderator</artifactId>
       <version>${project.version}</version>
     </dependency>

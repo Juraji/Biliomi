@@ -19,7 +19,6 @@
     <module>packages/integrations/twitter</module>
     <module>packages/integrations/streamlabs</module>
     <module>packages/chat/announcements</module>
-    <module>packages/chat/bits</module>
     <module>packages/chat/chatmoderator</module>
     <module>packages/chat/pmresponses</module>
     <module>packages/chat/quotes</module>

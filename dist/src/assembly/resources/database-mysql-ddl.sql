@@ -1,3 +1,25 @@
+CREATE TABLE AchievementRecord
+(
+  id            BIGINT AUTO_INCREMENT
+    PRIMARY KEY,
+  achievement   VARCHAR(255) NOT NULL,
+  achievementId VARCHAR(255) NOT NULL,
+  date          VARCHAR(255) NULL,
+  user_id       BIGINT       NOT NULL
+)
+  ENGINE = InnoDB;
+
+CREATE INDEX FK_8ijqatn18arjr3s1w288yhg5c
+  ON AchievementRecord (user_id);
+
+CREATE TABLE AchievementsSettings
+(
+  id                  VARCHAR(255) NOT NULL
+    PRIMARY KEY,
+  achievementsEnabled BIT          NULL
+)
+  ENGINE = InnoDB;
+
 CREATE TABLE AdventureRecord
 (
   id            BIGINT AUTO_INCREMENT
@@ -7,7 +29,8 @@ CREATE TABLE AdventureRecord
   date          VARCHAR(255) NULL,
   payout        BIGINT       NULL,
   adventurer_id BIGINT       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_qbop5pjpdk1j9x70vmfb09spk
   ON AdventureRecord (adventurer_id);
@@ -21,14 +44,16 @@ CREATE TABLE AdventureSettings
   maximumBet    BIGINT       NULL,
   minimumBet    BIGINT       NULL,
   winMultiplier DOUBLE       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE Announcement
 (
   id      BIGINT AUTO_INCREMENT
     PRIMARY KEY,
   message VARCHAR(255) NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE AnnouncementsSettings
 (
@@ -38,7 +63,8 @@ CREATE TABLE AnnouncementsSettings
   minChatMessages INT          NULL,
   runInterval     BIGINT       NULL,
   shuffle         BIT          NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE ApiLogin
 (
@@ -46,7 +72,8 @@ CREATE TABLE ApiLogin
   password      TINYBLOB     NULL,
   salt          TINYBLOB     NULL,
   user_id       BIGINT       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_79l5wyl5pp20554omivw4s4qf
   ON ApiLogin (settings_type);
@@ -59,7 +86,8 @@ CREATE TABLE ApiSecuritySettings
   id     VARCHAR(255) NOT NULL
     PRIMARY KEY,
   secret TINYBLOB     NULL
-);
+)
+  ENGINE = InnoDB;
 
 ALTER TABLE ApiLogin
   ADD CONSTRAINT FK_79l5wyl5pp20554omivw4s4qf
@@ -77,22 +105,15 @@ CREATE TABLE AuthToken
   refreshToken VARCHAR(1024) NULL,
   userId       VARCHAR(255)  NULL,
   timeToLive   BIGINT        NULL
-);
-
-CREATE TABLE BitsSettings
-(
-  id                              VARCHAR(255) NOT NULL
-    PRIMARY KEY,
-  bitsToPointsMultiplier          DOUBLE       NOT NULL,
-  bitsToPointsPayoutToAllChatters BIT          NOT NULL,
-  enableBitsToPoints              BIT          NOT NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE ChatModeratorLinkWhitelist
 (
   ChatModeratorSettings_id VARCHAR(255) NOT NULL,
   linkWhitelist            VARCHAR(255) NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_kxi06yvjylbo4l7ybqt9rp08f
   ON ChatModeratorLinkWhitelist (ChatModeratorSettings_id);
@@ -112,7 +133,8 @@ CREATE TABLE ChatModeratorSettings
   secondStrike              VARCHAR(255) NULL,
   thirdStrike               VARCHAR(255) NULL,
   exemptedGroup_id          BIGINT       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_ksca2jivs13p3kfhov4ni03re
   ON ChatModeratorSettings (exemptedGroup_id);
@@ -133,7 +155,8 @@ CREATE TABLE Command
   userGroup_id         BIGINT             NULL,
   CONSTRAINT UK_3c0aev9r05bfauwu3uo2a7tix
   UNIQUE (command)
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_grfvxvy0dqe66yxolmhxk2m4o
   ON Command (userGroup_id);
@@ -144,7 +167,8 @@ CREATE TABLE CommandAliasses
   aliasses   VARCHAR(255) NULL,
   CONSTRAINT FK_rhnaan9c1i1epyo7sfiu01ogl
   FOREIGN KEY (Command_id) REFERENCES Command (id)
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_rhnaan9c1i1epyo7sfiu01ogl
   ON CommandAliasses (Command_id);
@@ -159,10 +183,51 @@ CREATE TABLE CommandHistoryRecord
   success     BIT          NULL,
   triggeredBy VARCHAR(255) NULL,
   user_id     BIGINT       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_fbv6v2shlcjdisy3xasuwli7e
   ON CommandHistoryRecord (user_id);
+
+CREATE TABLE CommunitiesSettings
+(
+  id                    VARCHAR(255) NOT NULL
+    PRIMARY KEY,
+  autoUpdateCommunities BIT          NULL
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE CommunitiesSettings_Community
+(
+  CommunitiesSettings_id VARCHAR(255) NOT NULL,
+  defaultCommunities_id  BIGINT       NOT NULL,
+  PRIMARY KEY (CommunitiesSettings_id, defaultCommunities_id),
+  CONSTRAINT FK_rcnvckvggbeiu8d1mjr1y4ipi
+  FOREIGN KEY (CommunitiesSettings_id) REFERENCES CommunitiesSettings (id)
+)
+  ENGINE = InnoDB;
+
+CREATE INDEX FK_3d251giwgld9ew7u2y59qhk4e
+  ON CommunitiesSettings_Community (defaultCommunities_id);
+
+CREATE TABLE Community
+(
+  id       BIGINT AUTO_INCREMENT
+    PRIMARY KEY,
+  name     VARCHAR(255) NULL,
+  twitchId VARCHAR(255) NULL,
+  owner_id BIGINT       NULL,
+  CONSTRAINT UK_ana370637n4xuuym3v9l6wgkv
+  UNIQUE (name)
+)
+  ENGINE = InnoDB;
+
+CREATE INDEX FK_ix3il794cllbsb77crngcdfj1
+  ON Community (owner_id);
+
+ALTER TABLE CommunitiesSettings_Community
+  ADD CONSTRAINT FK_3d251giwgld9ew7u2y59qhk4e
+FOREIGN KEY (defaultCommunities_id) REFERENCES Community (id);
 
 CREATE TABLE CustomCommand
 (
@@ -172,7 +237,8 @@ CREATE TABLE CustomCommand
   CONSTRAINT FK_ofidj6homyeu550jufkuyu4r9
   FOREIGN KEY (id) REFERENCES Command (id)
     ON DELETE CASCADE
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE Donation
 (
@@ -182,7 +248,8 @@ CREATE TABLE Donation
   donation VARCHAR(255) NULL,
   note     VARCHAR(255) NULL,
   user_id  BIGINT       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_e1wf9faewj8ipo2200nc9qw1p
   ON Donation (user_id);
@@ -193,7 +260,8 @@ CREATE TABLE FollowerWatchSettings
     PRIMARY KEY,
   notifyOnUnFollow BIT          NULL,
   reward           BIGINT       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE Game
 (
@@ -201,9 +269,26 @@ CREATE TABLE Game
     PRIMARY KEY,
   firstPlayedOn VARCHAR(255) NULL,
   name          VARCHAR(255) NULL,
+  steamId       BIGINT       NULL,
   CONSTRAINT UK_gdtr9fjw6icy8hhf02kpmvqpc
   UNIQUE (name)
-);
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Game_Community
+(
+  Game_id        BIGINT NOT NULL,
+  communities_id BIGINT NOT NULL,
+  PRIMARY KEY (Game_id, communities_id),
+  CONSTRAINT FK_s6ga41s3el3f0dmh7fkamr091
+  FOREIGN KEY (Game_id) REFERENCES Game (id),
+  CONSTRAINT FK_i1g58bj9a5bb76yl1kohyxnp
+  FOREIGN KEY (communities_id) REFERENCES Community (id)
+)
+  ENGINE = InnoDB;
+
+CREATE INDEX FK_i1g58bj9a5bb76yl1kohyxnp
+  ON Game_Community (communities_id);
 
 CREATE TABLE HostRecord
 (
@@ -213,7 +298,8 @@ CREATE TABLE HostRecord
   date      VARCHAR(255) NULL,
   direction VARCHAR(255) NULL,
   user_id   BIGINT       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_jx1ey4a1i21et2gckdwirgrub
   ON HostRecord (user_id);
@@ -223,7 +309,8 @@ CREATE TABLE HostWatchSettings
   id     VARCHAR(255) NOT NULL
     PRIMARY KEY,
   reward BIGINT       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE InvestmentRecord
 (
@@ -235,7 +322,8 @@ CREATE TABLE InvestmentRecord
   payout      BIGINT       NULL,
   project     VARCHAR(255) NULL,
   invester_id BIGINT       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_5y4kycevwkvb7b2m41d9xf91r
   ON InvestmentRecord (invester_id);
@@ -247,7 +335,8 @@ CREATE TABLE InvestmentSettings
   investmentDuration BIGINT       NULL,
   maxInterest        DOUBLE       NULL,
   minInterest        DOUBLE       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE KillRecord
 (
@@ -257,7 +346,8 @@ CREATE TABLE KillRecord
   isSuicide BIT          NULL,
   killer_id BIGINT       NULL,
   target_id BIGINT       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_b0a45amhihmdfvcydtpqqoyjo
   ON KillRecord (killer_id);
@@ -274,32 +364,11 @@ CREATE TABLE ModerationRecord
   message VARCHAR(255) NULL,
   reason  VARCHAR(255) NULL,
   user_id BIGINT       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_k7johwbn1colaelentdpkalav
   ON ModerationRecord (user_id);
-
-CREATE TABLE MusicPlayerSettings
-(
-  id                     VARCHAR(255) NOT NULL
-    PRIMARY KEY,
-  playerVolume           INT          NULL,
-  requestMaxConcurrent   INT          NULL,
-  requestMaxSongDuration BIGINT       NULL,
-  requestsEnabled        BIT          NULL,
-  shuffle                BIT          NULL
-);
-
-CREATE TABLE MusicPlayerSong
-(
-  id       BIGINT AUTO_INCREMENT
-    PRIMARY KEY,
-  duration BIGINT       NULL,
-  title    VARCHAR(255) NULL,
-  videoID  VARCHAR(255) NULL,
-  CONSTRAINT UK_hm96d44lout94fau61vi5etb2
-  UNIQUE (videoID)
-);
 
 CREATE TABLE PointsSettings
 (
@@ -313,7 +382,8 @@ CREATE TABLE PointsSettings
   pointsNameSingular    VARCHAR(255) NULL,
   trackOffline          BIT          NULL,
   trackOnline           BIT          NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE Quote
 (
@@ -325,7 +395,8 @@ CREATE TABLE Quote
   user_id         BIGINT       NULL,
   CONSTRAINT FK_do9c725kihaygbg1wu8wheyku
   FOREIGN KEY (gameAtMoment_id) REFERENCES Game (id)
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_do9c725kihaygbg1wu8wheyku
   ON Quote (gameAtMoment_id);
@@ -341,7 +412,8 @@ CREATE TABLE RaidRecord
   direction    VARCHAR(255) NULL,
   gameAtMoment VARCHAR(255) NULL,
   channel_id   BIGINT       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_9af25maq9y4lcg730povpni5
   ON RaidRecord (channel_id);
@@ -353,7 +425,8 @@ CREATE TABLE RouletteRecord
   date    VARCHAR(255) NULL,
   fatal   BIT          NULL,
   user_id BIGINT       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_8xadv5lr84vxhhej6xdaqro3f
   ON RouletteRecord (user_id);
@@ -364,7 +437,26 @@ CREATE TABLE RouletteSettings
     PRIMARY KEY,
   timeoutOnDeath        BIGINT       NULL,
   timeoutOnDeathEnabled BIT          NULL
-);
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE SpotifySettings
+(
+  id                    VARCHAR(255) NOT NULL
+    PRIMARY KEY,
+  songRequestPlaylistId VARCHAR(255) NULL,
+  songrequestsEnabled   BIT          NULL,
+  maxDuration           BIGINT       NOT NULL
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE SteamSettings
+(
+  id                    VARCHAR(255) NOT NULL
+    PRIMARY KEY,
+  autoUpdateChannelGame BIT          NULL
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE SubscriberWatchSettings
 (
@@ -373,7 +465,8 @@ CREATE TABLE SubscriberWatchSettings
   rewardTier1 BIGINT       NULL,
   rewardTier2 BIGINT       NULL,
   rewardTier3 BIGINT       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE SystemSettings
 (
@@ -381,7 +474,8 @@ CREATE TABLE SystemSettings
     PRIMARY KEY,
   enableWhispers BIT          NULL,
   muted          BIT          NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE Tamagotchi
 (
@@ -398,7 +492,8 @@ CREATE TABLE Tamagotchi
   name         VARCHAR(255)     NULL,
   species      VARCHAR(255)     NULL,
   owner_id     BIGINT           NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_tnl3xr2wtg65skosq83p1dcjh
   ON Tamagotchi (owner_id);
@@ -415,7 +510,8 @@ CREATE TABLE TamagotchiSettings
   nameMaxLength        INT          NULL,
   newPrice             BIGINT       NULL,
   soapPrice            BIGINT       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE TamagotchiToys
 (
@@ -427,7 +523,8 @@ CREATE TABLE TamagotchiToys
   toyName         VARCHAR(255) NULL,
   CONSTRAINT FK_bvetm8utj6imjfuek5jntb4b5
   FOREIGN KEY (tamagotchi_id) REFERENCES Tamagotchi (id)
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_bvetm8utj6imjfuek5jntb4b5
   ON TamagotchiToys (tamagotchi_id);
@@ -441,7 +538,8 @@ CREATE TABLE Template
   templateKey VARCHAR(255) NULL,
   CONSTRAINT UK_al34jm30j5sri8b7b7ajqn4yr
   UNIQUE (templateKey)
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE TemplateKeys
 (
@@ -451,7 +549,8 @@ CREATE TABLE TemplateKeys
   PRIMARY KEY (Template_id, keyDescriptions_KEY),
   CONSTRAINT FK_5ueufbwc110mrriocgam5vhf8
   FOREIGN KEY (Template_id) REFERENCES Template (id)
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE TimeTrackingSettings
 (
@@ -459,7 +558,8 @@ CREATE TABLE TimeTrackingSettings
     PRIMARY KEY,
   trackOffline BIT          NULL,
   trackOnline  BIT          NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE TwitchOauthData
 (
@@ -467,13 +567,15 @@ CREATE TABLE TwitchOauthData
     PRIMARY KEY,
   botAccessToken     VARCHAR(255) NULL,
   channelAccessToken VARCHAR(255) NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE TwitterSettings
 (
   id VARCHAR(255) NOT NULL
     PRIMARY KEY
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE TwitterSettingsTrackedKeywords
 (
@@ -481,7 +583,8 @@ CREATE TABLE TwitterSettingsTrackedKeywords
   trackedKeywords VARCHAR(255) NULL,
   CONSTRAINT FK_2w75c5kf4345tn3hel43pqogj
   FOREIGN KEY (settings_type) REFERENCES TwitterSettings (id)
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_2w75c5kf4345tn3hel43pqogj
   ON TwitterSettingsTrackedKeywords (settings_type);
@@ -508,10 +611,15 @@ CREATE TABLE User
   UNIQUE (twitchUserId),
   CONSTRAINT UK_jreodf78a7pl5qidfh43axdfb
   UNIQUE (username)
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_fgyb05t42ekbvvim2bj3cd2h7
   ON User (userGroup_id);
+
+ALTER TABLE AchievementRecord
+  ADD CONSTRAINT FK_8ijqatn18arjr3s1w288yhg5c
+FOREIGN KEY (user_id) REFERENCES User (id);
 
 ALTER TABLE AdventureRecord
   ADD CONSTRAINT FK_qbop5pjpdk1j9x70vmfb09spk
@@ -524,6 +632,10 @@ FOREIGN KEY (user_id) REFERENCES User (id);
 ALTER TABLE CommandHistoryRecord
   ADD CONSTRAINT FK_fbv6v2shlcjdisy3xasuwli7e
 FOREIGN KEY (user_id) REFERENCES User (id);
+
+ALTER TABLE Community
+  ADD CONSTRAINT FK_ix3il794cllbsb77crngcdfj1
+FOREIGN KEY (owner_id) REFERENCES User (id);
 
 ALTER TABLE Donation
   ADD CONSTRAINT FK_e1wf9faewj8ipo2200nc9qw1p
@@ -573,7 +685,8 @@ CREATE TABLE UserGreeting
   user_id BIGINT       NULL,
   CONSTRAINT FK_4ecg31enlo3b8xabob7vpn0y3
   FOREIGN KEY (user_id) REFERENCES User (id)
-);
+)
+  ENGINE = InnoDB;
 
 CREATE INDEX FK_4ecg31enlo3b8xabob7vpn0y3
   ON UserGreeting (user_id);
@@ -584,7 +697,8 @@ CREATE TABLE UserGreetingSettings
     PRIMARY KEY,
   enableGreetings BIT          NULL,
   greetingTimeout BIGINT       NULL
-);
+)
+  ENGINE = InnoDB;
 
 CREATE TABLE UserGroup
 (
@@ -598,7 +712,8 @@ CREATE TABLE UserGroup
   UNIQUE (name),
   CONSTRAINT UK_p318n1yxjlbxl7l0g4elrnkf5
   UNIQUE (weight)
-);
+)
+  ENGINE = InnoDB;
 
 ALTER TABLE ChatModeratorSettings
   ADD CONSTRAINT FK_ksca2jivs13p3kfhov4ni03re

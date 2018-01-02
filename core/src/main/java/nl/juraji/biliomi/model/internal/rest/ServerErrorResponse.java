@@ -19,6 +19,9 @@ public class ServerErrorResponse {
   @XmlElement(name = "CausedBy")
   private String causedBy;
 
+  @XmlElement(name = "StackTrace")
+  private StackTraceElement[] stackTrace;
+
   public String getErrorMessage() {
     return errorMessage;
   }
@@ -33,5 +36,13 @@ public class ServerErrorResponse {
 
   public void setCausedBy(String causedBy) {
     this.causedBy = causedBy;
+  }
+
+  public StackTraceElement[] getStackTrace() {
+    return stackTrace;
+  }
+
+  public void setStackTrace(StackTraceElement[] stackTrace) {
+    this.stackTrace = stackTrace;
   }
 }

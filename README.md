@@ -10,7 +10,6 @@ And since I am a programmer with needs I decided to build my own.
   * Customizable Points system
   * View time tracking
   * Follower/Subscriber statistics
-  * Bits to points
 * RESTful Api
 * Customizable text-based commands
 * Spotify integration

@@ -21,6 +21,7 @@ public class ExceptionResponseMapper implements ExceptionMapper<Throwable> {
       ServerErrorResponse response = new ServerErrorResponse();
 
       response.setErrorMessage(throwable.getMessage());
+      response.setStackTrace(throwable.getStackTrace());
 
       if (throwable.getCause() != null) {
         response.setCausedBy(throwable.getCause().getMessage());
