@@ -59,7 +59,7 @@ public class SteamGameWatchTimerService extends TimerService {
 
   private void syncToTwitch() {
     try {
-      if (channelService.isStreamOffline()) {
+      if (!channelService.isStreamOnline()) {
         return;
       }
 

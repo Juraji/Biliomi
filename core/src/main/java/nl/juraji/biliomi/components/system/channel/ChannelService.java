@@ -1,5 +1,6 @@
 package nl.juraji.biliomi.components.system.channel;
 
+import com.google.common.eventbus.Subscribe;
 import nl.juraji.biliomi.components.system.users.UsersService;
 import nl.juraji.biliomi.io.api.twitch.v5.TwitchApi;
 import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchChannel;
@@ -8,8 +9,11 @@ import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchStream;
 import nl.juraji.biliomi.io.api.twitch.v5.model.wrappers.TwitchStreamInfo;
 import nl.juraji.biliomi.io.web.Response;
 import nl.juraji.biliomi.model.core.Game;
+import nl.juraji.biliomi.model.internal.events.twitch.webhook.ChannelStateEvent;
+import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
@@ -18,7 +22,10 @@ import javax.inject.Inject;
  * Biliomi v3
  */
 @Default
+@EventBusSubscriber
 public class ChannelService {
+
+  private boolean streamOnline = false;
 
   @Inject
   private Logger logger;
@@ -31,6 +38,17 @@ public class ChannelService {
 
   @Inject
   private GameService gameService;
+
+  @PostConstruct
+  private void initChannelService() {
+    streamOnline = getStream() != null;
+  }
+
+  @Subscribe
+  public void onChannelStateEvent(ChannelStateEvent event) {
+    streamOnline = event.isOnline();
+    logger.info("Stream went {}", (streamOnline ? "online" : "offline"));
+  }
 
   /**
    * Get the channel id of the channel Biliomi is currently connected to
@@ -47,16 +65,7 @@ public class ChannelService {
    * @return True if the current channel is online else False
    */
   public boolean isStreamOnline() {
-    return getStream() != null;
-  }
-
-  /**
-   * Convenience method
-   *
-   * @return The inverted boolean state of isStreamOnline()
-   */
-  public boolean isStreamOffline() {
-    return !isStreamOnline();
+    return streamOnline;
   }
 
   /**
@@ -65,7 +74,7 @@ public class ChannelService {
    * @return A TwitchStream object if the request succeeded else null
    */
   public TwitchStream getStream() {
-    return getStream(usersService.getCaster().getTwitchUserId());
+    return getStream(getChannelId());
   }
 
   /**
@@ -85,6 +94,15 @@ public class ChannelService {
     }
 
     return null;
+  }
+
+  /**
+   * Get channel information on the current channel
+   *
+   * @return The TwitchChannel or null on failure
+   */
+  public TwitchChannel getChannel() {
+    return getChannel(getChannelId());
   }
 
   /**
@@ -138,8 +156,8 @@ public class ChannelService {
       TwitchGame twitchGame = twitchApi.searchGame(gameName);
       Response<TwitchChannel> response = twitchApi.updateChannel(channelId, twitchGame.getName(), null);
 
-        if (response.isOK()) {
-        return gameService.getByName(response.getData().getGame(), true);
+      if (response.isOK()) {
+        return gameService.getByName(response.getData().getGame());
       }
     } catch (Exception e) {
       logger.error("Error updating channel game for " + channelId, e);

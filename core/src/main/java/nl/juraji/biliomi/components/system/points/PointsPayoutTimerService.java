@@ -74,7 +74,7 @@ public class PointsPayoutTimerService extends TimerService {
 
   private void runOfflinePayout() {
     long amount = settings.getOfflinePayoutAmount();
-    if (amount > 0 && channelService.isStreamOffline()) {
+    if (amount > 0 && !channelService.isStreamOnline()) {
       doPayouts(amount);
     }
   }

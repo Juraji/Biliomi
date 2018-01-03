@@ -1,13 +1,12 @@
 package nl.juraji.biliomi.rest.services.rest.info;
 
 import nl.juraji.biliomi.components.shared.ChatService;
+import nl.juraji.biliomi.components.system.channel.ChannelService;
 import nl.juraji.biliomi.components.system.channel.ChannelSettingsComponent;
 import nl.juraji.biliomi.components.system.channel.GameService;
 import nl.juraji.biliomi.components.system.users.UsersService;
-import nl.juraji.biliomi.io.api.twitch.v5.TwitchApi;
 import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchChannel;
-import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchImageInfo;
-import nl.juraji.biliomi.io.api.twitch.v5.model.wrappers.TwitchStreamInfo;
+import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchStream;
 import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.VersionInfo;
@@ -30,9 +29,6 @@ import javax.ws.rs.core.Response;
 public class ChannelInfoService {
 
   @Inject
-  private TwitchApi twitchApi;
-
-  @Inject
   private GameService gameService;
 
   @Inject
@@ -40,6 +36,9 @@ public class ChannelInfoService {
 
   @Inject
   private UsersService usersService;
+
+  @Inject
+  private ChannelService channelService;
 
   @Inject
   private TemplateDao templateDao;
@@ -58,42 +57,39 @@ public class ChannelInfoService {
   @GET
   @Path("/channel")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getChannelStatus() throws Exception {
+  public Response getChannelStatus() {
+    TwitchStream stream = channelService.getStream();
+    TwitchChannel channel;
     ChannelInfo info = null;
-    nl.juraji.biliomi.io.web.Response<TwitchChannel> channelResponse = twitchApi.getChannel();
 
-    if (channelResponse.isOK()) {
-      Template statusTemplate = templateDao.getByKey(ChannelSettingsComponent.CHANNEL_TITLE_TEMPLATE_KEY);
-      TwitchChannel channel = channelResponse.getData();
+    if (stream != null) {
+      channel = stream.getChannel();
+    } else {
+      channel = channelService.getChannel();
+    }
+
+    if (channel != null) {
       info = new ChannelInfo();
+      Template statusTemplate = templateDao.getByKey(ChannelSettingsComponent.CHANNEL_TITLE_TEMPLATE_KEY);
+      String statusWithoutTemplate = Templater.removeTemplate(channel.getStatus(), statusTemplate.getTemplate());
 
       info.setChannelName(channel.getDisplayName());
       info.setFollowerCount(channel.getFollowers());
       info.setSubscriberCount(usersService.getSubscriberCount());
-      info.setGame(gameService.getByName(channel.getGame(), true));
+      info.setGame(gameService.getByName(channel.getGame()));
       info.setStatus(channel.getStatus());
-      info.setStatusWithoutTemplate(Templater.removeTemplate(channel.getStatus(), statusTemplate.getTemplate()));
+      info.setStatusWithoutTemplate(statusWithoutTemplate);
       info.setLogoUri(channel.getLogo());
       info.setAffiliate(info.getSubscriberCount() > 0 || channel.isPartner());
       info.setPartner(channel.isPartner());
       info.getViewers().addAll(chatService.getViewersAsUsers());
 
-      insertTwitchStreamInfo(info, channel);
+      if (stream != null) {
+        info.setOnline(true);
+        info.setPreviewUri(stream.getPreview().getLarge());
+      }
     }
 
     return Responses.okOrEmpty(info);
-  }
-
-  private void insertTwitchStreamInfo(ChannelInfo info, TwitchChannel channel) throws Exception {
-    nl.juraji.biliomi.io.web.Response<TwitchStreamInfo> streamResponse = twitchApi.getStream(channel.getId());
-    if (streamResponse.isOK()) {
-      TwitchStreamInfo streamInfo = streamResponse.getData();
-      if (streamInfo.getStream() != null) {
-        info.setOnline(true);
-
-        TwitchImageInfo preview = streamInfo.getStream().getPreview();
-        info.setPreviewUri(preview.getMedium());
-      }
-    }
   }
 }

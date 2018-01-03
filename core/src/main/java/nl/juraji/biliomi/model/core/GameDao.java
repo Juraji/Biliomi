@@ -17,7 +17,7 @@ public class GameDao extends JpaDao<Game> {
     super(Game.class);
   }
 
-  public Game getByName(String name, boolean createIfNotExists) {
+  public Game getByName(String name) {
     if (name == null) {
       return null;
     }
@@ -26,7 +26,7 @@ public class GameDao extends JpaDao<Game> {
         .add(Restrictions.eq("name", name).ignoreCase())
         .getResult();
 
-    if (game == null && createIfNotExists) {
+    if (game == null) {
       game = new Game();
       game.setName(name);
       game.setFirstPlayedOn(DateTime.now());

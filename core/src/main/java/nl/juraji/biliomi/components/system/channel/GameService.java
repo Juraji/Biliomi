@@ -32,8 +32,8 @@ public class GameService {
     // run getCurrent once to persist the current game if it doesn't exist
     getCurrent();
   }
-  public Game getByName(String name, boolean createIfNotExists) {
-    return gameDao.getByName(name, createIfNotExists);
+  public Game getByName(String name) {
+    return gameDao.getByName(name);
   }
 
   public Game getBySteamId(long steamId) {
@@ -51,7 +51,7 @@ public class GameService {
       Response<TwitchChannel> channel = twitchApi.getChannel();
 
       if (channel.isOK()) {
-        return gameDao.getByName(channel.getData().getGame(), true);
+        return gameDao.getByName(channel.getData().getGame());
       }
     } catch (Exception e) {
       logger.error("Error retrieving channel information for caster channel", e);
