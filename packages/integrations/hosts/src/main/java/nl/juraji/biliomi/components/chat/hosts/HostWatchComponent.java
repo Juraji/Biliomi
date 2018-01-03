@@ -1,15 +1,18 @@
 package nl.juraji.biliomi.components.chat.hosts;
 
+import com.google.common.eventbus.Subscribe;
 import nl.juraji.biliomi.components.shared.TemplateSetup;
 import nl.juraji.biliomi.components.system.points.PointsService;
 import nl.juraji.biliomi.model.chat.HostWatchSettings;
 import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
+import nl.juraji.biliomi.model.internal.events.twitch.webhook.ChannelStateEvent;
 import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
+import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
 import nl.juraji.biliomi.utility.types.components.Component;
 
 import javax.inject.Inject;
@@ -21,6 +24,7 @@ import javax.inject.Singleton;
  */
 @Singleton
 @NormalComponent
+@EventBusSubscriber
 public class HostWatchComponent extends Component {
   private static final String HOST_CMD = ".host ";
   public static final String INCOMING_HOST_NOTICE_TEMPLATE = "IncomingHostNotice";
@@ -47,6 +51,11 @@ public class HostWatchComponent extends Component {
     settings = settingsService.getSettings(HostWatchSettings.class, s -> settings = s);
     hostWatchUpdateService.start();
     hostWatchEventsService.init();
+  }
+
+  @Subscribe
+  public void onChannelStateEvent(ChannelStateEvent event) {
+    hostWatchUpdateService.restart();
   }
 
   /**

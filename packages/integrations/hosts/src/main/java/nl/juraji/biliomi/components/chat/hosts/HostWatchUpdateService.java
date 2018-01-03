@@ -39,9 +39,12 @@ public class HostWatchUpdateService extends TimerService {
 
   @Override
   public void start() {
-    super.start();
-    // Update every 3 minutes
-    scheduleAtFixedRate(this::update,3, TimeUnit.MINUTES);
+    // Start updates only when channel is online
+    if (channelService.isStreamOnline()) {
+      super.start();
+      // Update every minute
+      scheduleAtFixedRate(this::update,1, TimeUnit.MINUTES);
+    }
   }
 
   private void update() {
