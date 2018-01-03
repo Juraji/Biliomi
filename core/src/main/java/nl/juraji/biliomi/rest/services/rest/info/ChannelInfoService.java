@@ -58,11 +58,13 @@ public class ChannelInfoService {
   @Path("/channel")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getChannelStatus() {
-    TwitchStream stream = channelService.getStream();
+    boolean streamOnline = channelService.isStreamOnline();
+    TwitchStream stream = null;
     TwitchChannel channel;
     ChannelInfo info = null;
 
-    if (stream != null) {
+    if (streamOnline) {
+      stream = channelService.getStream();
       channel = stream.getChannel();
     } else {
       channel = channelService.getChannel();
