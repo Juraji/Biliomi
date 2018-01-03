@@ -67,7 +67,7 @@ public class SpotifyComponent extends Component {
       return false;
     }
 
-    if (channelService.isStreamOffline()) {
+    if (!channelService.isStreamOnline()) {
       chat.whisper(user, i18n.get("ChatCommand.currentSong.playerInactive"));
       return false;
     }

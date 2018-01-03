@@ -49,33 +49,24 @@ public class PointsPayoutTimerService extends TimerService {
 
   @Override
   public void start() {
-    super.start();
-    boolean onlineEnabled = settings.isTrackOnline();
-    boolean offlineEnabled = settings.isTrackOffline();
+    if (channelService.isStreamOnline()) {
+      boolean onlineEnabled = settings.isTrackOnline();
+      long amount = settings.getOnlinePayoutAmount();
+      long payoutInterval = settings.getOnlinePayoutInterval();
 
-    long t;
-    if (onlineEnabled) {
-      t = settings.getOnlinePayoutInterval();
-      scheduleAtFixedRate(this::runOnlinePayout, t, TimeUnit.MILLISECONDS);
-    }
+      if (onlineEnabled) {
+        super.start();
+        scheduleAtFixedRate(() -> doPayouts(amount), 0, payoutInterval, TimeUnit.MILLISECONDS);
+      }
+    } else {
+      boolean offlineEnabled = settings.isTrackOffline();
+      long amount = settings.getOfflinePayoutAmount();
+      long payoutInterval = settings.getOfflinePayoutInterval();
 
-    if (offlineEnabled) {
-      t = settings.getOfflinePayoutInterval();
-      scheduleAtFixedRate(this::runOfflinePayout, t, TimeUnit.MILLISECONDS);
-    }
-  }
-
-  private void runOnlinePayout() {
-    long amount = settings.getOnlinePayoutAmount();
-    if (amount > 0 && channelService.isStreamOnline()) {
-      doPayouts(amount);
-    }
-  }
-
-  private void runOfflinePayout() {
-    long amount = settings.getOfflinePayoutAmount();
-    if (amount > 0 && !channelService.isStreamOnline()) {
-      doPayouts(amount);
+      if (offlineEnabled) {
+        super.start();
+        scheduleAtFixedRate(() -> doPayouts(amount), 0, payoutInterval, TimeUnit.MILLISECONDS);
+      }
     }
   }
 

@@ -16,12 +16,14 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Created by Juraji on 22-4-2017.
  * Biliomi v3
  */
 @Default
+@Singleton
 @EventBusSubscriber
 public class ChannelService {
 
@@ -41,6 +43,8 @@ public class ChannelService {
 
   @PostConstruct
   private void initChannelService() {
+    // When Biliomi initially boots the stream status will be unknown.
+    // This will set the status using the Api, just in case Biliomi is booted during stream.
     streamOnline = getStream() != null;
   }
 

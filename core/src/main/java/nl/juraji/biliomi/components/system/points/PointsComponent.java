@@ -1,15 +1,18 @@
 package nl.juraji.biliomi.components.system.points;
 
+import com.google.common.eventbus.Subscribe;
 import nl.juraji.biliomi.components.shared.TimeFormatter;
 import nl.juraji.biliomi.components.system.commands.CommandService;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.settings.PointsSettings;
+import nl.juraji.biliomi.model.internal.events.twitch.webhook.ChannelStateEvent;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
+import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
 import nl.juraji.biliomi.utility.types.components.Component;
 import nl.juraji.biliomi.utility.types.enums.OnOff;
 import nl.juraji.biliomi.utility.types.enums.StreamState;
@@ -25,8 +28,9 @@ import java.util.stream.Collectors;
  * Created by Juraji on 27-4-2017.
  * Biliomi v3
  */
-@SystemComponent
 @Singleton
+@SystemComponent
+@EventBusSubscriber
 public class PointsComponent extends Component {
 
   @Inject
@@ -47,6 +51,11 @@ public class PointsComponent extends Component {
   public void init() {
     settings = settingsService.getSettings(PointsSettings.class, s -> settings = s);
     pointsPayoutTimer.start();
+  }
+
+  @Subscribe
+  public void onChannelStateEvent(ChannelStateEvent event) {
+    pointsPayoutTimer.restart();
   }
 
   /**

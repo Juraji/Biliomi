@@ -100,7 +100,7 @@ public class WebhookReceiver implements Restartable {
 
           if (!this.notificationIdHistory.contains(notification.getId())) {
             logger.debug("New notification on topic: " + notification.getTopic());
-            this.notificationIdHistory.add(notification.getId(), 6, TimeUnit.HOURS);
+            this.notificationIdHistory.add(notification.getId(), 1, TimeUnit.HOURS);
             //noinspection unchecked Unchecked error can never occur, since the notification is unmarshalled by the handler
             notificationHandler.handleNotification(eventBus, notification);
           }
