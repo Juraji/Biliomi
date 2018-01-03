@@ -35,6 +35,12 @@ biliomi:
     # Due to security reasons you will need to register biliomi as an application on your Twitch account.
     # Check out Twitch's documentation on how to do this.
     clientId: null
+    # The callback url to supply to Twitch.
+    # Note that, when running Biliomi behind a firewall, you will need to forward this port to
+    # the machine running Biliomi.
+    webhooks:
+      callbackUrl: null
+      callbackPort: 30001
     login:
       # Biliomi uses oAuth tokens to logon to the Twitch servers.
       # These will be installed on first startup (when updateMode is set to INSTALL)

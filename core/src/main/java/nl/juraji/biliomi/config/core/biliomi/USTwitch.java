@@ -1,6 +1,7 @@
 package nl.juraji.biliomi.config.core.biliomi;
 
 import nl.juraji.biliomi.config.core.biliomi.twitch.USTwitchLogin;
+import nl.juraji.biliomi.config.core.biliomi.twitch.USTwitchWebhooks;
 
 /**
  * Created by Juraji on 9-10-2017.
@@ -8,6 +9,7 @@ import nl.juraji.biliomi.config.core.biliomi.twitch.USTwitchLogin;
  */
 public class USTwitch {
   private String clientId;
+  private USTwitchWebhooks webhooks;
   private USTwitchLogin login;
 
   public String getClientId() {
@@ -16,6 +18,14 @@ public class USTwitch {
 
   public void setClientId(String clientId) {
     this.clientId = clientId;
+  }
+
+  public USTwitchWebhooks getWebhooks() {
+    return webhooks;
+  }
+
+  public void setWebhooks(USTwitchWebhooks webhooks) {
+    this.webhooks = webhooks;
   }
 
   public USTwitchLogin getLogin() {

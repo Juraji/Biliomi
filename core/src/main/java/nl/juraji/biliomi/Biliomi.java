@@ -1,10 +1,7 @@
 package nl.juraji.biliomi;
 
 import nl.juraji.biliomi.boot.SystemBoot;
-import nl.juraji.biliomi.components.ComponentManager;
-import nl.juraji.biliomi.io.api.twitch.irc.IrcSession;
-import nl.juraji.biliomi.io.console.ConsoleApi;
-import nl.juraji.biliomi.rest.RestServerController;
+import nl.juraji.biliomi.io.api.twitch.helix.webhooks.TwitchWebhookSession;
 
 import javax.annotation.PreDestroy;
 import javax.enterprise.inject.Default;
@@ -23,8 +20,8 @@ public class Biliomi implements Runnable {
     CDI<Object> cdi = CDI.current();
 
     // Start console listener
-    ConsoleApi consoleApi = cdi.select(ConsoleApi.class).get();
-    consoleApi.init();
+//    ConsoleApi consoleApi = cdi.select(ConsoleApi.class).get();
+//    consoleApi.init();
 
     // Run system boot
     SystemBoot systemBoot = cdi.select(SystemBoot.class).get();
@@ -32,16 +29,17 @@ public class Biliomi implements Runnable {
     cdi.destroy(systemBoot);
 
     // Init ComponentManager
-    cdi.select(ComponentManager.class).get();
+//    cdi.select(ComponentManager.class).get();
 
     // Start IrcSession
-    cdi.select(IrcSession.class).get().start();
+//    cdi.select(IrcSession.class).get().start();
+    cdi.select(TwitchWebhookSession.class).get();
 
     // Start REST API
-    cdi.select(RestServerController.class).get().start();
+//    cdi.select(RestServerController.class).get().start();
 
     // Start listening for console commands
-    consoleApi.initCliCommands();
+//    consoleApi.initCliCommands();
 
     // The EventBusSubscriberInterceptor will register subscribers
     // Events are emitted by the IRC clients to bootstrap components and services

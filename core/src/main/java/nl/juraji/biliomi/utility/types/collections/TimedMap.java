@@ -167,6 +167,10 @@ public class TimedMap<K, V> {
     return map.containsKey(key);
   }
 
+  public boolean containsValue(V value) {
+    return findKey(value) != null;
+  }
+
   public K findKey(V value) {
     if (isEmpty()) {
       return null;
@@ -216,8 +220,8 @@ public class TimedMap<K, V> {
     timer.purge();
     timer.cancel();
   }
-
   private class ExpiringObject {
+
     private final ExpiryTask task;
     private V value;
 

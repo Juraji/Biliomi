@@ -54,7 +54,7 @@ public class TGBattleComponent extends Component {
    */
   @CommandRoute(command = "tgbattle")
   public boolean tgbattleCommand(User user, Arguments arguments) {
-    if (requests.findKey(user.getId()) != null) {
+    if (requests.containsValue(user.getId())) {
       chat.whisper(user, i18n.get("ChatCommand.tgbattle.outgoingRequestStillWaiting"));
       return false;
     }

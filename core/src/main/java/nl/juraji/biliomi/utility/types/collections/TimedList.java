@@ -28,4 +28,12 @@ public class TimedList<T> {
       return null;
     }
   }
+
+  public void stop() {
+    timedMap.stop();
+  }
+
+  public boolean contains(T value) {
+    return timedMap.containsValue(value);
+  }
 }

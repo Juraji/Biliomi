@@ -56,10 +56,31 @@ public final class Url {
    * @return A Map containing the key-value pairs
    */
   public static Map<String, String> unpackQueryString(String url) {
+    return unpackQueryString(url, false);
+  }
+
+  /**
+   * Unpack the querystring from the given url
+   * Returns an empty map if there is no querystring
+   *
+   * @param url             The url to parse
+   * @param isPureQueryString Supply true if the url is just the query string or false for complete urls
+   * @return A Map containing the key-value pairs
+   */
+  public static Map<String, String> unpackQueryString(String url, boolean isPureQueryString) {
     if (url != null) {
-      int qidIndex = url.indexOf(QUERY_IDENTIFIER);
-      if (qidIndex > -1) {
-        String query = url.substring(qidIndex + 1);
+      String query = null;
+
+      if (isPureQueryString) {
+        query = url;
+      } else {
+        int qidIndex = url.indexOf(QUERY_IDENTIFIER);
+        if (qidIndex > -1) {
+          query = url.substring(qidIndex + 1);
+        }
+      }
+
+      if (query != null) {
         return Splitter
             .on(QUERY_PAIR_SEPARATOR)
             .trimResults()

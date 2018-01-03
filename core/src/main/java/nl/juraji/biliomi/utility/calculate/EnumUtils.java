@@ -24,13 +24,28 @@ public final class EnumUtils {
    * @return The matching enum value or null when not convertible
    */
   public static <E extends Enum<E>> E toEnum(String name, Class<E> enumClass) {
+    return toEnum(name, enumClass, null);
+  }
+
+  /**
+   * Convert the given name to an enum value
+   * Case insensitive, Expects E to have uppercase values
+   * Based on org.apache.commons.lang3.EnumUtils.getEnum()
+   *
+   * @param name        The name to convert
+   * @param enumClass   The Enum class to convert to
+   * @param defaultName The default to return on inconvertable value
+   * @param <E>         Enum type
+   * @return The matching enum value or null when not convertible
+   */
+  public static <E extends Enum<E>> E toEnum(String name, Class<E> enumClass, E defaultName) {
     if (name == null) {
-      return null;
+      return defaultName;
     } else {
       try {
         return Enum.valueOf(enumClass, name.toUpperCase());
       } catch (IllegalArgumentException var3) {
-        return null;
+        return defaultName;
       }
     }
   }
@@ -56,8 +71,8 @@ public final class EnumUtils {
   /**
    * Check of to enum values equal (Nullsafe)
    *
-   * @param e1 Enum 1
-   * @param e2 Enum 2
+   * @param e1  Enum 1
+   * @param e2  Enum 2
    * @param <E> Generic type to force type equality
    * @return True when equals, False when not equals or null
    */
