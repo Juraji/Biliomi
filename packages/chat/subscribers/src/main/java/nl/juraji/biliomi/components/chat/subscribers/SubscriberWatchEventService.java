@@ -53,12 +53,12 @@ public class SubscriberWatchEventService implements Init {
 
   @Subscribe
   public void onTwitchSubscriberEvent(TwitchSubscriberEvent event) {
-    User user = usersService.getUser(event.getUsername(), true);
+    User user = event.getUser();
     long reward = getReward(event.getSubPlan());
     user.setSubscriber(true);
 
     if (user.getSubscribeDate() == null) {
-      user.setSubscribeDate(event.getTime());
+      user.setSubscribeDate(event.getTimeStamp());
     }
 
     if (reward > 0) {

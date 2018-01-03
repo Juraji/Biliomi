@@ -1,5 +1,6 @@
 package nl.juraji.biliomi.model.internal.events.twitch.followers;
 
+import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.internal.events.twitch.TwitchEvent;
 import org.joda.time.DateTime;
 
@@ -16,30 +17,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchFollowEvent extends TwitchEvent {
 
-  @XmlElement(name = "Username")
-  private final String username;
-
-  @XmlElement(name = "TwitchId")
-  private final long twitchId;
+  @XmlElement(name = "User")
+  private final User user;
 
   @XmlElement(name = "FollowsSince")
   private final DateTime followsSince;
 
-  public TwitchFollowEvent(String username, long twitchId, DateTime followsSince) {
-    this.username = username;
-    this.twitchId = twitchId;
+  public TwitchFollowEvent(User user, DateTime followsSince) {
+    this.user = user;
     this.followsSince = followsSince;
   }
 
-  public String getUsername() {
-    return username;
+  public User getUser() {
+    return user;
   }
 
   public DateTime getFollowsSince() {
     return followsSince;
-  }
-
-  public long getTwitchId() {
-    return twitchId;
   }
 }

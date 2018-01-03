@@ -60,7 +60,7 @@ public class ChannelSettingsComponent extends Component {
       stream = channelService.getStream();
     } else {
       // Add the target channel as user, so we get a Twitch id and get their channelstatus
-      targetUser = usersService.getUser(arguments.get(0), true);
+      targetUser = usersService.getUser(arguments.get(0));
       stream = channelService.getStream(targetUser.getTwitchUserId());
     }
 

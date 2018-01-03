@@ -44,7 +44,7 @@ public class TGHugComponent extends Component {
       return false;
     }
 
-    User otherUser = usersService.getUser(otherUsername, true);
+    User otherUser = usersService.getUser(otherUsername);
     if (otherUser == null) {
       chat.whisper(user, i18n.getUserNonExistent(otherUsername));
       return false;

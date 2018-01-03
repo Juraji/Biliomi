@@ -44,24 +44,13 @@ public class UsersService {
   }
 
   /**
-   * Get a User by username
-   *
-   * @param username The username
-   * @return The User or null on nonexistent
-   */
-  public User getUser(String username) {
-    return getUser(username, false);
-  }
-
-  /**
-   * Gat a User by username, create new User if if nonexistent.
+   * Get a User by username, create new User if if nonexistent.
    * Synchronized, so multiple concurrent callers can assert creation
    *
    * @param username          The username
-   * @param createIfNotExists When True a new user will be created if nonexistent
    * @return The User associated with the userrname
    */
-  public synchronized User getUser(String username, boolean createIfNotExists) {
+  public synchronized User getUser(String username) {
     if (username == null) {
       return null;
     }
@@ -70,7 +59,7 @@ public class UsersService {
     User user = userDao.getByUsername(lcUsername);
 
     try {
-      if (user == null && createIfNotExists) {
+      if (user == null) {
         Response<TwitchUserLogins> response = twitchApi.getUsersByUsername(lcUsername);
 
         if (response.isOK() && !response.getData().getUsers().isEmpty()) {

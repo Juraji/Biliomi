@@ -61,7 +61,7 @@ public class HostWatchComponent extends Component {
     }
 
     String targetUsername = arguments.toString();
-    User targetUser = usersService.getUser(targetUsername, true);
+    User targetUser = usersService.getUser(targetUsername);
 
     if (targetUser == null) {
       chat.whisper(user, i18n.getUserNonExistent(targetUsername));

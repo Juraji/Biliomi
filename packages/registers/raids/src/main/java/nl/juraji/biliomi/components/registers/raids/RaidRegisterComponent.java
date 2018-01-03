@@ -48,7 +48,7 @@ public class RaidRegisterComponent extends Component {
     Template template = templateDao.getByKey(RAID_MESSAGE_TEMPLATE_ID);
 
     String channelName = arguments.get(0);
-    User channel = usersService.getUser(channelName, true);
+    User channel = usersService.getUser(channelName);
     if (channel == null) {
       chat.whisper(user, i18n.getUserNonExistent(channelName));
       return false;
@@ -80,7 +80,7 @@ public class RaidRegisterComponent extends Component {
     }
 
     String channelName = arguments.get(0);
-    User channel = usersService.getUser(channelName, true);
+    User channel = usersService.getUser(channelName);
     if (channel == null) {
       chat.whisper(user, i18n.getUserNonExistent(channelName));
       return false;

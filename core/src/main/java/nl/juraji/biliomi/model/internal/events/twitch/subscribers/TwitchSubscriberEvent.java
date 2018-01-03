@@ -1,5 +1,6 @@
 package nl.juraji.biliomi.model.internal.events.twitch.subscribers;
 
+import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.internal.events.twitch.TwitchEvent;
 import org.joda.time.DateTime;
 
@@ -16,14 +17,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchSubscriberEvent extends TwitchEvent {
 
-  @XmlElement(name = "Username")
-  private String username;
+  @XmlElement(name = "User")
+  private final User user;
 
-  @XmlElement(name = "UserId")
-  private long userId;
-
-  @XmlElement(name = "Time")
-  private DateTime time;
+  @XmlElement(name = "Timestamp")
+  private DateTime timeStamp;
 
   @XmlElement(name = "SubPlan")
   private SubscriberPlanType subPlan;
@@ -31,51 +29,26 @@ public class TwitchSubscriberEvent extends TwitchEvent {
   @XmlElement(name = "IsResub")
   private boolean isResub;
 
-  public TwitchSubscriberEvent(String username, long userId, DateTime time, SubscriberPlanType subPlan, boolean isResub) {
-    this.username = username;
-    this.userId = userId;
-    this.time = time;
+  public TwitchSubscriberEvent(User user, DateTime timeStamp, SubscriberPlanType subPlan, boolean isResub) {
+    this.user = user;
+    this.timeStamp = timeStamp;
     this.subPlan = subPlan;
     this.isResub = isResub;
   }
 
-  public String getUsername() {
-    return username;
+  public User getUser() {
+    return user;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public long getUserId() {
-    return userId;
-  }
-
-  public void setUserId(long userId) {
-    this.userId = userId;
-  }
-
-  public DateTime getTime() {
-    return time;
-  }
-
-  public void setTime(DateTime time) {
-    this.time = time;
+  public DateTime getTimeStamp() {
+    return timeStamp;
   }
 
   public SubscriberPlanType getSubPlan() {
     return subPlan;
   }
 
-  public void setSubPlan(SubscriberPlanType subPlan) {
-    this.subPlan = subPlan;
-  }
-
   public boolean isResub() {
     return isResub;
-  }
-
-  public void setResub(boolean resub) {
-    isResub = resub;
   }
 }

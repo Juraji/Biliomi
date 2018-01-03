@@ -214,7 +214,7 @@ public class CustomCommandsComponent extends Component {
     if (template.templateContainsKey("firstargumentasuser")) {
       // Not in lambda, since it needs to fail on unknown user
       String username = arguments.get(0);
-      User argUser = usersService.getUser(username, true);
+      User argUser = usersService.getUser(username);
       if (argUser == null) {
         chat.whisper(user, i18n.get("ChatCommand.customCommandRunner.firstArgurmentAsUserNotFound")
             .add("command", arguments::getCommand)

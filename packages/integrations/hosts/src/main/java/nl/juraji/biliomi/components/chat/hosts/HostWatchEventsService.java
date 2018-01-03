@@ -58,7 +58,7 @@ public class HostWatchEventsService implements Init {
 
   @Subscribe
   public void onTwitchHostInEvent(TwitchHostInEvent event) {
-    User channel = usersService.getUser(event.getChannelName(), true);
+    User channel = usersService.getUser(event.getChannelName());
     boolean isCooldownExpired = isCooldownExpired(channel);
 
     if (isCooldownExpired) {

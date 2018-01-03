@@ -25,7 +25,6 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 
 /**
@@ -87,6 +86,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
       setupCoreUserSettings();
       setupDatabaseUserSettings();
       setupTwitchUserSettings();
+      setupTwitchWebhookSettings();
 
       saveSettings();
       console.println("Your settings have been saved. Restart Biliomi to apply your settings.");
@@ -110,7 +110,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
     return "First Time Setup";
   }
 
-  private void saveSettings() throws InvocationTargetException, IllegalAccessException, IOException {
+  private void saveSettings() throws IOException {
     // Component and integration settings are saved in separate files, these tags should be null in core.yml
 
     Yaml yamlInstance = new Yaml(new Constructor(YamlCoreSettings.class));
@@ -218,6 +218,43 @@ public class FirstTimeInstallSetupTask implements SetupTask {
     console.print("Enter your own Twitch account name in lowercase: ");
     input = console.awaitInput(true);
     usTwitch.getLogin().setChannelUsername(input);
+    console.println();
+  }
+
+  private void setupTwitchWebhookSettings() throws Exception {
+    USTwitch usTwitch = yamlCoreSettings.getBiliomi().getTwitch();
+    String callbackUrl;
+    String input;
+
+    console.println("Biliomi uses Twitch's webhooks in order to receive notifications about followers, subscribers, channel status and more.");
+    console.println("In order for this to work proper you will have to setup port forwarding in your router (if applicable) and find out what your public (internet) IP-address is.");
+    console.println("You can find out what your public IP-address is using https://wtfismyip.com.");
+    console.print("Would you like me to open this website for you? [y/n]:");
+    boolean yes = console.awaitYesNo();
+    if (yes) {
+      Desktop.getDesktop().browse(new URI("https://wtfismyip.com"));
+    }
+    console.println();
+
+    console.println("Please enter your public IP-address: ");
+    input = console.awaitInput(true);
+    callbackUrl = "http://" + input;
+    console.println();
+
+    console.println("Please enter a free port number [30001]: ");
+    input = console.awaitInput();
+    if (StringUtils.isEmpty(input)) {
+      callbackUrl += ":30001";
+    } else {
+      callbackUrl += ":" + input;
+    }
+
+    usTwitch.setWebhookCallbackUrl(callbackUrl);
+    console.println();
+
+    console.println("Please do not forget to forward this port to the machine running Biliomi in your router.");
+    console.println("Refer to your router's manual to find out how to do this.");
+    console.println("You can always open up config/core.yml and edit the address and port.");
     console.println();
   }
 

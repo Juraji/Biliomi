@@ -51,24 +51,8 @@ public class FollowerWatchUpdateService extends TimerService {
   @Override
   public void start() {
     super.start();
-    // Incrementals at 30 seconds intervals
-    scheduleAtFixedRate(this::incrementalUpdate, 30, TimeUnit.SECONDS);
     // Full at 10 seconds and every 6 hours after that
     scheduleAtFixedRate(this::update, 10,21600, TimeUnit.SECONDS);
-  }
-
-  private void incrementalUpdate() {
-    try {
-      Response<TwitchFollows> followsResponse = twitchApi.getChannelFollowers(channelService.getChannelId(), 20, 0);
-
-      if (followsResponse.isOK()) {
-        List<TwitchFollower> twitchFollowers = followsResponse.getData().getFollows();
-        updateChangedUsernames(twitchFollowers);
-        updateNewFollowers(twitchFollowers);
-      }
-    } catch (Exception e) {
-      logger.error("Failed incremental update of followers", e);
-    }
   }
 
   private void update() {
@@ -146,8 +130,7 @@ public class FollowerWatchUpdateService extends TimerService {
         .collect(Collectors.toList());
 
     newFollowers.forEach(twitchFollower -> eventBus.post(new TwitchFollowEvent(
-        twitchFollower.getUser().getName(),
-        twitchFollower.getUser().getId(),
+        usersService.getUserByTwitchId(twitchFollower.getUser().getId()),
         new DateTime(twitchFollower.getCreatedAt())
     )));
   }

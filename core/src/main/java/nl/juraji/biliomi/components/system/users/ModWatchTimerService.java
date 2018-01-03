@@ -60,7 +60,7 @@ public class ModWatchTimerService extends TimerService {
 
       List<String> moderatorUsernames = Splitter.on(", ").splitToList(event.getMessage().substring(33));
       moderatorUsernames.stream()
-          .map(username -> usersService.getUser(username, true))
+          .map(username -> usersService.getUser(username))
           .filter(user -> !user.isModerator())
           .forEach(user -> {
             user.setModerator(true);

@@ -85,7 +85,7 @@ public class QuoteRegisterComponent extends Component {
     }
 
     String qUsername = arguments.pop();
-    User qUser = usersService.getUser(qUsername, true);
+    User qUser = usersService.getUser(qUsername);
     if (qUser == null) {
       chat.whisper(user, i18n.getUserNonExistent(qUsername));
       return false;

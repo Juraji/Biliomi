@@ -75,7 +75,7 @@ public class CommandRouter {
     }
 
     Command command = commandService.getCommand(commandService.translateAlias(commandCall.getCommand()));
-    User user = userService.getUser(event.getUsername(), true);
+    User user = userService.getUser(event.getUsername());
 
     if (!calledByApi) {
       // Check permissions

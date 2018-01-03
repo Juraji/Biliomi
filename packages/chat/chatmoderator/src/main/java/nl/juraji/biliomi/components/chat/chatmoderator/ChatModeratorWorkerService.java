@@ -190,7 +190,7 @@ public class ChatModeratorWorkerService implements Init {
     }
 
     public void addStrike(ModerationReason reason) {
-      User user = usersService.getUser(event.getUsername(), true);
+      User user = usersService.getUser(event.getUsername());
       int strike = tallyService.tally(user.getUsername());
 
       this.reason = reason;
@@ -200,7 +200,7 @@ public class ChatModeratorWorkerService implements Init {
 
     public void execute() {
       if (action != null) {
-        User user = usersService.getUser(event.getUsername(), true);
+        User user = usersService.getUser(event.getUsername());
         int strike = tallyService.getCurrent(user.getUsername());
 
         executeAction(action, user);

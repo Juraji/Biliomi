@@ -60,7 +60,7 @@ public class DonationRegisterComponent extends Component {
     }
 
     String donatorUsername = arguments.pop();
-    User donator = usersService.getUser(donatorUsername, true);
+    User donator = usersService.getUser(donatorUsername);
     if (donator == null) {
       chat.whisper(user, i18n.getUserNonExistent(donatorUsername));
       return false;

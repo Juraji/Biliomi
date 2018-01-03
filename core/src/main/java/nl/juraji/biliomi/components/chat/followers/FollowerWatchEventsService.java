@@ -57,7 +57,7 @@ public class FollowerWatchEventsService implements Init {
 
   @Subscribe
   public void onTwitchFollowEvent(TwitchFollowEvent event) {
-    User user = usersService.getUser(event.getUsername(), true);
+    User user = event.getUser();
     user.setFollower(true);
 
     // If the follow date is not null the user has followed before.

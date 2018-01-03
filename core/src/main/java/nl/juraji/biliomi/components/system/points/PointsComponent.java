@@ -257,7 +257,7 @@ public class PointsComponent extends Component {
 
     long amount = NumberConverter.asNumber(arguments.get(0)).toLong();
     List<User> currentViewers = chat.getViewers().stream()
-        .map(viewer -> usersService.getUser(viewer, true))
+        .map(viewer -> usersService.getUser(viewer))
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
 

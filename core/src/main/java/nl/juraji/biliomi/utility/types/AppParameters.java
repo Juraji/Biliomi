@@ -24,6 +24,9 @@ public class AppParameters {
   @Parameter(names = {"--workingdir", "-w"}, description = "The base directory for component files (e.g. exports, etc.)")
   private String workingDir = "./data";
 
+  @Parameter(names = {"--debug", "-D"}, description = "Start Biliomi in debug mode, more information is shown in the console")
+  private boolean debugMode = false;
+
   @Parameter(names = {"--casteroauth"}, description = "When supplied this token is used, instead of the OAuth flow during installation")
   private String casterOAuth = null;
 
@@ -33,8 +36,8 @@ public class AppParameters {
   @Parameter(names = "--resetauth", description = "Reset authentication for Twitch and ALL other integrations")
   private boolean resetAuth = false;
 
-  @Parameter(names = {"--debug", "-D"}, description = "Start Biliomi in debug mode, more information is shown in the console")
-  private boolean debugMode = false;
+  @Parameter(names = {"--disablewebhooksubscriptions"}, description = "Disable Twitch webhooks (prevents repetitious subscribing during development or testing, but will still listen for incoming notifications)")
+  private boolean disableWebhookSubscriptions = false;
 
   public AppParameters(String[] args) {
     try {
@@ -82,5 +85,9 @@ public class AppParameters {
 
   public boolean isDebugMode() {
     return debugMode;
+  }
+
+  public boolean isDisableWebhookSubscriptions() {
+    return disableWebhookSubscriptions;
   }
 }

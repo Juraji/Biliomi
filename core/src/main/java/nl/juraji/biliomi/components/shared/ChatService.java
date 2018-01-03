@@ -77,7 +77,7 @@ public class ChatService {
   @Subscribe
   public void onIrcUserModeEvent(IrcUserModeEvent event) {
     if (event.isModeratorMode()) {
-      User user = usersService.getUser(event.getUsername(), true);
+      User user = usersService.getUser(event.getUsername());
       if (!user.isModerator()) {
         user.setModerator(true);
         userDao.save(user);
@@ -106,7 +106,7 @@ public class ChatService {
 
   public List<User> getViewersAsUsers() {
     return viewers.stream()
-        .map(username -> usersService.getUser(username, true))
+        .map(username -> usersService.getUser(username))
         .collect(Collectors.toList());
   }
 

@@ -50,7 +50,7 @@ public class HostersService {
 
   public List<User> getHostersAsUsers() {
     return hosters.stream()
-        .map(username -> usersService.getUser(username, true))
+        .map(username -> usersService.getUser(username))
         .collect(Collectors.toList());
   }
 }

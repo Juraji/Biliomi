@@ -50,8 +50,8 @@ public class DefaultGroupsAndUsersTask implements SetupTask {
       return;
     }
 
-    User casterUser = usersService.getUser(channelName, true);
-    User botUser = usersService.getUser(botName, true);
+    User casterUser = usersService.getUser(channelName);
+    User botUser = usersService.getUser(botName);
 
     casterUser.setCaster(true);
     casterUser.setUserGroup(defaultGroups.get(0));

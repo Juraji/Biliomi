@@ -66,7 +66,7 @@ public class ChatModeratorComponent extends Component {
     }
 
     String username = arguments.get(0);
-    User targetUser = usersService.getUser(username, true);
+    User targetUser = usersService.getUser(username);
 
     if (targetUser == null) {
       chat.whisper(user, i18n.getUserNonExistent(username));
@@ -93,7 +93,7 @@ public class ChatModeratorComponent extends Component {
     }
 
     String username = arguments.get(0);
-    User targetUser = usersService.getUser(username, true);
+    User targetUser = usersService.getUser(username);
 
     if (targetUser == null) {
       chat.whisper(user, i18n.getUserNonExistent(username));
@@ -120,7 +120,7 @@ public class ChatModeratorComponent extends Component {
     }
 
     String username = arguments.get(0);
-    User targetUser = usersService.getUser(username, true);
+    User targetUser = usersService.getUser(username);
 
     if (targetUser == null) {
       chat.whisper(user, i18n.getUserNonExistent(username));
@@ -147,7 +147,7 @@ public class ChatModeratorComponent extends Component {
     }
 
     String username = arguments.get(0);
-    User targetUser = usersService.getUser(username, true);
+    User targetUser = usersService.getUser(username);
 
     if (targetUser == null) {
       chat.whisper(user, i18n.getUserNonExistent(username));
@@ -173,7 +173,7 @@ public class ChatModeratorComponent extends Component {
     }
 
     String username = arguments.get(0);
-    User targetUser = usersService.getUser(username, true);
+    User targetUser = usersService.getUser(username);
 
     if (targetUser == null) {
       chat.whisper(user, i18n.getUserNonExistent(username));

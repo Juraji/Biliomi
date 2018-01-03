@@ -49,10 +49,14 @@ public abstract class TimerService implements Restartable {
   }
 
   protected void scheduleAtFixedRate(Runnable command, long initialDelay, long period, TimeUnit unit) {
-    timerExecutor.scheduleAtFixedRate(command, initialDelay, period, unit);
+    if (timerExecutor != null) {
+      timerExecutor.scheduleAtFixedRate(command, initialDelay, period, unit);
+    }
   }
 
   protected void schedule(Runnable command, long delay, TimeUnit unit) {
-    timerExecutor.schedule(command, delay, unit);
+    if (timerExecutor != null) {
+      timerExecutor.schedule(command, delay, unit);
+    }
   }
 }

@@ -92,8 +92,8 @@ public class UserRestService extends ModelRestService<User> {
   @GET
   @Path("/byusername/{username}")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getUserByUsername(@PathParam("username") String username, @QueryParam("createifnotexists") Boolean createifnotexists) {
-    User user = usersService.getUser(username, (createifnotexists != null && createifnotexists));
+  public Response getUserByUsername(@PathParam("username") String username) {
+    User user = usersService.getUser(username);
     return Responses.okOrEmpty(user);
   }
 }

@@ -1,26 +1,25 @@
 package nl.juraji.biliomi.io.api.twitch.helix.webhooks;
 
 import fi.iki.elonen.NanoHTTPD;
+import nl.juraji.biliomi.BiliomiContainer;
 import nl.juraji.biliomi.io.api.twitch.helix.webhooks.handlers.NotificationHandler;
 import nl.juraji.biliomi.io.api.twitch.helix.webhooks.model.WebhookNotification;
-import nl.juraji.biliomi.io.web.Url;
 import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.CoreSetting;
 import nl.juraji.biliomi.utility.events.EventBus;
-import nl.juraji.biliomi.utility.factories.concurrent.ThreadPools;
 import nl.juraji.biliomi.utility.types.Restartable;
 import nl.juraji.biliomi.utility.types.collections.TimedList;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -33,12 +32,11 @@ public class WebhookReceiver implements Restartable {
 
   private final Map<String, NotificationHandler> notificationHandlers = new HashMap<>();
   private NanoHTTPD httpServer;
-  private ExecutorService receiverExecutor;
   private TimedList<String> notificationIdHistory;
 
   @Inject
-  @CoreSetting("biliomi.twitch.webhooks.callbackPort")
-  private String webhookCallbackPort;
+  @CoreSetting("biliomi.twitch.webhookCallbackUrl")
+  private String webhookCallbackUrl;
 
   @Inject
   private Logger logger;
@@ -46,36 +44,22 @@ public class WebhookReceiver implements Restartable {
   @Inject
   private EventBus eventBus;
 
-  @PostConstruct
-  private void initWebhookReceiver() {
-    int serverPort = NumberConverter.asNumber(webhookCallbackPort).withDefault(30001).toInteger();
-
-    this.httpServer = new NanoHTTPD(serverPort) {
-      @Override
-      public Response serve(IHTTPSession session) {
-        String response = "";
-
-        String queryParameterString = session.getQueryParameterString();
-        if (StringUtils.isNotEmpty(queryParameterString)) {
-          Map<String, String> query = Url.unpackQueryString(queryParameterString, true);
-          if (query.containsKey("hub.challenge")) {
-            logger.debug("Hub challenge received for topic: " + query.get("hub.topic"));
-            response = query.get("hub.challenge");
-          }
-        } else {
-          receiverExecutor.submit(() -> handleSessionInput(session));
-        }
-
-        return newFixedLengthResponse(response);
-      }
-    };
-  }
-
   @Override
   public void start() {
+    int serverPort = 0;
+
     try {
+      URL url = new URL(webhookCallbackUrl);
+      serverPort = url.getPort();
+    } catch (MalformedURLException e) {
+      logger.error("Failed reading configured webhook callback url", e);
+      // If this fails shut down Biliomi
+      BiliomiContainer.getContainer().shutdownNow(1);
+    }
+
+    try {
+      this.httpServer = new WebhookReceiverServer(serverPort, this::handleSessionInput);
       this.notificationIdHistory = new TimedList<>("WebhookReceiverNotificationIdHistory");
-      this.receiverExecutor = ThreadPools.newExecutorService(8, "WebhookReceiverNotificationProcessor");
       this.httpServer.start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
       logger.info("Started HTTP server for Twitch webhook updates");
     } catch (IOException e) {
@@ -85,10 +69,9 @@ public class WebhookReceiver implements Restartable {
 
   @Override
   public void stop() {
-    this.httpServer.stop();
-    if (this.receiverExecutor != null) {
-      this.receiverExecutor.shutdownNow();
-      this.receiverExecutor = null;
+    if (this.httpServer != null) {
+      this.httpServer.stop();
+      this.httpServer = null;
     }
 
     if (this.notificationIdHistory != null) {

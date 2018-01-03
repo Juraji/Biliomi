@@ -151,8 +151,7 @@ public class SubscriberWatchUpdateService extends TimerService {
     twitchSubscriptions.stream()
         .filter(twitchSubscription -> !localSubscriptions.contains(twitchSubscription.getUser().getId()))
         .forEach(twitchSubscription -> eventBus.post(new TwitchSubscriberEvent(
-            twitchSubscription.getUser().getName(),
-            twitchSubscription.getUser().getId(),
+            usersService.getUserByTwitchId(twitchSubscription.getUser().getId()),
             new DateTime(twitchSubscription.getCreatedAt()),
             SubscriberPlanType.TIER1,
             false

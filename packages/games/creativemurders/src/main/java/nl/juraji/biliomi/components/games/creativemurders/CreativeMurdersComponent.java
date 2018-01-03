@@ -40,7 +40,7 @@ public class CreativeMurdersComponent extends Component {
 
       // If there's just one argument check if it's a user
       if (arguments.assertSize(1)) {
-        target = usersService.getUser(arguments.get(0), true);
+        target = usersService.getUser(arguments.get(0));
       }
 
       if (target != null) {
