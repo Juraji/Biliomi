@@ -1,4 +1,4 @@
-package nl.juraji.biliomi.rest.services.rest.info;
+package nl.juraji.biliomi.rest.services.rest.channel;
 
 import nl.juraji.biliomi.components.shared.ChatService;
 import nl.juraji.biliomi.components.system.channel.ChannelService;
@@ -9,8 +9,9 @@ import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchChannel;
 import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchStream;
 import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
-import nl.juraji.biliomi.model.core.VersionInfo;
+import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.internal.rest.ChannelInfo;
+import nl.juraji.biliomi.model.internal.rest.PaginatedResponse;
 import nl.juraji.biliomi.rest.config.Responses;
 import nl.juraji.biliomi.utility.types.Templater;
 
@@ -20,13 +21,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * Created by Juraji on 25-6-2017.
  * Biliomi v3
  */
-@Path("/info")
-public class ChannelInfoService {
+@Path("/channel")
+public class ChannelStatusService {
 
   @Inject
   private GameService gameService;
@@ -43,19 +45,8 @@ public class ChannelInfoService {
   @Inject
   private TemplateDao templateDao;
 
-  @Inject
-  private VersionInfo versionInfo;
-
   @GET
-  @Path("/version")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getVersionInfo() {
-    return Responses.ok(versionInfo);
-  }
-
-
-  @GET
-  @Path("/channel")
+  @Path("/status")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getChannelStatus() {
     TwitchStream stream = channelService.getStream();
@@ -82,7 +73,6 @@ public class ChannelInfoService {
       info.setLogoUri(channel.getLogo());
       info.setAffiliate(info.getSubscriberCount() > 0 || channel.isPartner());
       info.setPartner(channel.isPartner());
-      info.getViewers().addAll(chatService.getViewersAsUsers());
 
       if (stream != null) {
         info.setOnline(true);
@@ -91,5 +81,21 @@ public class ChannelInfoService {
     }
 
     return Responses.okOrEmpty(info);
+  }
+
+  @GET
+  @Path("/viewers")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response getChannelViewers() {
+    List<User> viewersAsUsers = chatService.getViewersAsUsers();
+    PaginatedResponse<User> response = null;
+
+    if (viewersAsUsers.isEmpty()) {
+      response = new PaginatedResponse<>();
+      response.setEntities(viewersAsUsers);
+      response.setTotalAvailable(viewersAsUsers.size());
+    }
+
+    return Responses.okOrEmpty(response);
   }
 }

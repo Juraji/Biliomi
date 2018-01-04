@@ -1,14 +1,11 @@
 package nl.juraji.biliomi.model.internal.rest;
 
 import nl.juraji.biliomi.model.core.Game;
-import nl.juraji.biliomi.model.core.User;
-import nl.juraji.biliomi.utility.factories.ModelUtils;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Set;
 
 /**
  * Created by Juraji on 26-6-2017.
@@ -50,9 +47,6 @@ public class ChannelInfo {
 
   @XmlElement(name = "SubscriberCount")
   private long subscriberCount;
-
-  @XmlElement(name = "Viewers")
-  private Set<User> viewers;
 
   public String getLogoUri() {
     return logoUri;
@@ -140,10 +134,5 @@ public class ChannelInfo {
 
   public void setSubscriberCount(long subscriberCount) {
     this.subscriberCount = subscriberCount;
-  }
-
-  public Set<User> getViewers() {
-    viewers = ModelUtils.initCollection(viewers);
-    return viewers;
   }
 }
