@@ -10,7 +10,7 @@ import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchStream;
 import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
-import nl.juraji.biliomi.model.internal.rest.ChannelInfo;
+import nl.juraji.biliomi.model.internal.rest.ChannelStatus;
 import nl.juraji.biliomi.model.internal.rest.PaginatedResponse;
 import nl.juraji.biliomi.rest.config.Responses;
 import nl.juraji.biliomi.utility.types.Templater;
@@ -52,7 +52,7 @@ public class ChannelStatusService {
     boolean streamOnline = channelService.isStreamOnline();
     TwitchStream stream = null;
     TwitchChannel channel;
-    ChannelInfo info = null;
+    ChannelStatus status = null;
 
     if (streamOnline) {
       stream = channelService.getStream();
@@ -62,27 +62,27 @@ public class ChannelStatusService {
     }
 
     if (channel != null) {
-      info = new ChannelInfo();
+      status = new ChannelStatus();
       Template statusTemplate = templateDao.getByKey(ChannelSettingsComponent.CHANNEL_TITLE_TEMPLATE_KEY);
       String statusWithoutTemplate = Templater.removeTemplate(channel.getStatus(), statusTemplate.getTemplate());
 
-      info.setChannelName(channel.getDisplayName());
-      info.setFollowerCount(channel.getFollowers());
-      info.setSubscriberCount(usersService.getSubscriberCount());
-      info.setGame(gameService.getByName(channel.getGame()));
-      info.setStatus(channel.getStatus());
-      info.setStatusWithoutTemplate(statusWithoutTemplate);
-      info.setLogoUri(channel.getLogo());
-      info.setAffiliate(info.getSubscriberCount() > 0 || channel.isPartner());
-      info.setPartner(channel.isPartner());
+      status.setChannelName(channel.getDisplayName());
+      status.setFollowerCount(channel.getFollowers());
+      status.setSubscriberCount(usersService.getSubscriberCount());
+      status.setGame(gameService.getByName(channel.getGame()));
+      status.setStatus(channel.getStatus());
+      status.setStatusWithoutTemplate(statusWithoutTemplate);
+      status.setLogoUri(channel.getLogo());
+      status.setAffiliate(status.getSubscriberCount() > 0 || channel.isPartner());
+      status.setPartner(channel.isPartner());
 
       if (stream != null) {
-        info.setOnline(true);
-        info.setPreviewUri(stream.getPreview().getLarge());
+        status.setOnline(true);
+        status.setPreviewUri(stream.getPreview().getLarge());
       }
     }
 
-    return Responses.okOrEmpty(info);
+    return Responses.okOrEmpty(status);
   }
 
   @GET

@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ChannelInfo {
+public class ChannelStatus {
 
   @XmlElement(name = "LogoUri")
   private String logoUri;
