@@ -4,6 +4,7 @@ import nl.juraji.biliomi.components.games.roulette.RouletteRecordService;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.RouletteRecord;
 import nl.juraji.biliomi.model.games.UserRecordStats;
+import nl.juraji.biliomi.model.internal.rest.PaginatedResponse;
 import nl.juraji.biliomi.rest.config.ModelRestService;
 import nl.juraji.biliomi.rest.config.Responses;
 
@@ -34,11 +35,7 @@ public class RouletteRecordRestService extends ModelRestService<RouletteRecord> 
     user.setId(id);
     UserRecordStats recordInfo = rouletteRecordService.getRecordInfo(user);
 
-    if (recordInfo == null) {
-      return Responses.noContent();
-    } else {
-      return Responses.ok(recordInfo);
-    }
+    return Responses.okOrEmpty(recordInfo);
   }
 
   @GET
@@ -48,7 +45,7 @@ public class RouletteRecordRestService extends ModelRestService<RouletteRecord> 
     User user = new User();
     user.setId(id);
     List<RouletteRecord> records = RouletteRecordDao.getRecords(user, 10);
-    return toPaginatedResponse(records);
+    return PaginatedResponse.create(records);
   }
 
   @Override

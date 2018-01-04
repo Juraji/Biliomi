@@ -5,6 +5,7 @@ import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.KillRecord;
 import nl.juraji.biliomi.model.games.KillRecordDao;
 import nl.juraji.biliomi.model.games.UserKDRRecordStats;
+import nl.juraji.biliomi.model.internal.rest.PaginatedResponse;
 import nl.juraji.biliomi.rest.config.ModelRestService;
 import nl.juraji.biliomi.rest.config.Responses;
 
@@ -35,11 +36,7 @@ public class KillRecordRestService extends ModelRestService<KillRecord> {
     user.setId(id);
     UserKDRRecordStats recordInfo = killRecordService.getKDR(user);
 
-    if (recordInfo == null) {
-      return Responses.noContent();
-    } else {
-      return Responses.ok(recordInfo);
-    }
+    return Responses.okOrEmpty(recordInfo);
   }
 
   @GET
@@ -50,7 +47,7 @@ public class KillRecordRestService extends ModelRestService<KillRecord> {
     user.setId(id);
     List<KillRecord> records = killRecordDao.getRecords(user, 10);
 
-    return toPaginatedResponse(records);
+    return PaginatedResponse.create(records);
   }
 
   @Override

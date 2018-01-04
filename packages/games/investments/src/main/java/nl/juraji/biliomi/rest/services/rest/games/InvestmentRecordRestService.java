@@ -5,6 +5,7 @@ import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.InvestmentRecord;
 import nl.juraji.biliomi.model.games.InvestmentRecordDao;
 import nl.juraji.biliomi.model.games.UserInvestRecordStats;
+import nl.juraji.biliomi.model.internal.rest.PaginatedResponse;
 import nl.juraji.biliomi.rest.config.ModelRestService;
 import nl.juraji.biliomi.rest.config.Responses;
 
@@ -49,7 +50,7 @@ public class InvestmentRecordRestService extends ModelRestService<InvestmentReco
     User user = new User();
     user.setId(id);
     List<InvestmentRecord> records = investmentRecordDao.getRecords(user, 10);
-    return toPaginatedResponse(records);
+    return PaginatedResponse.create(records);
   }
 
   @Override

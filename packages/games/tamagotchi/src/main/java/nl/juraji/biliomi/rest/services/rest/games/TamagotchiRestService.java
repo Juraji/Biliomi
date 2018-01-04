@@ -2,6 +2,7 @@ package nl.juraji.biliomi.rest.services.rest.games;
 
 import nl.juraji.biliomi.model.games.Tamagotchi;
 import nl.juraji.biliomi.model.games.TamagotchiDao;
+import nl.juraji.biliomi.model.internal.rest.PaginatedResponse;
 import nl.juraji.biliomi.rest.config.ModelRestService;
 
 import javax.inject.Inject;
@@ -27,7 +28,7 @@ public class TamagotchiRestService extends ModelRestService<Tamagotchi> {
   @Produces(MediaType.APPLICATION_JSON)
   public Response getDeceasedTamagotchis() {
     List<Tamagotchi> tamagotchis = tamagotchiDao.getDeceasedTamagotchis();
-    return toPaginatedResponse(tamagotchis);
+    return PaginatedResponse.create(tamagotchis);
   }
 
   @Override

@@ -3,6 +3,7 @@ package nl.juraji.biliomi.rest.services.rest.core;
 import nl.juraji.biliomi.components.system.users.UsersService;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.UserDao;
+import nl.juraji.biliomi.model.internal.rest.PaginatedResponse;
 import nl.juraji.biliomi.rest.config.ModelRestService;
 import nl.juraji.biliomi.rest.config.Responses;
 
@@ -78,7 +79,7 @@ public class UserRestService extends ModelRestService<User> {
   @Produces(MediaType.APPLICATION_JSON)
   public Response getLatestFollowers() {
     List<User> followers = userDao.getFollowers(20);
-    return toPaginatedResponse(followers);
+    return PaginatedResponse.create(followers);
   }
 
   @GET
@@ -86,7 +87,7 @@ public class UserRestService extends ModelRestService<User> {
   @Produces(MediaType.APPLICATION_JSON)
   public Response getLatestSubscribers() {
     List<User> subscribers = userDao.getSubscribers(20);
-    return toPaginatedResponse(subscribers);
+    return PaginatedResponse.create(subscribers);
   }
 
   @GET

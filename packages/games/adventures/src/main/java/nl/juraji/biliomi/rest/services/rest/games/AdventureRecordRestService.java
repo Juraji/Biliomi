@@ -5,6 +5,7 @@ import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.games.AdventureRecord;
 import nl.juraji.biliomi.model.games.AdventureRecordDao;
 import nl.juraji.biliomi.model.games.UserAdventureRecordStats;
+import nl.juraji.biliomi.model.internal.rest.PaginatedResponse;
 import nl.juraji.biliomi.rest.config.ModelRestService;
 import nl.juraji.biliomi.rest.config.Responses;
 
@@ -40,11 +41,7 @@ public class AdventureRecordRestService extends ModelRestService<AdventureRecord
     user.setId(id);
     UserAdventureRecordStats recordInfo = adventureRecordService.getRecordInfo(user);
 
-    if (recordInfo == null) {
-      return Responses.noContent();
-    } else {
-      return Responses.ok(recordInfo);
-    }
+    return Responses.okOrEmpty(recordInfo);
   }
 
   @GET
@@ -55,7 +52,7 @@ public class AdventureRecordRestService extends ModelRestService<AdventureRecord
     user.setId(id);
     List<AdventureRecord> records = adventureRecordDao.getRecords(user, 10);
 
-    return toPaginatedResponse(records);
+    return PaginatedResponse.create(records);
   }
 
   @Override
