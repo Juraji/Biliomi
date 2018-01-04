@@ -4,9 +4,11 @@ import fi.iki.elonen.NanoHTTPD;
 import nl.juraji.biliomi.BiliomiContainer;
 import nl.juraji.biliomi.io.api.twitch.helix.webhooks.handlers.NotificationHandler;
 import nl.juraji.biliomi.io.api.twitch.helix.webhooks.model.WebhookNotification;
+import nl.juraji.biliomi.io.web.Url;
 import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.CoreSetting;
 import nl.juraji.biliomi.utility.events.EventBus;
+import nl.juraji.biliomi.utility.factories.concurrent.ThreadPools;
 import nl.juraji.biliomi.utility.types.Restartable;
 import nl.juraji.biliomi.utility.types.collections.TimedList;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -32,6 +35,7 @@ public class WebhookReceiver implements Restartable {
 
   private final Map<String, NotificationHandler> notificationHandlers = new HashMap<>();
   private NanoHTTPD httpServer;
+  private ExecutorService receiverDataExecutor;
   private TimedList<String> notificationIdHistory;
 
   @Inject
@@ -58,8 +62,9 @@ public class WebhookReceiver implements Restartable {
     }
 
     try {
-      this.httpServer = new WebhookReceiverServer(serverPort, this::handleSessionInput);
+      this.receiverDataExecutor = ThreadPools.newExecutorService(4, "WebhookReceiverServer");
       this.notificationIdHistory = new TimedList<>("WebhookReceiverNotificationIdHistory");
+      this.httpServer = new Server(serverPort);
       this.httpServer.start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
       logger.info("Started HTTP server for Twitch webhook updates");
     } catch (IOException e) {
@@ -77,6 +82,11 @@ public class WebhookReceiver implements Restartable {
     if (this.notificationIdHistory != null) {
       this.notificationIdHistory.stop();
       this.notificationIdHistory = null;
+    }
+
+    if (this.receiverDataExecutor != null) {
+      this.receiverDataExecutor.shutdownNow();
+      this.receiverDataExecutor = null;
     }
   }
 
@@ -108,6 +118,38 @@ public class WebhookReceiver implements Restartable {
       } catch (IOException e) {
         logger.error("Failed reading input", e);
       }
+    }
+  }
+
+  private final class Server extends NanoHTTPD {
+
+    public Server(int port) {
+      super(port);
+    }
+
+    @Override
+    public Response serve(IHTTPSession session) {
+      String response = null;
+      String queryParameterString = session.getQueryParameterString();
+
+      if (StringUtils.isNotEmpty(queryParameterString)) {
+        Map<String, String> hubQuery = Url.unpackQueryString(queryParameterString, true);
+
+        String hubMode = hubQuery.get("hub.mode");
+        String hubTopic = Url.decode(hubQuery.get("hub.topic"));
+        if ("denied".equals(hubMode)) {
+          // A topic subscription was denied,
+          logger.error("Failed to subscribe to topic: {} ({})", hubTopic, hubQuery.get("hub.reason"));
+        } else if ("subscribe".equals(hubMode)) {
+          logger.info("Succesfully subscribed to topic: {}", hubTopic);
+          response = hubQuery.get("hub.challenge");
+        }
+      } else {
+        receiverDataExecutor.submit(() -> handleSessionInput(session));
+      }
+
+      // Always return a response
+      return newFixedLengthResponse(response);
     }
   }
 }

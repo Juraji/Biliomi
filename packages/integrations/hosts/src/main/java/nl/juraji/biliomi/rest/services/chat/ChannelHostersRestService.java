@@ -17,7 +17,7 @@ import java.util.List;
  * Created by Juraji on 2-1-2018.
  * Biliomi
  */
-@Path("/info/channel")
+@Path("/channel")
 public class ChannelHostersRestService {
 
   @Inject

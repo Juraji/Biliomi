@@ -2,13 +2,11 @@ package nl.juraji.biliomi.rest.services.chat;
 
 import nl.juraji.biliomi.model.chat.HostRecord;
 import nl.juraji.biliomi.model.chat.HostRecordDao;
-import nl.juraji.biliomi.model.core.Direction;
 import nl.juraji.biliomi.rest.config.ModelRestService;
 
 import javax.inject.Inject;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
 import java.util.List;
 
 /**
@@ -21,17 +19,9 @@ public class HostRecordRestService extends ModelRestService<HostRecord> {
   @Inject
   private HostRecordDao hostRecordDao;
 
-  @QueryParam("direction")
-  private Direction direction;
-
   @Override
   public List<HostRecord> getEntities() {
-
-    if (direction != null) {
-      return hostRecordDao.getListByDirection(direction);
-    } else {
-      return hostRecordDao.getList();
-    }
+    return hostRecordDao.getList();
   }
 
   @Override
