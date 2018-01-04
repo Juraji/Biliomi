@@ -4,6 +4,7 @@ import com.google.common.base.Splitter;
 import nl.juraji.biliomi.utility.types.MutableString;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -63,7 +64,7 @@ public final class Url {
    * Unpack the querystring from the given url
    * Returns an empty map if there is no querystring
    *
-   * @param url             The url to parse
+   * @param url               The url to parse
    * @param isPureQueryString Supply true if the url is just the query string or false for complete urls
    * @return A Map containing the key-value pairs
    */
@@ -130,6 +131,31 @@ public final class Url {
       return URLEncoder.encode(s, QUERY_ENCODING);
     } catch (UnsupportedEncodingException e) {
       throw new UnsupportedOperationException(e);
+    }
+  }
+
+  /**
+   * Decode an uri (component) with UTF-8 encoding
+   *
+   * @param uri      The uri to decode
+   * @return The decoded uri or null on failure
+   */
+  public static String decode(String uri) {
+    return decode(uri, "UTF-8");
+  }
+
+  /**
+   * Decode an uri (component)
+   *
+   * @param uri      The uri to decode
+   * @param encoding The encoding to use
+   * @return The decoded uri or null on failure
+   */
+  public static String decode(String uri, String encoding) {
+    try {
+      return URLDecoder.decode(uri, encoding);
+    } catch (UnsupportedEncodingException ignored) {
+      return null;
     }
   }
 }
