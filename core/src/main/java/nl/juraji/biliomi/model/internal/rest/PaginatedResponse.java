@@ -1,5 +1,8 @@
 package nl.juraji.biliomi.model.internal.rest;
 
+import nl.juraji.biliomi.rest.config.Responses;
+
+import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -34,5 +37,21 @@ public class PaginatedResponse<T> {
 
   public void setTotalAvailable(int totalAvailable) {
     this.totalAvailable = totalAvailable;
+  }
+
+  public static <T> Response create(List<T> list) {
+    return create(list, (list == null ? 0 : list.size()));
+  }
+
+  public static <T> Response create(List<T> list, int total) {
+    if (list != null && !list.isEmpty()) {
+      PaginatedResponse<T> response = new PaginatedResponse<>();
+      response.setEntities(list);
+      response.setTotalAvailable(total);
+
+      return Responses.ok(response);
+    } else {
+      return Responses.noContent();
+    }
   }
 }

@@ -9,7 +9,6 @@ import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchChannel;
 import nl.juraji.biliomi.io.api.twitch.v5.model.TwitchStream;
 import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
-import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.internal.rest.ChannelStatus;
 import nl.juraji.biliomi.model.internal.rest.PaginatedResponse;
 import nl.juraji.biliomi.rest.config.Responses;
@@ -21,7 +20,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 /**
  * Created by Juraji on 25-6-2017.
@@ -89,15 +87,6 @@ public class ChannelStatusService {
   @Path("/viewers")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getChannelViewers() {
-    List<User> viewersAsUsers = chatService.getViewersAsUsers();
-    PaginatedResponse<User> response = null;
-
-    if (viewersAsUsers.isEmpty()) {
-      response = new PaginatedResponse<>();
-      response.setEntities(viewersAsUsers);
-      response.setTotalAvailable(viewersAsUsers.size());
-    }
-
-    return Responses.okOrEmpty(response);
+    return PaginatedResponse.create(chatService.getViewersAsUsers());
   }
 }

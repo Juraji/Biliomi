@@ -69,7 +69,7 @@ public abstract class ModelRestService<T> {
       entities = new LimitQueryProcessor<T>().process(entities, queryParams);
     }
 
-    return toPaginatedResponse(entities, total);
+    return PaginatedResponse.create(entities, total);
   }
 
   /**
@@ -183,23 +183,5 @@ public abstract class ModelRestService<T> {
           Object property = PropertyUtils.getProperty(object, field.getName());
           return property == null || (String.class.isAssignableFrom(property.getClass()) && StringUtils.isEmpty((String) property));
         });
-  }
-
-  protected Response toPaginatedResponse(List<T> entities) {
-    return toPaginatedResponse(entities, entities.size());
-  }
-
-  protected Response toPaginatedResponse(List<T> entities, int totalAvailable) {
-
-    if (entities.isEmpty()) {
-      return Responses.noContent();
-    } else {
-      PaginatedResponse<T> response = new PaginatedResponse<>();
-
-      response.setEntities(entities);
-      response.setTotalAvailable(totalAvailable);
-
-      return Responses.ok(response);
-    }
   }
 }
