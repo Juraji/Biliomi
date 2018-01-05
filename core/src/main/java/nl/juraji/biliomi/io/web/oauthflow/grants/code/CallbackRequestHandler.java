@@ -24,12 +24,14 @@ public class CallbackRequestHandler implements Runnable {
 
   private final Socket socket;
   private final String accessTokenParamName;
+  private final CallbackEventListener eventListener;
+  private final CallbackResources resources;
 
-  private CallbackEventListener callbackEventListener;
-
-  public CallbackRequestHandler(Socket socket, String accessTokenParamName) {
+  public CallbackRequestHandler(Socket socket, String accessTokenParamName, CallbackEventListener eventListener, CallbackResources resources) {
     this.socket = socket;
     this.accessTokenParamName = accessTokenParamName;
+    this.eventListener = eventListener;
+    this.resources = resources;
   }
 
   @Override
@@ -59,20 +61,20 @@ public class CallbackRequestHandler implements Runnable {
         if (queryParams.size() == 0) {
           // There were no query params, the token most probably came via hash data
           // The redirect page rewrites this to query parameters then comes back here
-          sendFile(CallbackResources.getAuthHashRedirectPageFile(), CONTENT_TYPE_HTML, outputStream);
+          sendFile(resources.getAuthHashRedirectPageFile(), CONTENT_TYPE_HTML, outputStream);
         } else {
           updateCallbackEventListener(queryParams);
 
           if (queryParams.containsKey(accessTokenParamName)) {
             // Authorization was succesful
-            sendFile(CallbackResources.getAuthSuccessPageFile(), CONTENT_TYPE_HTML, outputStream);
+            sendFile(resources.getAuthSuccessPageFile(), CONTENT_TYPE_HTML, outputStream);
           } else {
             // Authorization failed
-            sendFile(CallbackResources.getAuthFailedPageFile(), CONTENT_TYPE_HTML, outputStream);
+            sendFile(resources.getAuthFailedPageFile(), CONTENT_TYPE_HTML, outputStream);
           }
         }
       } catch (IllegalStateException e) {
-        sendFile(CallbackResources.getAuthFailedPageFile(), CONTENT_TYPE_HTML, outputStream);
+        sendFile(resources.getAuthFailedPageFile(), CONTENT_TYPE_HTML, outputStream);
         throw e;
       }
     } catch (IOException | URISyntaxException e) {
@@ -80,19 +82,15 @@ public class CallbackRequestHandler implements Runnable {
     }
   }
 
-  public void setCallbackEventListener(CallbackEventListener callbackEventListener) {
-    this.callbackEventListener = callbackEventListener;
-  }
-
   private void updateCallbackEventListener(Map<String, String> queryParams) {
-    if (callbackEventListener != null) {
+    if (eventListener != null) {
       if (queryParams.containsKey(accessTokenParamName)) {
         String accessToken = queryParams.get(accessTokenParamName);
         String stateToken = queryParams.get("state");
-        callbackEventListener.onAccessTokenReceived(accessToken, stateToken);
+        eventListener.onAccessTokenReceived(accessToken, stateToken);
       } else if (queryParams.containsKey("error")) {
         String error = queryParams.getOrDefault("error", "Unknown Error");
-        callbackEventListener.onAuthenticationError(error);
+        eventListener.onAuthenticationError(error);
       }
     }
   }

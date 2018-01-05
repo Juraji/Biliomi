@@ -15,8 +15,7 @@ import java.util.concurrent.ExecutorService;
  */
 public class CallbackServer implements CallbackEventListener {
 
-  private final String redirectHost;
-  private final int redirectPort;
+  private final CallbackResources resources;
   private final String stateToken;
 
   private ServerSocket serverSocket;
@@ -24,10 +23,9 @@ public class CallbackServer implements CallbackEventListener {
   private String accessToken;
   private String authorizationError;
 
-  public CallbackServer(String stateToken) {
+  public CallbackServer(CallbackResources resources, String stateToken) {
     this.stateToken = stateToken;
-    redirectHost = CallbackResources.HOST;
-    redirectPort = CallbackResources.PORT;
+    this.resources = resources;
   }
 
   @Override
@@ -55,7 +53,7 @@ public class CallbackServer implements CallbackEventListener {
    * @throws IOException When an exception occurs reading/writing to/from a socket
    */
   public void awaitAuthorization(String accessTokenParamName) throws IOException {
-    serverSocket = new ServerSocket(redirectPort, 0, InetAddress.getByName(redirectHost));
+    serverSocket = new ServerSocket(resources.getCallbackPort(), 0, InetAddress.getByName(resources.getCallbackHost()));
     runCallbackServer(accessTokenParamName);
   }
 
@@ -83,13 +81,12 @@ public class CallbackServer implements CallbackEventListener {
    * @param accessTokenParamName The name of the code returned by the callback (code, access_token...)
    */
   private void runCallbackServer(String accessTokenParamName) throws IOException {
-    handlerExecutor = ThreadPools.newExecutorService(4, "OAuthFlowCallbackServer");
+    handlerExecutor = ThreadPools.newSingleThreadExecutor("OAuthFlowCallbackServer");
 
     while (true) {
       try {
         Socket socket = serverSocket.accept();
-        CallbackRequestHandler handler = new CallbackRequestHandler(socket, accessTokenParamName);
-        handler.setCallbackEventListener(this);
+        CallbackRequestHandler handler = new CallbackRequestHandler(socket, accessTokenParamName, this, resources);
 
         assert handlerExecutor != null;
         handlerExecutor.submit(handler);

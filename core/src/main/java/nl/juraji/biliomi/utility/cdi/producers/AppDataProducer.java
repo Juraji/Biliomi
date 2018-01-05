@@ -60,4 +60,11 @@ public final class AppDataProducer {
     String appDataValueAsString = getAppDataValueAsString(injectionPoint);
     return NumberConverter.asNumber(appDataValueAsString).toLong();
   }
+
+  @Produces
+  @AppData("PRODUCER")
+  public Integer getAppDataValueAsInteger(InjectionPoint injectionPoint) {
+    String appDataValueAsString = getAppDataValueAsString(injectionPoint);
+    return NumberConverter.asNumber(appDataValueAsString).toInteger();
+  }
 }

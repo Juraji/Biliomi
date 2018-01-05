@@ -197,7 +197,7 @@ public class FirstTimeInstallSetupTask implements SetupTask {
     console.println("Create an application for Biliomi on Twitch.");
     console.println("For security reasons Biliomi is not shipped with any OAuth application keys.");
     console.println("This is why you need to create an application on Twitch and supply the information here.");
-    console.println("Note: The oauth callback url will be: " + CallbackResources.REDIRECT_URI);
+    console.println("Note: The oauth callback url will be: " + CallbackResources.init().getRedirectUri());
     console.print("Hit [enter] to open up https://www.twitch.tv/kraken/oauth2/clients/new and use the callback uri stated above.");
     console.awaitInput();
     Desktop.getDesktop().browse(new URI("https://www.twitch.tv/kraken/oauth2/clients/new"));

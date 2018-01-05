@@ -41,7 +41,7 @@ public class StreamLabsOAuthDirector extends OAuthFlowDirector<StreamLabsOAuthSc
 
   @Override
   public boolean awaitAccessToken() throws IOException {
-    CallbackServer callback = new CallbackServer(getStateToken());
+    CallbackServer callback = createCallbackServer();
     callback.awaitAuthorization("code");
     if (callback.getAccessToken() == null) {
       authenticationError = callback.getAuthorizationError();

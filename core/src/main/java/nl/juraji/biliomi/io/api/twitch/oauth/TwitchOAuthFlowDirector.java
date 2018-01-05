@@ -32,7 +32,7 @@ public class TwitchOAuthFlowDirector extends OAuthFlowDirector<TwitchOAuthScope>
 
   @Override
   public boolean awaitAccessToken() throws IOException {
-    CallbackServer callback = new CallbackServer(getStateToken());
+    CallbackServer callback = createCallbackServer();
     callback.awaitAuthorization("access_token");
     accessToken = callback.getAccessToken();
     authenticationError = callback.getAuthorizationError();

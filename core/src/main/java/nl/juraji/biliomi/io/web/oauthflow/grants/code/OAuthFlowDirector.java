@@ -13,6 +13,7 @@ public abstract class OAuthFlowDirector<E> {
 
   private final String consumerKey;
   private final String stateToken;
+  private final CallbackResources resources;
 
   protected String accessToken;
   protected String refreshToken;
@@ -26,6 +27,7 @@ public abstract class OAuthFlowDirector<E> {
 
     this.consumerKey = consumerKey;
     this.stateToken = new TokenGenerator(10, true).generate();
+    this.resources = CallbackResources.init();
   }
 
   protected String getConsumerKey() {
@@ -37,7 +39,11 @@ public abstract class OAuthFlowDirector<E> {
   }
 
   protected String getRedirectUri() {
-    return CallbackResources.REDIRECT_URI;
+    return resources.getRedirectUri();
+  }
+
+  protected CallbackServer createCallbackServer() {
+    return new CallbackServer(resources, stateToken);
   }
 
   public String getAccessToken() {
