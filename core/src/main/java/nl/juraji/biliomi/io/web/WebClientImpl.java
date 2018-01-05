@@ -5,7 +5,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.net.MediaType;
 import nl.juraji.biliomi.model.core.VersionInfo;
 import nl.juraji.biliomi.utility.calculate.ObjectGraphs;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
+import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppData;
 import nl.juraji.biliomi.utility.factories.marshalling.JacksonMarshaller;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.client.HttpClient;
@@ -46,7 +46,7 @@ public class WebClientImpl implements WebClient {
   private VersionInfo versionInfo;
 
   @Inject
-  @AppDataValue("webclient.cache.duration")
+  @AppData("webclient.cache.duration")
   private Long cacheDuration;
 
   @PostConstruct

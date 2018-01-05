@@ -1,6 +1,6 @@
 package nl.juraji.biliomi.rest;
 
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
+import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppData;
 import nl.juraji.biliomi.utility.types.Restartable;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -27,7 +27,7 @@ public class RestServerController implements Restartable {
   private Logger logger;
 
   @Inject
-  @AppDataValue("rest.api.uris.base")
+  @AppData("rest.api.uris.base")
   private String apiBaseUri;
 
   private HttpServer server;

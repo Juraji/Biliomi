@@ -1,7 +1,7 @@
 package nl.juraji.biliomi.utility.cdi.producers;
 
 import nl.juraji.biliomi.model.core.VersionInfo;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
+import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppData;
 import org.joda.time.DateTime;
 
 import javax.enterprise.inject.Produces;
@@ -14,15 +14,15 @@ import javax.inject.Inject;
 public final class VersionInfoProducer {
 
   @Inject
-  @AppDataValue("biliomi.build.version")
+  @AppData("biliomi.build.version")
   private String appVersion;
 
   @Inject
-  @AppDataValue("webclient.useragent")
+  @AppData("webclient.useragent")
   private String userAgent;
 
   @Inject
-  @AppDataValue("biliomi.build.timestamp")
+  @AppData("biliomi.build.timestamp")
   private String buildTimestamp;
 
   @Produces

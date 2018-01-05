@@ -8,7 +8,7 @@ import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.internal.rest.auth.TokenType;
 import nl.juraji.biliomi.model.internal.rest.auth.TokenUserType;
 import nl.juraji.biliomi.utility.calculate.EnumUtils;
-import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppDataValue;
+import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppData;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.ChannelName;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -34,15 +34,15 @@ public class JWTGenerator {
   private String channelName;
 
   @Inject
-  @AppDataValue("rest.security.token.auth.expiresaftermillis")
+  @AppData("rest.security.token.auth.expiresaftermillis")
   private Long authTokenExpiry;
 
   @Inject
-  @AppDataValue("rest.security.token.refresh.expiresaftermillis")
+  @AppData("rest.security.token.refresh.expiresaftermillis")
   private Long refreshTokenExpiry;
 
   @Inject
-  @AppDataValue("rest.security.token.auth.allowedskewseconds")
+  @AppData("rest.security.token.auth.allowedskewseconds")
   private Long allowedSkewSeconds;
 
   private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
