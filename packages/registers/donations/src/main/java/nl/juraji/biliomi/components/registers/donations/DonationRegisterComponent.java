@@ -1,15 +1,16 @@
 package nl.juraji.biliomi.components.registers.donations;
 
 import nl.juraji.biliomi.components.shared.TemplateSetup;
+import nl.juraji.biliomi.model.core.Template;
 import nl.juraji.biliomi.model.core.TemplateDao;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.registers.Donation;
-import nl.juraji.biliomi.utility.calculate.MathUtils;
 import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.NormalComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
+import nl.juraji.biliomi.utility.types.Templater;
 import nl.juraji.biliomi.utility.types.components.Component;
 
 import javax.enterprise.inject.Default;
@@ -70,13 +71,10 @@ public class DonationRegisterComponent extends Component {
     Donation donation = donationsService.registerDonation(donator, donationString);
     long count = donationsService.getCurrentDonationCount(donator);
 
-    chat.say(i18n.get("ChatCommand.donations.add.added")
+    Template template = templateDao.getByKey(DonationRegisterConstants.MANUAL_DONATION_NOTICE);
+    chat.say(Templater.template(template.getTemplate())
         .add("username", donator::getNameAndTitle)
         .add("donation", donation::getDonation));
-
-    chat.say(i18n.get("ChatCommand.donations.add.added.donationCount")
-        .add("ordinalcount", MathUtils.getOrdinal(count))
-        .add("username", donator::getNameAndTitle));
     return true;
   }
 
