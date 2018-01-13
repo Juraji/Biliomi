@@ -64,8 +64,12 @@ public class ChatService {
 
   @Subscribe
   public void onIrcUserJoinedEvent(IrcUserJoinedEvent event) {
-    logger.info("[JOIN] {}", event.getUsername());
-    viewers.add(event.getUsername());
+    if (!viewers.contains(event.getUsername())) {
+      // Since the part event is not always emitted we need to check
+      // if we don't already know this user is present
+      logger.info("[JOIN] {}", event.getUsername());
+      viewers.add(event.getUsername());
+    }
   }
 
   @Subscribe

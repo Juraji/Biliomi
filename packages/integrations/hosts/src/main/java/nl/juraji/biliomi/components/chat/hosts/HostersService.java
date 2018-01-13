@@ -3,6 +3,7 @@ package nl.juraji.biliomi.components.chat.hosts;
 import com.google.common.eventbus.Subscribe;
 import nl.juraji.biliomi.components.system.users.UsersService;
 import nl.juraji.biliomi.model.core.User;
+import nl.juraji.biliomi.model.internal.events.twitch.webhook.ChannelStateEvent;
 import nl.juraji.biliomi.model.internal.twitch.hosting.TwitchHostInEvent;
 import nl.juraji.biliomi.model.internal.twitch.hosting.TwitchUnhostEvent;
 import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
@@ -41,6 +42,15 @@ public class HostersService {
     String channelName = event.getChannelName();
     if (hosters.contains(channelName)) {
       hosters.remove(channelName);
+    }
+  }
+
+  @Subscribe
+  public void onChannelStateEvent(ChannelStateEvent event) {
+    if (!event.isOnline()) {
+      // Clear the hosters list when the channel went offline,
+      // since it will no longer get updated by the watch service
+      this.hosters.clear();
     }
   }
 
