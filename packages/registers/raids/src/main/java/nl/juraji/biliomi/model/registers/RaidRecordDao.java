@@ -7,7 +7,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import javax.enterprise.inject.Default;
-import java.util.List;
 
 /**
  * Created by Juraji on 24-5-2017.
@@ -29,12 +28,5 @@ public class RaidRecordDao extends JpaDao<RaidRecord> {
         ))
         .addOrder(Order.desc("id"))
         .getCount();
-  }
-
-  public List<RaidRecord> getListByDirection(Direction direction) {
-    return criteria()
-        .add(Restrictions.eq("direction", direction))
-        .addOrder(Order.desc("id"))
-        .getList();
   }
 }

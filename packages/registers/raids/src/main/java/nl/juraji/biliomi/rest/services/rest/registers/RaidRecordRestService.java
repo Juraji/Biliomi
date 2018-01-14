@@ -1,6 +1,5 @@
 package nl.juraji.biliomi.rest.services.rest.registers;
 
-import nl.juraji.biliomi.model.core.Direction;
 import nl.juraji.biliomi.model.registers.RaidRecord;
 import nl.juraji.biliomi.model.registers.RaidRecordDao;
 import nl.juraji.biliomi.rest.config.ModelRestService;
@@ -8,7 +7,6 @@ import nl.juraji.biliomi.rest.config.ModelRestService;
 import javax.inject.Inject;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
 import java.util.List;
 
 /**
@@ -21,16 +19,9 @@ public class RaidRecordRestService extends ModelRestService<RaidRecord> {
   @Inject
   private RaidRecordDao raidRecordDao;
 
-  @QueryParam("direction")
-  private Direction direction;
-
   @Override
   public List<RaidRecord> getEntities() {
-    if (direction != null) {
-      return raidRecordDao.getListByDirection(direction);
-    } else {
-      return raidRecordDao.getList();
-    }
+    return raidRecordDao.getList();
   }
 
   @Override
@@ -53,7 +44,7 @@ public class RaidRecordRestService extends ModelRestService<RaidRecord> {
   public boolean deleteEntity(long id) {
     RaidRecord raidRecord = raidRecordDao.get(id);
 
-    if (raidRecord==null) {
+    if (raidRecord == null) {
       return false;
     }
 
