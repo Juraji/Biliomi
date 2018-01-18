@@ -82,6 +82,7 @@ public final class Url {
       }
 
       if (query != null) {
+        query = decode(query);
         return Splitter
             .on(QUERY_PAIR_SEPARATOR)
             .trimResults()
