@@ -86,7 +86,7 @@ public class CallbackRequestHandler implements Runnable {
     if (eventListener != null) {
       if (queryParams.containsKey(accessTokenParamName)) {
         String accessToken = queryParams.get(accessTokenParamName);
-        String stateToken = queryParams.get("state");
+        String stateToken = Url.decode(queryParams.get("state"));
         eventListener.onAccessTokenReceived(accessToken, stateToken);
       } else if (queryParams.containsKey("error")) {
         String error = queryParams.getOrDefault("error", "Unknown Error");

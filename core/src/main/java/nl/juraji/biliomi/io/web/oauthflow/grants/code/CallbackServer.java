@@ -30,14 +30,13 @@ public class CallbackServer implements CallbackEventListener {
 
   @Override
   public void onAccessTokenReceived(String accessToken, String stateToken) {
-    stopCallbackServer();
-
     if (!this.stateToken.equals(stateToken)) {
       // This is bad, throw a Runtime error so Biliomi shuts down and no more data is sent
       throw new IllegalStateException("Invalid OAuth state token, this might indicate a CSRF attack. Please contact Twitch about this.");
     }
 
     this.accessToken = accessToken;
+    stopCallbackServer();
   }
 
   @Override

@@ -55,11 +55,11 @@ public class CallbackResources {
   }
 
   public URL getAuthHashRedirectPageFile() {
-    return CallbackResources.class.getResource(authSuccessPageResourceName);
+    return CallbackResources.class.getResource(hashRedirectPageResourceName);
   }
 
   public URL getAuthSuccessPageFile() {
-    return CallbackResources.class.getResource(authFailedPageResourceName);
+    return CallbackResources.class.getResource(authSuccessPageResourceName);
   }
 
   public URL getAuthFailedPageFile() {
