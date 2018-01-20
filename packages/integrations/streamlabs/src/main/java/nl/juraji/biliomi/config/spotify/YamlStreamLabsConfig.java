@@ -1,10 +1,10 @@
-package nl.juraji.biliomi.config.streamlabs;
+package nl.juraji.biliomi.config.spotify;
 
 /**
  * Created by Juraji on 22-10-2017.
  * Biliomi
  */
-public class YamlSpotifyConfig {
+public class YamlStreamLabsConfig {
   private String consumerKey;
   private String consumerSecret;
 

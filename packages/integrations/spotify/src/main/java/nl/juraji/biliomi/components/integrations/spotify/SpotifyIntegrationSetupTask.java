@@ -6,7 +6,7 @@ import nl.juraji.biliomi.components.integrations.spotify.api.oauth.SpotifyOAuthF
 import nl.juraji.biliomi.components.integrations.spotify.api.oauth.SpotifyOAuthScope;
 import nl.juraji.biliomi.components.integrations.spotify.api.v1.SpotifyApi;
 import nl.juraji.biliomi.components.integrations.spotify.api.v1.model.user.SpotifyUser;
-import nl.juraji.biliomi.config.streamlabs.SpotifyConfigService;
+import nl.juraji.biliomi.config.spotify.SpotifyConfigService;
 import nl.juraji.biliomi.io.console.ConsoleApi;
 import nl.juraji.biliomi.io.web.Response;
 import nl.juraji.biliomi.io.web.WebClient;

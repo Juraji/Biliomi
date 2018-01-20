@@ -3,6 +3,8 @@ package nl.juraji.biliomi.rest.services;
 import nl.juraji.biliomi.components.integrations.spotify.api.v1.SpotifyApi;
 import nl.juraji.biliomi.components.integrations.spotify.api.v1.model.playlist.SpotifyPlaylist;
 import nl.juraji.biliomi.io.web.Response;
+import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
+import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
 import nl.juraji.biliomi.model.integrations.SpotifySettings;
 import nl.juraji.biliomi.rest.config.SettingsModelRestService;
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +21,9 @@ import javax.ws.rs.Path;
 public class SpotifySettingsRestService extends SettingsModelRestService<SpotifySettings> {
 
   @Inject
+  private AuthTokenDao authTokenDao;
+
+  @Inject
   private Logger logger;
 
   @Inject
@@ -26,7 +31,12 @@ public class SpotifySettingsRestService extends SettingsModelRestService<Spotify
 
   @Override
   public SpotifySettings getEntity() {
-    return settingsService.getSettings(SpotifySettings.class);
+    SpotifySettings settings = settingsService.getSettings(SpotifySettings.class);
+
+    // Set integration enabled process variable
+    settings.set_integrationEnabled(authTokenDao.isTokenPresent(TokenGroup.INTEGRATIONS, "spotify"));
+
+    return settings;
   }
 
   @Override

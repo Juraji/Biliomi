@@ -2,6 +2,8 @@ package nl.juraji.biliomi.rest.services;
 
 import nl.juraji.biliomi.components.integrations.twitter.TweetTrackerService;
 import nl.juraji.biliomi.components.system.settings.SettingsService;
+import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
+import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
 import nl.juraji.biliomi.model.integrations.TwitterSettings;
 import nl.juraji.biliomi.rest.config.SettingsModelRestService;
 
@@ -17,6 +19,9 @@ import java.util.Set;
 public class TwitterSettingsRestService extends SettingsModelRestService<TwitterSettings> {
 
   @Inject
+  private AuthTokenDao authTokenDao;
+
+  @Inject
   private SettingsService settingsService;
 
   @Inject
@@ -24,7 +29,12 @@ public class TwitterSettingsRestService extends SettingsModelRestService<Twitter
 
   @Override
   public TwitterSettings getEntity() {
-    return settingsService.getSettings(TwitterSettings.class);
+    TwitterSettings settings = settingsService.getSettings(TwitterSettings.class);
+
+    // Set integration enabled process variable
+    settings.set_integrationEnabled(authTokenDao.isTokenPresent(TokenGroup.INTEGRATIONS, "twitter"));
+
+    return settings;
   }
 
   @Override

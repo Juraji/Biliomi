@@ -25,9 +25,21 @@ public class TwitterSettings extends Settings {
   @CollectionTable(name = "TwitterSettingsTrackedKeywords", joinColumns = @JoinColumn(name = "settings_type"))
   private Set<String> trackedKeywords;
 
+  @Transient
+  @XmlElement(name = "_IntegrationEnabled")
+  private boolean _integrationEnabled = false;
+
   public Set<String> getTrackedKeywords() {
     trackedKeywords = ModelUtils.initCollection(trackedKeywords);
     return trackedKeywords;
+  }
+
+  public boolean is_integrationEnabled() {
+    return _integrationEnabled;
+  }
+
+  public void set_integrationEnabled(boolean _integrationEnabled) {
+    this._integrationEnabled = _integrationEnabled;
   }
 
   @Override

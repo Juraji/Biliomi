@@ -4,7 +4,7 @@ import nl.juraji.biliomi.boot.SetupTask;
 import nl.juraji.biliomi.boot.SetupTaskPriority;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.oauth.StreamLabsOAuthDirector;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.oauth.StreamLabsOAuthScope;
-import nl.juraji.biliomi.config.streamlabs.StreamLabsConfigService;
+import nl.juraji.biliomi.config.spotify.StreamLabsConfigService;
 import nl.juraji.biliomi.io.console.ConsoleApi;
 import nl.juraji.biliomi.io.web.WebClient;
 import nl.juraji.biliomi.model.core.security.tokens.AuthToken;

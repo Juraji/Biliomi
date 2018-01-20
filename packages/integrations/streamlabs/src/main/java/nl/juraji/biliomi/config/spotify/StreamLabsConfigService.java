@@ -1,4 +1,4 @@
-package nl.juraji.biliomi.config.streamlabs;
+package nl.juraji.biliomi.config.spotify;
 
 import nl.juraji.biliomi.config.ConfigService;
 
