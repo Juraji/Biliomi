@@ -38,4 +38,13 @@ public class AuthTokenDao extends JpaDao<AuthToken> {
 
     return tokenEnt;
   }
+
+  public boolean isTokenPresent(TokenGroup tokenGroup, String name) {
+    return criteria()
+        .add(Restrictions.and(
+            Restrictions.eq("tokenGroup", tokenGroup),
+            Restrictions.eq("name", name)
+        ))
+        .getCount() > 0;
+  }
 }
