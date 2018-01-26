@@ -81,10 +81,10 @@
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/resources</outputDirectory>
+              <outputDirectory>${project.build.directory}</outputDirectory>
               <resources>
                 <resource>
-                  <directory>src/assembly/resources</directory>
+                  <directory>src/assembly</directory>
                   <filtering>true</filtering>
                 </resource>
               </resources>
