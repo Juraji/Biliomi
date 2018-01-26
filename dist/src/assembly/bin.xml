@@ -39,11 +39,14 @@
         <moduleSet>
             <useAllReactorProjects>true</useAllReactorProjects>
             <sources>
-                <outputDirectoryMapping>./</outputDirectoryMapping>
+                <outputDirectoryMapping>extras</outputDirectoryMapping>
                 <excludeSubModuleDirectories>false</excludeSubModuleDirectories>
                 <fileSets>
                     <fileSet>
                         <directory>/target/extras</directory>
+                        <excludes>
+                            <exclude>.*</exclude>
+                        </excludes>
                     </fileSet>
                 </fileSets>
             </sources>
@@ -64,9 +67,8 @@
         </fileSet>
         <fileSet>
             <directory>${project.build.directory}</directory>
-            <outputDirectory>./</outputDirectory>
+            <outputDirectory>extras</outputDirectory>
             <includes>
-                <include>extras/**/*</include>
                 <include>Biliomi.ts</include>
             </includes>
         </fileSet>
