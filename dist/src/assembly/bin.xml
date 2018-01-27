@@ -45,7 +45,8 @@
                     <fileSet>
                         <directory>/target/extras</directory>
                         <excludes>
-                            <exclude>.*</exclude>
+                            <exclude>**/.*</exclude>
+                            <exclude>**/.*/</exclude>
                         </excludes>
                     </fileSet>
                 </fileSets>
