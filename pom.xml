@@ -1,145 +1,146 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>nl.juraji</groupId>
-  <artifactId>biliomi</artifactId>
-  <version>3.18.0</version>
-  <packaging>pom</packaging>
+    <groupId>nl.juraji</groupId>
+    <artifactId>biliomi</artifactId>
+    <version>3.18.0</version>
+    <packaging>pom</packaging>
 
-  <name>Biliomi</name>
-  <url>https://juraji.nl</url>
+    <name>Biliomi</name>
+    <url>https://juraji.nl</url>
 
-  <modules>
-    <module>core</module>
-    <module>dist</module>
-    <module>packages/integrations/auto-updates</module>
-    <module>packages/integrations/spotify</module>
-    <module>packages/integrations/steam</module>
-    <module>packages/integrations/twitter</module>
-    <module>packages/integrations/streamlabs</module>
-    <module>packages/chat/announcements</module>
-    <module>packages/chat/chatmoderator</module>
-    <module>packages/chat/pmresponses</module>
-    <module>packages/chat/quotes</module>
-    <module>packages/chat/raffles</module>
-    <module>packages/chat/subscribers</module>
-    <module>packages/chat/usergreetings</module>
-    <module>packages/registers/donations</module>
-    <module>packages/registers/raids</module>
-    <module>packages/games/tamagotchi</module>
-    <module>packages/games/adventures</module>
-    <module>packages/games/8ball</module>
-    <module>packages/games/investments</module>
-    <module>packages/games/creativemurders</module>
-    <module>packages/games/roulette</module>
-    <module>packages/games/slotmachine</module>
-    <module>packages/integrations/hosts</module>
-    <module>packages/games/achievements</module>
-  </modules>
+    <modules>
+        <module>core</module>
+        <module>dist</module>
+        <module>packages/chat/announcements</module>
+        <module>packages/chat/chatmoderator</module>
+        <module>packages/chat/pmresponses</module>
+        <module>packages/chat/quotes</module>
+        <module>packages/chat/raffles</module>
+        <module>packages/chat/subscribers</module>
+        <module>packages/chat/usergreetings</module>
+        <module>packages/games/8ball</module>
+        <module>packages/games/achievements</module>
+        <module>packages/games/adventures</module>
+        <module>packages/games/creativemurders</module>
+        <module>packages/games/investments</module>
+        <module>packages/games/roulette</module>
+        <module>packages/games/slotmachine</module>
+        <module>packages/games/tamagotchi</module>
+        <module>packages/integrations/auto-updates</module>
+        <module>packages/integrations/hosts</module>
+        <module>packages/integrations/panel-server</module>
+        <module>packages/integrations/spotify</module>
+        <module>packages/integrations/steam</module>
+        <module>packages/integrations/streamlabs</module>
+        <module>packages/integrations/twitter</module>
+        <module>packages/registers/donations</module>
+        <module>packages/registers/raids</module>
+    </modules>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.build.timestamp>${maven.build.timestamp}</project.build.timestamp>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ssZ</maven.build.timestamp.format>
-  </properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.timestamp>${maven.build.timestamp}</project.build.timestamp>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ssZ</maven.build.timestamp.format>
+    </properties>
 
-  <build>
-    <!-- Configure resource filtering -->
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-      </resource>
-    </resources>
+    <build>
+        <!-- Configure resource filtering -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
 
-    <plugins>
+        <plugins>
 
-      <!-- Configure the compiler to use Java 8 -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.5.1</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
+            <!-- Configure the compiler to use Java 8 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
 
-      <!-- Copy Resources -->
-      <!-- Most modules need this, so it's done for all -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>2.6</version>
-        <executions>
-          <execution>
-            <id>copy-resources</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>src/assembly</directory>
-                  <filtering>true</filtering>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+            <!-- Copy Resources -->
+            <!-- Most modules need this, so it's done for all -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/assembly</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
-  <dependencies>
+    <dependencies>
 
-    <!-- TEST DEPENDENCIES -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
-    </dependency>
+        <!-- TEST DEPENDENCIES -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
 
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>1.10.19</version>
-      <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>
 
-    <dependency>
-      <groupId>org.powermock</groupId>
-      <artifactId>powermock-api-mockito</artifactId>
-      <version>1.6.6</version>
-      <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>1.6.6</version>
+            <scope>test</scope>
+        </dependency>
 
-    <dependency>
-      <groupId>org.powermock</groupId>
-      <artifactId>powermock-module-junit4</artifactId>
-      <version>1.6.6</version>
-      <scope>test</scope>
-    </dependency>
-    <!-- END TEST DEPENDENCIES -->
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>1.6.6</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- END TEST DEPENDENCIES -->
 
-    <!-- Logging -->
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-      <version>2.9.0</version>
-    </dependency>
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.9.0</version>
+        </dependency>
 
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-jul</artifactId>
-      <version>2.9.0</version>
-    </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-jul</artifactId>
+            <version>2.9.0</version>
+        </dependency>
 
-    <!-- END RUNTIME DEPENDENCIES -->
-  </dependencies>
+        <!-- END RUNTIME DEPENDENCIES -->
+    </dependencies>
 </project>

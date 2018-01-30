@@ -239,5 +239,11 @@
       <artifactId>biliomi-games-achievements</artifactId>
       <version>${project.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>biliomi-integration-panel-server</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

@@ -1,0 +1,17 @@
+# Biliomi has an internal webserver specialized for the panel (https://github.com/Juraji/Biliomi-ui)
+# If you would want to use the internal webserver for the panel simply put the panel sources in the "/panel" directory,
+# in the installation root and set "enablePanelServer" to "true" (without quotes).
+
+
+# Enable or disable the webserver for Biliomi's panel
+enablePanelServer: false
+
+# Advanced settings
+# You should only change this if you now what you're ding or you're a serious google guru.
+# CORS is on by default and will only allow connections locally. If you change the host or the port, change the "corsAllowedOrigin"
+# accordingly. The webserver will fail to serve content to origins other than this value.
+# Note you can add comma separated origins or use "*" to allow any origin.
+serverHost: "localhost"
+serverPort: 8000
+serverRoot: null
+corsAllowedOrigin: "http://localhost:8000"
