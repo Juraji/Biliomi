@@ -24,9 +24,7 @@ public class PanelServerComponent extends Component {
 
   @Override
   public void init() {
-    if (serverService.isPanelSourcePresent()) {
-      serverService.start();
-    }
+    serverService.start();
   }
 
   @PreDestroy
