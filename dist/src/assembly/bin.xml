@@ -59,7 +59,7 @@
             <directory>${project.build.directory}</directory>
             <outputDirectory>${project.parent.name}</outputDirectory>
             <includes>
-                <include>biliomi-*.jar</include>
+                <include>biliomi.jar</include>
                 <include>start-biliomi.*</include>
                 <include>i18n/**/*</include>
                 <include>default-config/**/*</include>
@@ -74,7 +74,7 @@
             </includes>
         </fileSet>
         <fileSet>
-            <directory>${project.basedir}</directory>
+            <directory>${project.basedir}/../</directory>
             <outputDirectory>./</outputDirectory>
             <includes>
                 <include>*.md</include>

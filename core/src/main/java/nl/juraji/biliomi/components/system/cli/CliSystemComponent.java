@@ -1,6 +1,8 @@
 package nl.juraji.biliomi.components.system.cli;
 
 import nl.juraji.biliomi.BiliomiContainer;
+import nl.juraji.biliomi.components.shared.TimeFormatter;
+import nl.juraji.biliomi.model.core.VersionInfo;
 import nl.juraji.biliomi.model.internal.events.bot.ConsoleInputEvent;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CliCommandRoute;
@@ -13,6 +15,7 @@ import nl.juraji.biliomi.utility.types.collections.MultivaluedHashMap;
 import nl.juraji.biliomi.utility.types.components.Component;
 
 import javax.enterprise.inject.Default;
+import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -32,6 +35,9 @@ public class CliSystemComponent extends Component {
   public boolean helpCommand(ConsoleInputEvent event) {
     MutableString help = new MutableString();
     MultivaluedHashMap<String, CliCommandRoute> commandDescriptionsMap = cmdCommandRegistry.getCommandDescriptionsMap();
+
+    // Run the version command
+    versionCommand(event);
 
     if (event.isLegacyMode()) {
       help.appendNewLine()
@@ -65,6 +71,16 @@ public class CliSystemComponent extends Component {
         .append("Consult the docs on the console for more information").appendNewLine();
 
     logger.info(help.toString());
+    return true;
+  }
+
+  @CliCommandRoute(command = "version", description = "Print current version of Biliomi")
+  public boolean versionCommand(ConsoleInputEvent event) {
+    CDI<Object> cdi = CDI.current();
+    VersionInfo versionInfo = cdi.select(VersionInfo.class).get();
+    TimeFormatter timeFormatter = cdi.select(TimeFormatter.class).get();
+
+    logger.info("You are running Biliomi " + versionInfo.getVersion() + ", built on " + timeFormatter.fullDateTime(versionInfo.getBuildDate()));
     return true;
   }
 
