@@ -4,7 +4,6 @@ import nl.juraji.biliomi.io.web.Url;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
@@ -71,7 +70,7 @@ public class CallbackRequestHandler implements Runnable {
         sendFile(resources.getAuthFailedPageFilePath(), outputStream);
         throw e;
       }
-    } catch (IOException | URISyntaxException e) {
+    } catch (IOException e) {
       Logger.getLogger(getClass().getName()).log(Level.SEVERE, "An error occurred during communication", e);
     }
   }
@@ -89,7 +88,7 @@ public class CallbackRequestHandler implements Runnable {
     }
   }
 
-  private void sendFile(String fileResourcePath, DataOutputStream os) throws IOException, URISyntaxException {
+  private void sendFile(String fileResourcePath, DataOutputStream os) throws IOException {
     try (InputStream resourceStream = CallbackRequestHandler.class.getResourceAsStream(fileResourcePath)) {
       os.writeBytes("HTTP/1.1 200 OK\r\n");
       os.writeBytes("Content-Type: text/html\r\n");
