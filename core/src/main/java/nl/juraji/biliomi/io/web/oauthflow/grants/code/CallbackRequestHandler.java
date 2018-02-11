@@ -1,13 +1,10 @@
 package nl.juraji.biliomi.io.web.oauthflow.grants.code;
 
 import nl.juraji.biliomi.io.web.Url;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
@@ -18,9 +15,6 @@ import java.util.logging.Logger;
  * Biliomi v3
  */
 public class CallbackRequestHandler implements Runnable {
-
-  private static final String HTTP_EOL = "\r\n";
-  private static final String CONTENT_TYPE_HTML = "text/html";
 
   private final Socket socket;
   private final String accessTokenParamName;
@@ -61,20 +55,20 @@ public class CallbackRequestHandler implements Runnable {
         if (queryParams.size() == 0) {
           // There were no query params, the token most probably came via hash data
           // The redirect page rewrites this to query parameters then comes back here
-          sendFile(resources.getAuthHashRedirectPageFile(), CONTENT_TYPE_HTML, outputStream);
+          sendFile(resources.getAuthHashRedirectPageFilePath(), outputStream);
         } else {
           updateCallbackEventListener(queryParams);
 
           if (queryParams.containsKey(accessTokenParamName)) {
             // Authorization was succesful
-            sendFile(resources.getAuthSuccessPageFile(), CONTENT_TYPE_HTML, outputStream);
+            sendFile(resources.getAuthSuccessPageFilePath(), outputStream);
           } else {
             // Authorization failed
-            sendFile(resources.getAuthFailedPageFile(), CONTENT_TYPE_HTML, outputStream);
+            sendFile(resources.getAuthFailedPageFilePath(), outputStream);
           }
         }
       } catch (IllegalStateException e) {
-        sendFile(resources.getAuthFailedPageFile(), CONTENT_TYPE_HTML, outputStream);
+        sendFile(resources.getAuthFailedPageFilePath(), outputStream);
         throw e;
       }
     } catch (IOException | URISyntaxException e) {
@@ -95,19 +89,21 @@ public class CallbackRequestHandler implements Runnable {
     }
   }
 
-  private void sendFile(URL fileUrl, String contentType, DataOutputStream os) throws IOException, URISyntaxException {
-    File file = new File(fileUrl.toURI());
+  private void sendFile(String fileResourcePath, DataOutputStream os) throws IOException, URISyntaxException {
+    try (InputStream resourceStream = CallbackRequestHandler.class.getResourceAsStream(fileResourcePath)) {
+      os.writeBytes("HTTP/1.1 200 OK\r\n");
+      os.writeBytes("Content-Type: text/html\r\n");
+      os.writeBytes("\r\n");
 
-    if (file.exists()) {
-      os.writeBytes("HTTP/1.1 200 OK" + HTTP_EOL);
-      os.writeBytes("Content-Type: " + contentType + HTTP_EOL);
-      os.writeBytes(HTTP_EOL);
 
-      byte[] bytes = FileUtils.readFileToByteArray(file);
-      IOUtils.write(bytes, os);
-    } else {
-      os.writeBytes("HTTP/1.1 404 Not Found" + HTTP_EOL);
-      os.writeBytes(HTTP_EOL);
+      byte[] buffer = new byte[resourceStream.available()];
+      resourceStream.read(buffer);
+      os.write(buffer);
+    } catch (Exception e) {
+      Logger.getLogger(getClass().getName()).severe("Resource was missing: " + fileResourcePath);
+
+      os.writeBytes("HTTP/1.1 404 Not Found\r\n");
+      os.writeBytes("\r\n");
       os.writeBytes("404 Not Found");
     }
   }

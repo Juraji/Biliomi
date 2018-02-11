@@ -5,7 +5,6 @@ import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppData;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
-import java.net.URL;
 
 /**
  * Created by Juraji on 30-9-2017.
@@ -54,15 +53,15 @@ public class CallbackResources {
     return callbackUrlPort;
   }
 
-  public URL getAuthHashRedirectPageFile() {
-    return CallbackResources.class.getResource(hashRedirectPageResourceName);
+  public String getAuthHashRedirectPageFilePath() {
+    return hashRedirectPageResourceName;
   }
 
-  public URL getAuthSuccessPageFile() {
-    return CallbackResources.class.getResource(authSuccessPageResourceName);
+  public String getAuthSuccessPageFilePath() {
+    return authSuccessPageResourceName;
   }
 
-  public URL getAuthFailedPageFile() {
-    return CallbackResources.class.getResource(authFailedPageResourceName);
+  public String getAuthFailedPageFilePath() {
+    return authFailedPageResourceName;
   }
 }
