@@ -26,6 +26,8 @@ public final class Url {
   private Map<String, Object> query;
 
   public Url(String baseUri, Object... pathElements) {
+    this.query = new HashMap<>();
+
     if (pathElements.length > 0) {
       this.uri = baseUri + ELEMENT_SEPARATOR + Arrays.stream(pathElements)
           .map(String::valueOf)
