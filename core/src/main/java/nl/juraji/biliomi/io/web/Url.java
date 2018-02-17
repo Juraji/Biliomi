@@ -23,6 +23,7 @@ public final class Url {
   private static final char ELEMENT_SEPARATOR = '/';
 
   private String uri;
+  private Map<String, Object> query;
 
   public Url(String baseUri, Object... pathElements) {
     if (pathElements.length > 0) {
@@ -39,14 +40,23 @@ public final class Url {
     return new Url(baseUri, pathElements);
   }
 
-  public Url withQuery(Map<String, Object> query) {
-    this.uri = appendQueryString(this.uri, query);
+  public Url mergeQueryParams(Map<String, Object> query) {
+    this.query.putAll(query);
+    return this;
+  }
+
+  public Url withQueryParam(String key, Object value) {
+    this.query.put(key, value);
     return this;
   }
 
   @Override
   public String toString() {
-    return this.uri;
+    if (this.query.size() > 0) {
+      return appendQueryString(this.uri, query);
+    } else {
+      return this.uri;
+    }
   }
 
   /**

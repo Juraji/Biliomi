@@ -85,12 +85,16 @@ public class TwitchApiImpl implements TwitchApi {
 
   @Override
   public Response<TwitchFollows> getChannelFollowers(long twitchId, int limit, int offset) throws Exception {
-    return webClient.get(Url.url(API_BASE_URI, "channels", twitchId, "follows").withQuery(listQuery(limit, offset)), headers, TwitchFollows.class);
+    Url url = Url.url(API_BASE_URI, "channels", twitchId, "follows")
+        .mergeQueryParams(listQuery(limit, offset));
+    return webClient.get(url, headers, TwitchFollows.class);
   }
 
   @Override
   public Response<TwitchSubscriptions> getChannelSubscriptions(long twitchId, int limit, int offset) throws Exception {
-    return webClient.get(Url.url(API_BASE_URI, "channels", twitchId, "subscriptions").withQuery(listQuery(limit, offset)), headers, TwitchSubscriptions.class);
+    Url url = Url.url(API_BASE_URI, "channels", twitchId, "subscriptions")
+        .mergeQueryParams(listQuery(limit, offset));
+    return webClient.get(url, headers, TwitchSubscriptions.class);
   }
 
   @Override
@@ -100,9 +104,9 @@ public class TwitchApiImpl implements TwitchApi {
 
   @Override
   public Response<TwitchCommunity> getCommunityByName(String communityName) throws Exception {
-    HashMap<String, Object> query = new HashMap<>();
-    query.put("name", communityName);
-    return webClient.get(Url.url(API_BASE_URI, "communities").withQuery(query), headers, TwitchCommunity.class);
+    Url url = Url.url(API_BASE_URI, "communities")
+        .withQueryParam("name", communityName);
+    return webClient.get(url, headers, TwitchCommunity.class);
   }
 
   @Override
@@ -136,9 +140,9 @@ public class TwitchApiImpl implements TwitchApi {
 
   @Override
   public Response<TwitchUserLogins> getUsersByUsername(String... usernames) throws Exception {
-    Map<String, Object> loginQuery = new HashMap<>();
-    loginQuery.put("login", Joiner.on(",").join(usernames));
-    return webClient.get(Url.url(API_BASE_URI, "users").withQuery(loginQuery), headers, TwitchUserLogins.class);
+    Url url = Url.url(API_BASE_URI, "users")
+        .withQueryParam("login", Joiner.on(",").join(usernames));
+    return webClient.get(url, headers, TwitchUserLogins.class);
   }
 
   @Override
@@ -148,18 +152,18 @@ public class TwitchApiImpl implements TwitchApi {
 
   @Override
   public Response<TmiHosts> getHostUsers(String twitchId) throws Exception {
-    Map<String, Object> query = new HashMap<>();
-    query.put("include_logins", 1);
-    query.put("target", twitchId);
-    return webClient.get(Url.url(tmiBaseUri, "hosts").withQuery(query), null, TmiHosts.class);
+    Url url = Url.url(tmiBaseUri, "hosts")
+        .withQueryParam("include_logins", 1)
+        .withQueryParam("target", twitchId);
+    return webClient.get(url, null, TmiHosts.class);
   }
 
   @Override
   public TwitchGame searchGame(String gameName) throws Exception {
-    Map<String, Object> query = new HashMap<>();
-    query.put("query", gameName);
+    Url url = Url.url(API_BASE_URI, "search", "games")
+        .withQueryParam("query", gameName);
 
-    Response<TwitchGames> response = webClient.get(Url.url(API_BASE_URI, "search", "games").withQuery(query), headers, TwitchGames.class);
+    Response<TwitchGames> response = webClient.get(url, headers, TwitchGames.class);
     TwitchGame defaultGame = new TwitchGame();
     defaultGame.setName(gameName);
 

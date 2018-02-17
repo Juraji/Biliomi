@@ -5,8 +5,6 @@ import nl.juraji.biliomi.io.web.oauthflow.grants.code.CallbackServer;
 import nl.juraji.biliomi.io.web.oauthflow.grants.code.OAuthFlowDirector;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Juraji on 28-7-2017.
@@ -20,14 +18,14 @@ public class TwitchOAuthFlowDirector extends OAuthFlowDirector<TwitchOAuthScope>
 
   @Override
   public String getAuthenticationUri(TwitchOAuthScope... scopes) {
-    Map<String, Object> queryMap = new HashMap<>();
-    queryMap.put("response_type", "token");
-    queryMap.put("client_id", getConsumerKey());
-    queryMap.put("redirect_uri", getRedirectUri());
-    queryMap.put("state", getStateToken());
-    queryMap.put("force_verify", "true");
-    queryMap.put("scope", TwitchOAuthScope.join(scopes));
-    return Url.url("https://api.twitch.tv/kraken", "oauth2", "authorize").withQuery(queryMap).toString();
+    return Url.url("https://api.twitch.tv/kraken", "oauth2", "authorize")
+        .withQueryParam("response_type", "token")
+        .withQueryParam("client_id", getConsumerKey())
+        .withQueryParam("redirect_uri", getRedirectUri())
+        .withQueryParam("state", getStateToken())
+        .withQueryParam("force_verify", "true")
+        .withQueryParam("scope", TwitchOAuthScope.join(scopes))
+        .toString();
   }
 
   @Override

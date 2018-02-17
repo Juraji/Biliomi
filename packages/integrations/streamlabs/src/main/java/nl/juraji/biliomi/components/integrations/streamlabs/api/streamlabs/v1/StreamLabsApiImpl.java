@@ -11,7 +11,6 @@ import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
 import nl.juraji.biliomi.utility.exceptions.UnavailableException;
-import nl.juraji.biliomi.utility.factories.ModelUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.http.HttpHeader;
@@ -21,7 +20,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Map;
 
 /**
  * Created by Juraji on 2-10-2017.
@@ -51,14 +49,16 @@ public class StreamLabsApiImpl implements StreamLabsApi {
 
   @Override
   public Response<StreamLabsTwitchUser> getMe() throws Exception {
-    Map<String, Object> queryMap = executeTokenPreflight();
-    return webClient.get(Url.url(API_BASE_URI, "user").withQuery(queryMap), headers, StreamLabsTwitchUser.class);
+    Url url = Url.url(API_BASE_URI, "user")
+        .withQueryParam("access_token", executeTokenPreflight());
+    return webClient.get(url, headers, StreamLabsTwitchUser.class);
   }
 
   @Override
   public Response<StreamLabsSocketToken> getSocketToken() throws Exception {
-    Map<String, Object> queryMap = executeTokenPreflight();
-    return webClient.get(Url.url(API_BASE_URI, "socket", "token").withQuery(queryMap), headers, StreamLabsSocketToken.class);
+    Url url = Url.url(API_BASE_URI, "socket", "token")
+        .withQueryParam("access_token", executeTokenPreflight());
+    return webClient.get(url, headers, StreamLabsSocketToken.class);
   }
 
   /**
@@ -67,7 +67,7 @@ public class StreamLabsApiImpl implements StreamLabsApi {
    * @return The current access token
    */
   @SuppressWarnings("Duplicates")
-  private synchronized Map<String, Object> executeTokenPreflight() throws Exception {
+  private synchronized String executeTokenPreflight() throws Exception {
     AuthToken token = authTokenDao.get(TokenGroup.INTEGRATIONS, "streamlabs");
 
     if (StringUtils.isEmpty(token.getToken())) {
@@ -91,6 +91,6 @@ public class StreamLabsApiImpl implements StreamLabsApi {
       }
     }
 
-    return ModelUtils.mapWith(new ModelUtils.MapEntry<>("access_token", token.getToken()));
+    return token.getToken();
   }
 }
