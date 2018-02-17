@@ -86,14 +86,14 @@ public class TwitchApiImpl implements TwitchApi {
   @Override
   public Response<TwitchFollows> getChannelFollowers(long twitchId, int limit, int offset) throws Exception {
     Url url = Url.url(API_BASE_URI, "channels", twitchId, "follows")
-        .mergeQueryParams(listQuery(limit, offset));
+        .withQueryParams(listQuery(limit, offset));
     return webClient.get(url, headers, TwitchFollows.class);
   }
 
   @Override
   public Response<TwitchSubscriptions> getChannelSubscriptions(long twitchId, int limit, int offset) throws Exception {
     Url url = Url.url(API_BASE_URI, "channels", twitchId, "subscriptions")
-        .mergeQueryParams(listQuery(limit, offset));
+        .withQueryParams(listQuery(limit, offset));
     return webClient.get(url, headers, TwitchSubscriptions.class);
   }
 

@@ -13,8 +13,6 @@ import nl.juraji.biliomi.utility.exceptions.UnavailableException;
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Juraji on 25-5-2017.
@@ -47,26 +45,24 @@ public class SteamApiImpl implements SteamApi {
   @Override
   public Response<SteamLibraryResponse> getOwnedGames() throws Exception {
     executeTokenPreflight();
-    Map<String, Object> query = new HashMap<>();
 
-    query.put("key", apiKey);
-    query.put("steamid", userId);
-    query.put("format", "json");
-    query.put("include_appinfo", 1);
-
-    return webClient.get(Url.url(API_BASE_URI, "IPlayerService", "GetOwnedGames", "v0001").withQuery(query), null, SteamLibraryResponse.class);
+    Url url = Url.url(API_BASE_URI, "IPlayerService", "GetOwnedGames", "v0001")
+        .withQueryParam("key", apiKey)
+        .withQueryParam("steamid", userId)
+        .withQueryParam("format", "json")
+        .withQueryParam("include_appinfo", 1);
+    return webClient.get(url, null, SteamLibraryResponse.class);
   }
 
   @Override
   public Response<SteamPlayersResponse> getPlayerSummary() throws Exception {
     executeTokenPreflight();
-    Map<String, Object> query = new HashMap<>();
 
-    query.put("key", apiKey);
-    query.put("steamids", userId);
-    query.put("format", "json");
-
-    return webClient.get(Url.url(API_BASE_URI, "ISteamUser", "GetPlayerSummaries", "v0002").withQuery(query), null, SteamPlayersResponse.class);
+    Url url = Url.url(API_BASE_URI, "ISteamUser", "GetPlayerSummaries", "v0002")
+        .withQueryParam("key", apiKey)
+        .withQueryParam("steamids", userId)
+        .withQueryParam("format", "json");
+    return webClient.get(url, null, SteamPlayersResponse.class);
   }
 
   private void executeTokenPreflight() throws UnavailableException {

@@ -32,14 +32,14 @@ public class SpotifyOAuthFlowDirector extends OAuthFlowDirector<SpotifyOAuthScop
 
   @Override
   public String getAuthenticationUri(SpotifyOAuthScope... scopes) {
-    Map<String, Object> queryMap = new HashMap<>();
-    queryMap.put("client_id", getConsumerKey());
-    queryMap.put("response_type", "code");
-    queryMap.put("redirect_uri", getRedirectUri());
-    queryMap.put("state", getStateToken());
-    queryMap.put("scope", SpotifyOAuthScope.join(scopes));
-    queryMap.put("show_dialog", "true");
-    return Url.url("https://accounts.spotify.com", "authorize").withQuery(queryMap).toString();
+    return Url.url("https://accounts.spotify.com", "authorize")
+        .withQueryParam("client_id", getConsumerKey())
+        .withQueryParam("response_type", "code")
+        .withQueryParam("redirect_uri", getRedirectUri())
+        .withQueryParam("state", getStateToken())
+        .withQueryParam("scope", SpotifyOAuthScope.join(scopes))
+        .withQueryParam("show_dialog", "true")
+        .toString();
   }
 
   @Override

@@ -29,7 +29,6 @@ import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * Created by Juraji on 30-9-2017.
@@ -101,21 +100,18 @@ public class SpotifyApiImpl implements SpotifyApi {
   public Response<SpotifyTrack> getTrack(String trackId) throws Exception {
     executeTokenPreflight();
 
-    HashMap<String, Object> query = new HashMap<>();
-    query.put("market", countryCode);
-
-    return webClient.get(Url.url(API_BASE_URI, "tracks", trackId).withQuery(query), headers, SpotifyTrack.class);
+    Url url = Url.url(API_BASE_URI, "tracks", trackId)
+        .withQueryParam("market", countryCode);
+    return webClient.get(url, headers, SpotifyTrack.class);
   }
 
   @Override
   public Response<SpotifyTracksSearchResult> searchTrack(String query, int limit) throws Exception {
-    HashMap<String, Object> queryMap = new HashMap<>();
-    queryMap.put("query", query);
-    queryMap.put("market", countryCode);
-    queryMap.put("limit", limit);
-    queryMap.put("type", "track");
-
-    String url = Url.url(API_BASE_URI, "search").withQuery(queryMap).toString();
+    Url url = Url.url(API_BASE_URI, "search")
+        .withQueryParam("query", query)
+        .withQueryParam("market", countryCode)
+        .withQueryParam("limit", limit)
+        .withQueryParam("type", "track");
     return webClient.get(url, headers, SpotifyTracksSearchResult.class);
   }
 

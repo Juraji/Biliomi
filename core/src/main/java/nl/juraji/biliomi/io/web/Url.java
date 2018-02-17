@@ -36,20 +36,45 @@ public final class Url {
     }
   }
 
+  /**
+   * Build a new Url object
+   *
+   * @param baseUri      The base uri
+   * @param pathElements Uri path elements in correct order
+   * @return A new Url object
+   */
   public static Url url(String baseUri, Object... pathElements) {
     return new Url(baseUri, pathElements);
   }
 
-  public Url mergeQueryParams(Map<String, Object> query) {
+  /**
+   * Merge a map of query parameters with tihs Url object
+   *
+   * @param query A map containing the query key-value entries
+   * @return This Url object
+   */
+  public Url withQueryParams(Map<String, Object> query) {
     this.query.putAll(query);
     return this;
   }
 
+  /**
+   * Add a query parameter to this Url object
+   *
+   * @param key   The parameter key
+   * @param value The parameter value
+   * @return This Url object
+   */
   public Url withQueryParam(String key, Object value) {
     this.query.put(key, value);
     return this;
   }
 
+  /**
+   * Return the Uri this object represents as string
+   *
+   * @return The string representation of this Url object
+   */
   @Override
   public String toString() {
     if (this.query.size() > 0) {
@@ -147,7 +172,7 @@ public final class Url {
   /**
    * Decode an uri (component) with UTF-8 encoding
    *
-   * @param uri      The uri to decode
+   * @param uri The uri to decode
    * @return The decoded uri or null on failure
    */
   public static String decode(String uri) {

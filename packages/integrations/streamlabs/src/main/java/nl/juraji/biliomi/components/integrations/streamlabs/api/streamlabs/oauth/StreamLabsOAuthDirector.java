@@ -30,13 +30,13 @@ public class StreamLabsOAuthDirector extends OAuthFlowDirector<StreamLabsOAuthSc
 
   @Override
   public String getAuthenticationUri(StreamLabsOAuthScope... scopes) {
-    Map<String, Object> queryMap = new HashMap<>();
-    queryMap.put("response_type", "code");
-    queryMap.put("client_id", getConsumerKey());
-    queryMap.put("redirect_uri", getRedirectUri());
-    queryMap.put("scope", StreamLabsOAuthScope.join(scopes));
-    queryMap.put("state", getStateToken());
-    return Url.url("https://streamlabs.com/api/v1.0", "authorize").withQuery(queryMap).toString();
+    return Url.url("https://streamlabs.com/api/v1.0", "authorize")
+        .withQueryParam("response_type", "code")
+        .withQueryParam("client_id", getConsumerKey())
+        .withQueryParam("redirect_uri", getRedirectUri())
+        .withQueryParam("scope", StreamLabsOAuthScope.join(scopes))
+        .withQueryParam("state", getStateToken())
+        .toString();
   }
 
   @Override
