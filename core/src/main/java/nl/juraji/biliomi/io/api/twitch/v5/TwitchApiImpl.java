@@ -12,6 +12,7 @@ import nl.juraji.biliomi.model.core.security.tokens.AuthToken;
 import nl.juraji.biliomi.model.core.security.tokens.AuthTokenDao;
 import nl.juraji.biliomi.model.core.security.tokens.TokenGroup;
 import nl.juraji.biliomi.utility.calculate.MathUtils;
+import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppData;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.CoreSetting;
 import nl.juraji.biliomi.utility.factories.marshalling.JacksonMarshaller;
 import org.apache.commons.lang3.StringUtils;
@@ -34,10 +35,15 @@ import java.util.Set;
 @Singleton
 public class TwitchApiImpl implements TwitchApi {
   private static final int MAX_PAGE_SIZE = 100;
-  private static final String OAUTH_HEADER_PREFIX = "OAuth ";
-  private static final String API_BASE_URI = "https://api.twitch.tv/kraken";
-  private static final String tmiBaseUri = "https://tmi.twitch.tv";
 
+  @Inject
+  @AppData("apis.twitch.v5.baseUri")
+  private String apiBaseUri;
+
+  @Inject
+  @AppData("apis.twitch.tmi.baseUri")
+  private String tmiBaseUri;
+  
   @Inject
   @CoreSetting("biliomi.twitch.clientId")
   private String clientId;
@@ -56,17 +62,17 @@ public class TwitchApiImpl implements TwitchApi {
 
     headers.put("Client-ID", clientId);
     headers.put(HttpHeader.ACCEPT, "application/vnd.twitchtv.v5+json");
-    headers.put(HttpHeader.AUTHORIZATION, OAUTH_HEADER_PREFIX + casterToken.getToken());
+    headers.put(HttpHeader.AUTHORIZATION, "OAuth " + casterToken.getToken());
   }
 
   @Override
   public Response<TwitchChannel> getChannel() throws Exception {
-    return webClient.get(Url.url(API_BASE_URI, "channel"), headers, TwitchChannel.class);
+    return webClient.get(Url.url(apiBaseUri, "channel"), headers, TwitchChannel.class);
   }
 
   @Override
   public Response<TwitchChannel> getChannel(long twitchId) throws Exception {
-    return webClient.get(Url.url(API_BASE_URI, "channels", twitchId), headers, TwitchChannel.class);
+    return webClient.get(Url.url(apiBaseUri, "channels", twitchId), headers, TwitchChannel.class);
   }
 
   @Override
@@ -80,38 +86,38 @@ public class TwitchApiImpl implements TwitchApi {
 
     String updateDataJson = JacksonMarshaller.marshal(updateWrapper);
 
-    return webClient.put(Url.url(API_BASE_URI, "channels", twitchId), headers, updateDataJson, MediaType.JSON_UTF_8, TwitchChannel.class);
+    return webClient.put(Url.url(apiBaseUri, "channels", twitchId), headers, updateDataJson, MediaType.JSON_UTF_8, TwitchChannel.class);
   }
 
   @Override
   public Response<TwitchFollows> getChannelFollowers(long twitchId, int limit, int offset) throws Exception {
-    Url url = Url.url(API_BASE_URI, "channels", twitchId, "follows")
+    Url url = Url.url(apiBaseUri, "channels", twitchId, "follows")
         .withQueryParams(listQuery(limit, offset));
     return webClient.get(url, headers, TwitchFollows.class);
   }
 
   @Override
   public Response<TwitchSubscriptions> getChannelSubscriptions(long twitchId, int limit, int offset) throws Exception {
-    Url url = Url.url(API_BASE_URI, "channels", twitchId, "subscriptions")
+    Url url = Url.url(apiBaseUri, "channels", twitchId, "subscriptions")
         .withQueryParams(listQuery(limit, offset));
     return webClient.get(url, headers, TwitchSubscriptions.class);
   }
 
   @Override
   public Response<TwitchTeams> getChannelTeams(long twitchId) throws Exception {
-    return webClient.get(Url.url(API_BASE_URI, "channels", twitchId, "teams"), headers, TwitchTeams.class);
+    return webClient.get(Url.url(apiBaseUri, "channels", twitchId, "teams"), headers, TwitchTeams.class);
   }
 
   @Override
   public Response<TwitchCommunity> getCommunityByName(String communityName) throws Exception {
-    Url url = Url.url(API_BASE_URI, "communities")
+    Url url = Url.url(apiBaseUri, "communities")
         .withQueryParam("name", communityName);
     return webClient.get(url, headers, TwitchCommunity.class);
   }
 
   @Override
   public Response<TwitchCommunities> getChannelCommunities(long twitchId) throws Exception {
-    return webClient.get(Url.url(API_BASE_URI, "channels", twitchId, "communities"), headers, TwitchCommunities.class);
+    return webClient.get(Url.url(apiBaseUri, "channels", twitchId, "communities"), headers, TwitchCommunities.class);
   }
 
   @Override
@@ -125,29 +131,29 @@ public class TwitchApiImpl implements TwitchApi {
 
     String body = JacksonMarshaller.marshal(update);
 
-    return webClient.put(Url.url(API_BASE_URI, "channels", twitchId, "communities"), headers, body, MediaType.JSON_UTF_8, Void.class);
+    return webClient.put(Url.url(apiBaseUri, "channels", twitchId, "communities"), headers, body, MediaType.JSON_UTF_8, Void.class);
   }
 
   @Override
   public Response<Void> clearChannelCommunities(long twitchId) throws Exception {
-    return webClient.delete(Url.url(API_BASE_URI, "channels", twitchId, "community"), headers, Void.class);
+    return webClient.delete(Url.url(apiBaseUri, "channels", twitchId, "community"), headers, Void.class);
   }
 
   @Override
   public Response<TwitchStreamInfo> getStream(long twitchId) throws Exception {
-    return webClient.get(Url.url(API_BASE_URI, "streams", twitchId), headers, TwitchStreamInfo.class);
+    return webClient.get(Url.url(apiBaseUri, "streams", twitchId), headers, TwitchStreamInfo.class);
   }
 
   @Override
   public Response<TwitchUserLogins> getUsersByUsername(String... usernames) throws Exception {
-    Url url = Url.url(API_BASE_URI, "users")
+    Url url = Url.url(apiBaseUri, "users")
         .withQueryParam("login", Joiner.on(",").join(usernames));
     return webClient.get(url, headers, TwitchUserLogins.class);
   }
 
   @Override
   public Response<TwitchUser> getUser(String twitchId) throws Exception {
-    return webClient.get(Url.url(API_BASE_URI, "users", twitchId), headers, TwitchUser.class);
+    return webClient.get(Url.url(apiBaseUri, "users", twitchId), headers, TwitchUser.class);
   }
 
   @Override
@@ -160,7 +166,7 @@ public class TwitchApiImpl implements TwitchApi {
 
   @Override
   public TwitchGame searchGame(String gameName) throws Exception {
-    Url url = Url.url(API_BASE_URI, "search", "games")
+    Url url = Url.url(apiBaseUri, "search", "games")
         .withQueryParam("query", gameName);
 
     Response<TwitchGames> response = webClient.get(url, headers, TwitchGames.class);

@@ -4,6 +4,7 @@ import com.google.common.net.MediaType;
 import nl.juraji.biliomi.io.web.Response;
 import nl.juraji.biliomi.io.web.Url;
 import nl.juraji.biliomi.io.web.WebClient;
+import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppData;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.CoreSetting;
 import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.http.HttpHeader;
@@ -20,8 +21,11 @@ import javax.inject.Singleton;
 @Default
 @Singleton
 public class TwitchHelixWebhookApiImpl implements TwitchHelixWebhookApi {
-  private static final String API_BASE_URI = "https://api.twitch.tv/helix";
   private final HttpFields headers = new HttpFields();
+
+  @Inject
+  @AppData("apis.twitch.helix.baseUri")
+  private String apiBaseUri;
 
   @Inject
   @CoreSetting("biliomi.twitch.clientId")
@@ -42,10 +46,10 @@ public class TwitchHelixWebhookApiImpl implements TwitchHelixWebhookApi {
 
   @Override
   public Response<Void> subscribeToStreamsWebhookTopic(String localEndpoint, long leaseDurationSeconds, String targetChannelId) throws Exception {
-    Url hubTopic = Url.url(API_BASE_URI, "streams")
+    Url hubTopic = Url.url(apiBaseUri, "streams")
         .withQueryParam("user_id", targetChannelId);
 
-    Url url = Url.url(API_BASE_URI, "webhooks", "hub")
+    Url url = Url.url(apiBaseUri, "webhooks", "hub")
         .withQueryParam("hub.callback", webhookCallbackUrl + localEndpoint)
         .withQueryParam("hub.mode", "subscribe")
         .withQueryParam("hub.topic", hubTopic)
@@ -56,10 +60,10 @@ public class TwitchHelixWebhookApiImpl implements TwitchHelixWebhookApi {
 
   @Override
   public Response<Void> subscribeToFollowersWebhookTopic(String localEndpoint, long leaseDurationSeconds, String targetChannelId) throws Exception {
-    Url hubTopic = Url.url(API_BASE_URI, "users", "follows")
+    Url hubTopic = Url.url(apiBaseUri, "users", "follows")
         .withQueryParam("to_id", targetChannelId);
 
-    Url url = Url.url(API_BASE_URI, "webhooks", "hub")
+    Url url = Url.url(apiBaseUri, "webhooks", "hub")
         .withQueryParam("hub.callback", webhookCallbackUrl + localEndpoint)
         .withQueryParam("hub.mode", "subscribe")
         .withQueryParam("hub.topic", hubTopic)

@@ -6,6 +6,7 @@ import nl.juraji.biliomi.components.system.users.UsersService;
 import nl.juraji.biliomi.io.api.twitch.helix.webhooks.api.TwitchHelixWebhookApi;
 import nl.juraji.biliomi.io.api.twitch.helix.webhooks.handlers.FollowsNotificationHandler;
 import nl.juraji.biliomi.io.api.twitch.helix.webhooks.handlers.StreamsNotificationHandler;
+import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppData;
 import nl.juraji.biliomi.utility.estreams.einterface.ERunnable;
 import nl.juraji.biliomi.utility.types.components.TimerService;
 
@@ -22,9 +23,18 @@ import java.util.concurrent.TimeUnit;
 @Default
 @Singleton
 public class TwitchWebhookSession extends TimerService {
-  private static final String FOLLOWS_ENDPOINT = "/follows";
-  private static final String STREAMS_ENDPOINT = "/streams";
-  private static final int LEASE_DURATION_HRS = 24;
+
+  @Inject
+  @AppData("apis.twitch.helix.webhook.leaseDurationHours")
+  private Long leaseDurationHours;
+
+  @Inject
+  @AppData("apis.twitch.helix.webhook.endpoint.follows")
+  private String followsEndpoint;
+
+  @Inject
+  @AppData("apis.twitch.helix.webhook.endpoint.streams")
+  private String streamsEndpoint;
 
   @Inject
   private WebhookReceiver receiver;
@@ -41,8 +51,7 @@ public class TwitchWebhookSession extends TimerService {
   @Override
   public void start() {
     String channelId = String.valueOf(channelService.getChannelId());
-    int subscriptionRefreshInterval = LEASE_DURATION_HRS - 1;
-    long leaseDurationSeconds = TimeUnit.SECONDS.convert(LEASE_DURATION_HRS, TimeUnit.HOURS);
+    long leaseDurationSeconds = TimeUnit.SECONDS.convert(leaseDurationHours, TimeUnit.HOURS);
 
     // Set secret on receiver, start receiver and refresh timer
     receiver.start();
@@ -57,19 +66,13 @@ public class TwitchWebhookSession extends TimerService {
 
     // Subscribe to streams
     StreamsNotificationHandler streamsNotificationHandler = new StreamsNotificationHandler();
-    receiver.registerNotificationHandler(STREAMS_ENDPOINT, streamsNotificationHandler);
-    scheduleAtFixedRate(
-        subscribeCallWrapper(() -> this.twitchHelixWebhookApi.subscribeToStreamsWebhookTopic(STREAMS_ENDPOINT, leaseDurationSeconds, channelId)),
-        0, subscriptionRefreshInterval, TimeUnit.HOURS
-    );
+    receiver.registerNotificationHandler(streamsEndpoint, streamsNotificationHandler);
+    scheduleSubscription(() -> this.twitchHelixWebhookApi.subscribeToStreamsWebhookTopic(streamsEndpoint, leaseDurationSeconds, channelId));
 
     // Subscribe to follows
     FollowsNotificationHandler followsNotificationHandler = new FollowsNotificationHandler(usersService);
-    receiver.registerNotificationHandler(FOLLOWS_ENDPOINT, followsNotificationHandler);
-    scheduleAtFixedRate(
-        subscribeCallWrapper(() -> this.twitchHelixWebhookApi.subscribeToFollowersWebhookTopic(FOLLOWS_ENDPOINT, leaseDurationSeconds, channelId)),
-        0, subscriptionRefreshInterval, TimeUnit.HOURS
-    );
+    receiver.registerNotificationHandler(followsEndpoint, followsNotificationHandler);
+    scheduleSubscription(() -> this.twitchHelixWebhookApi.subscribeToFollowersWebhookTopic(followsEndpoint, leaseDurationSeconds, channelId));
 
     logger.info("Twitch webhooks initialized");
   }
@@ -81,13 +84,16 @@ public class TwitchWebhookSession extends TimerService {
     super.stop();
   }
 
-  private Runnable subscribeCallWrapper(ERunnable<Exception> runnable) {
-    return () -> {
+  protected void scheduleSubscription(ERunnable<Exception> command) {
+    long period = leaseDurationHours - 1;
+    Runnable timerCommand = () -> {
       try {
-        runnable.run();
+        command.run();
       } catch (Exception e) {
         logger.error("Failed refreshing webhook subscription, will retry later", e);
       }
     };
+
+    super.scheduleAtFixedRate(timerCommand, 0, period, TimeUnit.HOURS);
   }
 }
