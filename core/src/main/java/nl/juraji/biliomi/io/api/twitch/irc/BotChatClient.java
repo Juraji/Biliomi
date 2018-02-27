@@ -14,7 +14,10 @@ import nl.juraji.biliomi.model.internal.events.irc.user.messages.IrcSystemMessag
 import nl.juraji.biliomi.model.internal.events.irc.user.state.IrcUserJoinedEvent;
 import nl.juraji.biliomi.model.internal.events.irc.user.state.IrcUserLeftEvent;
 import nl.juraji.biliomi.model.internal.events.irc.user.state.IrcUserModeEvent;
+import nl.juraji.biliomi.model.internal.events.twitch.bits.TwitchBitsEvent;
+import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.events.EventBus;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -92,6 +95,13 @@ public class BotChatClient extends SocketClient implements ChatClientFacade {
     // Emit user mode (for updating user is moderator or not)
     if (Tags.UserType.MOD.equals(tags.getUserType())) {
       eventBus.post(new IrcUserModeEvent(username, tags, true));
+    }
+
+    // Emit bits if present
+    String bits = tags.getBits();
+    if (StringUtils.isNotEmpty(bits)) {
+      Long longBits = NumberConverter.asNumber(bits).withDefault(0).toLong();
+      eventBus.post(new TwitchBitsEvent(tags.getUserId(), longBits));
     }
 
     eventBus.post(new IrcChatMessageEvent(username, tags, message));
