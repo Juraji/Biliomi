@@ -63,11 +63,11 @@ public class ModWatchTimerService extends TimerService {
 
       // The message starts of with "The moderators of this room are: ", this bit needs to be taken out.
       List<String> moderatorUsernames = Splitter.on(Pattern.compile("[:,] ")).splitToList(event.getMessage());
-      moderatorUsernames.remove(0);
 
       // Check each user in the list agains the corresponding users in the database.
       // Set moderator to true and add all users to the updatedUsers list if they aren't known as moderator already
       moderatorUsernames.stream()
+          .skip(1)
           .map(username -> usersService.getUser(username))
           .filter(user -> !user.isModerator())
           .forEach(user -> {
