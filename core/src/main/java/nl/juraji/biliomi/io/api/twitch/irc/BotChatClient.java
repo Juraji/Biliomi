@@ -50,7 +50,7 @@ public class BotChatClient extends SocketClient implements ChatClientFacade {
   }
 
   @Override
-  public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
+  public void onConnected(WebSocket websocket, Map<String, List<String>> headers) {
     // Request capabilities
     websocket.sendText("CAP REQ :twitch.tv/membership");
     websocket.sendText("CAP REQ :twitch.tv/commands");
@@ -63,7 +63,7 @@ public class BotChatClient extends SocketClient implements ChatClientFacade {
   }
 
   @Override
-  public void onTextMessage(WebSocket websocket, String text) throws Exception {
+  public void onTextMessage(WebSocket websocket, String text) {
     // Catch server emitting PING, respond and break
     if (text.contains(IrcCommand.PING.toString())) {
       websocket.sendText(IrcCommand.PONG.toString());
@@ -101,7 +101,7 @@ public class BotChatClient extends SocketClient implements ChatClientFacade {
     String bits = tags.getBits();
     if (StringUtils.isNotEmpty(bits)) {
       Long longBits = NumberConverter.asNumber(bits).withDefault(0).toLong();
-      eventBus.post(new TwitchBitsEvent(tags.getUserId(), longBits));
+      eventBus.post(new TwitchBitsEvent(username, longBits));
     }
 
     eventBus.post(new IrcChatMessageEvent(username, tags, message));

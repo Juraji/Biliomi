@@ -19,6 +19,7 @@ import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 /**
  * Created by robin.
@@ -55,10 +56,17 @@ public class ModWatchTimerService extends TimerService {
   @Subscribe
   public void onIrcChannelNoticeEvent(IrcChannelNoticeEvent event) {
     if (Tags.MsgId.ROOM_MODS.equals(event.getMsgId())) {
+
+      // Make sure the bot's username is in the list
       passOrFailBotIsMod(event.getMessage());
       List<User> updatedUsers = new ArrayList<>();
 
-      List<String> moderatorUsernames = Splitter.on(", ").splitToList(event.getMessage().substring(33));
+      // The message starts of with "The moderators of this room are: ", this bit needs to be taken out.
+      List<String> moderatorUsernames = Splitter.on(Pattern.compile("[:,] ")).splitToList(event.getMessage());
+      moderatorUsernames.remove(0);
+
+      // Check each user in the list agains the corresponding users in the database.
+      // Set moderator to true and add all users to the updatedUsers list if they aren't known as moderator already
       moderatorUsernames.stream()
           .map(username -> usersService.getUser(username))
           .filter(user -> !user.isModerator())
@@ -67,6 +75,8 @@ public class ModWatchTimerService extends TimerService {
             updatedUsers.add(user);
           });
 
+      // Get the currently known moderators and check if they are present in the list.
+      // If not set moderator to false and add them to the updatedUsers list
       List<User> botModerators = usersService.getModerators();
       botModerators.stream()
           .filter(user -> !user.getUsername().equals(botName))
@@ -76,6 +86,7 @@ public class ModWatchTimerService extends TimerService {
             updatedUsers.add(user);
           });
 
+      // Save all user objects in the updatedUsers list
       usersService.save(updatedUsers);
       logger.info("Current moderators: {}", TextUtils.commaList(moderatorUsernames));
     }
