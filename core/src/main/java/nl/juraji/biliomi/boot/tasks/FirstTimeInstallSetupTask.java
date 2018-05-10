@@ -9,7 +9,7 @@ import nl.juraji.biliomi.config.core.biliomi.USDatabase;
 import nl.juraji.biliomi.config.core.biliomi.USTwitch;
 import nl.juraji.biliomi.config.core.biliomi.database.USMySQL;
 import nl.juraji.biliomi.io.console.ConsoleApi;
-import nl.juraji.biliomi.io.web.oauthflow.grants.code.CallbackResources;
+import nl.juraji.biliomi.io.web.oauth.OAuthFlow;
 import nl.juraji.biliomi.utility.calculate.NumberConverter;
 import nl.juraji.biliomi.utility.types.AppParameters;
 import org.apache.commons.io.FileUtils;
@@ -197,15 +197,20 @@ public class FirstTimeInstallSetupTask implements SetupTask {
     console.println("Create an application for Biliomi on Twitch.");
     console.println("For security reasons Biliomi is not shipped with any OAuth application keys.");
     console.println("This is why you need to create an application on Twitch and supply the information here.");
-    console.println("Note: The oauth callback url will be: " + CallbackResources.init().getRedirectUri());
-    console.print("Hit [enter] to open up https://www.twitch.tv/kraken/oauth2/clients/new and use the callback uri stated above.");
+    console.println("Note: The oauth callback url will be: " + OAuthFlow.REDIRECT_URI);
+    console.print("Hit [enter] to open up https://glass.twitch.tv/console/apps and use the callback uri stated above.");
     console.awaitInput();
-    Desktop.getDesktop().browse(new URI("https://www.twitch.tv/kraken/oauth2/clients/new"));
+    Desktop.getDesktop().browse(new URI("https://glass.twitch.tv/console/apps"));
     console.println();
 
     console.print("When your done enter the Client ID presented to you: ");
     input = console.awaitInput(true);
     usTwitch.setClientId(input);
+    console.println();
+
+    console.print("Now generate a new client secret and enter it here: ");
+    input = console.awaitInput(true);
+    usTwitch.setClientSecret(input);
     console.println();
 
     console.println("Biliomi needs its own Twitch account in order to be able to talk in your chat, please create one of you haven't already.");

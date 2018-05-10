@@ -140,6 +140,13 @@
       <version>2.9.1</version>
     </dependency>
 
+    <!-- OAuth -->
+    <dependency>
+      <groupId>org.apache.oltu.oauth2</groupId>
+      <artifactId>org.apache.oltu.oauth2.client</artifactId>
+      <version>1.0.2</version>
+    </dependency>
+
     <!-- Utility -->
     <dependency>
       <groupId>org.apache.commons</groupId>

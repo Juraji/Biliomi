@@ -4,6 +4,7 @@ import nl.juraji.biliomi.utility.jpa.JpaDao;
 import org.hibernate.criterion.Restrictions;
 
 import javax.enterprise.inject.Default;
+import java.util.List;
 
 /**
  * Created by Juraji on 6-9-2017.
@@ -37,6 +38,12 @@ public class AuthTokenDao extends JpaDao<AuthToken> {
     }
 
     return tokenEnt;
+  }
+
+  public List<AuthToken> getAllInGroup(TokenGroup tokenGroup) {
+    return criteria()
+            .add(Restrictions.eq("tokenGroup", tokenGroup))
+            .getList();
   }
 
   public boolean isTokenPresent(TokenGroup tokenGroup, String name) {

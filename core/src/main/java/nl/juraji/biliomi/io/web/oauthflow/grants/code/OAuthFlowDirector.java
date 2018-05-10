@@ -9,6 +9,7 @@ import java.io.IOException;
  * Created by Juraji on 30-9-2017.
  * Biliomi
  */
+@Deprecated
 public abstract class OAuthFlowDirector<E> {
 
   private final String consumerKey;

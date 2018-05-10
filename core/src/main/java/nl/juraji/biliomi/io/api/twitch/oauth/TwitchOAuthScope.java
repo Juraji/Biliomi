@@ -25,13 +25,9 @@ public enum TwitchOAuthScope {
   public static String join(TwitchOAuthScope... scopes) {
     if (scopes == null) return "";
     return Arrays.stream(scopes)
-        .map(TwitchOAuthScope::getKey)
+        .map(TwitchOAuthScope::toString)
         .reduce((l, r) -> l + ' ' + r)
         .orElse("");
-  }
-
-  public String getKey() {
-    return key;
   }
 
   @Override

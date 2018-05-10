@@ -8,6 +8,7 @@ import nl.juraji.biliomi.config.core.biliomi.twitch.USTwitchLogin;
  */
 public class USTwitch {
   private String clientId;
+  private String clientSecret;
   private String webhookCallbackUrl;
   private USTwitchLogin login;
 
@@ -17,6 +18,14 @@ public class USTwitch {
 
   public void setClientId(String clientId) {
     this.clientId = clientId;
+  }
+
+  public String getClientSecret() {
+    return clientSecret;
+  }
+
+  public void setClientSecret(String clientSecret) {
+    this.clientSecret = clientSecret;
   }
 
   public String getWebhookCallbackUrl() {

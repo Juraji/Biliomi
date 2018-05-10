@@ -51,8 +51,9 @@ public class SteamIntegrationSetupTask implements SetupTask {
 
   private void installSteamToken() throws Exception {
     console.println();
-    console.println("Would you like to set up Steam integration now? [y/n]: ");
+    console.print("Would you like to set up Steam integration now? [y/n]: ");
     if (!console.awaitYesNo()) {
+      console.println();
       logger.info("Canceled Steam integration setup");
       return;
     }
