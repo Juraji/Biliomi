@@ -1,6 +1,6 @@
 package nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.v1;
 
-import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.oauth.StreamLabsOAuthDirector;
+import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.oauth.StreamLabsOAuthFlow;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.v1.model.StreamLabsSocketToken;
 import nl.juraji.biliomi.components.integrations.streamlabs.api.streamlabs.v1.model.StreamLabsTwitchUser;
 import nl.juraji.biliomi.config.spotify.StreamLabsConfigService;
@@ -14,7 +14,6 @@ import nl.juraji.biliomi.utility.exceptions.UnavailableException;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.http.HttpHeader;
-import org.joda.time.DateTime;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
@@ -74,21 +73,12 @@ public class StreamLabsApiImpl implements StreamLabsApi {
       throw new UnavailableException("The Stream Labs is not connected to an account");
     }
 
-    DateTime expiryTime = token.getExpiryTime();
-    DateTime now = DateTime.now();
-    if (expiryTime != null && now.isAfter(expiryTime)) {
-      StreamLabsOAuthDirector director = new StreamLabsOAuthDirector(configService.getConsumerKey(), configService.getConsumerSecret(), webClient);
-      boolean refreshSuccess = director.awaitRefreshedAccessToken(token.getRefreshToken());
+    final StreamLabsOAuthFlow flow = new StreamLabsOAuthFlow(configService.getConsumerKey(), configService.getConsumerSecret());
+    final boolean tokenValid = flow.validateToken(token, webClient);
 
-      if (refreshSuccess) {
-        token.setToken(director.getAccessToken());
-        token.setRefreshToken(director.getRefreshToken());
-        token.setTimeToLive(director.getTimeToLive());
-        token.setIssuedAt(now);
-        authTokenDao.save(token);
-      } else {
-        throw new UnavailableException("The Stream Labs Api failed to refresh the access token: " + director.getAuthenticationError());
-      }
+    if (!tokenValid) {
+      flow.installRefreshToken(token);
+      authTokenDao.save(token);
     }
 
     return token.getToken();

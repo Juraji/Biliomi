@@ -15,7 +15,6 @@ import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.CoreSetting;
 import nl.juraji.biliomi.utility.types.AppParameters;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
-import org.apache.oltu.oauth2.client.response.OAuthAccessTokenResponse;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -122,15 +121,6 @@ public class TwitchOAuthTask implements SetupTask {
 
     private void installToken(AuthToken oauthData, TwitchOAuthScope... scopes) throws Exception {
         final TwitchOAuthFlow flow = new TwitchOAuthFlow(clientId, clientSecret);
-
-        final String implicitGrantCode = flow.getImplicitGrantCode(TwitchOAuthScope.join(scopes));
-        if (implicitGrantCode != null) {
-            final OAuthAccessTokenResponse token = flow.getAccessToken(implicitGrantCode);
-            if (token != null) {
-                oauthData.setToken(token.getAccessToken());
-                oauthData.setRefreshToken(token.getRefreshToken());
-                oauthData.setTimeToLive(token.getExpiresIn());
-            }
-        }
+        flow.installAccessToken(oauthData, TwitchOAuthScope.join(scopes));
     }
 }

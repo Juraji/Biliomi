@@ -121,7 +121,7 @@ public class AuthToken {
 
   public DateTime getExpiryTime() {
     if (issuedAt != null && timeToLive != null && timeToLive > 0) {
-      return issuedAt.withDurationAdded(timeToLive, 1);
+      return issuedAt.withDurationAdded(timeToLive, 1000);
     }
 
     return null;

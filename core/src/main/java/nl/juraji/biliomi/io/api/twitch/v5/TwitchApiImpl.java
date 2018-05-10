@@ -17,7 +17,6 @@ import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppData;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.CoreSetting;
 import nl.juraji.biliomi.utility.factories.marshalling.JacksonMarshaller;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.oltu.oauth2.client.response.OAuthAccessTokenResponse;
 import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.http.HttpHeader;
 
@@ -222,18 +221,14 @@ public class TwitchApiImpl implements TwitchApi {
         return defaultGame;
     }
 
-    private void validateOrRefreshToken() throws Exception {
+    private synchronized void validateOrRefreshToken() throws Exception {
         AuthToken casterToken = authTokenDao.get(TokenGroup.TWITCH, "channel");
-        final boolean tokenValid = twitchOAuthFlow.validateToken(casterToken.getToken(), webClient);
+        final boolean tokenValid = twitchOAuthFlow.validateToken(casterToken, webClient);
 
         if (!tokenValid) {
-            final OAuthAccessTokenResponse response = twitchOAuthFlow.refreshToken(casterToken.getRefreshToken());
-            if (response != null) {
-                casterToken.setToken(response.getAccessToken());
-                casterToken.setRefreshToken(response.getRefreshToken());
-                authTokenDao.save(casterToken);
-                headers.put(HttpHeader.AUTHORIZATION, "OAuth " + casterToken.getToken());
-            }
+            twitchOAuthFlow.installRefreshToken(casterToken);
+            authTokenDao.save(casterToken);
+            headers.put(HttpHeader.AUTHORIZATION, "OAuth " + casterToken.getToken());
         }
     }
 

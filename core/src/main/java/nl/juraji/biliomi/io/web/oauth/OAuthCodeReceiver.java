@@ -65,6 +65,7 @@ public final class OAuthCodeReceiver {
 
         callBackServer.start();
         final String result = future.get();
+        Thread.sleep(1000);
         callBackServer.stop();
         return result;
     }
