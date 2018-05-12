@@ -193,11 +193,7 @@ public class SubscriberWatchUpdateService extends TimerService {
     long channelId = channelService.getChannelId();
     Response<TwitchSubscriptions> response = twitchApi.getChannelSubscriptions(channelId, 0, 0);
     if (!response.isOK()) {
-      if (response.getStatus() == 422) {
-        throw new UnavailableException();
-      } else {
-        throw new Exception("Retrieving subscriber count failed, Status: " + response.getStatus() + ", Message: " + response.getRawData());
-      }
+      throw new UnavailableException();
     }
 
     return response.getData().getTotal();
