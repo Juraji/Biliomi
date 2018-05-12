@@ -25,6 +25,8 @@ import javax.inject.Singleton;
 @EventBusSubscriber
 public class ComponentManager {
 
+  private boolean isInitialized = false;
+
   @Inject
   private Logger logger;
 
@@ -33,27 +35,33 @@ public class ComponentManager {
 
   @Inject
   @SystemComponent
-  private Instance<Component> coreComponents;
+  private Instance<Component> systemComponents;
 
   @Inject
   @NormalComponent
-  private Instance<Component> components;
+  private Instance<Component> normalComponents;
 
   @PreDestroy
   public void destroyComponentManager() {
-    components.forEach(components::destroy);
-    coreComponents.forEach(coreComponents::destroy);
+    normalComponents.forEach(normalComponents::destroy);
+    systemComponents.forEach(systemComponents::destroy);
+    isInitialized = false;
   }
 
   @Subscribe
   public void onIrcConnectedEvent(IrcChannelJoinedEvent event) {
-    logger.info("Initializing components...");
+    if (isInitialized) {
+      logger.info("IRC connected, components were already initialized... So... moving on!");
+    } else {
+      isInitialized = true;
+      logger.info("IRC connected, initializing components...");
 
-    coreComponents.forEach(Component::init);
-    components.forEach(Component::init);
+      systemComponents.forEach(Component::init);
+      normalComponents.forEach(Component::init);
 
-    logger.info("All components loaded succesfully");
-    logger.info("Biliomi is ready for commands!");
+      logger.info("All components loaded succesfully");
+      logger.info("Biliomi is ready for commands!");
+    }
   }
 
   @Subscribe
