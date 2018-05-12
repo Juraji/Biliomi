@@ -14,76 +14,77 @@ import java.util.Optional;
  * Biliomi
  */
 public class XmlPathConverter<T> {
-  private final Class<T> type;
+    private final Class<T> type;
 
-  public XmlPathConverter(Class<T> type) {
-    this.type = type;
-  }
-
-  /**
-   * Convert the given XmlElement path to it's bean property path
-   * @param xmlElementPath A XMLElement path (case insensitive)
-   * @return The corresponding bean property path
-   */
-  public String convert(String xmlElementPath) throws XmlPathException {
-    if (StringUtils.isEmpty(xmlElementPath)) {
-      throw new XmlPathException("Can not defer an empty xml name");
+    public XmlPathConverter(Class<T> type) {
+        this.type = type;
     }
 
-    String path;
+    private static Field findPropertyField(Class type, String xmlElementName) {
+        Optional<Field> optField = Arrays.stream(type.getDeclaredFields())
+                .filter(field -> field.isAnnotationPresent(XmlElement.class))
+                .filter(field -> field.getAnnotation(XmlElement.class).name().equalsIgnoreCase(xmlElementName))
+                .findFirst();
 
-    if (xmlElementPath.contains(".")) {
-      String[] xmlElementNames = xmlElementPath.split("\\.");
-      List<String> newPathList = new ArrayList<>();
-      Class currentType = type;
+        if (optField.isPresent()) {
+            return optField.get();
+        } else if (type.getSuperclass() != null) {
+            return findPropertyField(type.getSuperclass(), xmlElementName);
+        } else {
+            return null;
+        }
+    }
 
-      for (String xmlElementName : xmlElementNames) {
-        Field propertyField = findPropertyField(currentType, xmlElementName);
-
-        if (propertyField == null) {
-          // If the current property is not found
-          // clear the list and break the loop.
-          newPathList.clear();
-          break;
+    /**
+     * Convert the given XmlElement path to it's bean property path
+     *
+     * @param xmlElementPath A XMLElement path (case insensitive)
+     * @return The corresponding bean property path
+     */
+    public String convert(String xmlElementPath) throws XmlPathException {
+        if (StringUtils.isEmpty(xmlElementPath)) {
+            throw new XmlPathException("Can not defer an empty xml name");
         }
 
-        newPathList.add(propertyField.getName());
-        currentType = propertyField.getType();
-      }
+        String path;
 
-      path = newPathList.stream()
-          .reduce((left, right) -> left + "." + right)
-          .orElse(null);
-    } else {
-      Field propertyField = findPropertyField(type, xmlElementPath);
-      path = (propertyField != null ? propertyField.getName() : null);
+        if (xmlElementPath.contains(".")) {
+            String[] xmlElementNames = xmlElementPath.split("\\.");
+            List<String> newPathList = new ArrayList<>();
+            Class currentType = type;
+
+            for (String xmlElementName : xmlElementNames) {
+                Field propertyField = findPropertyField(currentType, xmlElementName);
+
+                if (propertyField == null) {
+                    // If the current property is not found
+                    // clear the list and break the loop.
+                    newPathList.clear();
+                    break;
+                }
+
+                newPathList.add(propertyField.getName());
+                currentType = propertyField.getType();
+            }
+
+            path = newPathList.stream()
+                    .reduce((left, right) -> left + "." + right)
+                    .orElse(null);
+        } else {
+            Field propertyField = findPropertyField(type, xmlElementPath);
+            path = (propertyField != null ? propertyField.getName() : null);
+        }
+
+        if (path == null) {
+            throw new XmlPathException("Unable to defer XML name " + xmlElementPath + " in type " + type.getName());
+        }
+
+        return path;
     }
 
-    if (path == null) {
-      throw new XmlPathException("Unable to defer XML name " + xmlElementPath + " in type " + type.getName());
+    public static class XmlPathException extends Exception {
+        public XmlPathException(String message) {
+            super(message);
+        }
     }
-
-    return path;
-  }
-
-  private static Field findPropertyField(Class type, String xmlElementName) {
-    Optional<Field> optField = Arrays.stream(type.getDeclaredFields())
-        .filter(field -> field.isAnnotationPresent(XmlElement.class))
-        .filter(field -> field.getAnnotation(XmlElement.class).name().equalsIgnoreCase(xmlElementName))
-        .findFirst();
-
-    if (optField.isPresent()) {
-      return optField.get();
-    } else if (type.getSuperclass() != null) {
-      return findPropertyField(type.getSuperclass(), xmlElementName);
-    } else {
-      return null;
-    }
-  }
-
-  public static class XmlPathException extends Exception{
-    public XmlPathException(String message) {
-      super(message);
-    }
-  }
 }

@@ -17,38 +17,38 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchSubscriberEvent extends TwitchEvent {
 
-  @XmlElement(name = "User")
-  private final User user;
+    @XmlElement(name = "User")
+    private final User user;
 
-  @XmlElement(name = "Timestamp")
-  private DateTime timeStamp;
+    @XmlElement(name = "Timestamp")
+    private DateTime timeStamp;
 
-  @XmlElement(name = "SubPlan")
-  private SubscriberPlanType subPlan;
+    @XmlElement(name = "SubPlan")
+    private SubscriberPlanType subPlan;
 
-  @XmlElement(name = "IsResub")
-  private boolean isResub;
+    @XmlElement(name = "IsResub")
+    private boolean isResub;
 
-  public TwitchSubscriberEvent(User user, DateTime timeStamp, SubscriberPlanType subPlan, boolean isResub) {
-    this.user = user;
-    this.timeStamp = timeStamp;
-    this.subPlan = subPlan;
-    this.isResub = isResub;
-  }
+    public TwitchSubscriberEvent(User user, DateTime timeStamp, SubscriberPlanType subPlan, boolean isResub) {
+        this.user = user;
+        this.timeStamp = timeStamp;
+        this.subPlan = subPlan;
+        this.isResub = isResub;
+    }
 
-  public User getUser() {
-    return user;
-  }
+    public User getUser() {
+        return user;
+    }
 
-  public DateTime getTimeStamp() {
-    return timeStamp;
-  }
+    public DateTime getTimeStamp() {
+        return timeStamp;
+    }
 
-  public SubscriberPlanType getSubPlan() {
-    return subPlan;
-  }
+    public SubscriberPlanType getSubPlan() {
+        return subPlan;
+    }
 
-  public boolean isResub() {
-    return isResub;
-  }
+    public boolean isResub() {
+        return isResub;
+    }
 }

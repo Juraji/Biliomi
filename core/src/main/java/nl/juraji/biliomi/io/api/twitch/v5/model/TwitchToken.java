@@ -13,58 +13,58 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchToken {
 
-  @XmlElement(name = "authorization")
-  private TwitchAuthorization authorization;
+    @XmlElement(name = "authorization")
+    private TwitchAuthorization authorization;
 
-  @XmlElement(name = "client_id")
-  private String clientId;
+    @XmlElement(name = "client_id")
+    private String clientId;
 
-  @XmlElement(name = "user_id")
-  private String userId;
+    @XmlElement(name = "user_id")
+    private String userId;
 
-  @XmlElement(name = "user_name")
-  private String username;
+    @XmlElement(name = "user_name")
+    private String username;
 
-  @XmlElement(name = "valid")
-  private Boolean valid;
+    @XmlElement(name = "valid")
+    private Boolean valid;
 
-  public TwitchAuthorization getAuthorization() {
-    return authorization;
-  }
+    public TwitchAuthorization getAuthorization() {
+        return authorization;
+    }
 
-  public void setAuthorization(TwitchAuthorization authorization) {
-    this.authorization = authorization;
-  }
+    public void setAuthorization(TwitchAuthorization authorization) {
+        this.authorization = authorization;
+    }
 
-  public String getClientId() {
-    return clientId;
-  }
+    public String getClientId() {
+        return clientId;
+    }
 
-  public void setClientId(String clientId) {
-    this.clientId = clientId;
-  }
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
 
-  public String getUserId() {
-    return userId;
-  }
+    public String getUserId() {
+        return userId;
+    }
 
-  public void setUserId(String userId) {
-    this.userId = userId;
-  }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-  public String getUsername() {
-    return username;
-  }
+    public String getUsername() {
+        return username;
+    }
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-  public Boolean getValid() {
-    return valid;
-  }
+    public Boolean getValid() {
+        return valid;
+    }
 
-  public void setValid(Boolean valid) {
-    this.valid = valid;
-  }
+    public void setValid(Boolean valid) {
+        this.valid = valid;
+    }
 }

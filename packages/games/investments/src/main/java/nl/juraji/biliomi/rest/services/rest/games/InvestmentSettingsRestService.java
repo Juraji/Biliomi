@@ -12,20 +12,20 @@ import javax.ws.rs.Path;
 @Path("/games/settings/investments")
 public class InvestmentSettingsRestService extends SettingsModelRestService<InvestmentSettings> {
 
-  @Override
-  public InvestmentSettings getEntity() {
-    return settingsService.getSettings(InvestmentSettings.class);
-  }
+    @Override
+    public InvestmentSettings getEntity() {
+        return settingsService.getSettings(InvestmentSettings.class);
+    }
 
-  @Override
-  public InvestmentSettings updateEntity(InvestmentSettings e) {
-    InvestmentSettings settings = settingsService.getSettings(InvestmentSettings.class);
+    @Override
+    public InvestmentSettings updateEntity(InvestmentSettings e) {
+        InvestmentSettings settings = settingsService.getSettings(InvestmentSettings.class);
 
-    settings.setInvestmentDuration(e.getInvestmentDuration());
-    settings.setMinInterest(e.getMinInterest());
-    settings.setMaxInterest(e.getMaxInterest());
+        settings.setInvestmentDuration(e.getInvestmentDuration());
+        settings.setMinInterest(e.getMinInterest());
+        settings.setMaxInterest(e.getMaxInterest());
 
-    settingsService.save(settings);
-    return settings;
-  }
+        settingsService.save(settings);
+        return settings;
+    }
 }

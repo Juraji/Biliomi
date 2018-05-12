@@ -16,39 +16,39 @@ import java.util.List;
 @Path("/chat/hostrecords")
 public class HostRecordRestService extends ModelRestService<HostRecord> {
 
-  @Inject
-  private HostRecordDao hostRecordDao;
+    @Inject
+    private HostRecordDao hostRecordDao;
 
-  @Override
-  public List<HostRecord> getEntities() {
-    return hostRecordDao.getList();
-  }
-
-  @Override
-  public HostRecord getEntity(long id) {
-    throw new ForbiddenException();
-  }
-
-  @Override
-  public HostRecord createEntity(HostRecord e) {
-    hostRecordDao.save(e);
-    return e;
-  }
-
-  @Override
-  public HostRecord updateEntity(HostRecord e, long id) {
-    throw new ForbiddenException();
-  }
-
-  @Override
-  public boolean deleteEntity(long id) {
-    HostRecord hostRecord = hostRecordDao.get(id);
-
-    if (hostRecord == null) {
-      return false;
+    @Override
+    public List<HostRecord> getEntities() {
+        return hostRecordDao.getList();
     }
 
-    hostRecordDao.delete(hostRecord);
-    return true;
-  }
+    @Override
+    public HostRecord getEntity(long id) {
+        throw new ForbiddenException();
+    }
+
+    @Override
+    public HostRecord createEntity(HostRecord e) {
+        hostRecordDao.save(e);
+        return e;
+    }
+
+    @Override
+    public HostRecord updateEntity(HostRecord e, long id) {
+        throw new ForbiddenException();
+    }
+
+    @Override
+    public boolean deleteEntity(long id) {
+        HostRecord hostRecord = hostRecordDao.get(id);
+
+        if (hostRecord == null) {
+            return false;
+        }
+
+        hostRecordDao.delete(hostRecord);
+        return true;
+    }
 }

@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "IrcUserLeftEvent")
 public class IrcUserLeftEvent extends IrcUserEvent {
-  public IrcUserLeftEvent(String username, Tags tags) {
-    super(username, tags);
-  }
+    public IrcUserLeftEvent(String username, Tags tags) {
+        super(username, tags);
+    }
 }

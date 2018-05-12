@@ -19,16 +19,16 @@ import javax.interceptor.InvocationContext;
 @CliCommandRouteImplementor
 public class CliCommandRouteImplementorInterceptor {
 
-  @Inject
-  private CliCommandRouterRegistry cliCommandRouterRegistry;
+    @Inject
+    private CliCommandRouterRegistry cliCommandRouterRegistry;
 
-  @PostConstruct
-  public Object registerCommandRoutes(InvocationContext ctx) throws Exception {
-    Component component = (Component) ctx.getTarget();
-    CommandRouter.findCommandMethods(component.getClass(), CliCommandRoute.class)
-        .mapKey(CliCommandRoute::command)
-        .forEach((command, method) -> cliCommandRouterRegistry.put(command, component, method));
+    @PostConstruct
+    public Object registerCommandRoutes(InvocationContext ctx) throws Exception {
+        Component component = (Component) ctx.getTarget();
+        CommandRouter.findCommandMethods(component.getClass(), CliCommandRoute.class)
+                .mapKey(CliCommandRoute::command)
+                .forEach((command, method) -> cliCommandRouterRegistry.put(command, component, method));
 
-    return ctx.proceed();
-  }
+        return ctx.proceed();
+    }
 }

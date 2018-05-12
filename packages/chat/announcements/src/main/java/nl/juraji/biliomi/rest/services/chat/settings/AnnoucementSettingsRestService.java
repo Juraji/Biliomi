@@ -12,21 +12,21 @@ import javax.ws.rs.Path;
 @Path("/chat/settings/announcements")
 public class AnnoucementSettingsRestService extends SettingsModelRestService<AnnouncementsSettings> {
 
-  @Override
-  public AnnouncementsSettings getEntity() {
-    return settingsService.getSettings(AnnouncementsSettings.class);
-  }
+    @Override
+    public AnnouncementsSettings getEntity() {
+        return settingsService.getSettings(AnnouncementsSettings.class);
+    }
 
-  @Override
-  public AnnouncementsSettings updateEntity(AnnouncementsSettings e) {
-    AnnouncementsSettings settings = settingsService.getSettings(AnnouncementsSettings.class);
+    @Override
+    public AnnouncementsSettings updateEntity(AnnouncementsSettings e) {
+        AnnouncementsSettings settings = settingsService.getSettings(AnnouncementsSettings.class);
 
-    settings.setEnabled(e.isEnabled());
-    settings.setShuffle(e.isShuffle());
-    settings.setRunInterval(e.getRunInterval());
-    settings.setMinChatMessages(e.getMinChatMessages());
+        settings.setEnabled(e.isEnabled());
+        settings.setShuffle(e.isShuffle());
+        settings.setRunInterval(e.getRunInterval());
+        settings.setMinChatMessages(e.getMinChatMessages());
 
-    settingsService.save(settings);
-    return settings;
-  }
+        settingsService.save(settings);
+        return settings;
+    }
 }

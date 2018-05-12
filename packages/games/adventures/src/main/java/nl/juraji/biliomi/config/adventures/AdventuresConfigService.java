@@ -14,15 +14,15 @@ import javax.inject.Singleton;
 @Singleton
 public class AdventuresConfigService extends ConfigService<YamlAdventureConfig> {
 
-  public AdventuresConfigService() {
-    super("games/adventures.yml", YamlAdventureConfig.class);
-  }
+    public AdventuresConfigService() {
+        super("games/adventures.yml", YamlAdventureConfig.class);
+    }
 
-  public long getNextChapterInterval() {
-    return config.getNextChapterInterval();
-  }
+    public long getNextChapterInterval() {
+        return config.getNextChapterInterval();
+    }
 
-  public YamlAdventureStory getRandomStory() {
-    return MathUtils.listRand(config.getStories());
-  }
+    public YamlAdventureStory getRandomStory() {
+        return MathUtils.listRand(config.getStories());
+    }
 }

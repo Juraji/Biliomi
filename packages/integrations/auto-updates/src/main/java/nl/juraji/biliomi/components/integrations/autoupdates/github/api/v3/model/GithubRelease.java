@@ -14,80 +14,80 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GithubRelease {
 
-  @XmlElement(name = "html_url")
-  private String url;
+    @XmlElement(name = "html_url")
+    private String url;
 
-  @XmlElement(name = "tag_name")
-  private String tagName;
+    @XmlElement(name = "tag_name")
+    private String tagName;
 
-  @XmlElement(name = "name")
-  private String name;
+    @XmlElement(name = "name")
+    private String name;
 
-  @XmlElement(name = "draft")
-  private boolean isDraft;
+    @XmlElement(name = "draft")
+    private boolean isDraft;
 
-  @XmlElement(name = "prerelease")
-  private boolean isPrerelease;
+    @XmlElement(name = "prerelease")
+    private boolean isPrerelease;
 
-  @XmlElement(name = "published_at")
-  private String publishedAt;
+    @XmlElement(name = "published_at")
+    private String publishedAt;
 
-  @XmlElement(name = "assets")
-  private List<GithubReleaseAsset> assets;
+    @XmlElement(name = "assets")
+    private List<GithubReleaseAsset> assets;
 
-  public String getUrl() {
-    return url;
-  }
+    public String getUrl() {
+        return url;
+    }
 
-  public void setUrl(String url) {
-    this.url = url;
-  }
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-  public String getTagName() {
-    return tagName;
-  }
+    public String getTagName() {
+        return tagName;
+    }
 
-  public void setTagName(String tagName) {
-    this.tagName = tagName;
-  }
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public boolean isDraft() {
-    return isDraft;
-  }
+    public boolean isDraft() {
+        return isDraft;
+    }
 
-  public void setDraft(boolean draft) {
-    isDraft = draft;
-  }
+    public void setDraft(boolean draft) {
+        isDraft = draft;
+    }
 
-  public boolean isPrerelease() {
-    return isPrerelease;
-  }
+    public boolean isPrerelease() {
+        return isPrerelease;
+    }
 
-  public void setPrerelease(boolean prerelease) {
-    isPrerelease = prerelease;
-  }
+    public void setPrerelease(boolean prerelease) {
+        isPrerelease = prerelease;
+    }
 
-  public String getPublishedAt() {
-    return publishedAt;
-  }
+    public String getPublishedAt() {
+        return publishedAt;
+    }
 
-  public void setPublishedAt(String publishedAt) {
-    this.publishedAt = publishedAt;
-  }
+    public void setPublishedAt(String publishedAt) {
+        this.publishedAt = publishedAt;
+    }
 
-  public List<GithubReleaseAsset> getAssets() {
-    return assets;
-  }
+    public List<GithubReleaseAsset> getAssets() {
+        return assets;
+    }
 
-  public void setAssets(List<GithubReleaseAsset> assets) {
-    this.assets = assets;
-  }
+    public void setAssets(List<GithubReleaseAsset> assets) {
+        this.assets = assets;
+    }
 }

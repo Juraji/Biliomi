@@ -21,16 +21,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @OnDelete(action = OnDeleteAction.CASCADE)
 public class CustomCommand extends Command {
 
-  @Column
-  @NotNull
-  @XmlElement(name = "Message")
-  private String message;
+    @Column
+    @NotNull
+    @XmlElement(name = "Message")
+    private String message;
 
-  public String getMessage() {
-    return message;
-  }
+    public String getMessage() {
+        return message;
+    }
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

@@ -33,249 +33,249 @@ import java.util.stream.Collectors;
 @EventBusSubscriber
 public class PointsComponent extends Component {
 
-  @Inject
-  private PointsPayoutTimerService pointsPayoutTimer;
+    @Inject
+    private PointsPayoutTimerService pointsPayoutTimer;
 
-  @Inject
-  private TimeFormatter timeFormatter;
+    @Inject
+    private TimeFormatter timeFormatter;
 
-  @Inject
-  private PointsService pointsService;
+    @Inject
+    private PointsService pointsService;
 
-  @Inject
-  private CommandService commandService;
+    @Inject
+    private CommandService commandService;
 
-  private PointsSettings settings;
+    private PointsSettings settings;
 
-  @Override
-  public void init() {
-    settings = settingsService.getSettings(PointsSettings.class, s -> settings = s);
-    pointsPayoutTimer.start();
-  }
-
-  @Subscribe
-  public void onChannelStateEvent(ChannelStateEvent event) {
-    pointsPayoutTimer.restart();
-  }
-
-  /**
-   * The main command for setting pointspayout settings
-   * Only contains subcommand, so all calls are pushed to captureSubCommands
-   * Usage: !pointssettings [pointsnames|enable|interval|amount] [more...]
-   */
-  @CommandRoute(command = "pointssettings", systemCommand = true)
-  public boolean pointsSettingsCommand(User user, Arguments arguments) {
-    return captureSubCommands("pointssettings", i18n.supply("ChatCommand.pointsSettingsCommand.usage"), user, arguments);
-  }
-
-  /**
-   * Set the names for points
-   * Usage: !pointssettings pointsnames [singular name] [plural name]
-   */
-  @SubCommandRoute(parentCommand = "pointssettings", command = "pointsnames")
-  public boolean pointsSettingsCommandPointsNameSingular(User user, Arguments arguments) {
-    if (!arguments.assertSize(2)) {
-      chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.pointsNames.usage"));
-      return false;
+    @Override
+    public void init() {
+        settings = settingsService.getSettings(PointsSettings.class, s -> settings = s);
+        pointsPayoutTimer.start();
     }
 
-    String singularName = arguments.get(0);
-    String pluralName = arguments.getSafe(1);
-    String oldAlias = "my" + settings.getPointsNamePlural().toLowerCase();
-    String newAlias = "my" + pluralName.toLowerCase();
-
-    settings.setPointsNameSingular(singularName);
-    settings.setPointsNamePlural(pluralName);
-    settingsService.save(settings);
-
-    commandService.removeAlias(oldAlias);
-    commandService.registerAlias(newAlias, "mypoints");
-
-    chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.pointsNames.set")
-        .add("singular", settings::getPointsNameSingular)
-        .add("plural", settings::getPointsNamePlural));
-
-    chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.pointsNames.set.newPointsAlias")
-        .add("alias", newAlias));
-    return true;
-  }
-
-  /**
-   * The sub command for enabling/disabling points payouts
-   * Usage: !pointssettings enablepayouts [online|offline] [on/off]
-   */
-  @SubCommandRoute(parentCommand = "pointssettings", command = "enablepayouts")
-  public boolean pointsSettingsCommandEnable(User user, Arguments arguments) {
-    StreamState streamState = EnumUtils.toEnum(arguments.get(0), StreamState.class);
-    OnOff onOff = EnumUtils.toEnum(arguments.get(1), OnOff.class);
-
-    if (streamState == null || onOff == null) {
-      chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.enablepayouts.usage"));
-      return false;
+    @Subscribe
+    public void onChannelStateEvent(ChannelStateEvent event) {
+        pointsPayoutTimer.restart();
     }
 
-    if (StreamState.ONLINE.equals(streamState)) {
-      settings.setTrackOnline(OnOff.ON.equals(onOff));
-    } else {
-      settings.setTrackOffline(OnOff.ON.equals(onOff));
+    /**
+     * The main command for setting pointspayout settings
+     * Only contains subcommand, so all calls are pushed to captureSubCommands
+     * Usage: !pointssettings [pointsnames|enable|interval|amount] [more...]
+     */
+    @CommandRoute(command = "pointssettings", systemCommand = true)
+    public boolean pointsSettingsCommand(User user, Arguments arguments) {
+        return captureSubCommands("pointssettings", i18n.supply("ChatCommand.pointsSettingsCommand.usage"), user, arguments);
     }
 
-    settingsService.save(settings);
-    chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.enablepayouts.set")
-        .add("streamstate", i18n.getStreamState(streamState))
-        .add("state", i18n.getEnabledDisabled(onOff)));
+    /**
+     * Set the names for points
+     * Usage: !pointssettings pointsnames [singular name] [plural name]
+     */
+    @SubCommandRoute(parentCommand = "pointssettings", command = "pointsnames")
+    public boolean pointsSettingsCommandPointsNameSingular(User user, Arguments arguments) {
+        if (!arguments.assertSize(2)) {
+            chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.pointsNames.usage"));
+            return false;
+        }
 
-    return true;
-  }
+        String singularName = arguments.get(0);
+        String pluralName = arguments.getSafe(1);
+        String oldAlias = "my" + settings.getPointsNamePlural().toLowerCase();
+        String newAlias = "my" + pluralName.toLowerCase();
 
-  /**
-   * The sub command for setting payout intervals
-   * Usage: !pointssettings interval [online|offline] [minutes (5 at minimum)]
-   */
-  @SubCommandRoute(parentCommand = "pointssettings", command = "interval")
-  public boolean pointsSettingsCommandInterval(User user, Arguments arguments) {
-    StreamState when = EnumUtils.toEnum(arguments.get(0), StreamState.class);
-    Integer intervalMinutes = NumberConverter.asNumber(arguments.getSafe(1)).toInteger();
+        settings.setPointsNameSingular(singularName);
+        settings.setPointsNamePlural(pluralName);
+        settingsService.save(settings);
 
-    if (when == null || intervalMinutes == null || intervalMinutes < 5) {
-      chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.interval.usage"));
-      return false;
+        commandService.removeAlias(oldAlias);
+        commandService.registerAlias(newAlias, "mypoints");
+
+        chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.pointsNames.set")
+                .add("singular", settings::getPointsNameSingular)
+                .add("plural", settings::getPointsNamePlural));
+
+        chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.pointsNames.set.newPointsAlias")
+                .add("alias", newAlias));
+        return true;
     }
 
-    Duration duration = new Duration(intervalMinutes, 60000);
+    /**
+     * The sub command for enabling/disabling points payouts
+     * Usage: !pointssettings enablepayouts [online|offline] [on/off]
+     */
+    @SubCommandRoute(parentCommand = "pointssettings", command = "enablepayouts")
+    public boolean pointsSettingsCommandEnable(User user, Arguments arguments) {
+        StreamState streamState = EnumUtils.toEnum(arguments.get(0), StreamState.class);
+        OnOff onOff = EnumUtils.toEnum(arguments.get(1), OnOff.class);
 
-    if (StreamState.ONLINE.equals(when)) {
-      settings.setOnlinePayoutInterval(duration.getMillis());
-    } else {
-      settings.setOfflinePayoutInterval(duration.getMillis());
+        if (streamState == null || onOff == null) {
+            chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.enablepayouts.usage"));
+            return false;
+        }
+
+        if (StreamState.ONLINE.equals(streamState)) {
+            settings.setTrackOnline(OnOff.ON.equals(onOff));
+        } else {
+            settings.setTrackOffline(OnOff.ON.equals(onOff));
+        }
+
+        settingsService.save(settings);
+        chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.enablepayouts.set")
+                .add("streamstate", i18n.getStreamState(streamState))
+                .add("state", i18n.getEnabledDisabled(onOff)));
+
+        return true;
     }
 
-    settingsService.save(settings);
-    chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.interval.set")
-        .add("streamstate", i18n.getStreamState(when))
-        .add("interval", timeFormatter.timeQuantity(duration.getMillis())));
-    return true;
-  }
+    /**
+     * The sub command for setting payout intervals
+     * Usage: !pointssettings interval [online|offline] [minutes (5 at minimum)]
+     */
+    @SubCommandRoute(parentCommand = "pointssettings", command = "interval")
+    public boolean pointsSettingsCommandInterval(User user, Arguments arguments) {
+        StreamState when = EnumUtils.toEnum(arguments.get(0), StreamState.class);
+        Integer intervalMinutes = NumberConverter.asNumber(arguments.getSafe(1)).toInteger();
 
-  /**
-   * The sub command for setting payout amounts per interval
-   * Usage: !pointssettings amount [online|offline] [amount of points (1 at minimum)]
-   */
-  @SubCommandRoute(parentCommand = "pointssettings", command = "amount")
-  public boolean pointsSettingsCommandAmount(User user, Arguments arguments) {
-    StreamState when = EnumUtils.toEnum(arguments.get(0), StreamState.class);
-    Long amount = NumberConverter.asNumber(arguments.getSafe(1)).toLong();
+        if (when == null || intervalMinutes == null || intervalMinutes < 5) {
+            chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.interval.usage"));
+            return false;
+        }
 
-    if (when == null || amount == null || amount < 1) {
-      chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.amount.usage"));
-      return false;
+        Duration duration = new Duration(intervalMinutes, 60000);
+
+        if (StreamState.ONLINE.equals(when)) {
+            settings.setOnlinePayoutInterval(duration.getMillis());
+        } else {
+            settings.setOfflinePayoutInterval(duration.getMillis());
+        }
+
+        settingsService.save(settings);
+        chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.interval.set")
+                .add("streamstate", i18n.getStreamState(when))
+                .add("interval", timeFormatter.timeQuantity(duration.getMillis())));
+        return true;
     }
 
-    if (StreamState.ONLINE.equals(when)) {
-      settings.setOnlinePayoutAmount(amount);
-    } else {
-      settings.setOfflinePayoutAmount(amount);
+    /**
+     * The sub command for setting payout amounts per interval
+     * Usage: !pointssettings amount [online|offline] [amount of points (1 at minimum)]
+     */
+    @SubCommandRoute(parentCommand = "pointssettings", command = "amount")
+    public boolean pointsSettingsCommandAmount(User user, Arguments arguments) {
+        StreamState when = EnumUtils.toEnum(arguments.get(0), StreamState.class);
+        Long amount = NumberConverter.asNumber(arguments.getSafe(1)).toLong();
+
+        if (when == null || amount == null || amount < 1) {
+            chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.amount.usage"));
+            return false;
+        }
+
+        if (StreamState.ONLINE.equals(when)) {
+            settings.setOnlinePayoutAmount(amount);
+        } else {
+            settings.setOfflinePayoutAmount(amount);
+        }
+
+        settingsService.save(settings);
+        chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.amount.set")
+                .add("streamstate", i18n.getStreamState(when))
+                .add("amount", amount));
+
+        return true;
     }
 
-    settingsService.save(settings);
-    chat.whisper(user, i18n.get("ChatCommand.pointsSettingsCommand.amount.set")
-        .add("streamstate", i18n.getStreamState(when))
-        .add("amount", amount));
-
-    return true;
-  }
-
-  /**
-   * Manage points
-   * Only contains subcommand, so all calls are pushed to captureSubCommands
-   * Usage: !managepoints [give|take|everyone] [more...]
-   */
-  @CommandRoute(command = "managepoints", systemCommand = true)
-  public boolean managepointsCommand(User user, Arguments arguments) {
-    return captureSubCommands("managepoints", i18n.supply("ChatCommand.managePoints.usage"), user, arguments);
-  }
-
-  /**
-   * Give points to specific users
-   * Usage: !managepoints give [username] [amount of points]
-   */
-  @SubCommandRoute(parentCommand = "managepoints", command = "give")
-  public boolean managepointsCommandGive(User user, Arguments arguments) {
-    if (!arguments.assertSize(2) || NumberConverter.asNumber(arguments.get(1)).isNaN()) {
-      chat.whisper(user, i18n.get("ChatCommand.managePoints.give.usage"));
-      return false;
+    /**
+     * Manage points
+     * Only contains subcommand, so all calls are pushed to captureSubCommands
+     * Usage: !managepoints [give|take|everyone] [more...]
+     */
+    @CommandRoute(command = "managepoints", systemCommand = true)
+    public boolean managepointsCommand(User user, Arguments arguments) {
+        return captureSubCommands("managepoints", i18n.supply("ChatCommand.managePoints.usage"), user, arguments);
     }
 
-    User targetUser = usersService.getUser(arguments.get(0));
-    if (targetUser == null) {
-      chat.whisper(user, i18n.getUserNonExistent(arguments.get(0)));
-      return false;
+    /**
+     * Give points to specific users
+     * Usage: !managepoints give [username] [amount of points]
+     */
+    @SubCommandRoute(parentCommand = "managepoints", command = "give")
+    public boolean managepointsCommandGive(User user, Arguments arguments) {
+        if (!arguments.assertSize(2) || NumberConverter.asNumber(arguments.get(1)).isNaN()) {
+            chat.whisper(user, i18n.get("ChatCommand.managePoints.give.usage"));
+            return false;
+        }
+
+        User targetUser = usersService.getUser(arguments.get(0));
+        if (targetUser == null) {
+            chat.whisper(user, i18n.getUserNonExistent(arguments.get(0)));
+            return false;
+        }
+
+        long amount = NumberConverter.asNumber(arguments.get(1)).toLong();
+        targetUser.addPoints(amount);
+        usersService.save(targetUser);
+
+        chat.say(i18n.get("ChatCommand.managePoints.give.given")
+                .add("casterusername", user::getDisplayName)
+                .add("targetusername", targetUser::getDisplayName)
+                .add("points", pointsService.asString(amount))
+                .add("newbalance", pointsService.asString(targetUser.getPoints())));
+        return true;
     }
 
-    long amount = NumberConverter.asNumber(arguments.get(1)).toLong();
-    targetUser.addPoints(amount);
-    usersService.save(targetUser);
+    /**
+     * Take points from specific users
+     * Usage: !managepoints take [username] [amount of points]
+     */
+    @SubCommandRoute(parentCommand = "managepoints", command = "take")
+    public boolean managepointsCommandTake(User user, Arguments arguments) {
+        if (!arguments.assertSize(2) || NumberConverter.asNumber(arguments.get(1)).isNaN()) {
+            chat.whisper(user, i18n.get("ChatCommand.managePoints.take.usage"));
+            return false;
+        }
 
-    chat.say(i18n.get("ChatCommand.managePoints.give.given")
-        .add("casterusername", user::getDisplayName)
-        .add("targetusername", targetUser::getDisplayName)
-        .add("points", pointsService.asString(amount))
-        .add("newbalance", pointsService.asString(targetUser.getPoints())));
-    return true;
-  }
+        User targetUser = usersService.getUser(arguments.get(0));
+        if (targetUser == null) {
+            chat.whisper(user, i18n.getUserNonExistent(arguments.get(0)));
+            return false;
+        }
 
-  /**
-   * Take points from specific users
-   * Usage: !managepoints take [username] [amount of points]
-   */
-  @SubCommandRoute(parentCommand = "managepoints", command = "take")
-  public boolean managepointsCommandTake(User user, Arguments arguments) {
-    if (!arguments.assertSize(2) || NumberConverter.asNumber(arguments.get(1)).isNaN()) {
-      chat.whisper(user, i18n.get("ChatCommand.managePoints.take.usage"));
-      return false;
+        long amount = NumberConverter.asNumber(arguments.get(1)).toLong();
+        targetUser.takePoints(amount);
+        usersService.save(targetUser);
+
+        chat.say(i18n.get("ChatCommand.managePoints.take.taken")
+                .add("casterusername", user::getDisplayName)
+                .add("targetusername", targetUser::getDisplayName)
+                .add("points", pointsService.asString(amount))
+                .add("newbalance", pointsService.asString(targetUser.getPoints())));
+        return true;
     }
 
-    User targetUser = usersService.getUser(arguments.get(0));
-    if (targetUser == null) {
-      chat.whisper(user, i18n.getUserNonExistent(arguments.get(0)));
-      return false;
+    /**
+     * Give points to all users currently in the chat
+     * Usage: !managepoints everyone [amount of points]
+     */
+    @SubCommandRoute(parentCommand = "managepoints", command = "everyone")
+    public boolean managepointsCommandToall(User user, Arguments arguments) {
+        if (!arguments.assertSize(1) || NumberConverter.asNumber(arguments.get(0)).isNaN()) {
+            chat.whisper(user, i18n.get("ChatCommand.managePoints.everyone.usage"));
+            return false;
+        }
+
+        long amount = NumberConverter.asNumber(arguments.get(0)).toLong();
+        List<User> currentViewers = chat.getViewers().stream()
+                .map(viewer -> usersService.getUser(viewer))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        currentViewers.forEach(viewer -> viewer.addPoints(amount));
+        usersService.save(currentViewers);
+
+        chat.say(i18n.get("ChatCommand.managePoints.everyone.given")
+                .add("casterusername", user::getDisplayName)
+                .add("points", pointsService.asString(amount)));
+        return true;
     }
-
-    long amount = NumberConverter.asNumber(arguments.get(1)).toLong();
-    targetUser.takePoints(amount);
-    usersService.save(targetUser);
-
-    chat.say(i18n.get("ChatCommand.managePoints.take.taken")
-        .add("casterusername", user::getDisplayName)
-        .add("targetusername", targetUser::getDisplayName)
-        .add("points", pointsService.asString(amount))
-        .add("newbalance", pointsService.asString(targetUser.getPoints())));
-    return true;
-  }
-
-  /**
-   * Give points to all users currently in the chat
-   * Usage: !managepoints everyone [amount of points]
-   */
-  @SubCommandRoute(parentCommand = "managepoints", command = "everyone")
-  public boolean managepointsCommandToall(User user, Arguments arguments) {
-    if (!arguments.assertSize(1) || NumberConverter.asNumber(arguments.get(0)).isNaN()) {
-      chat.whisper(user, i18n.get("ChatCommand.managePoints.everyone.usage"));
-      return false;
-    }
-
-    long amount = NumberConverter.asNumber(arguments.get(0)).toLong();
-    List<User> currentViewers = chat.getViewers().stream()
-        .map(viewer -> usersService.getUser(viewer))
-        .filter(Objects::nonNull)
-        .collect(Collectors.toList());
-
-    currentViewers.forEach(viewer -> viewer.addPoints(amount));
-    usersService.save(currentViewers);
-
-    chat.say(i18n.get("ChatCommand.managePoints.everyone.given")
-        .add("casterusername", user::getDisplayName)
-        .add("points", pointsService.asString(amount)));
-    return true;
-  }
 }

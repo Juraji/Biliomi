@@ -21,64 +21,64 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class KillRecord {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @XmlElement(name = "Id")
-  private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement(name = "Id")
+    private long id;
 
-  @OneToOne
-  @NotNull
-  @XmlElement(name = "Killer")
-  private User killer;
+    @OneToOne
+    @NotNull
+    @XmlElement(name = "Killer")
+    private User killer;
 
-  @OneToOne
-  @NotNull
-  @XmlElement(name = "Target")
-  private User target;
+    @OneToOne
+    @NotNull
+    @XmlElement(name = "Target")
+    private User target;
 
-  @Column
-  @XmlElement(name = "IsSuicide")
-  private boolean isSuicide;
+    @Column
+    @XmlElement(name = "IsSuicide")
+    private boolean isSuicide;
 
-  @Column
-  @NotNull
-  @Type(type = DateTimeISO8601Type.TYPE)
-  @XmlElement(name = "Date")
-  private DateTime date;
+    @Column
+    @NotNull
+    @Type(type = DateTimeISO8601Type.TYPE)
+    @XmlElement(name = "Date")
+    private DateTime date;
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public User getKiller() {
-    return killer;
-  }
+    public User getKiller() {
+        return killer;
+    }
 
-  public void setKiller(User killer) {
-    this.killer = killer;
-  }
+    public void setKiller(User killer) {
+        this.killer = killer;
+    }
 
-  public User getTarget() {
-    return target;
-  }
+    public User getTarget() {
+        return target;
+    }
 
-  public void setTarget(User target) {
-    this.target = target;
-  }
+    public void setTarget(User target) {
+        this.target = target;
+    }
 
-  public boolean isSuicide() {
-    return isSuicide;
-  }
+    public boolean isSuicide() {
+        return isSuicide;
+    }
 
-  public void setSuicide(boolean suicide) {
-    isSuicide = suicide;
-  }
+    public void setSuicide(boolean suicide) {
+        isSuicide = suicide;
+    }
 
-  public DateTime getDate() {
-    return date;
-  }
+    public DateTime getDate() {
+        return date;
+    }
 
-  public void setDate(DateTime date) {
-    this.date = date;
-  }
+    public void setDate(DateTime date) {
+        this.date = date;
+    }
 }

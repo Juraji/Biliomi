@@ -25,64 +25,64 @@ import java.util.stream.Collectors;
 @Singleton
 public class PointsPayoutTimerService extends TimerService {
 
-  @Inject
-  private UsersService usersService;
+    @Inject
+    private UsersService usersService;
 
-  @Inject
-  private ChannelService channelService;
+    @Inject
+    private ChannelService channelService;
 
-  @Inject
-  private ChatService chatService;
+    @Inject
+    private ChatService chatService;
 
-  @Inject
-  private SettingsService settingsService;
+    @Inject
+    private SettingsService settingsService;
 
-  private PointsSettings settings;
+    private PointsSettings settings;
 
-  @PostConstruct
-  private void initPointsPayoutTimerService() {
-    settings = settingsService.getSettings(PointsSettings.class, e -> {
-      settings = e;
-      restart();
-    });
-  }
-
-  @Override
-  public void start() {
-    if (channelService.isStreamOnline()) {
-      boolean onlineEnabled = settings.isTrackOnline();
-      long amount = settings.getOnlinePayoutAmount();
-      long payoutInterval = settings.getOnlinePayoutInterval();
-
-      if (onlineEnabled) {
-        super.start();
-        scheduleAtFixedRate(() -> doPayouts(amount), 0, payoutInterval, TimeUnit.MILLISECONDS);
-      }
-    } else {
-      boolean offlineEnabled = settings.isTrackOffline();
-      long amount = settings.getOfflinePayoutAmount();
-      long payoutInterval = settings.getOfflinePayoutInterval();
-
-      if (offlineEnabled) {
-        super.start();
-        scheduleAtFixedRate(() -> doPayouts(amount), 0, payoutInterval, TimeUnit.MILLISECONDS);
-      }
+    @PostConstruct
+    private void initPointsPayoutTimerService() {
+        settings = settingsService.getSettings(PointsSettings.class, e -> {
+            settings = e;
+            restart();
+        });
     }
-  }
 
-  private void doPayouts(long amount) {
-    List<String> chatters = chatService.getViewers();
+    @Override
+    public void start() {
+        if (channelService.isStreamOnline()) {
+            boolean onlineEnabled = settings.isTrackOnline();
+            long amount = settings.getOnlinePayoutAmount();
+            long payoutInterval = settings.getOnlinePayoutInterval();
 
-    List<User> users = chatters.stream()
-        .map(usersService::getUser)
-        .filter(Objects::nonNull)
-        .filter(user -> user.isCaster() || user.isFollower() || user.isSubscriber())
-        .collect(Collectors.toList());
+            if (onlineEnabled) {
+                super.start();
+                scheduleAtFixedRate(() -> doPayouts(amount), 0, payoutInterval, TimeUnit.MILLISECONDS);
+            }
+        } else {
+            boolean offlineEnabled = settings.isTrackOffline();
+            long amount = settings.getOfflinePayoutAmount();
+            long payoutInterval = settings.getOfflinePayoutInterval();
 
-    logger.info("Running points payouts for {} users, with {} {} per user...",
-        users.size(), amount, settings.getPointsNamePlural());
+            if (offlineEnabled) {
+                super.start();
+                scheduleAtFixedRate(() -> doPayouts(amount), 0, payoutInterval, TimeUnit.MILLISECONDS);
+            }
+        }
+    }
 
-    users.forEach(user -> user.setPoints(user.getPoints() + amount));
-    usersService.save(users);
-  }
+    private void doPayouts(long amount) {
+        List<String> chatters = chatService.getViewers();
+
+        List<User> users = chatters.stream()
+                .map(usersService::getUser)
+                .filter(Objects::nonNull)
+                .filter(user -> user.isCaster() || user.isFollower() || user.isSubscriber())
+                .collect(Collectors.toList());
+
+        logger.info("Running points payouts for {} users, with {} {} per user...",
+                users.size(), amount, settings.getPointsNamePlural());
+
+        users.forEach(user -> user.setPoints(user.getPoints() + amount));
+        usersService.save(users);
+    }
 }

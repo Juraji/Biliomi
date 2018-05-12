@@ -11,24 +11,24 @@ import twitter4j.StatusListener;
  */
 public interface TweetListener extends StatusListener {
 
-  @Override
-  void onStatus(Status status);
+    @Override
+    void onStatus(Status status);
 
-  @Override
-  void onStallWarning(StallWarning warning);
+    @Override
+    void onStallWarning(StallWarning warning);
 
-  @Override
-  default void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
-    // Not required
-  }
+    @Override
+    default void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
+        // Not required
+    }
 
-  @Override
-  default void onTrackLimitationNotice(int numberOfLimitedStatuses) {
-    // Not required
-  }
+    @Override
+    default void onTrackLimitationNotice(int numberOfLimitedStatuses) {
+        // Not required
+    }
 
-  @Override
-  default void onScrubGeo(long userId, long upToStatusId) {
-    // Not required
-  }
+    @Override
+    default void onScrubGeo(long userId, long upToStatusId) {
+        // Not required
+    }
 }

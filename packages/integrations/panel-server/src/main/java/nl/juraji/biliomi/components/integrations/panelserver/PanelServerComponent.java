@@ -19,22 +19,22 @@ import javax.inject.Singleton;
 @NormalComponent
 public class PanelServerComponent extends Component {
 
-  @Inject
-  private PanelServerService serverService;
+    @Inject
+    private PanelServerService serverService;
 
-  @Override
-  public void init() {
-    serverService.start();
-  }
+    @Override
+    public void init() {
+        serverService.start();
+    }
 
-  @PreDestroy
-  private void destroy() {
-    serverService.stop();
-  }
+    @PreDestroy
+    private void destroy() {
+        serverService.stop();
+    }
 
-  @CliCommandRoute(command = "restartwebserver", description = "Restart the panel web server")
-  public boolean restartWebserverCommand(ConsoleInputEvent event) {
-    serverService.restart();
-    return true;
-  }
+    @CliCommandRoute(command = "restartwebserver", description = "Restart the panel web server")
+    public boolean restartWebserverCommand(ConsoleInputEvent event) {
+        serverService.restart();
+        return true;
+    }
 }

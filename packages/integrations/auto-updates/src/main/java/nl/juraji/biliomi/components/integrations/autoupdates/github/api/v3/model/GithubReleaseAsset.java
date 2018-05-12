@@ -13,36 +13,36 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GithubReleaseAsset {
 
-  @XmlElement(name = "name")
-  private String name;
+    @XmlElement(name = "name")
+    private String name;
 
-  @XmlElement(name = "content_type")
-  private String contentType;
+    @XmlElement(name = "content_type")
+    private String contentType;
 
-  @XmlElement(name = "browser_download_url")
-  private String downloadUrl;
+    @XmlElement(name = "browser_download_url")
+    private String downloadUrl;
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public String getContentType() {
-    return contentType;
-  }
+    public String getContentType() {
+        return contentType;
+    }
 
-  public void setContentType(String contentType) {
-    this.contentType = contentType;
-  }
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
 
-  public String getDownloadUrl() {
-    return downloadUrl;
-  }
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
 
-  public void setDownloadUrl(String downloadUrl) {
-    this.downloadUrl = downloadUrl;
-  }
+    public void setDownloadUrl(String downloadUrl) {
+        this.downloadUrl = downloadUrl;
+    }
 }

@@ -18,42 +18,42 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class UserGreeting {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @XmlElement(name = "Id")
-  private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement(name = "Id")
+    private long id;
 
-  @OneToOne
-  @NotNull
-  @XmlElement(name = "User")
-  private User user;
+    @OneToOne
+    @NotNull
+    @XmlElement(name = "User")
+    private User user;
 
-  @Column
-  @NotNull
-  @XmlElement(name = "Message")
-  private String message;
+    @Column
+    @NotNull
+    @XmlElement(name = "Message")
+    private String message;
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-  public User getUser() {
-    return user;
-  }
+    public User getUser() {
+        return user;
+    }
 
-  public void setUser(User user) {
-    this.user = user;
-  }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-  public String getMessage() {
-    return message;
-  }
+    public String getMessage() {
+        return message;
+    }
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

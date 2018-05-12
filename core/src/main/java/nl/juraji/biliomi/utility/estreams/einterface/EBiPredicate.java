@@ -6,5 +6,5 @@ package nl.juraji.biliomi.utility.estreams.einterface;
  */
 @FunctionalInterface
 public interface EBiPredicate<T, U, E extends Exception> {
-  boolean test(T t, U u) throws E;
+    boolean test(T t, U u) throws E;
 }

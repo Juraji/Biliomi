@@ -5,5 +5,5 @@ package nl.juraji.biliomi.utility.types.enums;
  * Biliomi v3
  */
 public enum AddRemove {
-  ADD, REMOVE
+    ADD, REMOVE
 }

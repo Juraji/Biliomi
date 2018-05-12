@@ -6,24 +6,24 @@ package nl.juraji.biliomi.rest.config;
  */
 public final class RestRequestInfoHolder {
 
-  private static final ThreadLocal<RequestInfo> requestInfo = new ThreadLocal<>();
+    private static final ThreadLocal<RequestInfo> requestInfo = new ThreadLocal<>();
 
-  public static RequestInfo getRequestInfo() {
-    if (requestInfo.get() == null) {
-      requestInfo.set(new RequestInfo());
-    }
-    return requestInfo.get();
-  }
-
-  public static class RequestInfo {
-    private String username;
-
-    public String getUsername() {
-      return username;
+    public static RequestInfo getRequestInfo() {
+        if (requestInfo.get() == null) {
+            requestInfo.set(new RequestInfo());
+        }
+        return requestInfo.get();
     }
 
-    public void setUsername(String username) {
-      this.username = username;
+    public static class RequestInfo {
+        private String username;
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
     }
-  }
 }

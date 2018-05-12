@@ -28,76 +28,76 @@ import java.util.List;
 @Default
 public class SystemCommandExporter extends Exporter {
 
-  @Inject
-  private CommandDao commandDao;
+    @Inject
+    private CommandDao commandDao;
 
-  @Inject
-  private TimeFormatter timeFormatter;
+    @Inject
+    private TimeFormatter timeFormatter;
 
-  @Inject
-  private PointsService pointsService;
+    @Inject
+    private PointsService pointsService;
 
-  public SystemCommandExporter() throws IOException {
-    super("Command", "System Command", "Moderator Can Always Activate", "User Group", "Cooldown", "Price", "Aliasses");
-  }
+    public SystemCommandExporter() throws IOException {
+        super("Command", "System Command", "Moderator Can Always Activate", "User Group", "Cooldown", "Price", "Aliasses");
+    }
 
-  @Override
-  public void generateRows() {
-    List<Command> commands = listSystemCommands();
+    @Override
+    public void generateRows() {
+        List<Command> commands = listSystemCommands();
 
-    EStream.from(commands)
-        .sorted((c1, c2) -> c1.getCommand().compareTo(c2.getCommand()))
-        .forEach(command -> addRecord(
-            command.getCommand(),
-            command.isSystemCommand(),
-            command.isModeratorCanActivate(),
-            (command.isSystemCommand() ? null : command.getUserGroup().getName()),
-            (command.getCooldown() == 0 ? null : timeFormatter.timeQuantity(command.getCooldown())),
-            (command.getPrice() == 0 ? null : pointsService.asString(command.getPrice())),
-            TextUtils.commaList(command.getAliasses())
-        ));
-  }
+        EStream.from(commands)
+                .sorted((c1, c2) -> c1.getCommand().compareTo(c2.getCommand()))
+                .forEach(command -> addRecord(
+                        command.getCommand(),
+                        command.isSystemCommand(),
+                        command.isModeratorCanActivate(),
+                        (command.isSystemCommand() ? null : command.getUserGroup().getName()),
+                        (command.getCooldown() == 0 ? null : timeFormatter.timeQuantity(command.getCooldown())),
+                        (command.getPrice() == 0 ? null : pointsService.asString(command.getPrice())),
+                        TextUtils.commaList(command.getAliasses())
+                ));
+    }
 
-  private List<Command> listSystemCommands() {
-    List<Command> commands = new FastList<>();
-    List<CommandRoute> commandRoutes = new FastList<>();
-    List<SubCommandRoute> subCommandRoutes = new FastList<>();
+    private List<Command> listSystemCommands() {
+        List<Command> commands = new FastList<>();
+        List<CommandRoute> commandRoutes = new FastList<>();
+        List<SubCommandRoute> subCommandRoutes = new FastList<>();
 
-    // Gather all commandroutes and subCommandRoutes
-    ReflectionUtils.forClassPackage(ComponentManager.class)
-        .subTypes(Component.class)
-        .forEach(componentClass -> {
-          CommandRouter.findCommandMethods(componentClass, CommandRoute.class)
-              .map((route, method) -> route)
-              .forEach(commandRoutes::add);
-          CommandRouter.findCommandMethods(componentClass, SubCommandRoute.class)
-              .map((subRoute, method) -> subRoute)
-              .forEach(subCommandRoutes::add);
-        });
+        // Gather all commandroutes and subCommandRoutes
+        ReflectionUtils.forClassPackage(ComponentManager.class)
+                .subTypes(Component.class)
+                .forEach(componentClass -> {
+                    CommandRouter.findCommandMethods(componentClass, CommandRoute.class)
+                            .map((route, method) -> route)
+                            .forEach(commandRoutes::add);
+                    CommandRouter.findCommandMethods(componentClass, SubCommandRoute.class)
+                            .map((subRoute, method) -> subRoute)
+                            .forEach(subCommandRoutes::add);
+                });
 
-    // Build commands list
-    commandRoutes.stream()
-        .map(commandRoute -> commandDao.getCommand(commandRoute.command()))
-        .forEach(command -> {
-          // Add this command
-          commands.add(command);
-          // Add all subroutes
-          EStream.from(subCommandRoutes)
-              .filter(subCommandRoute -> command.getCommand().equals(subCommandRoute.parentCommand()))
-              .map(subCommandRoute -> {
-                // Clone the parent command obj, add subroute to command and return clone
-                Command clone = (Command) BeanUtils.cloneBean(command);
-                clone.setCommand(clone.getCommand() + ' ' + subCommandRoute.command());
-                return clone;
-              })
-              .forEach(commands::add);
-        });
+        // Build commands list
+        commandRoutes.stream()
+                .map(commandRoute -> commandDao.getCommand(commandRoute.command()))
+                .forEach(command -> {
+                    // Add this command
+                    commands.add(command);
+                    // Add all subroutes
+                    EStream.from(subCommandRoutes)
+                            .filter(subCommandRoute -> command.getCommand().equals(subCommandRoute.parentCommand()))
+                            .map(subCommandRoute -> {
+                                // Clone the parent command obj, add subroute to command and return clone
+                                Command clone = (Command) BeanUtils.cloneBean(command);
+                                clone.setCommand(clone.getCommand() + ' ' + subCommandRoute.command());
+                                return clone;
+                            })
+                            .forEach(commands::add);
+                });
 
-    return commands;
-  }
+        return commands;
+    }
 
-  @Override
-  public String getDoneMessage() {
-    return "Saved an export of all system commands to \"" + getTargetFile().getAbsolutePath() + "\"";
-  }
+    @Override
+    public String getDoneMessage() {
+        return "Saved an export of all system commands to \"" + getTargetFile().getAbsolutePath() + "\"";
+    }
 }

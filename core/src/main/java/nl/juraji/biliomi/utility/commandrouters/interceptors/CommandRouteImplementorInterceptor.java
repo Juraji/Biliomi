@@ -22,44 +22,44 @@ import javax.interceptor.InvocationContext;
 @CommandRouteImplementor
 public class CommandRouteImplementorInterceptor {
 
-  @Inject
-  private CommandService commandService;
+    @Inject
+    private CommandService commandService;
 
-  @Inject
-  private UserGroupService userGroupService;
+    @Inject
+    private UserGroupService userGroupService;
 
-  @Inject
-  private CommandRouterRegistry commandRouterRegistry;
+    @Inject
+    private CommandRouterRegistry commandRouterRegistry;
 
-  @PostConstruct
-  public Object registerCommandRoutes(InvocationContext ctx) throws Exception {
-    Component component = (Component) ctx.getTarget();
-    CommandRouter.findCommandMethods(component.getClass(), CommandRoute.class)
-        .mapKey(this::persistedCommand)
-        .forEach((command, method) -> {
-          // Register the command
-          commandRouterRegistry.put(command.getCommand(), component, method);
-          // Register any aliasses
-          command.getAliasses().forEach(alias -> commandRouterRegistry.putAlias(alias, command.getCommand()));
-        });
+    @PostConstruct
+    public Object registerCommandRoutes(InvocationContext ctx) throws Exception {
+        Component component = (Component) ctx.getTarget();
+        CommandRouter.findCommandMethods(component.getClass(), CommandRoute.class)
+                .mapKey(this::persistedCommand)
+                .forEach((command, method) -> {
+                    // Register the command
+                    commandRouterRegistry.put(command.getCommand(), component, method);
+                    // Register any aliasses
+                    command.getAliasses().forEach(alias -> commandRouterRegistry.putAlias(alias, command.getCommand()));
+                });
 
-    return ctx.proceed();
-  }
-
-  private Command persistedCommand(CommandRoute properties) {
-    Command command = commandService.getCommand(properties.command());
-
-    if (command == null) {
-      command = new Command();
-      command.setCommand(properties.command());
-      command.setSystemCommand(properties.systemCommand());
-      command.setModeratorCanActivate(properties.modCanActivate());
-      command.setCooldown(properties.defaultCooldown());
-      command.setPrice(properties.defaultPrice());
-      command.setUserGroup(userGroupService.getDefaultGroup());
-      commandService.save(command);
+        return ctx.proceed();
     }
 
-    return command;
-  }
+    private Command persistedCommand(CommandRoute properties) {
+        Command command = commandService.getCommand(properties.command());
+
+        if (command == null) {
+            command = new Command();
+            command.setCommand(properties.command());
+            command.setSystemCommand(properties.systemCommand());
+            command.setModeratorCanActivate(properties.modCanActivate());
+            command.setCooldown(properties.defaultCooldown());
+            command.setPrice(properties.defaultPrice());
+            command.setUserGroup(userGroupService.getDefaultGroup());
+            commandService.save(command);
+        }
+
+        return command;
+    }
 }

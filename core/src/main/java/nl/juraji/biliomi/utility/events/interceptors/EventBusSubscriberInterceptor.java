@@ -16,32 +16,32 @@ import javax.interceptor.InvocationContext;
 @EventBusSubscriber
 public class EventBusSubscriberInterceptor {
 
-  @Inject
-  private EventBus eventBus;
+    @Inject
+    private EventBus eventBus;
 
-  /**
-   * Register beans, annotated with @EventBusSubscriber to the EventBus before PostConstruct
-   *
-   * @param ctx The invocation context
-   * @return The interceptor proceed command
-   * @throws Exception When an error occurs while registering the bean
-   */
-  @PostConstruct
-  public Object registerObject(InvocationContext ctx) throws Exception {
-    eventBus.register(ctx.getTarget());
-    return ctx.proceed();
-  }
+    /**
+     * Register beans, annotated with @EventBusSubscriber to the EventBus before PostConstruct
+     *
+     * @param ctx The invocation context
+     * @return The interceptor proceed command
+     * @throws Exception When an error occurs while registering the bean
+     */
+    @PostConstruct
+    public Object registerObject(InvocationContext ctx) throws Exception {
+        eventBus.register(ctx.getTarget());
+        return ctx.proceed();
+    }
 
-  /**
-   * Unregister beans, annotated with @EventBusSubscriber to the EventBus before PreDestroy
-   *
-   * @param ctx The invocation context
-   * @return The interceptor proceed command
-   * @throws Exception When an error occurs while registering the bean
-   */
-  @PreDestroy
-  public Object unregisterObject(InvocationContext ctx) throws Exception {
-    eventBus.unregister(ctx.getTarget());
-    return ctx.proceed();
-  }
+    /**
+     * Unregister beans, annotated with @EventBusSubscriber to the EventBus before PreDestroy
+     *
+     * @param ctx The invocation context
+     * @return The interceptor proceed command
+     * @throws Exception When an error occurs while registering the bean
+     */
+    @PreDestroy
+    public Object unregisterObject(InvocationContext ctx) throws Exception {
+        eventBus.unregister(ctx.getTarget());
+        return ctx.proceed();
+    }
 }

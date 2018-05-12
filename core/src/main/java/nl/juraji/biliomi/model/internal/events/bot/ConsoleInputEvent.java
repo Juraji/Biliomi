@@ -18,39 +18,39 @@ import java.util.List;
 public class ConsoleInputEvent extends Event {
 
 
-  @XmlElement(name = "Input")
-  private final String input;
+    @XmlElement(name = "Input")
+    private final String input;
 
-  @XmlElement(name = "LegacyMode")
-  private final boolean legacyMode;
+    @XmlElement(name = "LegacyMode")
+    private final boolean legacyMode;
 
-  @XmlElement(name = "Indentifier")
-  private final char identifier;
+    @XmlElement(name = "Indentifier")
+    private final char identifier;
 
-  public ConsoleInputEvent(String input, boolean legacyMode) {
-    this.input = (input.length() > 0 ? input.substring(1) : input);
-    this.identifier = (input.length() > 0 ? input.charAt(0) : 0);
-    this.legacyMode = legacyMode;
-  }
+    public ConsoleInputEvent(String input, boolean legacyMode) {
+        this.input = (input.length() > 0 ? input.substring(1) : input);
+        this.identifier = (input.length() > 0 ? input.charAt(0) : 0);
+        this.legacyMode = legacyMode;
+    }
 
-  public String getInput() {
-    return input;
-  }
+    public String getInput() {
+        return input;
+    }
 
-  public List<String> getInputSplit() {
-    return Arrays.asList(input.split(" "));
-  }
+    public List<String> getInputSplit() {
+        return Arrays.asList(input.split(" "));
+    }
 
-  public boolean isLegacyMode() {
-    return legacyMode;
-  }
+    public boolean isLegacyMode() {
+        return legacyMode;
+    }
 
-  public char getIdentifier() {
-    return identifier;
-  }
+    public char getIdentifier() {
+        return identifier;
+    }
 
-  @Override
-  public String toString() {
-    return identifier + input;
-  }
+    @Override
+    public String toString() {
+        return identifier + input;
+    }
 }

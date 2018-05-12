@@ -13,14 +13,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SpotifyTracksSearchResult {
 
-  @XmlElement(name = "tracks")
-  private SpotifyTrackPagingObject tracks;
+    @XmlElement(name = "tracks")
+    private SpotifyTrackPagingObject tracks;
 
-  public SpotifyTrackPagingObject getTracks() {
-    return tracks;
-  }
+    public SpotifyTrackPagingObject getTracks() {
+        return tracks;
+    }
 
-  public void setTracks(SpotifyTrackPagingObject tracks) {
-    this.tracks = tracks;
-  }
+    public void setTracks(SpotifyTrackPagingObject tracks) {
+        this.tracks = tracks;
+    }
 }

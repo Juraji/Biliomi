@@ -15,19 +15,19 @@ import java.io.FileNotFoundException;
  */
 public abstract class ConfigService<T> {
 
-  protected final T config;
+    protected final T config;
 
-  public ConfigService(String configPath, Class<T> constructorClass) {
-    T loadedConfig = null;
-    File file = new File(BiliomiContainer.getParameters().getConfigurationDir(), configPath);
-    Yaml yaml = new Yaml(new Constructor(constructorClass));
+    public ConfigService(String configPath, Class<T> constructorClass) {
+        T loadedConfig = null;
+        File file = new File(BiliomiContainer.getParameters().getConfigurationDir(), configPath);
+        Yaml yaml = new Yaml(new Constructor(constructorClass));
 
-    try {
-      loadedConfig = yaml.loadAs(new FileInputStream(file), constructorClass);
-    } catch (FileNotFoundException e) {
-      LogManager.getLogger(getClass().getName()).error("Failed loading module configuration from " + file.getAbsolutePath());
+        try {
+            loadedConfig = yaml.loadAs(new FileInputStream(file), constructorClass);
+        } catch (FileNotFoundException e) {
+            LogManager.getLogger(getClass().getName()).error("Failed loading module configuration from " + file.getAbsolutePath());
+        }
+
+        this.config = loadedConfig;
     }
-
-    this.config = loadedConfig;
-  }
 }

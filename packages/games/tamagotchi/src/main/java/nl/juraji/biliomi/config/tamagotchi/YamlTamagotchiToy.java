@@ -5,58 +5,58 @@ package nl.juraji.biliomi.config.tamagotchi;
  * Biliomi
  */
 public class YamlTamagotchiToy {
-  private String name;
-  private int durationDays;
-  private double foodModifier;
-  private double moodModifier;
-  private double hygieneModifier;
-  private long cost;
+    private String name;
+    private int durationDays;
+    private double foodModifier;
+    private double moodModifier;
+    private double hygieneModifier;
+    private long cost;
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public int getDurationDays() {
-    return durationDays;
-  }
+    public int getDurationDays() {
+        return durationDays;
+    }
 
-  public void setDurationDays(int durationDays) {
-    this.durationDays = durationDays;
-  }
+    public void setDurationDays(int durationDays) {
+        this.durationDays = durationDays;
+    }
 
-  public double getFoodModifier() {
-    return foodModifier;
-  }
+    public double getFoodModifier() {
+        return foodModifier;
+    }
 
-  public void setFoodModifier(double foodModifier) {
-    this.foodModifier = foodModifier;
-  }
+    public void setFoodModifier(double foodModifier) {
+        this.foodModifier = foodModifier;
+    }
 
-  public double getMoodModifier() {
-    return moodModifier;
-  }
+    public double getMoodModifier() {
+        return moodModifier;
+    }
 
-  public void setMoodModifier(double moodModifier) {
-    this.moodModifier = moodModifier;
-  }
+    public void setMoodModifier(double moodModifier) {
+        this.moodModifier = moodModifier;
+    }
 
-  public double getHygieneModifier() {
-    return hygieneModifier;
-  }
+    public double getHygieneModifier() {
+        return hygieneModifier;
+    }
 
-  public void setHygieneModifier(double hygieneModifier) {
-    this.hygieneModifier = hygieneModifier;
-  }
+    public void setHygieneModifier(double hygieneModifier) {
+        this.hygieneModifier = hygieneModifier;
+    }
 
-  public long getCost() {
-    return cost;
-  }
+    public long getCost() {
+        return cost;
+    }
 
-  public void setCost(long cost) {
-    this.cost = cost;
-  }
+    public void setCost(long cost) {
+        this.cost = cost;
+    }
 }

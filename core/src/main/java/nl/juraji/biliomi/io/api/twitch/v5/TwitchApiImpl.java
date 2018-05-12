@@ -36,30 +36,23 @@ import java.util.Set;
 @Singleton
 public class TwitchApiImpl implements TwitchApi {
     private static final int MAX_PAGE_SIZE = 100;
-
+    private final HttpFields headers = new HttpFields();
     @Inject
     @AppData("apis.twitch.v5.baseUri")
     private String apiBaseUri;
-
     @Inject
     @AppData("apis.twitch.tmi.baseUri")
     private String tmiBaseUri;
-
     @Inject
     @CoreSetting("biliomi.twitch.clientId")
     private String clientId;
-
     @Inject
     @CoreSetting("biliomi.twitch.clientSecret")
     private String clientSecret;
-
     @Inject
     private WebClient webClient;
-
     @Inject
     private AuthTokenDao authTokenDao;
-
-    private final HttpFields headers = new HttpFields();
     private TwitchOAuthFlow twitchOAuthFlow;
 
     @PostConstruct

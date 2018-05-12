@@ -8,15 +8,15 @@ import nl.juraji.biliomi.config.ConfigService;
  */
 public class TwitterConfigService extends ConfigService<YamlTwitterConfig> {
 
-  public TwitterConfigService() {
-    super("integrations/twitter.yml", YamlTwitterConfig.class);
-  }
+    public TwitterConfigService() {
+        super("integrations/twitter.yml", YamlTwitterConfig.class);
+    }
 
-  public String getConsumerKey() {
-    return config.getConsumerKey();
-  }
+    public String getConsumerKey() {
+        return config.getConsumerKey();
+    }
 
-  public String getConsumerSecret() {
-    return config.getConsumerSecret();
-  }
+    public String getConsumerSecret() {
+        return config.getConsumerSecret();
+    }
 }

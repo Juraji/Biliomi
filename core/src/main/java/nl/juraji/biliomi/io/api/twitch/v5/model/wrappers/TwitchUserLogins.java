@@ -16,14 +16,14 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchUserLogins extends TwitchList {
 
-  @XmlElement(name = "users")
-  private List<TwitchUser> users;
+    @XmlElement(name = "users")
+    private List<TwitchUser> users;
 
-  public List<TwitchUser> getUsers() {
-    return users;
-  }
+    public List<TwitchUser> getUsers() {
+        return users;
+    }
 
-  public void setUsers(List<TwitchUser> users) {
-    this.users = users;
-  }
+    public void setUsers(List<TwitchUser> users) {
+        this.users = users;
+    }
 }

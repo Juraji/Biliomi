@@ -16,22 +16,22 @@ import javax.enterprise.inject.spi.InjectionPoint;
  */
 public final class LoggerProducer {
 
-  static {
-    if (BiliomiContainer.getParameters().isDebugMode()) {
-      Configurator.setLevel("nl.juraji.biliomi", Level.DEBUG);
-    }
-  }
-
-  @Produces
-  public Logger getLogger(InjectionPoint injectionPoint) {
-    Class loggerClass;
-
-    if (injectionPoint.getAnnotated().isAnnotationPresent(LoggerFor.class)) {
-      loggerClass = injectionPoint.getAnnotated().getAnnotation(LoggerFor.class).value();
-    } else {
-      loggerClass = injectionPoint.getBean().getBeanClass();
+    static {
+        if (BiliomiContainer.getParameters().isDebugMode()) {
+            Configurator.setLevel("nl.juraji.biliomi", Level.DEBUG);
+        }
     }
 
-    return LogManager.getLogger(loggerClass);
-  }
+    @Produces
+    public Logger getLogger(InjectionPoint injectionPoint) {
+        Class loggerClass;
+
+        if (injectionPoint.getAnnotated().isAnnotationPresent(LoggerFor.class)) {
+            loggerClass = injectionPoint.getAnnotated().getAnnotation(LoggerFor.class).value();
+        } else {
+            loggerClass = injectionPoint.getBean().getBeanClass();
+        }
+
+        return LogManager.getLogger(loggerClass);
+    }
 }

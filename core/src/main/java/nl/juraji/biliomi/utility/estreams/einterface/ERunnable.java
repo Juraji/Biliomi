@@ -6,5 +6,5 @@ package nl.juraji.biliomi.utility.estreams.einterface;
  */
 @FunctionalInterface
 public interface ERunnable<E extends Exception> {
-  void run() throws E;
+    void run() throws E;
 }

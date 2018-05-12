@@ -7,22 +7,22 @@ import java.util.List;
  * Biliomi
  */
 public class YamlAdventureStory {
-  private String title;
-  private List<String> chapters;
+    private String title;
+    private List<String> chapters;
 
-  public String getTitle() {
-    return title;
-  }
+    public String getTitle() {
+        return title;
+    }
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-  public List<String> getChapters() {
-    return chapters;
-  }
+    public List<String> getChapters() {
+        return chapters;
+    }
 
-  public void setChapters(List<String> chapters) {
-    this.chapters = chapters;
-  }
+    public void setChapters(List<String> chapters) {
+        this.chapters = chapters;
+    }
 }

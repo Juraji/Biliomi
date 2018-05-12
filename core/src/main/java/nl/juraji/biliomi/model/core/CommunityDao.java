@@ -12,19 +12,19 @@ import javax.enterprise.inject.Default;
 @Default
 public class CommunityDao extends JpaDao<Community> {
 
-  public CommunityDao() {
-    super(Community.class);
-  }
+    public CommunityDao() {
+        super(Community.class);
+    }
 
-  public Community getByName(String name) {
-    return criteria()
-        .add(Restrictions.eq("name", name).ignoreCase())
-        .getResult();
-  }
+    public Community getByName(String name) {
+        return criteria()
+                .add(Restrictions.eq("name", name).ignoreCase())
+                .getResult();
+    }
 
-  public Community getByTwitchID(String name) {
-    return criteria()
-        .add(Restrictions.eq("twitchId", name))
-        .getResult();
-  }
+    public Community getByTwitchID(String name) {
+        return criteria()
+                .add(Restrictions.eq("twitchId", name))
+                .getResult();
+    }
 }

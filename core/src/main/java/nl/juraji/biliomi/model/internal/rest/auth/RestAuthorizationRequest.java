@@ -15,29 +15,29 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RestAuthorizationRequest {
 
-  @XmlElement(name = "Username")
-  private String username;
+    @XmlElement(name = "Username")
+    private String username;
 
-  @XmlElement(name = "Password")
-  private String password;
+    @XmlElement(name = "Password")
+    private String password;
 
-  public String getUsername() {
-    return username;
-  }
+    public String getUsername() {
+        return username;
+    }
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-  public String getPassword() {
-    return password;
-  }
+    public String getPassword() {
+        return password;
+    }
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-  public boolean isEmpty() {
-    return StringUtils.isEmpty(username) || StringUtils.isEmpty(password);
-  }
+    public boolean isEmpty() {
+        return StringUtils.isEmpty(username) || StringUtils.isEmpty(password);
+    }
 }

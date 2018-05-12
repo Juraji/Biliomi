@@ -19,46 +19,46 @@ import java.util.concurrent.TimeUnit;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class InvestmentSettings extends Settings {
 
-  @Column
-  @XmlElement(name = "InvestmentDuration")
-  private long investmentDuration;
+    @Column
+    @XmlElement(name = "InvestmentDuration")
+    private long investmentDuration;
 
-  @Column
-  @XmlElement(name = "MinInterest")
-  private double minInterest;
+    @Column
+    @XmlElement(name = "MinInterest")
+    private double minInterest;
 
-  @Column
-  @XmlElement(name = "MaxInterest")
-  private double maxInterest;
+    @Column
+    @XmlElement(name = "MaxInterest")
+    private double maxInterest;
 
-  public long getInvestmentDuration() {
-    return investmentDuration;
-  }
+    public long getInvestmentDuration() {
+        return investmentDuration;
+    }
 
-  public void setInvestmentDuration(long investmentDuration) {
-    this.investmentDuration = investmentDuration;
-  }
+    public void setInvestmentDuration(long investmentDuration) {
+        this.investmentDuration = investmentDuration;
+    }
 
-  public double getMinInterest() {
-    return minInterest;
-  }
+    public double getMinInterest() {
+        return minInterest;
+    }
 
-  public void setMinInterest(double minInvestment) {
-    this.minInterest = minInvestment;
-  }
+    public void setMinInterest(double minInvestment) {
+        this.minInterest = minInvestment;
+    }
 
-  public double getMaxInterest() {
-    return maxInterest;
-  }
+    public double getMaxInterest() {
+        return maxInterest;
+    }
 
-  public void setMaxInterest(double maxInvestment) {
-    this.maxInterest = maxInvestment;
-  }
+    public void setMaxInterest(double maxInvestment) {
+        this.maxInterest = maxInvestment;
+    }
 
-  @Override
-  public void setDefaultValues() {
-    investmentDuration = TimeUnit.MILLISECONDS.convert(15, TimeUnit.MINUTES);
-    minInterest = 0.05; // 5%
-    maxInterest = 0.25; // 25%
-  }
+    @Override
+    public void setDefaultValues() {
+        investmentDuration = TimeUnit.MILLISECONDS.convert(15, TimeUnit.MINUTES);
+        minInterest = 0.05; // 5%
+        maxInterest = 0.25; // 25%
+    }
 }

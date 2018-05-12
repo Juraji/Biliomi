@@ -16,42 +16,42 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AchievementEvent extends Event {
 
-  @XmlElement(name = "User")
-  private User user;
+    @XmlElement(name = "User")
+    private User user;
 
-  @XmlElement(name = "AchievementId")
-  private String achievementId;
+    @XmlElement(name = "AchievementId")
+    private String achievementId;
 
-  @XmlElement(name = "Achievement")
-  private String achievement;
+    @XmlElement(name = "Achievement")
+    private String achievement;
 
-  public AchievementEvent(User user, String achievementId, String achievement) {
-    this.user = user;
-    this.achievementId = achievementId;
-    this.achievement = achievement;
-  }
+    public AchievementEvent(User user, String achievementId, String achievement) {
+        this.user = user;
+        this.achievementId = achievementId;
+        this.achievement = achievement;
+    }
 
-  public User getUser() {
-    return user;
-  }
+    public User getUser() {
+        return user;
+    }
 
-  public void setUser(User user) {
-    this.user = user;
-  }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-  public String getAchievementId() {
-    return achievementId;
-  }
+    public String getAchievementId() {
+        return achievementId;
+    }
 
-  public void setAchievementId(String achievementId) {
-    this.achievementId = achievementId;
-  }
+    public void setAchievementId(String achievementId) {
+        this.achievementId = achievementId;
+    }
 
-  public String getAchievement() {
-    return achievement;
-  }
+    public String getAchievement() {
+        return achievement;
+    }
 
-  public void setAchievement(String achievement) {
-    this.achievement = achievement;
-  }
+    public void setAchievement(String achievement) {
+        this.achievement = achievement;
+    }
 }

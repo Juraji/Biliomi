@@ -9,23 +9,23 @@ import java.util.Arrays;
  * Biliomi
  */
 public enum SteamProfileVisibilityState {
-  NOT_VISIBLE(1), VISIBLE(3);
+    NOT_VISIBLE(1), VISIBLE(3);
 
-  private int visibiltyState;
+    private int visibiltyState;
 
-  SteamProfileVisibilityState(int visibiltyState) {
-    this.visibiltyState = visibiltyState;
-  }
+    SteamProfileVisibilityState(int visibiltyState) {
+        this.visibiltyState = visibiltyState;
+    }
 
-  public int getVisibiltyState() {
-    return visibiltyState;
-  }
+    @JsonCreator
+    public static SteamProfileVisibilityState fromJson(int visibiltyState) {
+        return Arrays.stream(SteamProfileVisibilityState.values())
+                .filter(state -> state.getVisibiltyState() == visibiltyState)
+                .findFirst()
+                .orElse(null);
+    }
 
-  @JsonCreator
-  public static SteamProfileVisibilityState fromJson(int visibiltyState) {
-    return Arrays.stream(SteamProfileVisibilityState.values())
-        .filter(state -> state.getVisibiltyState() == visibiltyState)
-        .findFirst()
-        .orElse(null);
-  }
+    public int getVisibiltyState() {
+        return visibiltyState;
+    }
 }

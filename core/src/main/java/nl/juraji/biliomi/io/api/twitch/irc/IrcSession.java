@@ -20,34 +20,34 @@ import javax.inject.Singleton;
 @Default
 @Singleton
 public class IrcSession extends SocketSession {
-  public static final String SYSTEM_USER = "jtv";
+    public static final String SYSTEM_USER = "jtv";
 
-  @Inject
-  private EventBus eventBus;
+    @Inject
+    private EventBus eventBus;
 
-  @Inject
-  private AuthTokenDao authTokenDao;
+    @Inject
+    private AuthTokenDao authTokenDao;
 
-  @Inject
-  @BotName
-  private String botName;
+    @Inject
+    @BotName
+    private String botName;
 
-  @Inject
-  @ChannelName
-  private String channelName;
+    @Inject
+    @ChannelName
+    private String channelName;
 
-  @Override
-  protected SocketClient produceSocketClient() {
-    AuthToken botToken = authTokenDao.get(TokenGroup.TWITCH, "bot");
-    return new BotChatClient(eventBus, channelName, botName, botToken.getToken());
-  }
+    @Override
+    protected SocketClient produceSocketClient() {
+        AuthToken botToken = authTokenDao.get(TokenGroup.TWITCH, "bot");
+        return new BotChatClient(eventBus, channelName, botName, botToken.getToken());
+    }
 
-  @Override
-  protected String produceSocketUri() {
-    return "wss://irc-ws.chat.twitch.tv";
-  }
+    @Override
+    protected String produceSocketUri() {
+        return "wss://irc-ws.chat.twitch.tv";
+    }
 
-  public ChatClientFacade getChatClient() {
-    return (ChatClientFacade) getSocketClient();
-  }
+    public ChatClientFacade getChatClient() {
+        return (ChatClientFacade) getSocketClient();
+    }
 }

@@ -13,28 +13,28 @@ import java.util.List;
  */
 public class DonationDao extends JpaDao<Donation> {
 
-  public DonationDao() {
-    super(Donation.class);
-  }
+    public DonationDao() {
+        super(Donation.class);
+    }
 
-  @Override
-  public List<Donation> getList() {
-    return criteria()
-        .addOrder(Order.desc("date"))
-        .getList();
-  }
+    @Override
+    public List<Donation> getList() {
+        return criteria()
+                .addOrder(Order.desc("date"))
+                .getList();
+    }
 
-  public List<Donation> getDonationsFor(User user) {
-    return criteria()
-        .createAlias("user", "u")
-        .add(Restrictions.eq("u.id", user.getId()))
-        .getList();
-  }
+    public List<Donation> getDonationsFor(User user) {
+        return criteria()
+                .createAlias("user", "u")
+                .add(Restrictions.eq("u.id", user.getId()))
+                .getList();
+    }
 
-  public long getCount(User user) {
-    return criteria()
-        .createAlias("user", "u")
-        .add(Restrictions.eq("u.id", user.getId()))
-        .getCount();
-  }
+    public long getCount(User user) {
+        return criteria()
+                .createAlias("user", "u")
+                .add(Restrictions.eq("u.id", user.getId()))
+                .getCount();
+    }
 }

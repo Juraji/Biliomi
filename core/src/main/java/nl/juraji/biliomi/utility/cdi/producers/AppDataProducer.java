@@ -20,51 +20,51 @@ import java.util.Properties;
 @Singleton
 public final class AppDataProducer {
 
-  private final Properties properties = new Properties();
+    private final Properties properties = new Properties();
 
-  @PostConstruct
-  private void initAppDataProducer() {
-    String settingsFile = "/AppData.properties";
-    InputStream stream = AppDataProducer.class.getResourceAsStream(settingsFile);
+    @PostConstruct
+    private void initAppDataProducer() {
+        String settingsFile = "/AppData.properties";
+        InputStream stream = AppDataProducer.class.getResourceAsStream(settingsFile);
 
-    try {
-      properties.load(stream);
-    } catch (IOException e) {
-      LogManager.getLogger(getClass()).error("Failed to load application data file {}", settingsFile, e);
-    }
-  }
-
-  @Produces
-  @AppData("PRODUCER")
-  public String getAppDataValueAsString(InjectionPoint injectionPoint) {
-    Annotated annotated = injectionPoint.getAnnotated();
-    String key = null;
-    String value = null;
-
-    if (annotated.isAnnotationPresent(AppData.class)) {
-      AppData annotation = annotated.getAnnotation(AppData.class);
-      key = annotation.value();
-      value = properties.getProperty(key);
+        try {
+            properties.load(stream);
+        } catch (IOException e) {
+            LogManager.getLogger(getClass()).error("Failed to load application data file {}", settingsFile, e);
+        }
     }
 
-    if (value == null) {
-      throw new IllegalArgumentException("No AppData value found for key " + key);
+    @Produces
+    @AppData("PRODUCER")
+    public String getAppDataValueAsString(InjectionPoint injectionPoint) {
+        Annotated annotated = injectionPoint.getAnnotated();
+        String key = null;
+        String value = null;
+
+        if (annotated.isAnnotationPresent(AppData.class)) {
+            AppData annotation = annotated.getAnnotation(AppData.class);
+            key = annotation.value();
+            value = properties.getProperty(key);
+        }
+
+        if (value == null) {
+            throw new IllegalArgumentException("No AppData value found for key " + key);
+        }
+
+        return value;
     }
 
-    return value;
-  }
+    @Produces
+    @AppData("PRODUCER")
+    public Long getAppDataValueAsLong(InjectionPoint injectionPoint) {
+        String appDataValueAsString = getAppDataValueAsString(injectionPoint);
+        return NumberConverter.asNumber(appDataValueAsString).toLong();
+    }
 
-  @Produces
-  @AppData("PRODUCER")
-  public Long getAppDataValueAsLong(InjectionPoint injectionPoint) {
-    String appDataValueAsString = getAppDataValueAsString(injectionPoint);
-    return NumberConverter.asNumber(appDataValueAsString).toLong();
-  }
-
-  @Produces
-  @AppData("PRODUCER")
-  public Integer getAppDataValueAsInteger(InjectionPoint injectionPoint) {
-    String appDataValueAsString = getAppDataValueAsString(injectionPoint);
-    return NumberConverter.asNumber(appDataValueAsString).toInteger();
-  }
+    @Produces
+    @AppData("PRODUCER")
+    public Integer getAppDataValueAsInteger(InjectionPoint injectionPoint) {
+        String appDataValueAsString = getAppDataValueAsString(injectionPoint);
+        return NumberConverter.asNumber(appDataValueAsString).toInteger();
+    }
 }

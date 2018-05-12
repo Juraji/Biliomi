@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class MultivaluedHashMap<K, V> extends HashMap<K, List<V>> {
 
-  public void putSingle(K key, V value) {
-    this.putIfAbsent(key, new ArrayList<>());
-    this.get(key).add(value);
-  }
+    public void putSingle(K key, V value) {
+        this.putIfAbsent(key, new ArrayList<>());
+        this.get(key).add(value);
+    }
 }

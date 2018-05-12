@@ -11,62 +11,62 @@ import java.util.regex.Pattern;
  * Biliomi v3
  */
 public final class MessageReader {
-  private static final Pattern COMMAND_PATTERN = Pattern.compile("([a-z]+.)?tmi\\.twitch\\.tv[ ]([A-Z0-9]+)");
-  private static final Pattern USERNAME_PATTERN = Pattern.compile("([a-z0-9_]+)\\.tmi\\.twitch\\.tv");
-  private static final Pattern TAGS_PATTERN = Pattern.compile("^(@[^ ]+)\\s:");
-  private static final Pattern MESSAGE_PATTERN = Pattern.compile("[A-Z]+\\s#?[a-z]+\\s:(.*)");
+    private static final Pattern COMMAND_PATTERN = Pattern.compile("([a-z]+.)?tmi\\.twitch\\.tv[ ]([A-Z0-9]+)");
+    private static final Pattern USERNAME_PATTERN = Pattern.compile("([a-z0-9_]+)\\.tmi\\.twitch\\.tv");
+    private static final Pattern TAGS_PATTERN = Pattern.compile("^(@[^ ]+)\\s:");
+    private static final Pattern MESSAGE_PATTERN = Pattern.compile("[A-Z]+\\s#?[a-z]+\\s:(.*)");
 
-  private final String message;
+    private final String message;
 
-  public MessageReader(String message) {
-    if (StringUtils.isEmpty(message)) {
-      throw new IllegalArgumentException("Message can not be empty");
+    public MessageReader(String message) {
+        if (StringUtils.isEmpty(message)) {
+            throw new IllegalArgumentException("Message can not be empty");
+        }
+
+        this.message = message;
     }
 
-    this.message = message;
-  }
+    public IrcCommand getIrcCommand() {
+        Matcher matcher = COMMAND_PATTERN.matcher(message);
 
-  public IrcCommand getIrcCommand() {
-    Matcher matcher = COMMAND_PATTERN.matcher(message);
+        if (matcher.find()) {
+            String group = matcher.group(2);
+            if (Character.isDigit(group.charAt(0))) {
+                group = 'C' + group;
+            }
+            return EnumUtils.toEnum(group, IrcCommand.class);
+        }
 
-    if (matcher.find()) {
-      String group = matcher.group(2);
-      if (Character.isDigit(group.charAt(0))) {
-        group = 'C' + group;
-      }
-      return EnumUtils.toEnum(group, IrcCommand.class);
+        return null;
     }
 
-    return null;
-  }
+    public String getUsername() {
+        Matcher matcher = USERNAME_PATTERN.matcher(message);
 
-  public String getUsername() {
-    Matcher matcher = USERNAME_PATTERN.matcher(message);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
 
-    if (matcher.find()) {
-      return matcher.group(1);
+        return null;
     }
 
-    return null;
-  }
+    public Tags getTags() {
+        Matcher matcher = TAGS_PATTERN.matcher(message);
 
-  public Tags getTags() {
-    Matcher matcher = TAGS_PATTERN.matcher(message);
+        if (matcher.find()) {
+            return new Tags(matcher.group(1));
+        }
 
-    if (matcher.find()) {
-      return new Tags(matcher.group(1));
+        return null;
     }
 
-    return null;
-  }
+    public String getMessage() {
+        Matcher matcher = MESSAGE_PATTERN.matcher(message);
 
-  public String getMessage() {
-    Matcher matcher = MESSAGE_PATTERN.matcher(message);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
 
-    if (matcher.find()){
-      return matcher.group(1);
+        return null;
     }
-
-    return null;
-  }
 }

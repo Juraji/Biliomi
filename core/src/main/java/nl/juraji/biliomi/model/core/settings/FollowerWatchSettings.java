@@ -16,20 +16,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FollowerWatchSettings extends Settings {
 
-  @Column
-  @XmlElement(name = "Reward")
-  private long reward;
+    @Column
+    @XmlElement(name = "Reward")
+    private long reward;
 
-  public long getReward() {
-    return reward;
-  }
+    public long getReward() {
+        return reward;
+    }
 
-  public void setReward(long reward) {
-    this.reward = reward;
-  }
+    public void setReward(long reward) {
+        this.reward = reward;
+    }
 
-  @Override
-  public void setDefaultValues() {
-    this.reward = 0;
-  }
+    @Override
+    public void setDefaultValues() {
+        this.reward = 0;
+    }
 }

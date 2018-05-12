@@ -14,29 +14,29 @@ import javax.inject.Inject;
 @Default
 public class SubscriberWatchComponentUpdateTask implements SetupTask {
 
-  @Inject
-  private TemplateDao templateDao;
+    @Inject
+    private TemplateDao templateDao;
 
-  @Override
-  public void install() {
-    if (!templateDao.templateExists(SubscriberWatchComponent.SUB_NOTICE_TEMPLATE)) {
-      Template template = new Template();
-      template.setTemplateKey(SubscriberWatchComponent.SUB_NOTICE_TEMPLATE);
-      template.setTemplate("Wow @{{username}}, thank you for subscribing! Here's {{points}} for you!");
-      template.setDescription("Posted in the chat when a new subscriber registers");
-      template.getKeyDescriptions().put("username", "The username of the new subscriber");
-      template.getKeyDescriptions().put("points", "The amount of points being paid out to the subscribing user");
-      templateDao.save(template);
-    }
+    @Override
+    public void install() {
+        if (templateDao.templateMissing(SubscriberWatchComponent.SUB_NOTICE_TEMPLATE)) {
+            Template template = new Template();
+            template.setTemplateKey(SubscriberWatchComponent.SUB_NOTICE_TEMPLATE);
+            template.setTemplate("Wow @{{username}}, thank you for subscribing! Here's {{points}} for you!");
+            template.setDescription("Posted in the chat when a new subscriber registers");
+            template.getKeyDescriptions().put("username", "The username of the new subscriber");
+            template.getKeyDescriptions().put("points", "The amount of points being paid out to the subscribing user");
+            templateDao.save(template);
+        }
 
-    if (!templateDao.templateExists(SubscriberWatchComponent.RESUB_NOTICE_TEMPLATE)) {
-      Template template = new Template();
-      template.setTemplateKey(SubscriberWatchComponent.RESUB_NOTICE_TEMPLATE);
-      template.setTemplate("Wow @{{username}}, thank you for resubscribing! Here's {{points}} for you!");
-      template.setDescription("Posted in the chat when a subscriber resubscribes");
-      template.getKeyDescriptions().put("username", "The username of the subscriber");
-      template.getKeyDescriptions().put("points", "The amount of points being paid out to the subscribing user");
-      templateDao.save(template);
+        if (templateDao.templateMissing(SubscriberWatchComponent.RESUB_NOTICE_TEMPLATE)) {
+            Template template = new Template();
+            template.setTemplateKey(SubscriberWatchComponent.RESUB_NOTICE_TEMPLATE);
+            template.setTemplate("Wow @{{username}}, thank you for resubscribing! Here's {{points}} for you!");
+            template.setDescription("Posted in the chat when a subscriber resubscribes");
+            template.getKeyDescriptions().put("username", "The username of the subscriber");
+            template.getKeyDescriptions().put("points", "The amount of points being paid out to the subscribing user");
+            templateDao.save(template);
+        }
     }
-  }
 }

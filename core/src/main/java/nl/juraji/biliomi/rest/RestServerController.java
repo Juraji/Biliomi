@@ -20,35 +20,35 @@ import java.net.URI;
 @Default
 @Singleton
 public class RestServerController implements Restartable {
-  private static final String SERVICES_PACKAGE = "nl.juraji.biliomi.rest.services";
-  private static final String PROVIDERS_PACKAGE = "nl.juraji.biliomi.rest.config.providers";
+    private static final String SERVICES_PACKAGE = "nl.juraji.biliomi.rest.services";
+    private static final String PROVIDERS_PACKAGE = "nl.juraji.biliomi.rest.config.providers";
 
-  @Inject
-  private Logger logger;
+    @Inject
+    private Logger logger;
 
-  @Inject
-  @AppData("rest.api.uris.base")
-  private String apiBaseUri;
+    @Inject
+    @AppData("rest.api.uris.base")
+    private String apiBaseUri;
 
-  private HttpServer server;
+    private HttpServer server;
 
-  @Override
-  public void start() {
-    if (server == null) {
-      final ResourceConfig resourceConfig = new ResourceConfig()
-          .packages(true, SERVICES_PACKAGE, PROVIDERS_PACKAGE);
+    @Override
+    public void start() {
+        if (server == null) {
+            final ResourceConfig resourceConfig = new ResourceConfig()
+                    .packages(true, SERVICES_PACKAGE, PROVIDERS_PACKAGE);
 
-      server = GrizzlyHttpServerFactory.createHttpServer(URI.create(apiBaseUri), resourceConfig);
-      logger.info("Started the HTTP REST server on {}", apiBaseUri);
+            server = GrizzlyHttpServerFactory.createHttpServer(URI.create(apiBaseUri), resourceConfig);
+            logger.info("Started the HTTP REST server on {}", apiBaseUri);
+        }
     }
-  }
 
-  @PreDestroy
-  @Override
-  public void stop() {
-    if (server != null && server.isStarted()) {
-      server.shutdownNow();
-      server = null;
+    @PreDestroy
+    @Override
+    public void stop() {
+        if (server != null && server.isStarted()) {
+            server.shutdownNow();
+            server = null;
+        }
     }
-  }
 }

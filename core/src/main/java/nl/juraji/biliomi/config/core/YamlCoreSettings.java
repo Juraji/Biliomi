@@ -8,13 +8,13 @@ import javax.enterprise.inject.Vetoed;
  */
 @Vetoed // Do not inject, use the producer instead
 public class YamlCoreSettings {
-  private USBiliomi biliomi;
+    private USBiliomi biliomi;
 
-  public USBiliomi getBiliomi() {
-    return biliomi;
-  }
+    public USBiliomi getBiliomi() {
+        return biliomi;
+    }
 
-  public void setBiliomi(USBiliomi biliomi) {
-    this.biliomi = biliomi;
-  }
+    public void setBiliomi(USBiliomi biliomi) {
+        this.biliomi = biliomi;
+    }
 }

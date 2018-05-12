@@ -12,19 +12,19 @@ import javax.ws.rs.Path;
 @Path("/games/settings/roulette")
 public class RouletteSettingsRestService extends SettingsModelRestService<RouletteSettings> {
 
-  @Override
-  public RouletteSettings getEntity() {
-    return settingsService.getSettings(RouletteSettings.class);
-  }
+    @Override
+    public RouletteSettings getEntity() {
+        return settingsService.getSettings(RouletteSettings.class);
+    }
 
-  @Override
-  public RouletteSettings updateEntity(RouletteSettings e) {
-    RouletteSettings settings = settingsService.getSettings(RouletteSettings.class);
+    @Override
+    public RouletteSettings updateEntity(RouletteSettings e) {
+        RouletteSettings settings = settingsService.getSettings(RouletteSettings.class);
 
-    settings.setTimeoutOnDeathEnabled(e.isTimeoutOnDeathEnabled());
-    settings.setTimeoutOnDeath(e.getTimeoutOnDeath());
+        settings.setTimeoutOnDeathEnabled(e.isTimeoutOnDeathEnabled());
+        settings.setTimeoutOnDeath(e.getTimeoutOnDeath());
 
-    settingsService.save(settings);
-    return settings;
-  }
+        settingsService.save(settings);
+        return settings;
+    }
 }

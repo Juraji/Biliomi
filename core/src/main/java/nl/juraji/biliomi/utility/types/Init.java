@@ -5,8 +5,8 @@ package nl.juraji.biliomi.utility.types;
  * Biliomi v3
  */
 public interface Init {
-  /**
-   * Design usage: Forces class to implement a method for initialization of Weld Instances
-   */
-  void init();
+    /**
+     * Design usage: Forces class to implement a method for initialization of Weld Instances
+     */
+    void init();
 }

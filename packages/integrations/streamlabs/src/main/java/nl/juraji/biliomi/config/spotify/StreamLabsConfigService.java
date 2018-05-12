@@ -8,15 +8,15 @@ import nl.juraji.biliomi.config.ConfigService;
  */
 public class StreamLabsConfigService extends ConfigService<YamlStreamLabsConfig> {
 
-  public StreamLabsConfigService() {
-    super("integrations/streamlabs.yml", YamlStreamLabsConfig.class);
-  }
+    public StreamLabsConfigService() {
+        super("integrations/streamlabs.yml", YamlStreamLabsConfig.class);
+    }
 
-  public String getConsumerKey() {
-    return config.getConsumerKey();
-  }
+    public String getConsumerKey() {
+        return config.getConsumerKey();
+    }
 
-  public String getConsumerSecret() {
-    return config.getConsumerSecret();
-  }
+    public String getConsumerSecret() {
+        return config.getConsumerSecret();
+    }
 }

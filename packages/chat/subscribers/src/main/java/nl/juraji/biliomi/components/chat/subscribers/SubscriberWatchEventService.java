@@ -29,70 +29,70 @@ import javax.inject.Singleton;
 @EventBusSubscriber
 public class SubscriberWatchEventService implements Init {
 
-  @Inject
-  private UsersService usersService;
+    @Inject
+    private UsersService usersService;
 
-  @Inject
-  private PointsService pointsService;
+    @Inject
+    private PointsService pointsService;
 
-  @Inject
-  private ChatService chat;
+    @Inject
+    private ChatService chat;
 
-  @Inject
-  private TemplateDao templateDao;
+    @Inject
+    private TemplateDao templateDao;
 
-  @Inject
-  private SettingsService settingsService;
+    @Inject
+    private SettingsService settingsService;
 
-  private SubscriberWatchSettings settings;
+    private SubscriberWatchSettings settings;
 
-  @Override
-  public void init() {
-    settings = settingsService.getSettings(SubscriberWatchSettings.class, e -> settings = e);
-  }
-
-  @Subscribe
-  public void onTwitchSubscriberEvent(TwitchSubscriberEvent event) {
-    User user = event.getUser();
-    long reward = getReward(event.getSubPlan());
-    user.setSubscriber(true);
-
-    if (user.getSubscribeDate() == null) {
-      user.setSubscribeDate(event.getTimeStamp());
+    @Override
+    public void init() {
+        settings = settingsService.getSettings(SubscriberWatchSettings.class, e -> settings = e);
     }
 
-    if (reward > 0) {
-      pointsService.give(user, reward);
+    @Subscribe
+    public void onTwitchSubscriberEvent(TwitchSubscriberEvent event) {
+        User user = event.getUser();
+        long reward = getReward(event.getSubPlan());
+        user.setSubscriber(true);
+
+        if (user.getSubscribeDate() == null) {
+            user.setSubscribeDate(event.getTimeStamp());
+        }
+
+        if (reward > 0) {
+            pointsService.give(user, reward);
+        }
+
+        usersService.save(user);
+
+        Template template;
+        if (event.isResub()) {
+            template = templateDao.getByKey(SubscriberWatchComponent.RESUB_NOTICE_TEMPLATE);
+        } else {
+            template = templateDao.getByKey(SubscriberWatchComponent.SUB_NOTICE_TEMPLATE);
+        }
+
+        assert template != null; // Template cannot be null since they're set during install/update
+        if (StringUtils.isNotEmpty(template.getTemplate())) {
+            chat.say(Templater.template(template.getTemplate())
+                    .add("username", user::getDisplayName)
+                    .add("points", () -> pointsService.asString(reward)));
+        }
     }
 
-    usersService.save(user);
-
-    Template template;
-    if (event.isResub()) {
-      template = templateDao.getByKey(SubscriberWatchComponent.RESUB_NOTICE_TEMPLATE);
-    } else {
-      template = templateDao.getByKey(SubscriberWatchComponent.SUB_NOTICE_TEMPLATE);
+    private long getReward(SubscriberPlanType subPlan) {
+        switch (subPlan) {
+            case PRIME:
+            case TIER1:
+                return settings.getRewardTier1();
+            case TIER2:
+                return settings.getRewardTier2();
+            case TIER3:
+                return settings.getRewardTier3();
+            default:
+                return 0;
+        }
     }
-
-    assert template != null; // Template cannot be null since they're set during install/update
-    if (StringUtils.isNotEmpty(template.getTemplate())) {
-      chat.say(Templater.template(template.getTemplate())
-          .add("username", user::getDisplayName)
-          .add("points", () -> pointsService.asString(reward)));
-    }
-  }
-
-  private long getReward(SubscriberPlanType subPlan) {
-    switch (subPlan) {
-      case PRIME:
-      case TIER1:
-        return settings.getRewardTier1();
-      case TIER2:
-        return settings.getRewardTier2();
-      case TIER3:
-        return settings.getRewardTier3();
-      default:
-        return 0;
-    }
-  }
 }

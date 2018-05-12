@@ -10,23 +10,23 @@ import nl.juraji.biliomi.io.web.Response;
  */
 public interface SteamApi {
 
-  /**
-   * Check wether the integration is set up proper
-   */
-  boolean isAvailable();
+    /**
+     * Check wether the integration is set up proper
+     */
+    boolean isAvailable();
 
-  /**
-   * Get all library items for the authorized Steam user
-   *
-   * @see <a href="https://developer.valvesoftware.com/wiki/Steam_Web_API#GetOwnedGames_.28v0001.29">GetOwnedGames</a>
-   */
-  Response<SteamLibraryResponse> getOwnedGames() throws Exception;
+    /**
+     * Get all library items for the authorized Steam user
+     *
+     * @see <a href="https://developer.valvesoftware.com/wiki/Steam_Web_API#GetOwnedGames_.28v0001.29">GetOwnedGames</a>
+     */
+    Response<SteamLibraryResponse> getOwnedGames() throws Exception;
 
-  /**
-   * Get the player summary for the authorized Steam user
-   * Note: The availablility of data is decided by the privacy settings of the authorized Steam user
-   *
-   * @see <a href="https://developer.valvesoftware.com/wiki/Steam_Web_API#GetPlayerSummaries_.28v0002.29">GetPlayerSummaries</a>
-   */
-  Response<SteamPlayersResponse> getPlayerSummary() throws Exception;
+    /**
+     * Get the player summary for the authorized Steam user
+     * Note: The availablility of data is decided by the privacy settings of the authorized Steam user
+     *
+     * @see <a href="https://developer.valvesoftware.com/wiki/Steam_Web_API#GetPlayerSummaries_.28v0002.29">GetPlayerSummaries</a>
+     */
+    Response<SteamPlayersResponse> getPlayerSummary() throws Exception;
 }

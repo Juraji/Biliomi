@@ -8,20 +8,20 @@ import java.util.Map;
  * Biliomi
  */
 public class LimitQueryProcessor<T> implements QueryProcessor<List<T>> {
-  public static final String PARAM_NAME_LIMIT = "limit";
-  public static final String PARAM_NAME_OFFSET = "offset";
+    public static final String PARAM_NAME_LIMIT = "limit";
+    public static final String PARAM_NAME_OFFSET = "offset";
 
-  @Override
-  public List<T> process(List<T> entities, Map<String, Object> queryParams) {
-    if (entities.size() > 0 && queryParams.containsKey(PARAM_NAME_LIMIT)) {
-      Integer limit = (Integer) queryParams.get(PARAM_NAME_LIMIT);
-      Integer offset = (Integer) queryParams.getOrDefault(PARAM_NAME_OFFSET, 0);
+    @Override
+    public List<T> process(List<T> entities, Map<String, Object> queryParams) {
+        if (entities.size() > 0 && queryParams.containsKey(PARAM_NAME_LIMIT)) {
+            Integer limit = (Integer) queryParams.get(PARAM_NAME_LIMIT);
+            Integer offset = (Integer) queryParams.getOrDefault(PARAM_NAME_OFFSET, 0);
 
-      offset = Math.max(0, offset);
-      limit = Math.min(offset + limit, entities.size());
-      entities = entities.subList(offset, limit);
+            offset = Math.max(0, offset);
+            limit = Math.min(offset + limit, entities.size());
+            entities = entities.subList(offset, limit);
+        }
+
+        return entities;
     }
-
-    return entities;
-  }
 }

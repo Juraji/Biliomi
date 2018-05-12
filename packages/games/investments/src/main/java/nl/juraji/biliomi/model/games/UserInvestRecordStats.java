@@ -13,23 +13,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class UserInvestRecordStats extends UserRecordStats {
 
-  @XmlElement(name = "TotalInvested")
-  private final long totalInvested;
+    @XmlElement(name = "TotalInvested")
+    private final long totalInvested;
 
-  @XmlElement(name = "TotalEarned")
-  private final long totalEarned;
+    @XmlElement(name = "TotalEarned")
+    private final long totalEarned;
 
-  public UserInvestRecordStats(long recordCount, long losses, long wins, long totalInvested, long totalEarned) {
-    super(recordCount, losses, wins);
-    this.totalInvested = totalInvested;
-    this.totalEarned = totalEarned;
-  }
+    public UserInvestRecordStats(long recordCount, long losses, long wins, long totalInvested, long totalEarned) {
+        super(recordCount, losses, wins);
+        this.totalInvested = totalInvested;
+        this.totalEarned = totalEarned;
+    }
 
-  public long getTotalInvested() {
-    return totalInvested;
-  }
+    public long getTotalInvested() {
+        return totalInvested;
+    }
 
-  public long getTotalEarned() {
-    return totalEarned;
-  }
+    public long getTotalEarned() {
+        return totalEarned;
+    }
 }

@@ -5,5 +5,5 @@ package nl.juraji.biliomi.components.integrations.spotify.api.v1.model.tracks;
  * Biliomi
  */
 public enum SpotifyAlbumType {
-  ALBUM, SINGLE, COMPILATION
+    ALBUM, SINGLE, COMPILATION
 }

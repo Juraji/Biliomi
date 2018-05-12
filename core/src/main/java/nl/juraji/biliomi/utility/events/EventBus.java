@@ -16,23 +16,23 @@ import java.util.concurrent.ExecutorService;
 @Default
 @Singleton
 public class EventBus {
-  private final ExecutorService executor = ThreadPools.newExecutorService(8, "EventBusExecutor");
-  private final AsyncEventBus eventBus = new AsyncEventBus(executor, new EventSubscriberExceptionHandler());
+    private final ExecutorService executor = ThreadPools.newExecutorService(8, "EventBusExecutor");
+    private final AsyncEventBus eventBus = new AsyncEventBus(executor, new EventSubscriberExceptionHandler());
 
-  public void register(Object object) {
-    eventBus.register(object);
-  }
+    public void register(Object object) {
+        eventBus.register(object);
+    }
 
-  public void unregister(Object object) {
-    eventBus.unregister(object);
-  }
+    public void unregister(Object object) {
+        eventBus.unregister(object);
+    }
 
-  public void post(Event event) {
-    eventBus.post(event);
-  }
+    public void post(Event event) {
+        eventBus.post(event);
+    }
 
-  @PreDestroy
-  private void destroyEventBus() {
-    executor.shutdown();
-  }
+    @PreDestroy
+    private void destroyEventBus() {
+        executor.shutdown();
+    }
 }

@@ -15,14 +15,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchUnhostEvent extends Event {
 
-  @XmlElement(name = "ChannelName")
-  private final String channelName;
+    @XmlElement(name = "ChannelName")
+    private final String channelName;
 
-  public TwitchUnhostEvent(String channelName) {
-    this.channelName = channelName;
-  }
+    public TwitchUnhostEvent(String channelName) {
+        this.channelName = channelName;
+    }
 
-  public String getChannelName() {
-    return channelName;
-  }
+    public String getChannelName() {
+        return channelName;
+    }
 }

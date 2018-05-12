@@ -27,223 +27,223 @@ import java.util.stream.Collectors;
 @SystemComponent
 @Singleton
 public class ChannelSettingsComponent extends Component {
-  public static final String CHANNEL_TITLE_TEMPLATE_KEY = "ChannelTitle";
-  private static final String CHANNEL_TITLE_TEMPLATE_INPUT_REPL = "{{input}}";
+    public static final String CHANNEL_TITLE_TEMPLATE_KEY = "ChannelTitle";
+    private static final String CHANNEL_TITLE_TEMPLATE_INPUT_REPL = "{{input}}";
 
-  @Inject
-  private ChannelService channelService;
+    @Inject
+    private ChannelService channelService;
 
-  @Inject
-  private CommunitiesService communitiesService;
+    @Inject
+    private CommunitiesService communitiesService;
 
-  @Inject
-  private TimeFormatter timeFormatter;
+    @Inject
+    private TimeFormatter timeFormatter;
 
-  @Inject
-  private TemplateDao templateDao;
+    @Inject
+    private TemplateDao templateDao;
 
-  @Inject
-  private SettingsService settingsService;
+    @Inject
+    private SettingsService settingsService;
 
-  /**
-   * Check wether the caster or another channel is streaming or not
-   * Usage: !online or !online [channelname]
-   */
-  @CommandRoute(command = "online")
-  public boolean onlineCommand(User user, Arguments arguments) {
-    TwitchStream stream;
-    User targetUser;
+    /**
+     * Check wether the caster or another channel is streaming or not
+     * Usage: !online or !online [channelname]
+     */
+    @CommandRoute(command = "online")
+    public boolean onlineCommand(User user, Arguments arguments) {
+        TwitchStream stream;
+        User targetUser;
 
-    if (arguments.size() == 0) {
-      // On no arguments post current channel status
-      targetUser = usersService.getCaster();
-      stream = channelService.getStream();
-    } else {
-      // Add the target channel as user, so we get a Twitch id and get their channelstatus
-      targetUser = usersService.getUser(arguments.get(0));
-      stream = channelService.getStream(targetUser.getTwitchUserId());
-    }
-
-    if (stream != null) {
-      chat.say(i18n.get("ChatCommand.online.channelOnline")
-          .add("channelname", targetUser::getDisplayName)
-          .add("gamename", stream::getGame));
-    } else {
-      chat.say(i18n.get("Common.channels.channelOffline")
-          .add("channelname", targetUser::getDisplayName));
-    }
-    return true;
-  }
-
-  /**
-   * Get the uptime of the current channel (if the channel is online)
-   * Usage: !uptime
-   */
-  @CommandRoute(command = "uptime")
-  public boolean uptimeCommand(User user, Arguments arguments) {
-    User caster = usersService.getCaster();
-    TwitchStream stream = channelService.getStream();
-
-    if (stream != null) {
-      DateTime streamStart = new DateTime(stream.getCreatedAt());
-      chat.say(i18n.get("ChatCommand.uptime.status")
-          .add("channelname", caster::getDisplayName)
-          .add("uptime", timeFormatter.timeQuantitySince(streamStart)));
-    } else {
-      chat.say(i18n.get("Common.channels.channelOffline")
-          .add("channelname", caster::getDisplayName));
-    }
-    return true;
-  }
-
-  /**
-   * Get the current game
-   * Usage: !game
-   */
-  @CommandRoute(command = "game")
-  public boolean gameCommand(User user, Arguments arguments) {
-    User caster = usersService.getCaster();
-    TwitchStream stream = channelService.getStream();
-
-    if (stream != null) {
-      chat.say(i18n.get("ChatCommand.game.status")
-          .add("channelname", caster::getDisplayName)
-          .add("gamename", stream::getGame));
-    } else {
-      chat.say(i18n.get("Common.channels.channelOffline")
-          .add("channelname", caster::getDisplayName));
-    }
-    return true;
-  }
-
-  /**
-   * Update channel information
-   * Usage !channel [game|status] [more...]
-   */
-  @CommandRoute(command = "channel", systemCommand = true)
-  public boolean channelCommand(User user, Arguments arguments) {
-    return captureSubCommands("channel", i18n.supply("ChatCommand.channel.usage"), user, arguments);
-  }
-
-  /**
-   * Update channel game
-   * Usage !channel game [game name...]
-   */
-  @SubCommandRoute(parentCommand = "channel", command = "game")
-  public boolean channelCommandGame(User user, Arguments arguments) {
-    if (!arguments.assertMinSize(1)) {
-      chat.whisper(user, i18n.get("ChatCommand.channel.game.usage"));
-      return false;
-    }
-
-    Game updateGameResult = channelService.updateGame(arguments.toString());
-
-    if (updateGameResult != null) {
-      chat.whisper(user, i18n.get("ChatCommand.channel.game.updated")
-          .add("gamename", updateGameResult::getName));
-    } else {
-      chat.whisper(user, i18n.get("Common.channels.updatedfailed"));
-      return false;
-    }
-
-    CommunitiesSettings communitiesSettings = settingsService.getSettings(CommunitiesSettings.class);
-    if (communitiesSettings.isAutoUpdateCommunities()) {
-      Set<Community> communities = updateGameResult.getCommunities();
-
-      // Todo: clear communities results in a 500 error
-      // communitiesService.clearChannelCommunities();
-
-      if (communities.size() == 0) {
-        communities = communitiesSettings.getDefaultCommunities();
-      }
-
-      if (communities.size() > 0) {
-        boolean communitiesUpdated = communitiesService.updateTwitchCommunities(communities);
-        if (communitiesUpdated) {
-          chat.whisper(user, i18n.get("ChatCommand.channel.game.communities.updated")
-              .add("communities", communities.stream()
-                  .limit(3)
-                  .map(Community::getName)
-                  .collect(Collectors.toList())));
+        if (arguments.size() == 0) {
+            // On no arguments post current channel status
+            targetUser = usersService.getCaster();
+            stream = channelService.getStream();
         } else {
-          chat.whisper(user, i18n.get("ChatCommand.channel.game.communities.updatedFailed"));
-          return false;
+            // Add the target channel as user, so we get a Twitch id and get their channelstatus
+            targetUser = usersService.getUser(arguments.get(0));
+            stream = channelService.getStream(targetUser.getTwitchUserId());
         }
-      }
+
+        if (stream != null) {
+            chat.say(i18n.get("ChatCommand.online.channelOnline")
+                    .add("channelname", targetUser::getDisplayName)
+                    .add("gamename", stream::getGame));
+        } else {
+            chat.say(i18n.get("Common.channels.channelOffline")
+                    .add("channelname", targetUser::getDisplayName));
+        }
+        return true;
     }
 
-    return true;
-  }
+    /**
+     * Get the uptime of the current channel (if the channel is online)
+     * Usage: !uptime
+     */
+    @CommandRoute(command = "uptime")
+    public boolean uptimeCommand(User user, Arguments arguments) {
+        User caster = usersService.getCaster();
+        TwitchStream stream = channelService.getStream();
 
-  /**
-   * Update channel status
-   * Optionally applies template CHANNEL_TITLE_TEMPLATE_KEY with key "{{input}}" replaced by user input
-   * Usage !channel status [new status...]
-   */
-  @SubCommandRoute(parentCommand = "channel", command = "status")
-  public boolean channelCommandStatus(User user, Arguments arguments) {
-    if (!arguments.assertMinSize(1)) {
-      chat.whisper(user, i18n.get("ChatCommand.channel.status.usage"));
-      return false;
+        if (stream != null) {
+            DateTime streamStart = new DateTime(stream.getCreatedAt());
+            chat.say(i18n.get("ChatCommand.uptime.status")
+                    .add("channelname", caster::getDisplayName)
+                    .add("uptime", timeFormatter.timeQuantitySince(streamStart)));
+        } else {
+            chat.say(i18n.get("Common.channels.channelOffline")
+                    .add("channelname", caster::getDisplayName));
+        }
+        return true;
     }
 
-    Template template = templateDao.getByKey(CHANNEL_TITLE_TEMPLATE_KEY);
-    String newStatus;
+    /**
+     * Get the current game
+     * Usage: !game
+     */
+    @CommandRoute(command = "game")
+    public boolean gameCommand(User user, Arguments arguments) {
+        User caster = usersService.getCaster();
+        TwitchStream stream = channelService.getStream();
 
-    if (template == null || template.getTemplate() == null) {
-      // No template available
-      newStatus = arguments.toString();
-    } else {
-      // Template available, apply it to the input
-      newStatus = Templater.template(template.getTemplate())
-          .add(CHANNEL_TITLE_TEMPLATE_INPUT_REPL, arguments.toString())
-          .apply();
+        if (stream != null) {
+            chat.say(i18n.get("ChatCommand.game.status")
+                    .add("channelname", caster::getDisplayName)
+                    .add("gamename", stream::getGame));
+        } else {
+            chat.say(i18n.get("Common.channels.channelOffline")
+                    .add("channelname", caster::getDisplayName));
+        }
+        return true;
     }
 
-    boolean success = channelService.updateStatus(newStatus);
-    if (success) {
-      chat.whisper(user, i18n.get("ChatCommand.channel.status.updated")
-          .add("status", newStatus));
-      return true;
-    } else {
-      chat.whisper(user, i18n.get("Common.channels.updatedfailed"));
-      return false;
-    }
-  }
-
-  /**
-   * Set a template to apply when the channel status is updated
-   * Use the key "{{input}}" which will be replaced with the arguments
-   * Usage: !channel titletemplate [template...] or !channel titletemplate off
-   */
-  @SubCommandRoute(parentCommand = "channel", command = "titletemplate")
-  public boolean channelCommandTitleTemplate(User user, Arguments arguments) {
-    if (!arguments.assertMinSize(1)) {
-      chat.whisper(user, i18n.get("ChatCommand.channel.titletemplate.usage"));
-      return false;
+    /**
+     * Update channel information
+     * Usage !channel [game|status] [more...]
+     */
+    @CommandRoute(command = "channel", systemCommand = true)
+    public boolean channelCommand(User user, Arguments arguments) {
+        return captureSubCommands("channel", i18n.supply("ChatCommand.channel.usage"), user, arguments);
     }
 
-    Template template = templateDao.getByKey(CHANNEL_TITLE_TEMPLATE_KEY);
-    String newTemplate = arguments.toString();
-    OnOff off = EnumUtils.toEnum(newTemplate, OnOff.class);
+    /**
+     * Update channel game
+     * Usage !channel game [game name...]
+     */
+    @SubCommandRoute(parentCommand = "channel", command = "game")
+    public boolean channelCommandGame(User user, Arguments arguments) {
+        if (!arguments.assertMinSize(1)) {
+            chat.whisper(user, i18n.get("ChatCommand.channel.game.usage"));
+            return false;
+        }
 
-    if (template == null) {
-      throw new IllegalStateException("Channel title template does not exist");
+        Game updateGameResult = channelService.updateGame(arguments.toString());
+
+        if (updateGameResult != null) {
+            chat.whisper(user, i18n.get("ChatCommand.channel.game.updated")
+                    .add("gamename", updateGameResult::getName));
+        } else {
+            chat.whisper(user, i18n.get("Common.channels.updatedfailed"));
+            return false;
+        }
+
+        CommunitiesSettings communitiesSettings = settingsService.getSettings(CommunitiesSettings.class);
+        if (communitiesSettings.isAutoUpdateCommunities()) {
+            Set<Community> communities = updateGameResult.getCommunities();
+
+            // Todo: clear communities results in a 500 error
+            // communitiesService.clearChannelCommunities();
+
+            if (communities.size() == 0) {
+                communities = communitiesSettings.getDefaultCommunities();
+            }
+
+            if (communities.size() > 0) {
+                boolean communitiesUpdated = communitiesService.updateTwitchCommunities(communities);
+                if (communitiesUpdated) {
+                    chat.whisper(user, i18n.get("ChatCommand.channel.game.communities.updated")
+                            .add("communities", communities.stream()
+                                    .limit(3)
+                                    .map(Community::getName)
+                                    .collect(Collectors.toList())));
+                } else {
+                    chat.whisper(user, i18n.get("ChatCommand.channel.game.communities.updatedFailed"));
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
-    if (EnumUtils.equals(OnOff.OFF, off)) {
-      // User wishes to delete the existing template
-      template.setTemplate(null);
-      chat.whisper(user, i18n.get("ChatCommand.channel.titletemplate.deleted"));
-    } else {
-      // User wishes to set or edit the current template
-      template.setTemplate(arguments.toString());
-      templateDao.save(template);
+    /**
+     * Update channel status
+     * Optionally applies template CHANNEL_TITLE_TEMPLATE_KEY with key "{{input}}" replaced by user input
+     * Usage !channel status [new status...]
+     */
+    @SubCommandRoute(parentCommand = "channel", command = "status")
+    public boolean channelCommandStatus(User user, Arguments arguments) {
+        if (!arguments.assertMinSize(1)) {
+            chat.whisper(user, i18n.get("ChatCommand.channel.status.usage"));
+            return false;
+        }
 
-      chat.whisper(user, i18n.get("ChatCommand.channel.titletemplate.updated")
-          .add("template", template::getTemplate));
+        Template template = templateDao.getByKey(CHANNEL_TITLE_TEMPLATE_KEY);
+        String newStatus;
+
+        if (template == null || template.getTemplate() == null) {
+            // No template available
+            newStatus = arguments.toString();
+        } else {
+            // Template available, apply it to the input
+            newStatus = Templater.template(template.getTemplate())
+                    .add(CHANNEL_TITLE_TEMPLATE_INPUT_REPL, arguments.toString())
+                    .apply();
+        }
+
+        boolean success = channelService.updateStatus(newStatus);
+        if (success) {
+            chat.whisper(user, i18n.get("ChatCommand.channel.status.updated")
+                    .add("status", newStatus));
+            return true;
+        } else {
+            chat.whisper(user, i18n.get("Common.channels.updatedfailed"));
+            return false;
+        }
     }
 
-    return true;
-  }
+    /**
+     * Set a template to apply when the channel status is updated
+     * Use the key "{{input}}" which will be replaced with the arguments
+     * Usage: !channel titletemplate [template...] or !channel titletemplate off
+     */
+    @SubCommandRoute(parentCommand = "channel", command = "titletemplate")
+    public boolean channelCommandTitleTemplate(User user, Arguments arguments) {
+        if (!arguments.assertMinSize(1)) {
+            chat.whisper(user, i18n.get("ChatCommand.channel.titletemplate.usage"));
+            return false;
+        }
+
+        Template template = templateDao.getByKey(CHANNEL_TITLE_TEMPLATE_KEY);
+        String newTemplate = arguments.toString();
+        OnOff off = EnumUtils.toEnum(newTemplate, OnOff.class);
+
+        if (template == null) {
+            throw new IllegalStateException("Channel title template does not exist");
+        }
+
+        if (EnumUtils.equals(OnOff.OFF, off)) {
+            // User wishes to delete the existing template
+            template.setTemplate(null);
+            chat.whisper(user, i18n.get("ChatCommand.channel.titletemplate.deleted"));
+        } else {
+            // User wishes to set or edit the current template
+            template.setTemplate(arguments.toString());
+            templateDao.save(template);
+
+            chat.whisper(user, i18n.get("ChatCommand.channel.titletemplate.updated")
+                    .add("template", template::getTemplate));
+        }
+
+        return true;
+    }
 }

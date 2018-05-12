@@ -24,84 +24,84 @@ import java.util.List;
 @SetupTaskPriority(priority = 3)
 public class DefaultGroupsAndUsersTask implements SetupTask {
 
-  @Inject
-  private Logger logger;
+    @Inject
+    private Logger logger;
 
-  @Inject
-  @ChannelName
-  private String channelName;
+    @Inject
+    @ChannelName
+    private String channelName;
 
-  @Inject
-  @BotName
-  private String botName;
+    @Inject
+    @BotName
+    private String botName;
 
-  @Inject
-  private UserGroupDao userGroupDao;
+    @Inject
+    private UserGroupDao userGroupDao;
 
-  @Inject
-  private UsersService usersService;
+    @Inject
+    private UsersService usersService;
 
-  @Override
-  public void install() {
-    List<UserGroup> defaultGroups = createDefaultGroups();
+    @Override
+    public void install() {
+        List<UserGroup> defaultGroups = createDefaultGroups();
 
-    // Create users for caster and bot
-    if (usersService.getUser(channelName) != null && usersService.getUser(botName) != null) {
-      return;
+        // Create users for caster and bot
+        if (usersService.getUser(channelName) != null && usersService.getUser(botName) != null) {
+            return;
+        }
+
+        User casterUser = usersService.getUser(channelName);
+        User botUser = usersService.getUser(botName);
+
+        casterUser.setCaster(true);
+        casterUser.setUserGroup(defaultGroups.get(0));
+        usersService.save(casterUser);
+
+        botUser.setModerator(true);
+        botUser.setUserGroup(defaultGroups.get(1));
+        usersService.save(botUser);
+
+        logger.info("Created user {} as Caster", casterUser.getDisplayName());
+        logger.info("Created user {} as Moderator", botUser.getDisplayName());
     }
 
-    User casterUser = usersService.getUser(channelName);
-    User botUser = usersService.getUser(botName);
+    @Override
+    public void update() {
+        // Do nothing
+    }
 
-    casterUser.setCaster(true);
-    casterUser.setUserGroup(defaultGroups.get(0));
-    usersService.save(casterUser);
+    @Override
+    public String getDisplayName() {
+        return "Create default groups and users";
+    }
 
-    botUser.setModerator(true);
-    botUser.setUserGroup(defaultGroups.get(1));
-    usersService.save(botUser);
+    /**
+     * Create the default set of groups:
+     * 0: Caster
+     * 1: Moderator
+     * 2: Viewer (Set as default)
+     */
+    private List<UserGroup> createDefaultGroups() {
+        List<UserGroup> groups = new ArrayList<>();
 
-    logger.info("Created user {} as Caster", casterUser.getDisplayName());
-    logger.info("Created user {} as Moderator", botUser.getDisplayName());
-  }
+        UserGroup caster = new UserGroup();
+        caster.setName("Caster");
+        caster.setWeight(0);
+        groups.add(caster);
 
-  @Override
-  public void update() {
-    // Do nothing
-  }
+        UserGroup moderator = new UserGroup();
+        moderator.setName("Moderator");
+        moderator.setWeight(1);
+        groups.add(moderator);
 
-  @Override
-  public String getDisplayName() {
-    return "Create default groups and users";
-  }
+        UserGroup viewer = new UserGroup();
+        viewer.setName("Viewer");
+        viewer.setWeight(UserGroupService.MAX_WEIGHT + 1);
+        viewer.setDefaultGroup(true);
+        groups.add(viewer);
 
-  /**
-   * Create the default set of groups:
-   * 0: Caster
-   * 1: Moderator
-   * 2: Viewer (Set as default)
-   */
-  private List<UserGroup> createDefaultGroups() {
-    List<UserGroup> groups = new ArrayList<>();
-
-    UserGroup caster = new UserGroup();
-    caster.setName("Caster");
-    caster.setWeight(0);
-    groups.add(caster);
-
-    UserGroup moderator = new UserGroup();
-    moderator.setName("Moderator");
-    moderator.setWeight(1);
-    groups.add(moderator);
-
-    UserGroup viewer = new UserGroup();
-    viewer.setName("Viewer");
-    viewer.setWeight(UserGroupService.MAX_WEIGHT + 1);
-    viewer.setDefaultGroup(true);
-    groups.add(viewer);
-
-    userGroupDao.save(groups);
-    groups.forEach(userGroup -> logger.info("Created group {}", userGroup.getName()));
-    return groups;
-  }
+        userGroupDao.save(groups);
+        groups.forEach(userGroup -> logger.info("Created group {}", userGroup.getName()));
+        return groups;
+    }
 }

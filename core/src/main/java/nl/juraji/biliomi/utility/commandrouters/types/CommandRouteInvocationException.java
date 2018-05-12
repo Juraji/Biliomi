@@ -5,7 +5,7 @@ package nl.juraji.biliomi.utility.commandrouters.types;
  * Biliomi v3
  */
 public class CommandRouteInvocationException extends Exception {
-  public CommandRouteInvocationException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public CommandRouteInvocationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

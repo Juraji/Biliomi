@@ -14,25 +14,25 @@ import javax.ws.rs.Path;
 @Path("/core/settings/communities")
 public class CommunitiesSettingsRestService extends SettingsModelRestService<CommunitiesSettings> {
 
-  @Inject
-  private SettingsService settingsService;
+    @Inject
+    private SettingsService settingsService;
 
-  @Override
-  public CommunitiesSettings getEntity() {
-    return settingsService.getSettings(CommunitiesSettings.class);
-  }
+    @Override
+    public CommunitiesSettings getEntity() {
+        return settingsService.getSettings(CommunitiesSettings.class);
+    }
 
-  @Override
-  public CommunitiesSettings updateEntity(CommunitiesSettings e) {
-    CommunitiesSettings settings = settingsService.getSettings(CommunitiesSettings.class);
+    @Override
+    public CommunitiesSettings updateEntity(CommunitiesSettings e) {
+        CommunitiesSettings settings = settingsService.getSettings(CommunitiesSettings.class);
 
-    settings.setAutoUpdateCommunities(e.isAutoUpdateCommunities());
+        settings.setAutoUpdateCommunities(e.isAutoUpdateCommunities());
 
-    settings.getDefaultCommunities().clear();
-    settings.getDefaultCommunities().addAll(e.getDefaultCommunities());
+        settings.getDefaultCommunities().clear();
+        settings.getDefaultCommunities().addAll(e.getDefaultCommunities());
 
-    settingsService.save(settings);
+        settingsService.save(settings);
 
-    return settings;
-  }
+        return settings;
+    }
 }

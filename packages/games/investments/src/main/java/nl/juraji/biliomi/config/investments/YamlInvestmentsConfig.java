@@ -8,13 +8,13 @@ import java.util.List;
  */
 public class YamlInvestmentsConfig {
 
-  private List<String> projects;
+    private List<String> projects;
 
-  public List<String> getProjects() {
-    return projects;
-  }
+    public List<String> getProjects() {
+        return projects;
+    }
 
-  public void setProjects(List<String> projects) {
-    this.projects = projects;
-  }
+    public void setProjects(List<String> projects) {
+        this.projects = projects;
+    }
 }

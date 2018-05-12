@@ -13,14 +13,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class SteamResponse<T> {
 
-  @XmlElement(name = "response")
-  private T response;
+    @XmlElement(name = "response")
+    private T response;
 
-  public T getResponse() {
-    return response;
-  }
+    public T getResponse() {
+        return response;
+    }
 
-  public void setResponse(T response) {
-    this.response = response;
-  }
+    public void setResponse(T response) {
+        this.response = response;
+    }
 }

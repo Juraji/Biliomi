@@ -5,5 +5,5 @@ package nl.juraji.biliomi.components.games.tamagotchi.services;
  * Biliomi v3
  */
 public enum Gender {
-  MALE, FEMALE, NEUTRAL
+    MALE, FEMALE, NEUTRAL
 }

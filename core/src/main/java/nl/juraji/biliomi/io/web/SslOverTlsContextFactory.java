@@ -8,8 +8,8 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
  */
 public final class SslOverTlsContextFactory extends SslContextFactory {
 
-  public SslOverTlsContextFactory() {
-    super(false);
-    this.setIncludeProtocols("TLSv1.2");
-  }
+    public SslOverTlsContextFactory() {
+        super(false);
+        this.setIncludeProtocols("TLSv1.2");
+    }
 }

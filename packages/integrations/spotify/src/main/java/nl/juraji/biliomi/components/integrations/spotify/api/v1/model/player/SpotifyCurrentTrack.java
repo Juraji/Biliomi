@@ -15,47 +15,47 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SpotifyCurrentTrack extends SpotifyTrack {
 
-  @XmlElement(name = "timestamp")
-  private long timestamp;
+    @XmlElement(name = "timestamp")
+    private long timestamp;
 
-  @XmlElement(name = "progress_ms")
-  private long progressMs;
+    @XmlElement(name = "progress_ms")
+    private long progressMs;
 
-  @XmlElement(name = "is_playing")
-  private boolean isPlaying;
+    @XmlElement(name = "is_playing")
+    private boolean isPlaying;
 
-  @XmlElement(name = "item")
-  private SpotifyTrack item;
+    @XmlElement(name = "item")
+    private SpotifyTrack item;
 
-  public long getTimestamp() {
-    return timestamp;
-  }
+    public long getTimestamp() {
+        return timestamp;
+    }
 
-  public void setTimestamp(long timestamp) {
-    this.timestamp = timestamp;
-  }
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 
-  public long getProgressMs() {
-    return progressMs;
-  }
+    public long getProgressMs() {
+        return progressMs;
+    }
 
-  public void setProgressMs(long progressMs) {
-    this.progressMs = progressMs;
-  }
+    public void setProgressMs(long progressMs) {
+        this.progressMs = progressMs;
+    }
 
-  public boolean isPlaying() {
-    return isPlaying;
-  }
+    public boolean isPlaying() {
+        return isPlaying;
+    }
 
-  public void setPlaying(boolean playing) {
-    isPlaying = playing;
-  }
+    public void setPlaying(boolean playing) {
+        isPlaying = playing;
+    }
 
-  public SpotifyTrack getItem() {
-    return item;
-  }
+    public SpotifyTrack getItem() {
+        return item;
+    }
 
-  public void setItem(SpotifyTrack item) {
-    this.item = item;
-  }
+    public void setItem(SpotifyTrack item) {
+        this.item = item;
+    }
 }

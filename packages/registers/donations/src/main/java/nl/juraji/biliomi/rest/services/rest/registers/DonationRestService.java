@@ -15,46 +15,46 @@ import java.util.List;
 @Path("/registers/donations")
 public class DonationRestService extends ModelRestService<Donation> {
 
-  @Inject
-  private DonationDao donationDao;
+    @Inject
+    private DonationDao donationDao;
 
-  @Override
-  public List<Donation> getEntities() {
-    return donationDao.getList();
-  }
-
-  @Override
-  public Donation getEntity(long id) {
-    return donationDao.get(id);
-  }
-
-  @Override
-  public Donation createEntity(Donation e) {
-    donationDao.save(e);
-    return e;
-  }
-
-  @Override
-  public Donation updateEntity(Donation e, long id) {
-    Donation donation = donationDao.get(id);
-
-    donation.setDonation(e.getDonation());
-    donation.setNote(e.getNote());
-    donation.setDate(e.getDate());
-
-    donationDao.save(donation);
-    return donation;
-  }
-
-  @Override
-  public boolean deleteEntity(long id) {
-    Donation donation = donationDao.get(id);
-
-    if (donation == null) {
-      return false;
+    @Override
+    public List<Donation> getEntities() {
+        return donationDao.getList();
     }
 
-    donationDao.delete(donation);
-    return true;
-  }
+    @Override
+    public Donation getEntity(long id) {
+        return donationDao.get(id);
+    }
+
+    @Override
+    public Donation createEntity(Donation e) {
+        donationDao.save(e);
+        return e;
+    }
+
+    @Override
+    public Donation updateEntity(Donation e, long id) {
+        Donation donation = donationDao.get(id);
+
+        donation.setDonation(e.getDonation());
+        donation.setNote(e.getNote());
+        donation.setDate(e.getDate());
+
+        donationDao.save(donation);
+        return donation;
+    }
+
+    @Override
+    public boolean deleteEntity(long id) {
+        Donation donation = donationDao.get(id);
+
+        if (donation == null) {
+            return false;
+        }
+
+        donationDao.delete(donation);
+        return true;
+    }
 }

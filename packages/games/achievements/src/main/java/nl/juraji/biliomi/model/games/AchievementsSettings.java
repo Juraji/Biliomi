@@ -18,20 +18,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AchievementsSettings extends Settings {
 
-  @Column
-  @XmlElement(name = "AchievementsEnabled")
-  private boolean achievementsEnabled;
+    @Column
+    @XmlElement(name = "AchievementsEnabled")
+    private boolean achievementsEnabled;
 
-  public boolean isAchievementsEnabled() {
-    return achievementsEnabled;
-  }
+    public boolean isAchievementsEnabled() {
+        return achievementsEnabled;
+    }
 
-  public void setAchievementsEnabled(boolean achievementsEnabled) {
-    this.achievementsEnabled = achievementsEnabled;
-  }
+    public void setAchievementsEnabled(boolean achievementsEnabled) {
+        this.achievementsEnabled = achievementsEnabled;
+    }
 
-  @Override
-  public void setDefaultValues() {
-    achievementsEnabled = true;
-  }
+    @Override
+    public void setDefaultValues() {
+        achievementsEnabled = true;
+    }
 }

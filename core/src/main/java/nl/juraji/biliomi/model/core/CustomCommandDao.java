@@ -11,20 +11,20 @@ import javax.enterprise.inject.Default;
  */
 @Default
 public class CustomCommandDao extends JpaDao<CustomCommand> {
-  public CustomCommandDao() {
-    super(CustomCommand.class);
-  }
+    public CustomCommandDao() {
+        super(CustomCommand.class);
+    }
 
-  public CustomCommand getCommand(String command) {
-    return criteria()
-        .add(Restrictions.eq("command", command))
-        .getResult();
-  }
+    public CustomCommand getCommand(String command) {
+        return criteria()
+                .add(Restrictions.eq("command", command))
+                .getResult();
+    }
 
-  public CustomCommand getByAlias(String alias) {
-    return criteria()
-        .createAlias("aliasses", "a")
-        .add(Restrictions.eq("a.elements", alias))
-        .getResult();
-  }
+    public CustomCommand getByAlias(String alias) {
+        return criteria()
+                .createAlias("aliasses", "a")
+                .add(Restrictions.eq("a.elements", alias))
+                .getResult();
+    }
 }

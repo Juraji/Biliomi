@@ -6,5 +6,5 @@ package nl.juraji.biliomi.utility.estreams.einterface;
  */
 @FunctionalInterface
 public interface EComparator<T, E extends Exception> {
-  int compare(T t1, T t2) throws E;
+    int compare(T t1, T t2) throws E;
 }

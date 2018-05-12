@@ -21,82 +21,82 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ModerationRecord {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @XmlElement(name = "Id")
-  private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement(name = "Id")
+    private long id;
 
-  @NotNull
-  @ManyToOne
-  @XmlElement(name = "User")
-  private User user;
+    @NotNull
+    @ManyToOne
+    @XmlElement(name = "User")
+    private User user;
 
-  @Column
-  @NotNull
-  @Enumerated(EnumType.STRING)
-  @XmlElement(name = "Action")
-  private ModerationAction action;
+    @Column
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @XmlElement(name = "Action")
+    private ModerationAction action;
 
-  @Column
-  @NotNull
-  @Enumerated(EnumType.STRING)
-  @XmlElement(name = "Reason")
-  private ModerationReason reason;
+    @Column
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @XmlElement(name = "Reason")
+    private ModerationReason reason;
 
-  @Column
-  @XmlElement(name = "Message")
-  private String message;
+    @Column
+    @XmlElement(name = "Message")
+    private String message;
 
-  @Column
-  @Type(type = DateTimeISO8601Type.TYPE)
-  @XmlElement(name = "Date")
-  private DateTime date;
+    @Column
+    @Type(type = DateTimeISO8601Type.TYPE)
+    @XmlElement(name = "Date")
+    private DateTime date;
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-  public User getUser() {
-    return user;
-  }
+    public User getUser() {
+        return user;
+    }
 
-  public void setUser(User user) {
-    this.user = user;
-  }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-  public ModerationAction getAction() {
-    return action;
-  }
+    public ModerationAction getAction() {
+        return action;
+    }
 
-  public void setAction(ModerationAction action) {
-    this.action = action;
-  }
+    public void setAction(ModerationAction action) {
+        this.action = action;
+    }
 
-  public ModerationReason getReason() {
-    return reason;
-  }
+    public ModerationReason getReason() {
+        return reason;
+    }
 
-  public void setReason(ModerationReason reason) {
-    this.reason = reason;
-  }
+    public void setReason(ModerationReason reason) {
+        this.reason = reason;
+    }
 
-  public String getMessage() {
-    return message;
-  }
+    public String getMessage() {
+        return message;
+    }
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-  public DateTime getDate() {
-    return date;
-  }
+    public DateTime getDate() {
+        return date;
+    }
 
-  public void setDate(DateTime date) {
-    this.date = date;
-  }
+    public void setDate(DateTime date) {
+        this.date = date;
+    }
 }

@@ -26,104 +26,103 @@ import javax.inject.Singleton;
 @NormalComponent
 @EventBusSubscriber
 public class HostWatchComponent extends Component {
-  private static final String HOST_CMD = ".host ";
-  public static final String INCOMING_HOST_NOTICE_TEMPLATE = "IncomingHostNotice";
+    public static final String INCOMING_HOST_NOTICE_TEMPLATE = "IncomingHostNotice";
+    private static final String HOST_CMD = ".host ";
+    @Inject
+    private HostWatchUpdateService hostWatchUpdateService;
 
-  @Inject
-  private HostWatchUpdateService hostWatchUpdateService;
+    @Inject
+    private HostWatchEventsService hostWatchEventsService;
 
-  @Inject
-  private HostWatchEventsService hostWatchEventsService;
+    @Inject
+    private PointsService pointsService;
 
-  @Inject
-  private PointsService pointsService;
+    @Inject
+    private HostRecordService hostRecordService;
 
-  @Inject
-  private HostRecordService hostRecordService;
+    @Inject
+    private TemplateDao templateDao;
 
-  @Inject
-  private TemplateDao templateDao;
+    private HostWatchSettings settings;
 
-  private HostWatchSettings settings;
-
-  @Override
-  public void init() {
-    settings = settingsService.getSettings(HostWatchSettings.class, s -> settings = s);
-    hostWatchUpdateService.start();
-    hostWatchEventsService.init();
-  }
-
-  @Subscribe
-  public void onChannelStateEvent(ChannelStateEvent event) {
-    hostWatchUpdateService.restart();
-  }
-
-  /**
-   * Host another channel
-   * Usage: !host [channelname]
-   */
-  @CommandRoute(command = "host", systemCommand = true)
-  public boolean hostCommand(User user, Arguments arguments) {
-    if (!arguments.assertSize(1)) {
-      chat.whisper(user, i18n.get("ChatCommand.hostWatch.host.usage"));
-      return false;
+    @Override
+    public void init() {
+        settings = settingsService.getSettings(HostWatchSettings.class, s -> settings = s);
+        hostWatchUpdateService.start();
+        hostWatchEventsService.init();
     }
 
-    String targetUsername = arguments.toString();
-    User targetUser = usersService.getUser(targetUsername);
-
-    if (targetUser == null) {
-      chat.whisper(user, i18n.getUserNonExistent(targetUsername));
-      return false;
+    @Subscribe
+    public void onChannelStateEvent(ChannelStateEvent event) {
+        hostWatchUpdateService.restart();
     }
 
-    hostRecordService.recordOutgoingHost(targetUser);
-    chat.say(HOST_CMD + targetUser.getUsername());
-    // Do not update the user. The Twitch chat already does this
-    return true;
-  }
+    /**
+     * Host another channel
+     * Usage: !host [channelname]
+     */
+    @CommandRoute(command = "host", systemCommand = true)
+    public boolean hostCommand(User user, Arguments arguments) {
+        if (!arguments.assertSize(1)) {
+            chat.whisper(user, i18n.get("ChatCommand.hostWatch.host.usage"));
+            return false;
+        }
 
-  /**
-   * The main command for setting followerwatch settings
-   * Only contains subcommand, so all calls are pushed to captureSubCommands
-   * Usage: !hostwatch [reward|] [value]
-   */
-  @CommandRoute(command = "hostwatch", systemCommand = true)
-  public boolean hostwatchCommand(User user, Arguments arguments) {
-    return captureSubCommands("hostwatch", i18n.supply("ChatCommand.hostWatch.usage"), user, arguments);
-  }
+        String targetUsername = arguments.toString();
+        User targetUser = usersService.getUser(targetUsername);
 
-  /**
-   * Set the reward in points when a user follows.
-   * Usage: !hostwatch reward [amount of points]
-   */
-  @SubCommandRoute(parentCommand = "hostwatch", command = "reward")
-  public boolean hostwatchCommandReward(User user, Arguments arguments) {
-    Long newReward = NumberConverter.asNumber(arguments.popSafe()).toLong();
+        if (targetUser == null) {
+            chat.whisper(user, i18n.getUserNonExistent(targetUsername));
+            return false;
+        }
 
-    if (newReward == null || newReward < 0) {
-      chat.whisper(user, i18n.get("ChatCommand.hostWatch.reward.usage"));
-      return false;
+        hostRecordService.recordOutgoingHost(targetUser);
+        chat.say(HOST_CMD + targetUser.getUsername());
+        // Do not update the user. The Twitch chat already does this
+        return true;
     }
 
-    settings.setReward(newReward);
-    settingsService.save(settings);
-    chat.whisper(user, i18n.get("ChatCommand.hostWatch.reward.saved")
-        .add("points", pointsService.asString(newReward)));
+    /**
+     * The main command for setting followerwatch settings
+     * Only contains subcommand, so all calls are pushed to captureSubCommands
+     * Usage: !hostwatch [reward|] [value]
+     */
+    @CommandRoute(command = "hostwatch", systemCommand = true)
+    public boolean hostwatchCommand(User user, Arguments arguments) {
+        return captureSubCommands("hostwatch", i18n.supply("ChatCommand.hostWatch.usage"), user, arguments);
+    }
 
-    return true;
-  }
+    /**
+     * Set the reward in points when a user follows.
+     * Usage: !hostwatch reward [amount of points]
+     */
+    @SubCommandRoute(parentCommand = "hostwatch", command = "reward")
+    public boolean hostwatchCommandReward(User user, Arguments arguments) {
+        Long newReward = NumberConverter.asNumber(arguments.popSafe()).toLong();
 
-  /**
-   * Set the notice to post in the chat when another channel initiates a host
-   * Usage: !hostwatch sethostnotice [message... or OFF to disable]
-   */
-  @SubCommandRoute(parentCommand = "hostwatch", command = "sethostnotice")
-  public boolean hostWatchsethostnoticeCommand(User user, Arguments arguments) {
-    return new TemplateSetup(templateDao, chat)
-        .withCommandUsageMessage(i18n.getString("ChatCommand.hostWatch.sethostnotice.usage"))
-        .withTemplateDisabledMessage(i18n.getString("ChatCommand.hostWatch.sethostnotice.disabled"))
-        .withTemplatedSavedMessage(i18n.getString("ChatCommand.hostWatch.sethostnotice.saved"))
-        .apply(user, arguments.toString(), INCOMING_HOST_NOTICE_TEMPLATE);
-  }
+        if (newReward == null || newReward < 0) {
+            chat.whisper(user, i18n.get("ChatCommand.hostWatch.reward.usage"));
+            return false;
+        }
+
+        settings.setReward(newReward);
+        settingsService.save(settings);
+        chat.whisper(user, i18n.get("ChatCommand.hostWatch.reward.saved")
+                .add("points", pointsService.asString(newReward)));
+
+        return true;
+    }
+
+    /**
+     * Set the notice to post in the chat when another channel initiates a host
+     * Usage: !hostwatch sethostnotice [message... or OFF to disable]
+     */
+    @SubCommandRoute(parentCommand = "hostwatch", command = "sethostnotice")
+    public boolean hostWatchsethostnoticeCommand(User user, Arguments arguments) {
+        return new TemplateSetup(templateDao, chat)
+                .withCommandUsageMessage(i18n.getString("ChatCommand.hostWatch.sethostnotice.usage"))
+                .withTemplateDisabledMessage(i18n.getString("ChatCommand.hostWatch.sethostnotice.disabled"))
+                .withTemplatedSavedMessage(i18n.getString("ChatCommand.hostWatch.sethostnotice.saved"))
+                .apply(user, arguments.toString(), INCOMING_HOST_NOTICE_TEMPLATE);
+    }
 }

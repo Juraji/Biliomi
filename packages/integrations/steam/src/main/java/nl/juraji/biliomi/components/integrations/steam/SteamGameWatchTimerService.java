@@ -24,86 +24,86 @@ import java.util.concurrent.TimeUnit;
 @Singleton
 public class SteamGameWatchTimerService extends TimerService {
 
-  @Inject
-  private SteamApi steamApi;
+    @Inject
+    private SteamApi steamApi;
 
-  @Inject
-  private GameService gameService;
+    @Inject
+    private GameService gameService;
 
-  @Inject
-  private ChannelService channelService;
+    @Inject
+    private ChannelService channelService;
 
-  @Override
-  public void start() {
-    super.start();
+    @Override
+    public void start() {
+        super.start();
 
-    logger.info("Started watching your Steam account in order to sync Twitch with your currently playing game");
-    scheduleAtFixedRate(this::syncToTwitch, 0, 15, TimeUnit.MINUTES);
-  }
-
-  public boolean isAvailable() {
-    return steamApi.isAvailable();
-  }
-
-  public Game syncToTwitchNow() throws Exception {
-    Game game = getSteamGameAsGame();
-
-    if (game == null) {
-      throw new Exception("You are currently playing a game on Steam that is not known by Biliomi. Try importing your steam library");
+        logger.info("Started watching your Steam account in order to sync Twitch with your currently playing game");
+        scheduleAtFixedRate(this::syncToTwitch, 0, 15, TimeUnit.MINUTES);
     }
 
-    logger.info("Steam game sync forced, updating Twitch with game: " + game.getName());
-    channelService.updateGame(game.getName());
-    return game;
-  }
-
-  private void syncToTwitch() {
-    try {
-      if (!channelService.isStreamOnline()) {
-        return;
-      }
-
-      Game game = getSteamGameAsGame();
-      if (game == null) {
-        logger.info("You are currently playing a game on Steam that is not known by Biliomi. Try importing your steam library");
-        return;
-      }
-
-      String channelGame = channelService.getStream().getGame();
-      if (!channelGame.equals(game.getName())) {
-        // Only update Twitch if the Steam game differs from Twitch
-        logger.info("Steam game changed, updating Twitch: " + channelGame + " -> " + game.getName());
-        channelService.updateGame(game.getName());
-      }
-    } catch (UnavailableException e) {
-      logger.error("The service is unavailabe unavailable", e);
-    } catch (Exception e) {
-      logger.error("An error occurred while fetching Steam user information", e);
+    public boolean isAvailable() {
+        return steamApi.isAvailable();
     }
-  }
 
-  private Game getSteamGameAsGame() throws Exception {
-    Response<SteamPlayersResponse> response = steamApi.getPlayerSummary();
-    Game game = null;
+    public Game syncToTwitchNow() throws Exception {
+        Game game = getSteamGameAsGame();
 
-    if (response.isOK()) {
-      if (response.getData().getResponse().getPlayers().size() == 0) {
-        throw new UnavailableException("Steam user not found");
-      }
-
-      SteamPlayer steamPlayer = response.getData().getResponse().getPlayers().get(0);
-      if (SteamProfileVisibilityState.VISIBLE.equals(steamPlayer.getProfileVisibilityState())) {
-        if (steamPlayer.getCurrentGameId() != null) {
-          game = gameService.getBySteamId(steamPlayer.getCurrentGameId());
+        if (game == null) {
+            throw new Exception("You are currently playing a game on Steam that is not known by Biliomi. Try importing your steam library");
         }
-      } else {
-        throw new UnavailableException("The Steam profile is set to private, Biliomi can't read the nescessary information");
-      }
-    } else {
-      // Something else went wrong
-      throw new Exception(response.getRawData());
+
+        logger.info("Steam game sync forced, updating Twitch with game: " + game.getName());
+        channelService.updateGame(game.getName());
+        return game;
     }
 
-    return game;
-  }
+    private void syncToTwitch() {
+        try {
+            if (!channelService.isStreamOnline()) {
+                return;
+            }
+
+            Game game = getSteamGameAsGame();
+            if (game == null) {
+                logger.info("You are currently playing a game on Steam that is not known by Biliomi. Try importing your steam library");
+                return;
+            }
+
+            String channelGame = channelService.getStream().getGame();
+            if (!channelGame.equals(game.getName())) {
+                // Only update Twitch if the Steam game differs from Twitch
+                logger.info("Steam game changed, updating Twitch: " + channelGame + " -> " + game.getName());
+                channelService.updateGame(game.getName());
+            }
+        } catch (UnavailableException e) {
+            logger.error("The service is unavailabe unavailable", e);
+        } catch (Exception e) {
+            logger.error("An error occurred while fetching Steam user information", e);
+        }
+    }
+
+    private Game getSteamGameAsGame() throws Exception {
+        Response<SteamPlayersResponse> response = steamApi.getPlayerSummary();
+        Game game = null;
+
+        if (response.isOK()) {
+            if (response.getData().getResponse().getPlayers().size() == 0) {
+                throw new UnavailableException("Steam user not found");
+            }
+
+            SteamPlayer steamPlayer = response.getData().getResponse().getPlayers().get(0);
+            if (SteamProfileVisibilityState.VISIBLE.equals(steamPlayer.getProfileVisibilityState())) {
+                if (steamPlayer.getCurrentGameId() != null) {
+                    game = gameService.getBySteamId(steamPlayer.getCurrentGameId());
+                }
+            } else {
+                throw new UnavailableException("The Steam profile is set to private, Biliomi can't read the nescessary information");
+            }
+        } else {
+            // Something else went wrong
+            throw new Exception(response.getRawData());
+        }
+
+        return game;
+    }
 }

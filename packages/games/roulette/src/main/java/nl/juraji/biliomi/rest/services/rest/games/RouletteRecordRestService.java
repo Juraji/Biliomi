@@ -21,55 +21,55 @@ import java.util.List;
 @Path("/games/rouletterecords")
 public class RouletteRecordRestService extends ModelRestService<RouletteRecord> {
 
-  @Inject
-  private nl.juraji.biliomi.model.games.RouletteRecordDao RouletteRecordDao;
+    @Inject
+    private nl.juraji.biliomi.model.games.RouletteRecordDao RouletteRecordDao;
 
-  @Inject
-  private RouletteRecordService rouletteRecordService;
+    @Inject
+    private RouletteRecordService rouletteRecordService;
 
-  @GET
-  @Path("/stats/{userid}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getStatsForUser(@PathParam("userid") long id) {
-    User user = new User();
-    user.setId(id);
-    UserRecordStats recordInfo = rouletteRecordService.getRecordInfo(user);
+    @GET
+    @Path("/stats/{userid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStatsForUser(@PathParam("userid") long id) {
+        User user = new User();
+        user.setId(id);
+        UserRecordStats recordInfo = rouletteRecordService.getRecordInfo(user);
 
-    return Responses.okOrEmpty(recordInfo);
-  }
+        return Responses.okOrEmpty(recordInfo);
+    }
 
-  @GET
-  @Path("/latest/{userid}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getLatestRecordsForUser(@PathParam("userid") long id) {
-    User user = new User();
-    user.setId(id);
-    List<RouletteRecord> records = RouletteRecordDao.getRecords(user, 10);
-    return PaginatedResponse.create(records);
-  }
+    @GET
+    @Path("/latest/{userid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLatestRecordsForUser(@PathParam("userid") long id) {
+        User user = new User();
+        user.setId(id);
+        List<RouletteRecord> records = RouletteRecordDao.getRecords(user, 10);
+        return PaginatedResponse.create(records);
+    }
 
-  @Override
-  public List<RouletteRecord> getEntities() {
-    return RouletteRecordDao.getList();
-  }
+    @Override
+    public List<RouletteRecord> getEntities() {
+        return RouletteRecordDao.getList();
+    }
 
-  @Override
-  public RouletteRecord getEntity(long id) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public RouletteRecord getEntity(long id) {
+        throw new ForbiddenException();
+    }
 
-  @Override
-  public RouletteRecord createEntity(RouletteRecord e) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public RouletteRecord createEntity(RouletteRecord e) {
+        throw new ForbiddenException();
+    }
 
-  @Override
-  public RouletteRecord updateEntity(RouletteRecord e, long id) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public RouletteRecord updateEntity(RouletteRecord e, long id) {
+        throw new ForbiddenException();
+    }
 
-  @Override
-  public boolean deleteEntity(long id) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public boolean deleteEntity(long id) {
+        throw new ForbiddenException();
+    }
 }

@@ -15,58 +15,58 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class WebhookNotification<T> {
 
-  @XmlElement(name = "id")
-  private String id;
+    @XmlElement(name = "id")
+    private String id;
 
-  @XmlElement(name = "topic")
-  private String topic;
+    @XmlElement(name = "topic")
+    private String topic;
 
-  @XmlElement(name = "type")
-  private String type;
+    @XmlElement(name = "type")
+    private String type;
 
-  @XmlElement(name = "timestamp")
-  private DateTime timestamp;
+    @XmlElement(name = "timestamp")
+    private DateTime timestamp;
 
-  @XmlElement(name = "data")
-  private T data;
+    @XmlElement(name = "data")
+    private T data;
 
-  public String getId() {
-    return id;
-  }
+    public String getId() {
+        return id;
+    }
 
-  public void setId(String id) {
-    this.id = id;
-  }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-  public String getTopic() {
-    return topic;
-  }
+    public String getTopic() {
+        return topic;
+    }
 
-  public void setTopic(String topic) {
-    this.topic = topic;
-  }
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
 
-  public String getType() {
-    return type;
-  }
+    public String getType() {
+        return type;
+    }
 
-  public void setType(String type) {
-    this.type = type;
-  }
+    public void setType(String type) {
+        this.type = type;
+    }
 
-  public DateTime getTimestamp() {
-    return timestamp;
-  }
+    public DateTime getTimestamp() {
+        return timestamp;
+    }
 
-  public void setTimestamp(DateTime timestamp) {
-    this.timestamp = timestamp;
-  }
+    public void setTimestamp(DateTime timestamp) {
+        this.timestamp = timestamp;
+    }
 
-  public T getData() {
-    return data;
-  }
+    public T getData() {
+        return data;
+    }
 
-  public void setData(T data) {
-    this.data = data;
-  }
+    public void setData(T data) {
+        this.data = data;
+    }
 }

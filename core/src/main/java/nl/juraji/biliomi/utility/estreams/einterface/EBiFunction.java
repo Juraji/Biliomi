@@ -6,5 +6,5 @@ package nl.juraji.biliomi.utility.estreams.einterface;
  */
 @FunctionalInterface
 public interface EBiFunction<T, U, R, E extends Exception> {
-  R apply(T t, U u) throws E;
+    R apply(T t, U u) throws E;
 }

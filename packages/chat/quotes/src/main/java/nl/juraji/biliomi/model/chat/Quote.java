@@ -22,64 +22,64 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Quote {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @XmlElement(name = "Id")
-  private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement(name = "Id")
+    private long id;
 
-  @OneToOne
-  @NotNull
-  @XmlElement(name = "User")
-  private User user;
+    @OneToOne
+    @NotNull
+    @XmlElement(name = "User")
+    private User user;
 
-  @Column
-  @NotNull
-  @XmlElement(name = "Message")
-  private String message;
+    @Column
+    @NotNull
+    @XmlElement(name = "Message")
+    private String message;
 
-  @Column
-  @NotNull
-  @Type(type = DateTimeISO8601Type.TYPE)
-  @XmlElement(name = "Date")
-  private DateTime date;
+    @Column
+    @NotNull
+    @Type(type = DateTimeISO8601Type.TYPE)
+    @XmlElement(name = "Date")
+    private DateTime date;
 
-  @OneToOne
-  @XmlElement(name = "GameAtMoment")
-  private Game gameAtMoment;
+    @OneToOne
+    @XmlElement(name = "GameAtMoment")
+    private Game gameAtMoment;
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public User getUser() {
-    return user;
-  }
+    public User getUser() {
+        return user;
+    }
 
-  public void setUser(User user) {
-    this.user = user;
-  }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-  public String getMessage() {
-    return message;
-  }
+    public String getMessage() {
+        return message;
+    }
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-  public DateTime getDate() {
-    return date;
-  }
+    public DateTime getDate() {
+        return date;
+    }
 
-  public void setDate(DateTime date) {
-    this.date = date;
-  }
+    public void setDate(DateTime date) {
+        this.date = date;
+    }
 
-  public Game getGameAtMoment() {
-    return gameAtMoment;
-  }
+    public Game getGameAtMoment() {
+        return gameAtMoment;
+    }
 
-  public void setGameAtMoment(Game gameAtMoment) {
-    this.gameAtMoment = gameAtMoment;
-  }
+    public void setGameAtMoment(Game gameAtMoment) {
+        this.gameAtMoment = gameAtMoment;
+    }
 }

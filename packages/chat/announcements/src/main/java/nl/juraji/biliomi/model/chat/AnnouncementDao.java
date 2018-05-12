@@ -7,13 +7,13 @@ import nl.juraji.biliomi.utility.jpa.JpaDao;
  * Biliomi v3
  */
 public class AnnouncementDao extends JpaDao<Announcement> {
-  public AnnouncementDao() {
-    super(Announcement.class);
-  }
+    public AnnouncementDao() {
+        super(Announcement.class);
+    }
 
-  public void create(String message) {
-    Announcement announcement = new Announcement();
-    announcement.setMessage(message);
-    save(announcement);
-  }
+    public void create(String message) {
+        Announcement announcement = new Announcement();
+        announcement.setMessage(message);
+        save(announcement);
+    }
 }

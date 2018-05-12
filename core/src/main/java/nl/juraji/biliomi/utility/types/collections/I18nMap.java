@@ -12,18 +12,31 @@ import java.util.function.Supplier;
  * Biliomi v3
  */
 public interface I18nMap {
-  Templater get(String key);
-  String getString(String key);
-  Supplier<String> supply(String key);
-  List<String> getKeyStartsWith(String keyPrefix);
-  String getIfElse(boolean state, String trueKey, String falseKey);
-  String getEnabledDisabled(OnOff state);
-  String getEnabledDisabled(boolean state);
-  String getAllowedDisallowed(boolean state);
-  String getStreamState(StreamState streamState);
-  String getUserNonExistent(String username);
-  String getCommandNonExistent(String command);
-  String getGroupNonExistent(String groupName);
-  String getInputContainsBadWords();
-  String getGenericError(String user, String command, String errorMessage);
+    Templater get(String key);
+
+    String getString(String key);
+
+    Supplier<String> supply(String key);
+
+    List<String> getKeyStartsWith(String keyPrefix);
+
+    String getIfElse(boolean state, String trueKey, String falseKey);
+
+    String getEnabledDisabled(OnOff state);
+
+    String getEnabledDisabled(boolean state);
+
+    String getAllowedDisallowed(boolean state);
+
+    String getStreamState(StreamState streamState);
+
+    String getUserNonExistent(String username);
+
+    String getCommandNonExistent(String command);
+
+    String getGroupNonExistent(String groupName);
+
+    String getInputContainsBadWords();
+
+    String getGenericError(String user, String command, String errorMessage);
 }

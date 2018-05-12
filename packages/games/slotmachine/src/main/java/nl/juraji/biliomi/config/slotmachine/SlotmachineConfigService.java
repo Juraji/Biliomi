@@ -15,25 +15,25 @@ import java.util.Arrays;
 @Default
 @Singleton
 public class SlotmachineConfigService extends ConfigService<YamlSlotmachineConfig> {
-  private final YamlSlotmachineEmote jackpot;
+    private final YamlSlotmachineEmote jackpot;
 
-  public SlotmachineConfigService() {
-    super("games/slotmachine.yml", YamlSlotmachineConfig.class);
+    public SlotmachineConfigService() {
+        super("games/slotmachine.yml", YamlSlotmachineConfig.class);
 
-    Counter counter = new Counter();
-    config.getEmotes().forEach(emote -> emote.setIndex(counter.getAndIncrement()));
-    jackpot = config.getEmotes().get(config.getEmotes().size() - 1);
-  }
+        Counter counter = new Counter();
+        config.getEmotes().forEach(emote -> emote.setIndex(counter.getAndIncrement()));
+        jackpot = config.getEmotes().get(config.getEmotes().size() - 1);
+    }
 
-  public YamlSlotmachineEmote getRandomEmote() {
-    return MathUtils.listRand(config.getEmotes());
-  }
+    public YamlSlotmachineEmote getRandomEmote() {
+        return MathUtils.listRand(config.getEmotes());
+    }
 
-  public boolean isJackpotSeen(YamlSlotmachineEmote... emotes) {
-    return Arrays.stream(emotes).anyMatch(emote -> emote.getIndex() == jackpot.getIndex());
-  }
+    public boolean isJackpotSeen(YamlSlotmachineEmote... emotes) {
+        return Arrays.stream(emotes).anyMatch(emote -> emote.getIndex() == jackpot.getIndex());
+    }
 
-  public YamlSlotmachineEmote getJackpot() {
-    return jackpot;
-  }
+    public YamlSlotmachineEmote getJackpot() {
+        return jackpot;
+    }
 }

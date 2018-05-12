@@ -19,32 +19,32 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SteamSettings extends Settings {
 
-  @Column
-  @XmlElement(name = "AutoUpdateChannelGame")
-  private boolean autoUpdateChannelGame;
+    @Column
+    @XmlElement(name = "AutoUpdateChannelGame")
+    private boolean autoUpdateChannelGame;
 
-  @Transient
-  @XmlElement(name = "_IntegrationEnabled")
-  private boolean _integrationEnabled = false;
+    @Transient
+    @XmlElement(name = "_IntegrationEnabled")
+    private boolean _integrationEnabled = false;
 
-  public boolean isAutoUpdateChannelGame() {
-    return autoUpdateChannelGame;
-  }
+    public boolean isAutoUpdateChannelGame() {
+        return autoUpdateChannelGame;
+    }
 
-  public void setAutoUpdateChannelGame(boolean autoUpdateChannelGame) {
-    this.autoUpdateChannelGame = autoUpdateChannelGame;
-  }
+    public void setAutoUpdateChannelGame(boolean autoUpdateChannelGame) {
+        this.autoUpdateChannelGame = autoUpdateChannelGame;
+    }
 
-  @Override
-  public void setDefaultValues() {
-    this.autoUpdateChannelGame = false;
-  }
+    @Override
+    public void setDefaultValues() {
+        this.autoUpdateChannelGame = false;
+    }
 
-  public boolean is_integrationEnabled() {
-    return _integrationEnabled;
-  }
+    public boolean is_integrationEnabled() {
+        return _integrationEnabled;
+    }
 
-  public void set_integrationEnabled(boolean _integrationEnabled) {
-    this._integrationEnabled = _integrationEnabled;
-  }
+    public void set_integrationEnabled(boolean _integrationEnabled) {
+        this._integrationEnabled = _integrationEnabled;
+    }
 }

@@ -19,70 +19,70 @@ import java.util.Map;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Template {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @XmlElement(name = "Id")
-  private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement(name = "Id")
+    private long id;
 
-  @Column(unique = true)
-  @NotNull
-  @XmlElement(name = "TemplateKey")
-  private String templateKey;
+    @Column(unique = true)
+    @NotNull
+    @XmlElement(name = "TemplateKey")
+    private String templateKey;
 
-  @Column
-  @XmlElement(name = "Template")
-  private String template;
+    @Column
+    @XmlElement(name = "Template")
+    private String template;
 
-  @Column
-  @NotNull
-  @XmlElement(name = "Description")
-  private String description;
+    @Column
+    @NotNull
+    @XmlElement(name = "Description")
+    private String description;
 
-  @Column
-  @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(name = "TemplateKeys")
-  @XmlElement(name = "KeyDescriptions")
-  private Map<String, String> keyDescriptions;
+    @Column
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "TemplateKeys")
+    @XmlElement(name = "KeyDescriptions")
+    private Map<String, String> keyDescriptions;
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-  public String getTemplateKey() {
-    return templateKey;
-  }
+    public String getTemplateKey() {
+        return templateKey;
+    }
 
-  public void setTemplateKey(String templateKey) {
-    this.templateKey = templateKey;
-  }
+    public void setTemplateKey(String templateKey) {
+        this.templateKey = templateKey;
+    }
 
 
-  public String getTemplate() {
-    return template;
-  }
+    public String getTemplate() {
+        return template;
+    }
 
-  public void setTemplate(String template) {
-    this.template = template;
-  }
+    public void setTemplate(String template) {
+        this.template = template;
+    }
 
-  public String getDescription() {
-    return description;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public Map<String, String> getKeyDescriptions() {
-    keyDescriptions = ModelUtils.initCollection(keyDescriptions);
-    return keyDescriptions;
-  }
+    public Map<String, String> getKeyDescriptions() {
+        keyDescriptions = ModelUtils.initCollection(keyDescriptions);
+        return keyDescriptions;
+    }
 
-  public boolean isEmpty() {
-    return template == null || template.length() == 0;
-  }
+    public boolean isEmpty() {
+        return template == null || template.length() == 0;
+    }
 }

@@ -5,31 +5,31 @@ package nl.juraji.biliomi.config.slotmachine;
  * Biliomi
  */
 public class YamlSlotmachineEmote {
-  private int index;
-  private String emote;
-  private long value;
+    private int index;
+    private String emote;
+    private long value;
 
-  public int getIndex() {
-    return index;
-  }
+    public int getIndex() {
+        return index;
+    }
 
-  public void setIndex(int index) {
-    this.index = index;
-  }
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
-  public String getEmote() {
-    return emote;
-  }
+    public String getEmote() {
+        return emote;
+    }
 
-  public void setEmote(String emote) {
-    this.emote = emote;
-  }
+    public void setEmote(String emote) {
+        this.emote = emote;
+    }
 
-  public long getValue() {
-    return value;
-  }
+    public long getValue() {
+        return value;
+    }
 
-  public void setValue(long value) {
-    this.value = value;
-  }
+    public void setValue(long value) {
+        this.value = value;
+    }
 }

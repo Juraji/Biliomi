@@ -10,17 +10,17 @@ import nl.juraji.biliomi.io.web.Response;
  */
 public interface StreamLabsApi {
 
-  /**
-   * Get information about the linked Stream Labs account's owner
-   *
-   * @see <a href="https://dev.streamlabs.com/v1.0/reference#user">/user</a>
-   */
-  Response<StreamLabsTwitchUser> getMe() throws Exception;
+    /**
+     * Get information about the linked Stream Labs account's owner
+     *
+     * @see <a href="https://dev.streamlabs.com/v1.0/reference#user">/user</a>
+     */
+    Response<StreamLabsTwitchUser> getMe() throws Exception;
 
-  /**
-   * Retrieve a socket token
-   *
-   * @see <a href="https://dev.streamlabs.com/v1.0/reference#sockettoken">/socket/token</a>
-   */
-  Response<StreamLabsSocketToken> getSocketToken() throws Exception;
+    /**
+     * Retrieve a socket token
+     *
+     * @see <a href="https://dev.streamlabs.com/v1.0/reference#sockettoken">/socket/token</a>
+     */
+    Response<StreamLabsSocketToken> getSocketToken() throws Exception;
 }

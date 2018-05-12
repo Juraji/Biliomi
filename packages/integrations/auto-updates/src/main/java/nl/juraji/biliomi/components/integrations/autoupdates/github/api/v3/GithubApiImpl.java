@@ -17,21 +17,19 @@ import javax.inject.Inject;
  */
 @Default
 public class GithubApiImpl implements GithubApi {
-  private static final String API_BASE_URI = "https://api.github.com";
+    private static final String API_BASE_URI = "https://api.github.com";
+    private final HttpFields headers = new HttpFields();
+    @Inject
+    private WebClient webClient;
 
-  @Inject
-  private WebClient webClient;
+    @PostConstruct
+    private void initGithubApi() {
+        headers.put(HttpHeader.ACCEPT, "application/vnd.github.v3+json");
+        headers.put(WebClient.NO_CACHE_HEADER, "true");
+    }
 
-  private final HttpFields headers = new HttpFields();
-
-  @PostConstruct
-  private void initGithubApi() {
-    headers.put(HttpHeader.ACCEPT, "application/vnd.github.v3+json");
-    headers.put(WebClient.NO_CACHE_HEADER, "true");
-  }
-
-  @Override
-  public Response<GithubRelease> getLatestRelease(String owner, String repository) throws Exception {
-    return webClient.get(Url.url(API_BASE_URI, "repos", owner, repository, "releases", "latest"), headers, GithubRelease.class);
-  }
+    @Override
+    public Response<GithubRelease> getLatestRelease(String owner, String repository) throws Exception {
+        return webClient.get(Url.url(API_BASE_URI, "repos", owner, repository, "releases", "latest"), headers, GithubRelease.class);
+    }
 }

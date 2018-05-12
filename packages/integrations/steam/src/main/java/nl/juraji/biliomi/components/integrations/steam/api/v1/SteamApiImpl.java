@@ -20,54 +20,54 @@ import javax.inject.Inject;
  */
 @Default
 public class SteamApiImpl implements SteamApi {
-  private static final String API_BASE_URI = "http://api.steampowered.com";
+    private static final String API_BASE_URI = "http://api.steampowered.com";
 
-  @Inject
-  private AuthTokenDao authTokenDao;
+    @Inject
+    private AuthTokenDao authTokenDao;
 
-  @Inject
-  private WebClient webClient;
-  private String apiKey = null;
-  private String userId = null;
+    @Inject
+    private WebClient webClient;
+    private String apiKey = null;
+    private String userId = null;
 
-  @PostConstruct
-  private void initSteamApiImpl() {
-    AuthToken token = authTokenDao.get(TokenGroup.INTEGRATIONS, "steam");
-    this.apiKey = token.getToken();
-    this.userId = token.getUserId();
-  }
-
-  @Override
-  public boolean isAvailable() {
-    return !(apiKey == null || userId == null);
-  }
-
-  @Override
-  public Response<SteamLibraryResponse> getOwnedGames() throws Exception {
-    executeTokenPreflight();
-
-    Url url = Url.url(API_BASE_URI, "IPlayerService", "GetOwnedGames", "v0001")
-        .withQueryParam("key", apiKey)
-        .withQueryParam("steamid", userId)
-        .withQueryParam("format", "json")
-        .withQueryParam("include_appinfo", 1);
-    return webClient.get(url, null, SteamLibraryResponse.class);
-  }
-
-  @Override
-  public Response<SteamPlayersResponse> getPlayerSummary() throws Exception {
-    executeTokenPreflight();
-
-    Url url = Url.url(API_BASE_URI, "ISteamUser", "GetPlayerSummaries", "v0002")
-        .withQueryParam("key", apiKey)
-        .withQueryParam("steamids", userId)
-        .withQueryParam("format", "json");
-    return webClient.get(url, null, SteamPlayersResponse.class);
-  }
-
-  private void executeTokenPreflight() throws UnavailableException {
-    if (apiKey == null) {
-      throw new UnavailableException("Missing Steam Api key or user id");
+    @PostConstruct
+    private void initSteamApiImpl() {
+        AuthToken token = authTokenDao.get(TokenGroup.INTEGRATIONS, "steam");
+        this.apiKey = token.getToken();
+        this.userId = token.getUserId();
     }
-  }
+
+    @Override
+    public boolean isAvailable() {
+        return !(apiKey == null || userId == null);
+    }
+
+    @Override
+    public Response<SteamLibraryResponse> getOwnedGames() throws Exception {
+        executeTokenPreflight();
+
+        Url url = Url.url(API_BASE_URI, "IPlayerService", "GetOwnedGames", "v0001")
+                .withQueryParam("key", apiKey)
+                .withQueryParam("steamid", userId)
+                .withQueryParam("format", "json")
+                .withQueryParam("include_appinfo", 1);
+        return webClient.get(url, null, SteamLibraryResponse.class);
+    }
+
+    @Override
+    public Response<SteamPlayersResponse> getPlayerSummary() throws Exception {
+        executeTokenPreflight();
+
+        Url url = Url.url(API_BASE_URI, "ISteamUser", "GetPlayerSummaries", "v0002")
+                .withQueryParam("key", apiKey)
+                .withQueryParam("steamids", userId)
+                .withQueryParam("format", "json");
+        return webClient.get(url, null, SteamPlayersResponse.class);
+    }
+
+    private void executeTokenPreflight() throws UnavailableException {
+        if (apiKey == null) {
+            throw new UnavailableException("Missing Steam Api key or user id");
+        }
+    }
 }

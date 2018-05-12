@@ -16,39 +16,39 @@ import java.util.List;
 @Path("/registers/raidrecords")
 public class RaidRecordRestService extends ModelRestService<RaidRecord> {
 
-  @Inject
-  private RaidRecordDao raidRecordDao;
+    @Inject
+    private RaidRecordDao raidRecordDao;
 
-  @Override
-  public List<RaidRecord> getEntities() {
-    return raidRecordDao.getList();
-  }
-
-  @Override
-  public RaidRecord getEntity(long id) {
-    throw new ForbiddenException();
-  }
-
-  @Override
-  public RaidRecord createEntity(RaidRecord e) {
-    raidRecordDao.save(e);
-    return e;
-  }
-
-  @Override
-  public RaidRecord updateEntity(RaidRecord e, long id) {
-    throw new ForbiddenException();
-  }
-
-  @Override
-  public boolean deleteEntity(long id) {
-    RaidRecord raidRecord = raidRecordDao.get(id);
-
-    if (raidRecord == null) {
-      return false;
+    @Override
+    public List<RaidRecord> getEntities() {
+        return raidRecordDao.getList();
     }
 
-    raidRecordDao.delete(raidRecord);
-    return true;
-  }
+    @Override
+    public RaidRecord getEntity(long id) {
+        throw new ForbiddenException();
+    }
+
+    @Override
+    public RaidRecord createEntity(RaidRecord e) {
+        raidRecordDao.save(e);
+        return e;
+    }
+
+    @Override
+    public RaidRecord updateEntity(RaidRecord e, long id) {
+        throw new ForbiddenException();
+    }
+
+    @Override
+    public boolean deleteEntity(long id) {
+        RaidRecord raidRecord = raidRecordDao.get(id);
+
+        if (raidRecord == null) {
+            return false;
+        }
+
+        raidRecordDao.delete(raidRecord);
+        return true;
+    }
 }

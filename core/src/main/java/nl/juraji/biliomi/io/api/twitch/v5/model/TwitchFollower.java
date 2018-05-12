@@ -13,36 +13,36 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchFollower {
 
-  @XmlElement(name = "created_at")
-  private String createdAt;
+    @XmlElement(name = "created_at")
+    private String createdAt;
 
-  @XmlElement(name = "notifications")
-  private boolean notifications;
+    @XmlElement(name = "notifications")
+    private boolean notifications;
 
-  @XmlElement(name = "user")
-  private TwitchUser user;
+    @XmlElement(name = "user")
+    private TwitchUser user;
 
-  public String getCreatedAt() {
-    return createdAt;
-  }
+    public String getCreatedAt() {
+        return createdAt;
+    }
 
-  public void setCreatedAt(String createdAt) {
-    this.createdAt = createdAt;
-  }
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
 
-  public boolean isNotifications() {
-    return notifications;
-  }
+    public boolean isNotifications() {
+        return notifications;
+    }
 
-  public void setNotifications(boolean notifications) {
-    this.notifications = notifications;
-  }
+    public void setNotifications(boolean notifications) {
+        this.notifications = notifications;
+    }
 
-  public TwitchUser getUser() {
-    return user;
-  }
+    public TwitchUser getUser() {
+        return user;
+    }
 
-  public void setUser(TwitchUser user) {
-    this.user = user;
-  }
+    public void setUser(TwitchUser user) {
+        this.user = user;
+    }
 }

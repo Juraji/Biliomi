@@ -12,18 +12,18 @@ import javax.ws.rs.Path;
 @Path("/chat/settings/followerwatch")
 public class FollowerWatchSettingsRestService extends SettingsModelRestService<FollowerWatchSettings> {
 
-  @Override
-  public FollowerWatchSettings getEntity() {
-    return settingsService.getSettings(FollowerWatchSettings.class);
-  }
+    @Override
+    public FollowerWatchSettings getEntity() {
+        return settingsService.getSettings(FollowerWatchSettings.class);
+    }
 
-  @Override
-  public FollowerWatchSettings updateEntity(FollowerWatchSettings e) {
-    FollowerWatchSettings settings = settingsService.getSettings(FollowerWatchSettings.class);
+    @Override
+    public FollowerWatchSettings updateEntity(FollowerWatchSettings e) {
+        FollowerWatchSettings settings = settingsService.getSettings(FollowerWatchSettings.class);
 
-    settings.setReward(e.getReward());
+        settings.setReward(e.getReward());
 
-    settingsService.save(settings);
-    return settings;
-  }
+        settingsService.save(settings);
+        return settings;
+    }
 }

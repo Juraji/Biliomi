@@ -14,11 +14,11 @@ import javax.inject.Singleton;
 @Singleton
 public class InvestmentsConfigService extends ConfigService<YamlInvestmentsConfig> {
 
-  public InvestmentsConfigService() {
-    super("games/investments.yml", YamlInvestmentsConfig.class);
-  }
+    public InvestmentsConfigService() {
+        super("games/investments.yml", YamlInvestmentsConfig.class);
+    }
 
-  public String getRandomProject() {
-    return MathUtils.listRand(config.getProjects());
-  }
+    public String getRandomProject() {
+        return MathUtils.listRand(config.getProjects());
+    }
 }

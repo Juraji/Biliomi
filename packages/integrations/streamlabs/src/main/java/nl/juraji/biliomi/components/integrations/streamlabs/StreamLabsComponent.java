@@ -24,54 +24,54 @@ import javax.inject.Singleton;
 @NormalComponent
 public class StreamLabsComponent extends Component {
 
-  @Inject
-  private StreamLabsApi streamLabsApi;
+    @Inject
+    private StreamLabsApi streamLabsApi;
 
-  @Inject
-  private Instance<StreamLabsSocketSession> streamLabsSocketSessionInstance;
+    @Inject
+    private Instance<StreamLabsSocketSession> streamLabsSocketSessionInstance;
 
-  @Override
-  public void init() {
-    initStreamLabsSocketSession();
-  }
-
-  private void initStreamLabsSocketSession() {
-    String accountName = null;
-    String socketToken = null;
-
-    try {
-      accountName = getAccountName();
-      socketToken = getSocketToken();
-    } catch (UnavailableException e) {
-      logger.debug("Stream Labs integration is unavailable", e);
-    } catch (Exception e) {
-      logger.error(e);
+    @Override
+    public void init() {
+        initStreamLabsSocketSession();
     }
 
-    if (StringUtils.isNotEmpty(accountName) && StringUtils.isNotEmpty(socketToken)) {
-      StreamLabsSocketSession streamLabsSocketSession = streamLabsSocketSessionInstance.get();
-      streamLabsSocketSession.setSocketToken(socketToken);
-      streamLabsSocketSession.start();
-      logger.info("Started Stream Labs socket session for " + accountName);
-    }
-  }
+    private void initStreamLabsSocketSession() {
+        String accountName = null;
+        String socketToken = null;
 
-  private String getAccountName() throws Exception {
-    Response<StreamLabsTwitchUser> meResponse = streamLabsApi.getMe();
+        try {
+            accountName = getAccountName();
+            socketToken = getSocketToken();
+        } catch (UnavailableException e) {
+            logger.debug("Stream Labs integration is unavailable", e);
+        } catch (Exception e) {
+            logger.error(e);
+        }
 
-    if (!meResponse.isOK()) {
-      return null;
-    }
-    return meResponse.getData().getUser().getDisplayName();
-  }
-
-  private String getSocketToken() throws Exception {
-    Response<StreamLabsSocketToken> response = streamLabsApi.getSocketToken();
-
-    if (!response.isOK()) {
-      return null;
+        if (StringUtils.isNotEmpty(accountName) && StringUtils.isNotEmpty(socketToken)) {
+            StreamLabsSocketSession streamLabsSocketSession = streamLabsSocketSessionInstance.get();
+            streamLabsSocketSession.setSocketToken(socketToken);
+            streamLabsSocketSession.start();
+            logger.info("Started Stream Labs socket session for " + accountName);
+        }
     }
 
-    return response.getData().getToken();
-  }
+    private String getAccountName() throws Exception {
+        Response<StreamLabsTwitchUser> meResponse = streamLabsApi.getMe();
+
+        if (!meResponse.isOK()) {
+            return null;
+        }
+        return meResponse.getData().getUser().getDisplayName();
+    }
+
+    private String getSocketToken() throws Exception {
+        Response<StreamLabsSocketToken> response = streamLabsApi.getSocketToken();
+
+        if (!response.isOK()) {
+            return null;
+        }
+
+        return response.getData().getToken();
+    }
 }

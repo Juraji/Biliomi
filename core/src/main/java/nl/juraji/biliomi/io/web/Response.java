@@ -10,53 +10,53 @@ import javax.enterprise.inject.Vetoed;
  */
 @Vetoed
 public class Response<T> {
-  private Request request;
-  private int status;
-  private String rawData;
-  private T data;
+    private Request request;
+    private int status;
+    private String rawData;
+    private T data;
 
-  public Request getRequest() {
-    return request;
-  }
+    public Request getRequest() {
+        return request;
+    }
 
-  public void setRequest(Request request) {
-    this.request = request;
-  }
+    public void setRequest(Request request) {
+        this.request = request;
+    }
 
-  public int getStatus() {
-    return status;
-  }
+    public int getStatus() {
+        return status;
+    }
 
-  public void setStatus(int status) {
-    this.status = status;
-  }
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
-  public String getRawData() {
-    return rawData;
-  }
+    public String getRawData() {
+        return rawData;
+    }
 
-  public void setRawData(String rawData) {
-    this.rawData = rawData;
-  }
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
 
-  public T getData() {
-    return data;
-  }
+    public T getData() {
+        return data;
+    }
 
-  public void setData(T data) {
-    this.data = data;
-  }
+    public void setData(T data) {
+        this.data = data;
+    }
 
-  public boolean isOK() {
-    return status >= 200 && status <= 299;
-  }
+    public boolean isOK() {
+        return status >= 200 && status <= 299;
+    }
 
-  @Override
-  public String toString() {
-    return "Response{" +
-        "request=" + request +
-        ", status=" + status +
-        ", rawData='" + rawData + '\'' +
-        '}';
-  }
+    @Override
+    public String toString() {
+        return "Response{" +
+                "request=" + request +
+                ", status=" + status +
+                ", rawData='" + rawData + '\'' +
+                '}';
+    }
 }

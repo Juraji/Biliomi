@@ -16,14 +16,14 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchSubscriptions extends TwitchList {
 
-  @XmlElement(name = "subscriptions")
-  private List<TwitchSubscription> subscriptions;
+    @XmlElement(name = "subscriptions")
+    private List<TwitchSubscription> subscriptions;
 
-  public List<TwitchSubscription> getSubscriptions() {
-    return subscriptions;
-  }
+    public List<TwitchSubscription> getSubscriptions() {
+        return subscriptions;
+    }
 
-  public void setSubscriptions(List<TwitchSubscription> subscriptions) {
-    this.subscriptions = subscriptions;
-  }
+    public void setSubscriptions(List<TwitchSubscription> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
 }

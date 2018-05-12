@@ -16,24 +16,24 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class ExceptionResponseMapper implements ExceptionMapper<Throwable> {
 
-  @Override
-  public Response toResponse(Throwable throwable) {
+    @Override
+    public Response toResponse(Throwable throwable) {
 
-    // IF this is a client error simply pas through the original response
-    if (throwable instanceof ClientErrorException) {
-      return ((ClientErrorException) throwable).getResponse();
-    } else if (BiliomiContainer.getParameters().isDebugMode())  {
-      ServerErrorResponse response = new ServerErrorResponse();
+        // IF this is a client error simply pas through the original response
+        if (throwable instanceof ClientErrorException) {
+            return ((ClientErrorException) throwable).getResponse();
+        } else if (BiliomiContainer.getParameters().isDebugMode()) {
+            ServerErrorResponse response = new ServerErrorResponse();
 
-      response.setErrorMessage(throwable.getMessage());
+            response.setErrorMessage(throwable.getMessage());
 
-      if (throwable.getCause() != null) {
-        response.setCausedBy(throwable.getCause().getMessage());
-      }
+            if (throwable.getCause() != null) {
+                response.setCausedBy(throwable.getCause().getMessage());
+            }
 
-      return Responses.serverError(response);
-    } else {
-      return Responses.serverError();
+            return Responses.serverError(response);
+        } else {
+            return Responses.serverError();
+        }
     }
-  }
 }

@@ -8,22 +8,22 @@ import java.util.List;
  */
 public class YamlCreativeMurdersConfig {
 
-  private List<String> murders;
-  private List<String> suicides;
+    private List<String> murders;
+    private List<String> suicides;
 
-  public List<String> getMurders() {
-    return murders;
-  }
+    public List<String> getMurders() {
+        return murders;
+    }
 
-  public void setMurders(List<String> murders) {
-    this.murders = murders;
-  }
+    public void setMurders(List<String> murders) {
+        this.murders = murders;
+    }
 
-  public List<String> getSuicides() {
-    return suicides;
-  }
+    public List<String> getSuicides() {
+        return suicides;
+    }
 
-  public void setSuicides(List<String> suicides) {
-    this.suicides = suicides;
-  }
+    public void setSuicides(List<String> suicides) {
+        this.suicides = suicides;
+    }
 }

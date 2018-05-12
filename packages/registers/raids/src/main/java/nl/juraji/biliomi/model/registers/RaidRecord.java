@@ -22,69 +22,69 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RaidRecord {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @XmlElement(name = "Id")
-  private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement(name = "Id")
+    private long id;
 
-  @OneToOne
-  @NotNull
-  @XmlElement(name = "Channel")
-  private User channel;
+    @OneToOne
+    @NotNull
+    @XmlElement(name = "Channel")
+    private User channel;
 
-  @Column
-  @NotNull
-  @Enumerated(EnumType.STRING)
-  @XmlElement(name = "Direction")
-  private Direction direction;
+    @Column
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @XmlElement(name = "Direction")
+    private Direction direction;
 
-  @Column
-  @NotNull
-  @Type(type = DateTimeISO8601Type.TYPE)
-  @XmlElement(name = "Date")
-  private DateTime date;
+    @Column
+    @NotNull
+    @Type(type = DateTimeISO8601Type.TYPE)
+    @XmlElement(name = "Date")
+    private DateTime date;
 
-  @Column
-  @XmlElement(name = "GameAtMoment")
-  private String gameAtMoment;
+    @Column
+    @XmlElement(name = "GameAtMoment")
+    private String gameAtMoment;
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-  public User getChannel() {
-    return channel;
-  }
+    public User getChannel() {
+        return channel;
+    }
 
-  public void setChannel(User channel) {
-    this.channel = channel;
-  }
+    public void setChannel(User channel) {
+        this.channel = channel;
+    }
 
-  public Direction getDirection() {
-    return direction;
-  }
+    public Direction getDirection() {
+        return direction;
+    }
 
-  public void setDirection(Direction direction) {
-    this.direction = direction;
-  }
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
 
-  public DateTime getDate() {
-    return date;
-  }
+    public DateTime getDate() {
+        return date;
+    }
 
-  public void setDate(DateTime date) {
-    this.date = date;
-  }
+    public void setDate(DateTime date) {
+        this.date = date;
+    }
 
-  public String getGameAtMoment() {
-    return gameAtMoment;
-  }
+    public String getGameAtMoment() {
+        return gameAtMoment;
+    }
 
-  public void setGameAtMoment(String wasPlaying) {
-    this.gameAtMoment = wasPlaying;
-  }
+    public void setGameAtMoment(String wasPlaying) {
+        this.gameAtMoment = wasPlaying;
+    }
 }

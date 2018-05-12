@@ -25,50 +25,50 @@ import java.util.Set;
 @Default
 public class TwitterApiImpl implements TwitterApi {
 
-  @Inject
-  private TwitterConfigService configService;
+    @Inject
+    private TwitterConfigService configService;
 
-  @Inject
-  private AuthTokenDao authTokenDao;
+    @Inject
+    private AuthTokenDao authTokenDao;
 
-  private AccessToken accessToken;
-  private Twitter twitter;
+    private AccessToken accessToken;
+    private Twitter twitter;
 
-  @PostConstruct
-  private void initTwitterApiImpl() {
-    AuthToken authToken = authTokenDao.get(TokenGroup.INTEGRATIONS, "twitter");
+    @PostConstruct
+    private void initTwitterApiImpl() {
+        AuthToken authToken = authTokenDao.get(TokenGroup.INTEGRATIONS, "twitter");
 
-    if (authToken.getToken() != null) {
-      accessToken = new AccessToken(authToken.getToken(), authToken.getSecret());
+        if (authToken.getToken() != null) {
+            accessToken = new AccessToken(authToken.getToken(), authToken.getSecret());
 
-      twitter = new TwitterFactory().getInstance();
-      twitter.setOAuthConsumer(configService.getConsumerKey(), configService.getConsumerSecret());
-      twitter.setOAuthAccessToken(accessToken);
+            twitter = new TwitterFactory().getInstance();
+            twitter.setOAuthConsumer(configService.getConsumerKey(), configService.getConsumerSecret());
+            twitter.setOAuthAccessToken(accessToken);
+        }
     }
-  }
 
-  @Override
-  public void postTweet(String message) throws Exception {
-    assertServiceAvailable();
-    twitter.updateStatus(message);
-  }
-
-  @Override
-  public TweetStreamFuture listenForTweets(TweetListener tweetListener, Set<String> keywords) throws Exception {
-    assertServiceAvailable();
-    // Create a new instance for every listener, so the caller can stop this specific instance if needed
-    TwitterStream twitterStream = new TwitterStreamFactory().getInstance();
-    twitterStream.setOAuthConsumer(configService.getConsumerKey(), configService.getConsumerSecret());
-    twitterStream.setOAuthAccessToken(accessToken);
-    twitterStream.addListener(tweetListener);
-    twitterStream.filter(keywords.toArray(new String[]{}));
-
-    return new TweetStreamFuture(twitterStream);
-  }
-
-  private void assertServiceAvailable() throws UnavailableException {
-    if (accessToken == null || twitter == null) {
-      throw new UnavailableException();
+    @Override
+    public void postTweet(String message) throws Exception {
+        assertServiceAvailable();
+        twitter.updateStatus(message);
     }
-  }
+
+    @Override
+    public TweetStreamFuture listenForTweets(TweetListener tweetListener, Set<String> keywords) throws Exception {
+        assertServiceAvailable();
+        // Create a new instance for every listener, so the caller can stop this specific instance if needed
+        TwitterStream twitterStream = new TwitterStreamFactory().getInstance();
+        twitterStream.setOAuthConsumer(configService.getConsumerKey(), configService.getConsumerSecret());
+        twitterStream.setOAuthAccessToken(accessToken);
+        twitterStream.addListener(tweetListener);
+        twitterStream.filter(keywords.toArray(new String[]{}));
+
+        return new TweetStreamFuture(twitterStream);
+    }
+
+    private void assertServiceAvailable() throws UnavailableException {
+        if (accessToken == null || twitter == null) {
+            throw new UnavailableException();
+        }
+    }
 }

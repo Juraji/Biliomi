@@ -19,33 +19,33 @@ import java.util.concurrent.TimeUnit;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RouletteSettings extends Settings {
 
-  @Column
-  @XmlElement(name = "TimeoutOnDeathEnabled")
-  private boolean timeoutOnDeathEnabled;
+    @Column
+    @XmlElement(name = "TimeoutOnDeathEnabled")
+    private boolean timeoutOnDeathEnabled;
 
-  @Column
-  @XmlElement(name = "TimeoutOnDeath")
-  private long timeoutOnDeath;
+    @Column
+    @XmlElement(name = "TimeoutOnDeath")
+    private long timeoutOnDeath;
 
-  public boolean isTimeoutOnDeathEnabled() {
-    return timeoutOnDeathEnabled;
-  }
+    public boolean isTimeoutOnDeathEnabled() {
+        return timeoutOnDeathEnabled;
+    }
 
-  public void setTimeoutOnDeathEnabled(boolean timeoutOnDeathEnabled) {
-    this.timeoutOnDeathEnabled = timeoutOnDeathEnabled;
-  }
+    public void setTimeoutOnDeathEnabled(boolean timeoutOnDeathEnabled) {
+        this.timeoutOnDeathEnabled = timeoutOnDeathEnabled;
+    }
 
-  public long getTimeoutOnDeath() {
-    return timeoutOnDeath;
-  }
+    public long getTimeoutOnDeath() {
+        return timeoutOnDeath;
+    }
 
-  public void setTimeoutOnDeath(long timeoutOnDeath) {
-    this.timeoutOnDeath = timeoutOnDeath;
-  }
+    public void setTimeoutOnDeath(long timeoutOnDeath) {
+        this.timeoutOnDeath = timeoutOnDeath;
+    }
 
-  @Override
-  public void setDefaultValues() {
-    timeoutOnDeathEnabled = true;
-    timeoutOnDeath = TimeUnit.MILLISECONDS.convert(3, TimeUnit.MINUTES);
-  }
+    @Override
+    public void setDefaultValues() {
+        timeoutOnDeathEnabled = true;
+        timeoutOnDeath = TimeUnit.MILLISECONDS.convert(3, TimeUnit.MINUTES);
+    }
 }

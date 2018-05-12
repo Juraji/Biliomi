@@ -17,45 +17,45 @@ import static nl.juraji.biliomi.utility.factories.marshalling.JacksonMarshaller.
  */
 public class StreamLabsEventListener implements Emitter.Listener {
 
-  private final EventBus eventBus;
+    private final EventBus eventBus;
 
-  public StreamLabsEventListener(EventBus eventBus) {
-    this.eventBus = eventBus;
-  }
-
-  @Override
-  public void call(Object... objects) {
-    try {
-      String eventData = String.valueOf(objects[0]);
-      SocketEvent event = unmarshal(eventData, SocketEvent.class);
-
-      if (event.getType() == null) {
-        // Event type was not recognized, ignore message
-        return;
-      }
-
-      switch (event.getType()) {
-        case DONATION:
-          event.getMessage().stream()
-              .map(node -> convertJsonNode(node, DonationMessage.class))
-              .forEach(this::handleDonationMessage);
-          break;
-        default:
-          break;
-      }
-    } catch (IOException ignored) {
-      // Ignored, if marshalling fails it was likely not a message which Biliomi understands
+    public StreamLabsEventListener(EventBus eventBus) {
+        this.eventBus = eventBus;
     }
-  }
 
-  private void handleDonationMessage(DonationMessage donationMessage) {
-    StreamLabsDonationEvent event = new StreamLabsDonationEvent(
-        donationMessage.getName(),
-        donationMessage.getFormattedAmount(),
-        donationMessage.getAmount(),
-        donationMessage.getMessage()
-    );
+    @Override
+    public void call(Object... objects) {
+        try {
+            String eventData = String.valueOf(objects[0]);
+            SocketEvent event = unmarshal(eventData, SocketEvent.class);
 
-    eventBus.post(event);
-  }
+            if (event.getType() == null) {
+                // Event type was not recognized, ignore message
+                return;
+            }
+
+            switch (event.getType()) {
+                case DONATION:
+                    event.getMessage().stream()
+                            .map(node -> convertJsonNode(node, DonationMessage.class))
+                            .forEach(this::handleDonationMessage);
+                    break;
+                default:
+                    break;
+            }
+        } catch (IOException ignored) {
+            // Ignored, if marshalling fails it was likely not a message which Biliomi understands
+        }
+    }
+
+    private void handleDonationMessage(DonationMessage donationMessage) {
+        StreamLabsDonationEvent event = new StreamLabsDonationEvent(
+                donationMessage.getName(),
+                donationMessage.getFormattedAmount(),
+                donationMessage.getAmount(),
+                donationMessage.getMessage()
+        );
+
+        eventBus.post(event);
+    }
 }

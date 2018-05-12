@@ -16,11 +16,11 @@ import java.util.Set;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchCommunitiesUpdate {
 
-  @XmlElement(name = "community_ids")
-  private Set<String> communityIds;
+    @XmlElement(name = "community_ids")
+    private Set<String> communityIds;
 
-  public Set<String> getCommunityIds() {
-    communityIds = ModelUtils.initCollection(communityIds);
-    return communityIds;
-  }
+    public Set<String> getCommunityIds() {
+        communityIds = ModelUtils.initCollection(communityIds);
+        return communityIds;
+    }
 }

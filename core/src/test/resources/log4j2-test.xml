@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--suppress XmlUnboundNsPrefix -->
 <Configuration status="WARN">
-  <Properties>
-    <Property name="LOGLEVEL_ROOT">error</Property>
-    <Property name="LOGLEVEL_APPLICATION">info</Property>
-  </Properties>
+    <Properties>
+        <Property name="LOGLEVEL_ROOT">error</Property>
+        <Property name="LOGLEVEL_APPLICATION">info</Property>
+    </Properties>
 
-  <Appenders>
-    <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %logger{1}: %msg %throwable{short}%n"/>
-    </Console>
-  </Appenders>
-  <Loggers>
-    <!-- Root logger (default) -->
-    <Root level="${LOGLEVEL_ROOT}">
-      <AppenderRef ref="Console" level="all"/>
-    </Root>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %logger{1}: %msg %throwable{short}%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <!-- Root logger (default) -->
+        <Root level="${LOGLEVEL_ROOT}">
+            <AppenderRef ref="Console" level="all"/>
+        </Root>
 
-    <!-- Application logging -->
-    <Logger name="nl.juraji.biliomi" level="${LOGLEVEL_APPLICATION}"/>
+        <!-- Application logging -->
+        <Logger name="nl.juraji.biliomi" level="${LOGLEVEL_APPLICATION}"/>
 
-  </Loggers>
+    </Loggers>
 </Configuration>

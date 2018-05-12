@@ -12,19 +12,19 @@ import javax.ws.rs.Path;
 @Path("/chat/settings/usergreetings")
 public class UserGreetingSettingsRestService extends SettingsModelRestService<UserGreetingSettings> {
 
-  @Override
-  public UserGreetingSettings getEntity() {
-    return settingsService.getSettings(UserGreetingSettings.class);
-  }
+    @Override
+    public UserGreetingSettings getEntity() {
+        return settingsService.getSettings(UserGreetingSettings.class);
+    }
 
-  @Override
-  public UserGreetingSettings updateEntity(UserGreetingSettings e) {
-    UserGreetingSettings settings = settingsService.getSettings(UserGreetingSettings.class);
+    @Override
+    public UserGreetingSettings updateEntity(UserGreetingSettings e) {
+        UserGreetingSettings settings = settingsService.getSettings(UserGreetingSettings.class);
 
-    settings.setEnableGreetings(e.isEnableGreetings());
-    settings.setGreetingTimeout(e.getGreetingTimeout());
+        settings.setEnableGreetings(e.isEnableGreetings());
+        settings.setGreetingTimeout(e.getGreetingTimeout());
 
-    settingsService.save(settings);
-    return settings;
-  }
+        settingsService.save(settings);
+        return settings;
+    }
 }

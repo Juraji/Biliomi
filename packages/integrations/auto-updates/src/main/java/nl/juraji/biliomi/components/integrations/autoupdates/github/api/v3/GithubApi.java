@@ -9,10 +9,10 @@ import nl.juraji.biliomi.io.web.Response;
  */
 public interface GithubApi {
 
-  /**
-   * Retrieve the latest release from a repository
-   *
-   * @see <a href="https://developer.github.com/v3/repos/releases/#get-the-latest-release">Get the latest release</a>
-   */
-  Response<GithubRelease> getLatestRelease(String owner, String repository) throws Exception;
+    /**
+     * Retrieve the latest release from a repository
+     *
+     * @see <a href="https://developer.github.com/v3/repos/releases/#get-the-latest-release">Get the latest release</a>
+     */
+    Response<GithubRelease> getLatestRelease(String owner, String repository) throws Exception;
 }

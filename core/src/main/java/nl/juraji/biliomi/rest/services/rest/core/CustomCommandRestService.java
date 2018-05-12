@@ -18,79 +18,79 @@ import java.util.List;
 @Path("/core/customcommands")
 public class CustomCommandRestService extends ModelRestService<CustomCommand> {
 
-  @Inject
-  private CustomCommandDao customCommandDao;
+    @Inject
+    private CustomCommandDao customCommandDao;
 
-  @Inject
-  private CommandRouterRegistry commandRouterRegistry;
+    @Inject
+    private CommandRouterRegistry commandRouterRegistry;
 
-  @Inject
-  @SystemComponent
-  private CustomCommandsComponent customCommandsComponent;
+    @Inject
+    @SystemComponent
+    private CustomCommandsComponent customCommandsComponent;
 
-  @Override
-  public List<CustomCommand> getEntities() {
-    return customCommandDao.getList();
-  }
-
-  @Override
-  public CustomCommand getEntity(long id) {
-    return customCommandDao.get(id);
-  }
-
-  @Override
-  public CustomCommand createEntity(CustomCommand e) {
-    customCommandDao.save(e);
-
-    // Register new command in the commandrouter
-    commandRouterRegistry.put(e.getCommand(), customCommandsComponent, CustomCommandsComponent.customCommandRunnerMethod);
-    e.getAliasses().forEach(alias -> commandRouterRegistry.putAlias(alias, e.getCommand()));
-
-    return e;
-  }
-
-  @Override
-  public CustomCommand updateEntity(CustomCommand e, long id) {
-    CustomCommand customCommand = customCommandDao.get(id);
-    String command = e.getCommand();
-
-    // Only some of the properties can be changed
-    customCommand.setPrice(e.getPrice());
-    customCommand.setCooldown(e.getCooldown());
-    customCommand.setModeratorCanActivate(e.isModeratorCanActivate());
-    customCommand.setSystemCommand(e.isSystemCommand());
-    customCommand.setUserGroup(e.getUserGroup());
-    customCommand.setMessage(e.getMessage());
-
-    // Clear current aliasses for command
-    if (!customCommand.getAliasses().isEmpty()) {
-      customCommand.getAliasses().clear();
-      commandRouterRegistry.clearAliassesFor(command);
+    @Override
+    public List<CustomCommand> getEntities() {
+        return customCommandDao.getList();
     }
 
-    if (!e.getAliasses().isEmpty()) {
-      // Re-add all aliasses for command
-      customCommand.getAliasses().addAll(e.getAliasses());
-      e.getAliasses().forEach(alias -> commandRouterRegistry.putAlias(alias, command));
+    @Override
+    public CustomCommand getEntity(long id) {
+        return customCommandDao.get(id);
     }
 
-    customCommandDao.save(customCommand);
-    return customCommand;
-  }
+    @Override
+    public CustomCommand createEntity(CustomCommand e) {
+        customCommandDao.save(e);
 
-  @Override
-  public boolean deleteEntity(long id) {
-    CustomCommand customCommand = customCommandDao.get(id);
+        // Register new command in the commandrouter
+        commandRouterRegistry.put(e.getCommand(), customCommandsComponent, CustomCommandsComponent.customCommandRunnerMethod);
+        e.getAliasses().forEach(alias -> commandRouterRegistry.putAlias(alias, e.getCommand()));
 
-    if (customCommand == null) {
-      return false;
+        return e;
     }
 
-    // Remove command from registry, so it won't be recognized as valid command anymore
-    commandRouterRegistry.remove(customCommand.getCommand());
-    customCommand.getAliasses().forEach(commandRouterRegistry::removeAlias);
+    @Override
+    public CustomCommand updateEntity(CustomCommand e, long id) {
+        CustomCommand customCommand = customCommandDao.get(id);
+        String command = e.getCommand();
 
-    customCommandDao.delete(customCommand);
-    return true;
-  }
+        // Only some of the properties can be changed
+        customCommand.setPrice(e.getPrice());
+        customCommand.setCooldown(e.getCooldown());
+        customCommand.setModeratorCanActivate(e.isModeratorCanActivate());
+        customCommand.setSystemCommand(e.isSystemCommand());
+        customCommand.setUserGroup(e.getUserGroup());
+        customCommand.setMessage(e.getMessage());
+
+        // Clear current aliasses for command
+        if (!customCommand.getAliasses().isEmpty()) {
+            customCommand.getAliasses().clear();
+            commandRouterRegistry.clearAliassesFor(command);
+        }
+
+        if (!e.getAliasses().isEmpty()) {
+            // Re-add all aliasses for command
+            customCommand.getAliasses().addAll(e.getAliasses());
+            e.getAliasses().forEach(alias -> commandRouterRegistry.putAlias(alias, command));
+        }
+
+        customCommandDao.save(customCommand);
+        return customCommand;
+    }
+
+    @Override
+    public boolean deleteEntity(long id) {
+        CustomCommand customCommand = customCommandDao.get(id);
+
+        if (customCommand == null) {
+            return false;
+        }
+
+        // Remove command from registry, so it won't be recognized as valid command anymore
+        commandRouterRegistry.remove(customCommand.getCommand());
+        customCommand.getAliasses().forEach(commandRouterRegistry::removeAlias);
+
+        customCommandDao.delete(customCommand);
+        return true;
+    }
 }

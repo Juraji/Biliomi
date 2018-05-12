@@ -28,71 +28,71 @@ import java.net.URI;
 @SetupTaskPriority(priority = 10)
 public class TwitterIntegrationSetupTask implements SetupTask {
 
-  @Inject
-  private TwitterConfigService configService;
+    @Inject
+    private TwitterConfigService configService;
 
-  @Inject
-  private Logger logger;
+    @Inject
+    private Logger logger;
 
-  @Inject
-  private ConsoleApi console;
+    @Inject
+    private ConsoleApi console;
 
-  @Inject
-  private AuthTokenDao authTokenDao;
+    @Inject
+    private AuthTokenDao authTokenDao;
 
-  @Override
-  public void install() {
-    if (StringUtils.isEmpty(configService.getConsumerKey()) || StringUtils.isEmpty(configService.getConsumerSecret())) {
-      logger.info("No consumer information set for Twitter");
-      return;
+    @Override
+    public void install() {
+        if (StringUtils.isEmpty(configService.getConsumerKey()) || StringUtils.isEmpty(configService.getConsumerSecret())) {
+            logger.info("No consumer information set for Twitter");
+            return;
+        }
+
+        AuthToken token = authTokenDao.get(TokenGroup.INTEGRATIONS, "twitter");
+
+        if (StringUtils.isEmpty(token.getToken())) {
+            try {
+                installTwitterToken(token);
+            } catch (TwitterException e) {
+                logger.error("An exception occurred while authorizing Twitter", e);
+            } catch (Exception e) {
+                logger.error("Failed setting up Twitter integration", e);
+            }
+        }
     }
 
-    AuthToken token = authTokenDao.get(TokenGroup.INTEGRATIONS, "twitter");
-
-    if (StringUtils.isEmpty(token.getToken())) {
-      try {
-        installTwitterToken(token);
-      } catch (TwitterException e) {
-        logger.error("An exception occurred while authorizing Twitter", e);
-      } catch (Exception e) {
-        logger.error("Failed setting up Twitter integration", e);
-      }
-    }
-  }
-
-  @Override
-  public String getDisplayName() {
-    return "Setup Twitter integration";
-  }
-
-  private void installTwitterToken(AuthToken token) throws Exception {
-    console.println();
-    console.print("Would you like to set up Twitter integration now? [y/n]: ");
-    if (!console.awaitYesNo()) {
-      logger.info("Canceled Twitter integration setup");
-      return;
+    @Override
+    public String getDisplayName() {
+        return "Setup Twitter integration";
     }
 
-    Twitter twitter = new TwitterFactory().getInstance();
-    twitter.setOAuthConsumer(configService.getConsumerKey(), configService.getConsumerSecret());
+    private void installTwitterToken(AuthToken token) throws Exception {
+        console.println();
+        console.print("Would you like to set up Twitter integration now? [y/n]: ");
+        if (!console.awaitYesNo()) {
+            logger.info("Canceled Twitter integration setup");
+            return;
+        }
 
-    RequestToken requestToken = twitter.getOAuthRequestToken();
+        Twitter twitter = new TwitterFactory().getInstance();
+        twitter.setOAuthConsumer(configService.getConsumerKey(), configService.getConsumerSecret());
 
-    console.println();
-    console.print("Hit [enter] to open up " + requestToken.getAuthorizationURL() + " and authorize on Twitter.");
-    Desktop.getDesktop().browse(new URI(requestToken.getAuthorizationURL()));
+        RequestToken requestToken = twitter.getOAuthRequestToken();
 
-    console.print("Enter the pin presented to you and hit [enter]: ");
-    String pinInput = console.awaitInput(true);
+        console.println();
+        console.print("Hit [enter] to open up " + requestToken.getAuthorizationURL() + " and authorize on Twitter.");
+        Desktop.getDesktop().browse(new URI(requestToken.getAuthorizationURL()));
 
-    AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, pinInput);
-    token.setToken(accessToken.getToken());
-    token.setSecret(accessToken.getTokenSecret());
-    token.setUserId(String.valueOf(accessToken.getUserId()));
-    authTokenDao.save(token);
+        console.print("Enter the pin presented to you and hit [enter]: ");
+        String pinInput = console.awaitInput(true);
 
-    console.println();
-    console.println("Successfully set up Twitter integration");
-    console.println();
-  }
+        AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, pinInput);
+        token.setToken(accessToken.getToken());
+        token.setSecret(accessToken.getTokenSecret());
+        token.setUserId(String.valueOf(accessToken.getUserId()));
+        authTokenDao.save(token);
+
+        console.println();
+        console.println("Successfully set up Twitter integration");
+        console.println();
+    }
 }

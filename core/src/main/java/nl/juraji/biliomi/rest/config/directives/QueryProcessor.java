@@ -7,5 +7,5 @@ import java.util.Map;
  * Biliomi
  */
 public interface QueryProcessor<T> {
-  T process(T object, Map<String, Object> queryParams) throws Exception;
+    T process(T object, Map<String, Object> queryParams) throws Exception;
 }

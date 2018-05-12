@@ -8,15 +8,15 @@ import nl.juraji.biliomi.config.ConfigService;
  */
 public class SpotifyConfigService extends ConfigService<YamlSpotifyConfig> {
 
-  public SpotifyConfigService() {
-    super("integrations/spotify.yml", YamlSpotifyConfig.class);
-  }
+    public SpotifyConfigService() {
+        super("integrations/spotify.yml", YamlSpotifyConfig.class);
+    }
 
-  public String getConsumerKey() {
-    return config.getConsumerKey();
-  }
+    public String getConsumerKey() {
+        return config.getConsumerKey();
+    }
 
-  public String getConsumerSecret() {
-    return config.getConsumerSecret();
-  }
+    public String getConsumerSecret() {
+        return config.getConsumerSecret();
+    }
 }

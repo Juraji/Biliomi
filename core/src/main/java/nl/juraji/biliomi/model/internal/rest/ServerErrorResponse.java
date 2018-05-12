@@ -13,25 +13,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServerErrorResponse {
 
-  @XmlElement(name = "ErrorMessage")
-  private String errorMessage;
+    @XmlElement(name = "ErrorMessage")
+    private String errorMessage;
 
-  @XmlElement(name = "CausedBy")
-  private String causedBy;
+    @XmlElement(name = "CausedBy")
+    private String causedBy;
 
-  public String getErrorMessage() {
-    return errorMessage;
-  }
+    public String getErrorMessage() {
+        return errorMessage;
+    }
 
-  public void setErrorMessage(String errorMessage) {
-    this.errorMessage = errorMessage;
-  }
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
 
-  public String getCausedBy() {
-    return causedBy;
-  }
+    public String getCausedBy() {
+        return causedBy;
+    }
 
-  public void setCausedBy(String causedBy) {
-    this.causedBy = causedBy;
-  }
+    public void setCausedBy(String causedBy) {
+        this.causedBy = causedBy;
+    }
 }

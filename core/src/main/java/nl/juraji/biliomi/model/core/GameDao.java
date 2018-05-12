@@ -13,41 +13,41 @@ import javax.enterprise.inject.Default;
 @Default
 public class GameDao extends JpaDao<Game> {
 
-  public GameDao() {
-    super(Game.class);
-  }
-
-  public Game getByName(String name) {
-    if (name == null) {
-      return null;
+    public GameDao() {
+        super(Game.class);
     }
 
-    Game game = criteria()
-        .add(Restrictions.eq("name", name).ignoreCase())
-        .getResult();
+    public Game getByName(String name) {
+        if (name == null) {
+            return null;
+        }
 
-    if (game == null) {
-      game = new Game();
-      game.setName(name);
-      game.setFirstPlayedOn(DateTime.now());
-      save(game);
+        Game game = criteria()
+                .add(Restrictions.eq("name", name).ignoreCase())
+                .getResult();
+
+        if (game == null) {
+            game = new Game();
+            game.setName(name);
+            game.setFirstPlayedOn(DateTime.now());
+            save(game);
+        }
+
+        return game;
     }
 
-    return game;
-  }
+    public Game getBySteamId(long steamId) {
+        return criteria()
+                .add(Restrictions.eq("steamId", steamId))
+                .getResult();
+    }
 
-  public Game getBySteamId(long steamId) {
-    return criteria()
-        .add(Restrictions.eq("steamId", steamId))
-        .getResult();
-  }
-
-  public Game getBySteamIdOrName(long steamId, String name) {
-    return criteria()
-        .add(Restrictions.or(
-            Restrictions.eq("steamId", steamId),
-            Restrictions.eq("name", name).ignoreCase()
-        ))
-        .getResult();
-  }
+    public Game getBySteamIdOrName(long steamId, String name) {
+        return criteria()
+                .add(Restrictions.or(
+                        Restrictions.eq("steamId", steamId),
+                        Restrictions.eq("name", name).ignoreCase()
+                ))
+                .getResult();
+    }
 }

@@ -18,13 +18,13 @@ import javax.ws.rs.core.Response;
 @Path("/version")
 public class VersionInfoRestService {
 
-  @Inject
-  private VersionInfo versionInfo;
+    @Inject
+    private VersionInfo versionInfo;
 
-  @GET
-  @PermitAll
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getVersionInfo() {
-    return Responses.ok(versionInfo);
-  }
+    @GET
+    @PermitAll
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getVersionInfo() {
+        return Responses.ok(versionInfo);
+    }
 }

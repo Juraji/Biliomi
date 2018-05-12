@@ -21,78 +21,78 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AdventureRecord {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @XmlElement(name = "Id")
-  private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement(name = "Id")
+    private long id;
 
-  @OneToOne
-  @NotNull
-  @XmlElement(name = "Adventurer")
-  private User adventurer;
+    @OneToOne
+    @NotNull
+    @XmlElement(name = "Adventurer")
+    private User adventurer;
 
-  @Column
-  @XmlElement(name = "Bet")
-  private long bet;
+    @Column
+    @XmlElement(name = "Bet")
+    private long bet;
 
-  @Column
-  @XmlElement(name = "Payout")
-  private long payout;
+    @Column
+    @XmlElement(name = "Payout")
+    private long payout;
 
-  @Column
-  @XmlElement(name = "ByTamagotchi")
-  private boolean byTamagotchi;
+    @Column
+    @XmlElement(name = "ByTamagotchi")
+    private boolean byTamagotchi;
 
-  @Column
-  @Type(type = DateTimeISO8601Type.TYPE)
-  @XmlElement(name = "Date")
-  private DateTime date;
+    @Column
+    @Type(type = DateTimeISO8601Type.TYPE)
+    @XmlElement(name = "Date")
+    private DateTime date;
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-  public User getAdventurer() {
-    return adventurer;
-  }
+    public User getAdventurer() {
+        return adventurer;
+    }
 
-  public void setAdventurer(User adventurer) {
-    this.adventurer = adventurer;
-  }
+    public void setAdventurer(User adventurer) {
+        this.adventurer = adventurer;
+    }
 
-  public long getBet() {
-    return bet;
-  }
+    public long getBet() {
+        return bet;
+    }
 
-  public void setBet(long bet) {
-    this.bet = bet;
-  }
+    public void setBet(long bet) {
+        this.bet = bet;
+    }
 
-  public long getPayout() {
-    return payout;
-  }
+    public long getPayout() {
+        return payout;
+    }
 
-  public void setPayout(long payout) {
-    this.payout = payout;
-  }
+    public void setPayout(long payout) {
+        this.payout = payout;
+    }
 
-  public boolean isByTamagotchi() {
-    return byTamagotchi;
-  }
+    public boolean isByTamagotchi() {
+        return byTamagotchi;
+    }
 
-  public void setByTamagotchi(boolean byTamagotchi) {
-    this.byTamagotchi = byTamagotchi;
-  }
+    public void setByTamagotchi(boolean byTamagotchi) {
+        this.byTamagotchi = byTamagotchi;
+    }
 
-  public DateTime getDate() {
-    return date;
-  }
+    public DateTime getDate() {
+        return date;
+    }
 
-  public void setDate(DateTime date) {
-    this.date = date;
-  }
+    public void setDate(DateTime date) {
+        this.date = date;
+    }
 }

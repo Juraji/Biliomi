@@ -34,78 +34,78 @@ import java.lang.reflect.InvocationTargetException;
 @Singleton
 public class UserSettingsProducer {
 
-  private YamlCoreSettings yamlCoreSettings;
-  private UpdateModeType updateMode;
+    private YamlCoreSettings yamlCoreSettings;
+    private UpdateModeType updateMode;
 
-  @PostConstruct
-  private void initUserSettingsProducer() {
-    try {
-      File coreYml = new File(BiliomiContainer.getParameters().getConfigurationDir(), "core.yml");
-      Yaml yamlInstance = new Yaml(new Constructor(YamlCoreSettings.class));
-      yamlCoreSettings = yamlInstance.loadAs(new FileInputStream(coreYml), YamlCoreSettings.class);
-
-      String updateMode = yamlCoreSettings.getBiliomi().getCore().getUpdateMode();
-      // Somehow Yaml thinks "off" means "false"
-      if (StringUtils.isEmpty(updateMode)) {
-        this.updateMode = UpdateModeType.OFF;
-      } else {
-        this.updateMode = EnumUtils.toEnum(updateMode, UpdateModeType.class);
-      }
-    } catch (FileNotFoundException e) {
-      this.yamlCoreSettings = new YamlCoreSettings();
-      ObjectGraphs.initializeObjectGraph(this.yamlCoreSettings);
-      this.updateMode = UpdateModeType.INSTALL;
-      this.yamlCoreSettings.getBiliomi().getCore().setUpdateMode(this.updateMode.toString());
-    }
-  }
-
-  @Produces
-  public YamlCoreSettings getYamlCoreSettings() {
-    return yamlCoreSettings;
-  }
-
-  @Produces
-  @CoreSetting("PRODUCER")
-  public String getUserSetting(InjectionPoint injectionPoint) {
-    Annotated annotated = injectionPoint.getAnnotated();
-
-    if (annotated.isAnnotationPresent(CoreSetting.class)) {
-      String settingPath = annotated.getAnnotation(CoreSetting.class).value();
-      Object object = yamlCoreSettings;
-      String[] split = settingPath.split("\\.");
-      int c = 0;
-
-      while (c < split.length) {
+    @PostConstruct
+    private void initUserSettingsProducer() {
         try {
-          object = PropertyUtils.getProperty(object, split[c]);
-          c++;
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-          LogManager.getLogger(getClass()).error("Failed retrieving setting " + settingPath, e);
-          return null;
-        }
-      }
+            File coreYml = new File(BiliomiContainer.getParameters().getConfigurationDir(), "core.yml");
+            Yaml yamlInstance = new Yaml(new Constructor(YamlCoreSettings.class));
+            yamlCoreSettings = yamlInstance.loadAs(new FileInputStream(coreYml), YamlCoreSettings.class);
 
-      return String.valueOf(object);
+            String updateMode = yamlCoreSettings.getBiliomi().getCore().getUpdateMode();
+            // Somehow Yaml thinks "off" means "false"
+            if (StringUtils.isEmpty(updateMode)) {
+                this.updateMode = UpdateModeType.OFF;
+            } else {
+                this.updateMode = EnumUtils.toEnum(updateMode, UpdateModeType.class);
+            }
+        } catch (FileNotFoundException e) {
+            this.yamlCoreSettings = new YamlCoreSettings();
+            ObjectGraphs.initializeObjectGraph(this.yamlCoreSettings);
+            this.updateMode = UpdateModeType.INSTALL;
+            this.yamlCoreSettings.getBiliomi().getCore().setUpdateMode(this.updateMode.toString());
+        }
     }
 
-    return null;
-  }
+    @Produces
+    public YamlCoreSettings getYamlCoreSettings() {
+        return yamlCoreSettings;
+    }
 
-  @Produces
-  @UpdateMode
-  public UpdateModeType getUpdateMode() {
-    return updateMode;
-  }
+    @Produces
+    @CoreSetting("PRODUCER")
+    public String getUserSetting(InjectionPoint injectionPoint) {
+        Annotated annotated = injectionPoint.getAnnotated();
 
-  @Produces
-  @BotName
-  public String getBotName() {
-    return yamlCoreSettings.getBiliomi().getTwitch().getLogin().getBotUsername().toLowerCase();
-  }
+        if (annotated.isAnnotationPresent(CoreSetting.class)) {
+            String settingPath = annotated.getAnnotation(CoreSetting.class).value();
+            Object object = yamlCoreSettings;
+            String[] split = settingPath.split("\\.");
+            int c = 0;
 
-  @Produces
-  @ChannelName
-  public String getChannelName() {
-    return yamlCoreSettings.getBiliomi().getTwitch().getLogin().getChannelUsername().toLowerCase();
-  }
+            while (c < split.length) {
+                try {
+                    object = PropertyUtils.getProperty(object, split[c]);
+                    c++;
+                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                    LogManager.getLogger(getClass()).error("Failed retrieving setting " + settingPath, e);
+                    return null;
+                }
+            }
+
+            return String.valueOf(object);
+        }
+
+        return null;
+    }
+
+    @Produces
+    @UpdateMode
+    public UpdateModeType getUpdateMode() {
+        return updateMode;
+    }
+
+    @Produces
+    @BotName
+    public String getBotName() {
+        return yamlCoreSettings.getBiliomi().getTwitch().getLogin().getBotUsername().toLowerCase();
+    }
+
+    @Produces
+    @ChannelName
+    public String getChannelName() {
+        return yamlCoreSettings.getBiliomi().getTwitch().getLogin().getChannelUsername().toLowerCase();
+    }
 }

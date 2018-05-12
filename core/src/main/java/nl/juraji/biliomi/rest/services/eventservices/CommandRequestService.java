@@ -25,48 +25,48 @@ import javax.ws.rs.core.Response;
 @Path("/events/commands")
 public class CommandRequestService {
 
-  @Inject
-  private CommandRouter commandRouter;
+    @Inject
+    private CommandRouter commandRouter;
 
-  @Inject
-  private CliCommandRouter cliCommandRouter;
+    @Inject
+    private CliCommandRouter cliCommandRouter;
 
-  @POST
-  @Path("/run")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response runBotCommand(CommandRequest commandRequest) {
-    if (StringUtils.isEmpty(commandRequest.getCommand())) {
-      return Responses.badRequest();
+    @POST
+    @Path("/run")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response runBotCommand(CommandRequest commandRequest) {
+        if (StringUtils.isEmpty(commandRequest.getCommand())) {
+            return Responses.badRequest();
+        }
+
+        MutableString command = new MutableString(commandRequest.getCommand());
+        command.prependIfMissing("!");
+        String username = RestRequestInfoHolder.getRequestInfo().getUsername();
+        IrcChatMessageEvent event = new IrcChatMessageEvent(username, null, command.toString());
+        boolean success = commandRouter.runCommand(event, true);
+
+        if (success) {
+            return Responses.ok();
+        } else {
+            return Responses.notModified();
+        }
     }
 
-    MutableString command = new MutableString(commandRequest.getCommand());
-    command.prependIfMissing("!");
-    String username = RestRequestInfoHolder.getRequestInfo().getUsername();
-    IrcChatMessageEvent event = new IrcChatMessageEvent(username, null, command.toString());
-    boolean success = commandRouter.runCommand(event, true);
+    @POST
+    @Path("/cli/run")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response runCliCommand(CommandRequest commandRequest) {
+        if (StringUtils.isEmpty(commandRequest.getCommand())) {
+            return Responses.badRequest();
+        }
 
-    if (success) {
-      return Responses.ok();
-    } else {
-      return Responses.notModified();
+        MutableString command = new MutableString(commandRequest.getCommand());
+        command.prependIfMissing("/");
+        ConsoleInputEvent event = new ConsoleInputEvent(command.toString(), false);
+        cliCommandRouter.onConsoleInputEvent(event);
+
+        return Responses.ok();
     }
-  }
-
-  @POST
-  @Path("/cli/run")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response runCliCommand(CommandRequest commandRequest) {
-    if (StringUtils.isEmpty(commandRequest.getCommand())) {
-      return Responses.badRequest();
-    }
-
-    MutableString command = new MutableString(commandRequest.getCommand());
-    command.prependIfMissing("/");
-    ConsoleInputEvent event = new ConsoleInputEvent(command.toString(), false);
-    cliCommandRouter.onConsoleInputEvent(event);
-
-    return Responses.ok();
-  }
 }

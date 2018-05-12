@@ -7,13 +7,13 @@ import java.util.List;
  * Biliomi
  */
 public class YamlEightBallConfig {
-  private List<String> eightballMessages;
+    private List<String> eightballMessages;
 
-  public List<String> getEightballMessages() {
-    return eightballMessages;
-  }
+    public List<String> getEightballMessages() {
+        return eightballMessages;
+    }
 
-  public void setEightballMessages(List<String> eightballMessages) {
-    this.eightballMessages = eightballMessages;
-  }
+    public void setEightballMessages(List<String> eightballMessages) {
+        this.eightballMessages = eightballMessages;
+    }
 }

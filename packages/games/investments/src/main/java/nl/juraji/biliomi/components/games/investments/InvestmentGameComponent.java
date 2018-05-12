@@ -28,181 +28,181 @@ import java.util.concurrent.TimeUnit;
 @NormalComponent
 public class InvestmentGameComponent extends Component {
 
-  @Inject
-  private TimeFormatter timeFormatter;
+    @Inject
+    private TimeFormatter timeFormatter;
 
-  @Inject
-  private PointsService pointsService;
+    @Inject
+    private PointsService pointsService;
 
-  @Inject
-  private InvestmentService investmentService;
-  private InvestmentSettings settings;
+    @Inject
+    private InvestmentService investmentService;
+    private InvestmentSettings settings;
 
-  @Override
-  public void init() {
-    super.init();
+    @Override
+    public void init() {
+        super.init();
 
-    investmentService.start();
-    settings = settingsService.getSettings(InvestmentSettings.class, s -> settings = s);
-  }
-
-  @CommandRoute(command = "pollmarket")
-  public boolean pollMarketCommand(User user, Arguments arguments) {
-    if (investmentService.isMarketStateGood()) {
-      chat.say(i18n.get("ChatCommand.pollMarket.stateGood"));
-    } else {
-      chat.say(i18n.get("ChatCommand.pollMarket.stateBad"));
-    }
-    return true;
-  }
-
-  /**
-   * Start an investment
-   * Usage: !invest [amount] [interest percentage 0...100]
-   */
-  @CommandRoute(command = "invest", defaultCooldown = 900000)
-  public boolean investCommand(User user, Arguments arguments) {
-    Long investAmount = NumberConverter.asNumber(arguments.getSafe(0)).toLong();
-    Integer investPercentage = NumberConverter.asNumber(arguments.getSafe(1)).toInteger();
-
-    if (investAmount == null || investPercentage == null) {
-      chat.whisper(user, i18n.get("ChatCommand.invest.usage"));
-      return false;
+        investmentService.start();
+        settings = settingsService.getSettings(InvestmentSettings.class, s -> settings = s);
     }
 
-    if (user.getPoints() < investAmount) {
-      chat.whisper(user, i18n.get("ChatCommand.invest.notEnoughPoints")
-          .add("pointsname", pointsService::pointsName)
-          .add("points", () -> pointsService.asString(user.getPoints())));
-      return false;
+    @CommandRoute(command = "pollmarket")
+    public boolean pollMarketCommand(User user, Arguments arguments) {
+        if (investmentService.isMarketStateGood()) {
+            chat.say(i18n.get("ChatCommand.pollMarket.stateGood"));
+        } else {
+            chat.say(i18n.get("ChatCommand.pollMarket.stateBad"));
+        }
+        return true;
     }
 
-    double investPercentageReal = (double) investPercentage / 100;
-    if (investPercentageReal < settings.getMinInterest() || investPercentageReal > settings.getMaxInterest()) {
-      chat.whisper(user, i18n.get("ChatCommand.invest.usage.maximums")
-          .add("time", timeFormatter.timeQuantity(settings.getInvestmentDuration()))
-          .add("mininterest", MathUtils.doubleToPercentage(settings.getMinInterest()))
-          .add("maxinterest", MathUtils.doubleToPercentage(settings.getMaxInterest())));
-      return false;
+    /**
+     * Start an investment
+     * Usage: !invest [amount] [interest percentage 0...100]
+     */
+    @CommandRoute(command = "invest", defaultCooldown = 900000)
+    public boolean investCommand(User user, Arguments arguments) {
+        Long investAmount = NumberConverter.asNumber(arguments.getSafe(0)).toLong();
+        Integer investPercentage = NumberConverter.asNumber(arguments.getSafe(1)).toInteger();
+
+        if (investAmount == null || investPercentage == null) {
+            chat.whisper(user, i18n.get("ChatCommand.invest.usage"));
+            return false;
+        }
+
+        if (user.getPoints() < investAmount) {
+            chat.whisper(user, i18n.get("ChatCommand.invest.notEnoughPoints")
+                    .add("pointsname", pointsService::pointsName)
+                    .add("points", () -> pointsService.asString(user.getPoints())));
+            return false;
+        }
+
+        double investPercentageReal = (double) investPercentage / 100;
+        if (investPercentageReal < settings.getMinInterest() || investPercentageReal > settings.getMaxInterest()) {
+            chat.whisper(user, i18n.get("ChatCommand.invest.usage.maximums")
+                    .add("time", timeFormatter.timeQuantity(settings.getInvestmentDuration()))
+                    .add("mininterest", MathUtils.doubleToPercentage(settings.getMinInterest()))
+                    .add("maxinterest", MathUtils.doubleToPercentage(settings.getMaxInterest())));
+            return false;
+        }
+
+        InvestmentRecord record = investmentService.startInvestment(user, investAmount, investPercentageReal);
+        chat.say(i18n.get("ChatCommand.invest.invested")
+                .add("username", user::getNameAndTitle)
+                .add("project", record::getProject)
+                .add("invested", () -> pointsService.asString(investAmount)));
+        return true;
     }
 
-    InvestmentRecord record = investmentService.startInvestment(user, investAmount, investPercentageReal);
-    chat.say(i18n.get("ChatCommand.invest.invested")
-        .add("username", user::getNameAndTitle)
-        .add("project", record::getProject)
-        .add("invested", () -> pointsService.asString(investAmount)));
-    return true;
-  }
+    /**
+     * State your current investment record status
+     * Usage: !myinvestments
+     */
+    @CommandRoute(command = "myinvestments")
+    public boolean myInvestmentsCommand(User user, Arguments arguments) {
+        UserInvestRecordStats recordInfo = investmentService.getRecordInfo(user);
 
-  /**
-   * State your current investment record status
-   * Usage: !myinvestments
-   */
-  @CommandRoute(command = "myinvestments")
-  public boolean myInvestmentsCommand(User user, Arguments arguments) {
-    UserInvestRecordStats recordInfo = investmentService.getRecordInfo(user);
+        if (recordInfo == null) {
+            chat.whisper(user, i18n.get("ChatCommand.myinvestments.noRecords"));
+            return false;
+        }
 
-    if (recordInfo == null) {
-      chat.whisper(user, i18n.get("ChatCommand.myinvestments.noRecords"));
-      return false;
+        chat.say(i18n.get("ChatCommand.myinvestments.stat")
+                .add("username", user::getNameAndTitle)
+                .add("count", recordInfo::getRecordCount)
+                .add("totalinvested", () -> pointsService.asString(recordInfo.getTotalInvested()))
+                .add("totalearned", () -> pointsService.asString(recordInfo.getTotalEarned()))
+                .add("successcount", recordInfo::getWins)
+                .add("failedcount", recordInfo::getLosses)
+                .add("comment", () -> i18n.getIfElse(recordInfo.isMoreWins(),
+                        "ChatCommand.myinvestments.stat.comment.mostlyWins",
+                        "ChatCommand.myinvestments.stat.comment.mostlyLosses")));
+        return true;
     }
 
-    chat.say(i18n.get("ChatCommand.myinvestments.stat")
-        .add("username", user::getNameAndTitle)
-        .add("count", recordInfo::getRecordCount)
-        .add("totalinvested", () -> pointsService.asString(recordInfo.getTotalInvested()))
-        .add("totalearned", () -> pointsService.asString(recordInfo.getTotalEarned()))
-        .add("successcount", recordInfo::getWins)
-        .add("failedcount", recordInfo::getLosses)
-        .add("comment", () -> i18n.getIfElse(recordInfo.isMoreWins(),
-            "ChatCommand.myinvestments.stat.comment.mostlyWins",
-            "ChatCommand.myinvestments.stat.comment.mostlyLosses")));
-    return true;
-  }
-
-  /**
-   * Manage investement settings
-   * Usage: !investsettings [duration|mininterest|maxinterest] [more...]
-   */
-  @CommandRoute(command = "investsettings", systemCommand = true)
-  public boolean investSettingsCommand(User user, Arguments arguments) {
-    return captureSubCommands("investsettings", i18n.supply("ChatCommand.investsettings.usage"), user, arguments);
-  }
-
-  /**
-   * Set the duration of an investment in minutes
-   * Usage: !investsettings duration [time in minutes]
-   */
-  @SubCommandRoute(parentCommand = "investsettings", command = "duration")
-  public boolean investSettingsCommandDuration(User user, Arguments arguments) {
-    Integer durationMinutes = NumberConverter.asNumber(arguments.get(0)).toInteger();
-
-    if (durationMinutes == null || durationMinutes < 0) {
-      chat.whisper(user, i18n.get("ChatCommand.investsettings.duration.usage"));
-      return false;
+    /**
+     * Manage investement settings
+     * Usage: !investsettings [duration|mininterest|maxinterest] [more...]
+     */
+    @CommandRoute(command = "investsettings", systemCommand = true)
+    public boolean investSettingsCommand(User user, Arguments arguments) {
+        return captureSubCommands("investsettings", i18n.supply("ChatCommand.investsettings.usage"), user, arguments);
     }
 
-    long duration = TimeUnit.MILLISECONDS.convert(durationMinutes, TimeUnit.MINUTES);
+    /**
+     * Set the duration of an investment in minutes
+     * Usage: !investsettings duration [time in minutes]
+     */
+    @SubCommandRoute(parentCommand = "investsettings", command = "duration")
+    public boolean investSettingsCommandDuration(User user, Arguments arguments) {
+        Integer durationMinutes = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
-    settings.setInvestmentDuration(duration);
-    settingsService.save(settings);
+        if (durationMinutes == null || durationMinutes < 0) {
+            chat.whisper(user, i18n.get("ChatCommand.investsettings.duration.usage"));
+            return false;
+        }
 
-    chat.whisper(user, i18n.get("ChatCommand.investsettings.duration.set")
-        .add("time", timeFormatter.timeQuantity(duration)));
-    return true;
-  }
+        long duration = TimeUnit.MILLISECONDS.convert(durationMinutes, TimeUnit.MINUTES);
 
-  /**
-   * Set the minimum interest rate for an investment
-   * Usage: !investsettings mininterest [percentage 0...100]
-   */
-  @SubCommandRoute(parentCommand = "investsettings", command = "mininterest")
-  public boolean investSettingsCommandMinInterest(User user, Arguments arguments) {
-    Integer input = NumberConverter.asNumber(arguments.get(0)).toInteger();
+        settings.setInvestmentDuration(duration);
+        settingsService.save(settings);
 
-    if (input == null || MathUtils.isNotInRange(input, 0, 100)) {
-      chat.whisper(user, i18n.get("ChatCommand.investsettings.mininterest.usage"));
-      return false;
+        chat.whisper(user, i18n.get("ChatCommand.investsettings.duration.set")
+                .add("time", timeFormatter.timeQuantity(duration)));
+        return true;
     }
 
-    double settingValue = input.doubleValue() / 100;
-    if (settingValue > settings.getMaxInterest()) {
-      chat.whisper(user, i18n.get("ChatCommand.investsettings.mininterest.higherThanMax")
-          .add("percentage", MathUtils.doubleToPercentage(settings.getMaxInterest())));
+    /**
+     * Set the minimum interest rate for an investment
+     * Usage: !investsettings mininterest [percentage 0...100]
+     */
+    @SubCommandRoute(parentCommand = "investsettings", command = "mininterest")
+    public boolean investSettingsCommandMinInterest(User user, Arguments arguments) {
+        Integer input = NumberConverter.asNumber(arguments.get(0)).toInteger();
+
+        if (input == null || MathUtils.isNotInRange(input, 0, 100)) {
+            chat.whisper(user, i18n.get("ChatCommand.investsettings.mininterest.usage"));
+            return false;
+        }
+
+        double settingValue = input.doubleValue() / 100;
+        if (settingValue > settings.getMaxInterest()) {
+            chat.whisper(user, i18n.get("ChatCommand.investsettings.mininterest.higherThanMax")
+                    .add("percentage", MathUtils.doubleToPercentage(settings.getMaxInterest())));
+        }
+
+        settings.setMinInterest(settingValue);
+        settingsService.save(settings);
+
+        chat.whisper(user, i18n.get("ChatCommand.investsettings.mininterest.set")
+                .add("percentage", MathUtils.doubleToPercentage(settingValue)));
+        return true;
     }
 
-    settings.setMinInterest(settingValue);
-    settingsService.save(settings);
+    /**
+     * Set the maximum interest rate for an investment
+     * Usage: !investsettings maxinterest [percentage 0...100]
+     */
+    @SubCommandRoute(parentCommand = "investsettings", command = "maxinterest")
+    public boolean investSettingsCommandMaxInterest(User user, Arguments arguments) {
+        Integer input = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
-    chat.whisper(user, i18n.get("ChatCommand.investsettings.mininterest.set")
-        .add("percentage", MathUtils.doubleToPercentage(settingValue)));
-    return true;
-  }
+        if (input == null || MathUtils.isNotInRange(input, 0, 100)) {
+            chat.whisper(user, i18n.get("ChatCommand.investsettings.maxinterest.usage"));
+            return false;
+        }
 
-  /**
-   * Set the maximum interest rate for an investment
-   * Usage: !investsettings maxinterest [percentage 0...100]
-   */
-  @SubCommandRoute(parentCommand = "investsettings", command = "maxinterest")
-  public boolean investSettingsCommandMaxInterest(User user, Arguments arguments) {
-    Integer input = NumberConverter.asNumber(arguments.get(0)).toInteger();
+        double settingValue = input.doubleValue() / 100;
+        if (settingValue < settings.getMinInterest()) {
+            chat.whisper(user, i18n.get("ChatCommand.investsettings.mininterest.lowerThanMin")
+                    .add("percentage", MathUtils.doubleToPercentage(settings.getMinInterest())));
+        }
 
-    if (input == null || MathUtils.isNotInRange(input, 0, 100)) {
-      chat.whisper(user, i18n.get("ChatCommand.investsettings.maxinterest.usage"));
-      return false;
+        settings.setMaxInterest(settingValue);
+        settingsService.save(settings);
+
+        chat.whisper(user, i18n.get("ChatCommand.investsettings.maxinterest.set")
+                .add("percentage", MathUtils.doubleToPercentage(settingValue)));
+        return true;
     }
-
-    double settingValue = input.doubleValue() / 100;
-    if (settingValue < settings.getMinInterest()) {
-      chat.whisper(user, i18n.get("ChatCommand.investsettings.mininterest.lowerThanMin")
-          .add("percentage", MathUtils.doubleToPercentage(settings.getMinInterest())));
-    }
-
-    settings.setMaxInterest(settingValue);
-    settingsService.save(settings);
-
-    chat.whisper(user, i18n.get("ChatCommand.investsettings.maxinterest.set")
-        .add("percentage", MathUtils.doubleToPercentage(settingValue)));
-    return true;
-  }
 }

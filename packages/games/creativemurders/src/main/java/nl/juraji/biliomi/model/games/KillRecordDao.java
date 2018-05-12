@@ -15,31 +15,31 @@ import java.util.List;
 @Default
 public class KillRecordDao extends JpaDao<KillRecord> {
 
-  public KillRecordDao() {
-    super(KillRecord.class);
-  }
+    public KillRecordDao() {
+        super(KillRecord.class);
+    }
 
-  public List<KillRecord> getRecords(User user) {
-    return getRecords(user, -1);
-  }
+    public List<KillRecord> getRecords(User user) {
+        return getRecords(user, -1);
+    }
 
-  public List<KillRecord> getRecords(User user, int limit) {
-    return criteria()
-        .createAlias("killer", "k")
-        .createAlias("target", "t")
-        .add(Restrictions.or(
-            Restrictions.eq("k.id", user.getId()),
-            Restrictions.eq("t.id", user.getId())
-        ))
-        .addOrder(Order.desc("id"))
-        .setMaxResults(limit)
-        .getList();
-  }
+    public List<KillRecord> getRecords(User user, int limit) {
+        return criteria()
+                .createAlias("killer", "k")
+                .createAlias("target", "t")
+                .add(Restrictions.or(
+                        Restrictions.eq("k.id", user.getId()),
+                        Restrictions.eq("t.id", user.getId())
+                ))
+                .addOrder(Order.desc("id"))
+                .setMaxResults(limit)
+                .getList();
+    }
 
-  public long getKillCount(User killer) {
-    return criteria()
-        .createAlias("killer", "k")
-        .add(Restrictions.eq("k.id", killer.getId()))
-        .getCount();
-  }
+    public long getKillCount(User killer) {
+        return criteria()
+                .createAlias("killer", "k")
+                .add(Restrictions.eq("k.id", killer.getId()))
+                .getCount();
+    }
 }

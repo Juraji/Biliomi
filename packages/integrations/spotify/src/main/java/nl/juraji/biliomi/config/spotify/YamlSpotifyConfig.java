@@ -5,22 +5,22 @@ package nl.juraji.biliomi.config.spotify;
  * Biliomi
  */
 public class YamlSpotifyConfig {
-  private String consumerKey;
-  private String consumerSecret;
+    private String consumerKey;
+    private String consumerSecret;
 
-  public String getConsumerKey() {
-    return consumerKey;
-  }
+    public String getConsumerKey() {
+        return consumerKey;
+    }
 
-  public void setConsumerKey(String consumerKey) {
-    this.consumerKey = consumerKey;
-  }
+    public void setConsumerKey(String consumerKey) {
+        this.consumerKey = consumerKey;
+    }
 
-  public String getConsumerSecret() {
-    return consumerSecret;
-  }
+    public String getConsumerSecret() {
+        return consumerSecret;
+    }
 
-  public void setConsumerSecret(String consumerSecret) {
-    this.consumerSecret = consumerSecret;
-  }
+    public void setConsumerSecret(String consumerSecret) {
+        this.consumerSecret = consumerSecret;
+    }
 }

@@ -15,27 +15,27 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class IrcChannelNoticeEvent extends IrcChannelEvent {
 
-  @XmlElement(name = "Tags")
-  private final Tags tags;
+    @XmlElement(name = "Tags")
+    private final Tags tags;
 
-  @XmlElement(name = "Message")
-  private final String message;
+    @XmlElement(name = "Message")
+    private final String message;
 
-  public IrcChannelNoticeEvent(String channelName, Tags tags, String message) {
-    super(channelName);
-    this.tags = tags;
-    this.message = message;
-  }
+    public IrcChannelNoticeEvent(String channelName, Tags tags, String message) {
+        super(channelName);
+        this.tags = tags;
+        this.message = message;
+    }
 
-  public Tags getTags() {
-    return tags;
-  }
+    public Tags getTags() {
+        return tags;
+    }
 
-  public Tags.MsgId getMsgId() {
-    return tags.getMsgId();
-  }
+    public Tags.MsgId getMsgId() {
+        return tags.getMsgId();
+    }
 
-  public String getMessage() {
-    return message;
-  }
+    public String getMessage() {
+        return message;
+    }
 }

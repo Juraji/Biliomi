@@ -13,36 +13,36 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchSubscription {
 
-  @XmlElement(name = "_id")
-  private String id;
+    @XmlElement(name = "_id")
+    private String id;
 
-  @XmlElement(name = "created_at")
-  private String createdAt;
+    @XmlElement(name = "created_at")
+    private String createdAt;
 
-  @XmlElement(name = "user")
-  private TwitchUser user;
+    @XmlElement(name = "user")
+    private TwitchUser user;
 
-  public String getId() {
-    return id;
-  }
+    public String getId() {
+        return id;
+    }
 
-  public void setId(String id) {
-    this.id = id;
-  }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-  public String getCreatedAt() {
-    return createdAt;
-  }
+    public String getCreatedAt() {
+        return createdAt;
+    }
 
-  public void setCreatedAt(String createdAt) {
-    this.createdAt = createdAt;
-  }
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
 
-  public TwitchUser getUser() {
-    return user;
-  }
+    public TwitchUser getUser() {
+        return user;
+    }
 
-  public void setUser(TwitchUser user) {
-    this.user = user;
-  }
+    public void setUser(TwitchUser user) {
+        this.user = user;
+    }
 }

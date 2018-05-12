@@ -10,11 +10,11 @@ import org.apache.logging.log4j.LogManager;
  */
 public final class EventSubscriberExceptionHandler implements SubscriberExceptionHandler {
 
-  @Override
-  public void handleException(Throwable throwable, SubscriberExceptionContext subscriberExceptionContext) {
-    String eventName = subscriberExceptionContext.getEvent().getClass().getSimpleName();
-    Class<?> subscriber = subscriberExceptionContext.getSubscriber().getClass();
+    @Override
+    public void handleException(Throwable throwable, SubscriberExceptionContext subscriberExceptionContext) {
+        String eventName = subscriberExceptionContext.getEvent().getClass().getSimpleName();
+        Class<?> subscriber = subscriberExceptionContext.getSubscriber().getClass();
 
-    LogManager.getLogger(subscriber).error("An error occurred on event " + eventName + " in " + subscriber.getName(), throwable);
-  }
+        LogManager.getLogger(subscriber).error("An error occurred on event " + eventName + " in " + subscriber.getName(), throwable);
+    }
 }

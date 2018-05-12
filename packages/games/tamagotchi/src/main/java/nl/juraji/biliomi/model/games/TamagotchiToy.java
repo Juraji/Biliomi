@@ -21,77 +21,77 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TamagotchiToy {
 
-  @Column
-  @XmlElement(name = "ToyName")
-  private String toyName;
+    @Column
+    @XmlElement(name = "ToyName")
+    private String toyName;
 
-  @Column
-  @Type(type = DateTimeISO8601Type.TYPE)
-  @XmlElement(name = "ExpiresAt")
-  private DateTime expiresAt;
+    @Column
+    @Type(type = DateTimeISO8601Type.TYPE)
+    @XmlElement(name = "ExpiresAt")
+    private DateTime expiresAt;
 
-  @Column
-  @XmlElement(name = "FoodModifier")
-  private double foodModifier;
+    @Column
+    @XmlElement(name = "FoodModifier")
+    private double foodModifier;
 
-  @Column
-  @XmlElement(name = "MoodModifier")
-  private double moodModifier;
+    @Column
+    @XmlElement(name = "MoodModifier")
+    private double moodModifier;
 
-  @Column
-  @XmlElement(name = "HygieneModifier")
-  private double hygieneModifier;
+    @Column
+    @XmlElement(name = "HygieneModifier")
+    private double hygieneModifier;
 
-  // Used when buying or listing toy (process variable)
-  @Transient
-  @XmlElement(name = "Cost")
-  private long cost;
+    // Used when buying or listing toy (process variable)
+    @Transient
+    @XmlElement(name = "Cost")
+    private long cost;
 
-  public String getToyName() {
-    return toyName;
-  }
+    public String getToyName() {
+        return toyName;
+    }
 
-  public void setToyName(String toyName) {
-    this.toyName = toyName;
-  }
+    public void setToyName(String toyName) {
+        this.toyName = toyName;
+    }
 
-  public DateTime getExpiresAt() {
-    return expiresAt;
-  }
+    public DateTime getExpiresAt() {
+        return expiresAt;
+    }
 
-  public void setExpiresAt(DateTime expiresAt) {
-    this.expiresAt = expiresAt;
-  }
+    public void setExpiresAt(DateTime expiresAt) {
+        this.expiresAt = expiresAt;
+    }
 
-  public double getFoodModifier() {
-    return foodModifier;
-  }
+    public double getFoodModifier() {
+        return foodModifier;
+    }
 
-  public void setFoodModifier(double foodModifier) {
-    this.foodModifier = foodModifier;
-  }
+    public void setFoodModifier(double foodModifier) {
+        this.foodModifier = foodModifier;
+    }
 
-  public double getMoodModifier() {
-    return moodModifier;
-  }
+    public double getMoodModifier() {
+        return moodModifier;
+    }
 
-  public void setMoodModifier(double moodModifier) {
-    this.moodModifier = moodModifier;
-  }
+    public void setMoodModifier(double moodModifier) {
+        this.moodModifier = moodModifier;
+    }
 
-  public double getHygieneModifier() {
-    return hygieneModifier;
-  }
+    public double getHygieneModifier() {
+        return hygieneModifier;
+    }
 
-  public void setHygieneModifier(double hygieneModifier) {
-    this.hygieneModifier = hygieneModifier;
-  }
+    public void setHygieneModifier(double hygieneModifier) {
+        this.hygieneModifier = hygieneModifier;
+    }
 
-  public long getCost() {
-    return cost;
-  }
+    public long getCost() {
+        return cost;
+    }
 
-  public void setCost(long cost) {
-    this.cost = cost;
-  }
+    public void setCost(long cost) {
+        this.cost = cost;
+    }
 }

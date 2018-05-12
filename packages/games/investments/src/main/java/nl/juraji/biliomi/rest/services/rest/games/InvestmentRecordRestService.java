@@ -22,59 +22,59 @@ import java.util.List;
 @Path("/games/investmentrecords")
 public class InvestmentRecordRestService extends ModelRestService<InvestmentRecord> {
 
-  @Inject
-  private InvestmentRecordDao investmentRecordDao;
+    @Inject
+    private InvestmentRecordDao investmentRecordDao;
 
-  @Inject
-  private InvestmentService investmentService;
+    @Inject
+    private InvestmentService investmentService;
 
-  @GET
-  @Path("/stats/{userid}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getStatsForUser(@PathParam("userid") long id) {
-    User user = new User();
-    user.setId(id);
-    UserInvestRecordStats recordInfo = investmentService.getRecordInfo(user);
+    @GET
+    @Path("/stats/{userid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStatsForUser(@PathParam("userid") long id) {
+        User user = new User();
+        user.setId(id);
+        UserInvestRecordStats recordInfo = investmentService.getRecordInfo(user);
 
-    if (recordInfo == null) {
-      return Responses.noContent();
-    } else {
-      return Responses.ok(recordInfo);
+        if (recordInfo == null) {
+            return Responses.noContent();
+        } else {
+            return Responses.ok(recordInfo);
+        }
     }
-  }
 
-  @GET
-  @Path("/latest/{userid}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getLatestRecordsForUser(@PathParam("userid") long id) {
-    User user = new User();
-    user.setId(id);
-    List<InvestmentRecord> records = investmentRecordDao.getRecords(user, 10);
-    return PaginatedResponse.create(records);
-  }
+    @GET
+    @Path("/latest/{userid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLatestRecordsForUser(@PathParam("userid") long id) {
+        User user = new User();
+        user.setId(id);
+        List<InvestmentRecord> records = investmentRecordDao.getRecords(user, 10);
+        return PaginatedResponse.create(records);
+    }
 
-  @Override
-  public List<InvestmentRecord> getEntities() {
-    return investmentRecordDao.getList();
-  }
+    @Override
+    public List<InvestmentRecord> getEntities() {
+        return investmentRecordDao.getList();
+    }
 
-  @Override
-  public InvestmentRecord getEntity(long id) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public InvestmentRecord getEntity(long id) {
+        throw new ForbiddenException();
+    }
 
-  @Override
-  public InvestmentRecord createEntity(InvestmentRecord e) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public InvestmentRecord createEntity(InvestmentRecord e) {
+        throw new ForbiddenException();
+    }
 
-  @Override
-  public InvestmentRecord updateEntity(InvestmentRecord e, long id) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public InvestmentRecord updateEntity(InvestmentRecord e, long id) {
+        throw new ForbiddenException();
+    }
 
-  @Override
-  public boolean deleteEntity(long id) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public boolean deleteEntity(long id) {
+        throw new ForbiddenException();
+    }
 }

@@ -17,13 +17,13 @@ import javax.ws.rs.core.Response;
 @Path("/channel")
 public class ChannelHostersRestService {
 
-  @Inject
-  private HostersService hostersService;
+    @Inject
+    private HostersService hostersService;
 
-  @GET
-  @Path("/hosters")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getChannelHosters() {
-    return PaginatedResponse.create(hostersService.getHostersAsUsers());
-  }
+    @GET
+    @Path("/hosters")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getChannelHosters() {
+        return PaginatedResponse.create(hostersService.getHostersAsUsers());
+    }
 }

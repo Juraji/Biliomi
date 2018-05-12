@@ -16,53 +16,53 @@ import java.util.List;
 @Path("/chat/announcements")
 public class AnnouncementRestService extends ModelRestService<Announcement> {
 
-  @Inject
-  private AnnouncementDao announcementDao;
+    @Inject
+    private AnnouncementDao announcementDao;
 
-  @Inject
-  private AnnouncementTimerService announcementTimerService;
+    @Inject
+    private AnnouncementTimerService announcementTimerService;
 
-  @Override
-  public List<Announcement> getEntities() {
-    return announcementDao.getList();
-  }
-
-  @Override
-  public Announcement getEntity(long id) {
-    return announcementDao.get(id);
-  }
-
-  @Override
-  public Announcement createEntity(Announcement e) {
-    announcementDao.save(e);
-    announcementTimerService.restart();
-    return e;
-  }
-
-  @Override
-  public Announcement updateEntity(Announcement e, long id) {
-    Announcement announcement = announcementDao.get(id);
-
-    if (announcement == null) {
-      return null;
+    @Override
+    public List<Announcement> getEntities() {
+        return announcementDao.getList();
     }
 
-    announcement.setMessage(e.getMessage());
-    announcementDao.save(announcement);
-    announcementTimerService.restart();
-    return announcement;
-  }
-
-  @Override
-  public boolean deleteEntity(long id) {
-    Announcement announcement = announcementDao.get(id);
-
-    if (announcement == null) {
-      return false;
+    @Override
+    public Announcement getEntity(long id) {
+        return announcementDao.get(id);
     }
 
-    announcementDao.delete(announcement);
-    announcementTimerService.restart();
-    return true;
-  }
+    @Override
+    public Announcement createEntity(Announcement e) {
+        announcementDao.save(e);
+        announcementTimerService.restart();
+        return e;
+    }
+
+    @Override
+    public Announcement updateEntity(Announcement e, long id) {
+        Announcement announcement = announcementDao.get(id);
+
+        if (announcement == null) {
+            return null;
+        }
+
+        announcement.setMessage(e.getMessage());
+        announcementDao.save(announcement);
+        announcementTimerService.restart();
+        return announcement;
+    }
+
+    @Override
+    public boolean deleteEntity(long id) {
+        Announcement announcement = announcementDao.get(id);
+
+        if (announcement == null) {
+            return false;
+        }
+
+        announcementDao.delete(announcement);
+        announcementTimerService.restart();
+        return true;
+    }
 }

@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public interface NotificationHandler<T extends WebhookNotification> {
 
-  T unmarshalNotification(String notificationData) throws IOException;
+    T unmarshalNotification(String notificationData) throws IOException;
 
-  void handleNotification(EventBus eventBus, T notification);
+    void handleNotification(EventBus eventBus, T notification);
 }

@@ -11,30 +11,30 @@ import java.util.function.Consumer;
  * Biliomi v3
  */
 public class ManagedTransaction extends Managed {
-  private Consumer<Exception> exceptionConsumer;
+    private Consumer<Exception> exceptionConsumer;
 
-  public ManagedTransaction(EntityManagerFactory emf) {
-    super(emf);
-  }
-
-  public ManagedTransaction withExceptionConsumer(Consumer<Exception> exceptionConsumer) {
-    this.exceptionConsumer = exceptionConsumer;
-    return this;
-  }
-
-  public void executeWithinTransaction(Consumer<Session> sessionConsumer) {
-    validateSession();
-    Transaction transaction = session.beginTransaction();
-    try {
-      sessionConsumer.accept(session);
-      transaction.commit();
-      session.flush();
-    } catch (Exception e) {
-      transaction.rollback();
-      exceptionConsumer.accept(e);
-      throw e;
-    } finally {
-      session.close();
+    public ManagedTransaction(EntityManagerFactory emf) {
+        super(emf);
     }
-  }
+
+    public ManagedTransaction withExceptionConsumer(Consumer<Exception> exceptionConsumer) {
+        this.exceptionConsumer = exceptionConsumer;
+        return this;
+    }
+
+    public void executeWithinTransaction(Consumer<Session> sessionConsumer) {
+        validateSession();
+        Transaction transaction = session.beginTransaction();
+        try {
+            sessionConsumer.accept(session);
+            transaction.commit();
+            session.flush();
+        } catch (Exception e) {
+            transaction.rollback();
+            exceptionConsumer.accept(e);
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
 }

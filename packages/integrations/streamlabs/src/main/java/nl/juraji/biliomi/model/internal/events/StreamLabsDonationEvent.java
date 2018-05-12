@@ -15,54 +15,54 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class StreamLabsDonationEvent extends Event {
 
-  @XmlElement(name = "Username")
-  private String username;
+    @XmlElement(name = "Username")
+    private String username;
 
-  @XmlElement(name = "FormattedAmount")
-  private String formattedAmount;
+    @XmlElement(name = "FormattedAmount")
+    private String formattedAmount;
 
-  @XmlElement(name = "Message")
-  private String message;
+    @XmlElement(name = "Message")
+    private String message;
 
-  @XmlElement(name = "Amount")
-  private double amount;
+    @XmlElement(name = "Amount")
+    private double amount;
 
-  public StreamLabsDonationEvent(String username, String formattedAmount, double amount, String message) {
-    this.username = username;
-    this.formattedAmount = formattedAmount;
-    this.message = message;
-    this.amount = amount;
-  }
+    public StreamLabsDonationEvent(String username, String formattedAmount, double amount, String message) {
+        this.username = username;
+        this.formattedAmount = formattedAmount;
+        this.message = message;
+        this.amount = amount;
+    }
 
-  public String getUsername() {
-    return username;
-  }
+    public String getUsername() {
+        return username;
+    }
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-  public String getFormattedAmount() {
-    return formattedAmount;
-  }
+    public String getFormattedAmount() {
+        return formattedAmount;
+    }
 
-  public void setFormattedAmount(String formattedAmount) {
-    this.formattedAmount = formattedAmount;
-  }
+    public void setFormattedAmount(String formattedAmount) {
+        this.formattedAmount = formattedAmount;
+    }
 
-  public String getMessage() {
-    return message;
-  }
+    public String getMessage() {
+        return message;
+    }
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-  public double getAmount() {
-    return amount;
-  }
+    public double getAmount() {
+        return amount;
+    }
 
-  public void setAmount(double amount) {
-    this.amount = amount;
-  }
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
 }

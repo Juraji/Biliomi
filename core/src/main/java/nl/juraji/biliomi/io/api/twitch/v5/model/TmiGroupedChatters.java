@@ -15,68 +15,68 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TmiGroupedChatters {
 
-  @XmlElement(name = "moderators")
-  private List<String> moderators;
+    @XmlElement(name = "moderators")
+    private List<String> moderators;
 
-  @XmlElement(name = "staff")
-  private List<String> staff;
+    @XmlElement(name = "staff")
+    private List<String> staff;
 
-  @XmlElement(name = "admins")
-  private List<String> admins;
+    @XmlElement(name = "admins")
+    private List<String> admins;
 
-  @XmlElement(name = "global_mods")
-  private List<String> globalMods;
+    @XmlElement(name = "global_mods")
+    private List<String> globalMods;
 
-  @XmlElement(name = "viewers")
-  private List<String> viewers;
+    @XmlElement(name = "viewers")
+    private List<String> viewers;
 
-  public List<String> getModerators() {
-    return moderators;
-  }
+    public List<String> getModerators() {
+        return moderators;
+    }
 
-  public void setModerators(List<String> moderators) {
-    this.moderators = moderators;
-  }
+    public void setModerators(List<String> moderators) {
+        this.moderators = moderators;
+    }
 
-  public List<String> getStaff() {
-    return staff;
-  }
+    public List<String> getStaff() {
+        return staff;
+    }
 
-  public void setStaff(List<String> staff) {
-    this.staff = staff;
-  }
+    public void setStaff(List<String> staff) {
+        this.staff = staff;
+    }
 
-  public List<String> getAdmins() {
-    return admins;
-  }
+    public List<String> getAdmins() {
+        return admins;
+    }
 
-  public void setAdmins(List<String> admins) {
-    this.admins = admins;
-  }
+    public void setAdmins(List<String> admins) {
+        this.admins = admins;
+    }
 
-  public List<String> getGlobalMods() {
-    return globalMods;
-  }
+    public List<String> getGlobalMods() {
+        return globalMods;
+    }
 
-  public void setGlobalMods(List<String> globalMods) {
-    this.globalMods = globalMods;
-  }
+    public void setGlobalMods(List<String> globalMods) {
+        this.globalMods = globalMods;
+    }
 
-  public List<String> getViewers() {
-    return viewers;
-  }
+    public List<String> getViewers() {
+        return viewers;
+    }
 
-  public void setViewers(List<String> viewers) {
-    this.viewers = viewers;
-  }
+    public void setViewers(List<String> viewers) {
+        this.viewers = viewers;
+    }
 
-  public List<String> getAll() {
-    List<String> all = new ArrayList<>();
-    all.addAll(moderators);
-    all.addAll(staff);
-    all.addAll(admins);
-    all.addAll(globalMods);
-    all.addAll(viewers);
-    return all;
-  }
+    public List<String> getAll() {
+        List<String> all = new ArrayList<>();
+        all.addAll(moderators);
+        all.addAll(staff);
+        all.addAll(admins);
+        all.addAll(globalMods);
+        all.addAll(viewers);
+        return all;
+    }
 }

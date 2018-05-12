@@ -5,18 +5,18 @@ package nl.juraji.biliomi.config.core.biliomi;
  * Biliomi v3
  */
 public enum UpdateModeType {
-  INSTALL("create"),      // Will install the Biliomi as a fresh installation
-  UPDATE("update"),       // Will run database and system update tasks
-  OFF(null),          // Does nothing, just start Biliomi
-  DEVELOPMENT("create-drop");   // Will drop any existing tables in the database an reinstall Biliomi
+    INSTALL("create"),      // Will install the Biliomi as a fresh installation
+    UPDATE("update"),       // Will run database and system update tasks
+    OFF(null),          // Does nothing, just start Biliomi
+    DEVELOPMENT("create-drop");   // Will drop any existing tables in the database an reinstall Biliomi
 
-  private String ddlMode;
+    private String ddlMode;
 
-  UpdateModeType(String ddlMode) {
-    this.ddlMode = ddlMode;
-  }
+    UpdateModeType(String ddlMode) {
+        this.ddlMode = ddlMode;
+    }
 
-  public String getDdlMode() {
-    return this.ddlMode;
-  }
+    public String getDdlMode() {
+        return this.ddlMode;
+    }
 }

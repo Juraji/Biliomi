@@ -13,25 +13,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SpotifyUser {
 
-  @XmlElement(name = "id")
-  private String id;
+    @XmlElement(name = "id")
+    private String id;
 
-  @XmlElement(name = "display_name")
-  private String displayName;
+    @XmlElement(name = "display_name")
+    private String displayName;
 
-  public String getId() {
-    return id;
-  }
+    public String getId() {
+        return id;
+    }
 
-  public void setId(String id) {
-    this.id = id;
-  }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-  public String getDisplayName() {
-    return displayName;
-  }
+    public String getDisplayName() {
+        return displayName;
+    }
 
-  public void setDisplayName(String displayName) {
-    this.displayName = displayName;
-  }
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
 }

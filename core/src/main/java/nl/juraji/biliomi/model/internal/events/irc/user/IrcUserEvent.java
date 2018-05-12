@@ -18,25 +18,25 @@ import java.util.Map;
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class IrcUserEvent extends IrcEvent {
 
-  @XmlElement(name = "Username")
-  private final String username;
+    @XmlElement(name = "Username")
+    private final String username;
 
-  @XmlElement(name = "Tags")
-  private final Tags tags;
+    @XmlElement(name = "Tags")
+    private final Tags tags;
 
-  public IrcUserEvent(String username, Tags tags) {
-    this.username = username;
-    this.tags = tags;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public Map<String, String> getTags() {
-    if (tags == null) {
-      return new HashMap<>();
+    public IrcUserEvent(String username, Tags tags) {
+        this.username = username;
+        this.tags = tags;
     }
-    return tags;
-  }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Map<String, String> getTags() {
+        if (tags == null) {
+            return new HashMap<>();
+        }
+        return tags;
+    }
 }

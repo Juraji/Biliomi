@@ -19,57 +19,57 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SpotifySettings extends Settings {
 
-  @Column
-  @XmlElement(name = "SongrequestsEnabled")
-  private boolean songrequestsEnabled;
+    @Column
+    @XmlElement(name = "SongrequestsEnabled")
+    private boolean songrequestsEnabled;
 
-  @Column
-  @XmlElement(name = "SongRequestPlaylistId")
-  private String songRequestPlaylistId;
+    @Column
+    @XmlElement(name = "SongRequestPlaylistId")
+    private String songRequestPlaylistId;
 
-  @Column
-  @XmlElement(name = "MaxDuration")
-  private long maxDuration;
+    @Column
+    @XmlElement(name = "MaxDuration")
+    private long maxDuration;
 
-  @Transient
-  @XmlElement(name = "_IntegrationEnabled")
-  private boolean _integrationEnabled = false;
+    @Transient
+    @XmlElement(name = "_IntegrationEnabled")
+    private boolean _integrationEnabled = false;
 
-  public boolean isSongrequestsEnabled() {
-    return songrequestsEnabled;
-  }
+    public boolean isSongrequestsEnabled() {
+        return songrequestsEnabled;
+    }
 
-  public void setSongrequestsEnabled(boolean songrequestsEnabled) {
-    this.songrequestsEnabled = songrequestsEnabled;
-  }
+    public void setSongrequestsEnabled(boolean songrequestsEnabled) {
+        this.songrequestsEnabled = songrequestsEnabled;
+    }
 
-  public String getSongRequestPlaylistId() {
-    return songRequestPlaylistId;
-  }
+    public String getSongRequestPlaylistId() {
+        return songRequestPlaylistId;
+    }
 
-  public void setSongRequestPlaylistId(String songRequestPlaylistId) {
-    this.songRequestPlaylistId = songRequestPlaylistId;
-  }
+    public void setSongRequestPlaylistId(String songRequestPlaylistId) {
+        this.songRequestPlaylistId = songRequestPlaylistId;
+    }
 
-  public long getMaxDuration() {
-    return maxDuration;
-  }
+    public long getMaxDuration() {
+        return maxDuration;
+    }
 
-  public void setMaxDuration(long maxDuration) {
-    this.maxDuration = maxDuration;
-  }
+    public void setMaxDuration(long maxDuration) {
+        this.maxDuration = maxDuration;
+    }
 
-  public boolean is_integrationEnabled() {
-    return _integrationEnabled;
-  }
+    public boolean is_integrationEnabled() {
+        return _integrationEnabled;
+    }
 
-  public void set_integrationEnabled(boolean _integrationEnabled) {
-    this._integrationEnabled = _integrationEnabled;
-  }
+    public void set_integrationEnabled(boolean _integrationEnabled) {
+        this._integrationEnabled = _integrationEnabled;
+    }
 
-  @Override
-  public void setDefaultValues() {
-    songrequestsEnabled = false;
-    maxDuration = 480000;
-  }
+    @Override
+    public void setDefaultValues() {
+        songrequestsEnabled = false;
+        maxDuration = 480000;
+    }
 }

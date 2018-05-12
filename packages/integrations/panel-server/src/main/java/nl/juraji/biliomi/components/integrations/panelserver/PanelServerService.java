@@ -23,90 +23,90 @@ import java.util.Collection;
 @Singleton
 public class PanelServerService implements Restartable {
 
-  @Inject
-  private Logger logger;
+    @Inject
+    private Logger logger;
 
-  @Inject
-  private PanelServerConfigService configService;
+    @Inject
+    private PanelServerConfigService configService;
 
-  private SimpleWebServer webServer;
+    private SimpleWebServer webServer;
 
-  @Override
-  public void start() {
-    if (isPanelSourcePresent()) {
-      if (this.webServer == null && configService.isEnablePanelServer()) {
-        File panelRoot = getServerRoot();
-        String serverHost = configService.getServerHost();
-        int serverPort = configService.getServerPort();
-        String allowedOrigin = configService.getCorsAllowedOrigin();
-        boolean quiet = !BiliomiContainer.getParameters().isDebugMode();
+    @Override
+    public void start() {
+        if (isPanelSourcePresent()) {
+            if (this.webServer == null && configService.isEnablePanelServer()) {
+                File panelRoot = getServerRoot();
+                String serverHost = configService.getServerHost();
+                int serverPort = configService.getServerPort();
+                String allowedOrigin = configService.getCorsAllowedOrigin();
+                boolean quiet = !BiliomiContainer.getParameters().isDebugMode();
 
-        this.webServer = new PanelServer(serverHost, serverPort, panelRoot, quiet, allowedOrigin);
+                this.webServer = new PanelServer(serverHost, serverPort, panelRoot, quiet, allowedOrigin);
 
-        try {
-          this.webServer.start(NanoHTTPD.SOCKET_READ_TIMEOUT, true);
-        } catch (IOException e) {
-          logger.error("Failed starting webserver", e);
+                try {
+                    this.webServer.start(NanoHTTPD.SOCKET_READ_TIMEOUT, true);
+                } catch (IOException e) {
+                    logger.error("Failed starting webserver", e);
+                }
+
+                logger.info("Panel webserver started at http://" + serverHost + ":" + serverPort);
+            } else {
+                logger.info("Panel webserver already running or disabled by config");
+            }
         }
-
-        logger.info("Panel webserver started at http://" + serverHost + ":" + serverPort);
-      } else {
-        logger.info("Panel webserver already running or disabled by config");
-      }
-    }
-  }
-
-  @Override
-  public void stop() {
-    if (this.webServer != null) {
-      this.webServer.stop();
-      this.webServer = null;
-      logger.info("Panel webserver stopped");
-    }
-  }
-
-  private File getServerRoot() {
-    String serverRootPath = configService.getServerRoot();
-
-    if (serverRootPath == null) {
-      // Use the default root if the root in the config is null
-      serverRootPath = BiliomiContainer.getParameters().getRootDir() + "/panel";
-    }
-
-    return new File(serverRootPath);
-  }
-
-  private boolean isPanelSourcePresent() {
-    boolean indexFound = false;
-
-    try {
-      Collection<File> files = FileUtils.listFiles(getServerRoot(), new String[]{"html"}, false);
-      indexFound = !files.isEmpty();
-    } catch (IllegalArgumentException e) {
-      logger.error("Failed checking panel sources", e);
-    }
-
-    return indexFound;
-  }
-
-  private class PanelServer extends SimpleWebServer {
-
-    public PanelServer(String host, int port, File wwwroot, boolean quiet, String cors) {
-      super(host, port, wwwroot, quiet, cors);
     }
 
     @Override
-    protected Response getNotFoundResponse() {
-      // Respond with index.html when an item is not found
-      File index = new File(getServerRoot(), "index.html");
-      try {
-        String content = FileUtils.readFileToString(index, "UTF-8");
-        return newFixedLengthResponse(Response.Status.OK, MIME_HTML, content);
-      } catch (IOException e) {
-        logger.error("Failed index.html fallback", e);
-      }
-
-      return getInternalErrorResponse("Internal error");
+    public void stop() {
+        if (this.webServer != null) {
+            this.webServer.stop();
+            this.webServer = null;
+            logger.info("Panel webserver stopped");
+        }
     }
-  }
+
+    private File getServerRoot() {
+        String serverRootPath = configService.getServerRoot();
+
+        if (serverRootPath == null) {
+            // Use the default root if the root in the config is null
+            serverRootPath = BiliomiContainer.getParameters().getRootDir() + "/panel";
+        }
+
+        return new File(serverRootPath);
+    }
+
+    private boolean isPanelSourcePresent() {
+        boolean indexFound = false;
+
+        try {
+            Collection<File> files = FileUtils.listFiles(getServerRoot(), new String[]{"html"}, false);
+            indexFound = !files.isEmpty();
+        } catch (IllegalArgumentException e) {
+            logger.error("Failed checking panel sources", e);
+        }
+
+        return indexFound;
+    }
+
+    private class PanelServer extends SimpleWebServer {
+
+        public PanelServer(String host, int port, File wwwroot, boolean quiet, String cors) {
+            super(host, port, wwwroot, quiet, cors);
+        }
+
+        @Override
+        protected Response getNotFoundResponse() {
+            // Respond with index.html when an item is not found
+            File index = new File(getServerRoot(), "index.html");
+            try {
+                String content = FileUtils.readFileToString(index, "UTF-8");
+                return newFixedLengthResponse(Response.Status.OK, MIME_HTML, content);
+            } catch (IOException e) {
+                logger.error("Failed index.html fallback", e);
+            }
+
+            return getInternalErrorResponse("Internal error");
+        }
+    }
 }

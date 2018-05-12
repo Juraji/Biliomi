@@ -15,61 +15,61 @@ import javax.enterprise.inject.spi.CDI;
  * Biliomi v3
  */
 public final class BiliomiContainer {
-  private static BiliomiContainer container;
-  private static AppParameters appParameters;
-  private Weld weld;
+    private static BiliomiContainer container;
+    private static AppParameters appParameters;
 
-  static {
-    System.setProperty("java.util.logging.manager", "org.apache.logging.log4j.jul.LogManager");
-    Log.setLog(new JavaUtilLog());
-  }
+    static {
+        System.setProperty("java.util.logging.manager", "org.apache.logging.log4j.jul.LogManager");
+        Log.setLog(new JavaUtilLog());
+    }
 
-  private BiliomiContainer() {
-  }
+    private Weld weld;
 
-  public static void main(String[] args) throws Exception {
-    appParameters = new AppParameters(args);
-    container = new BiliomiContainer();
-    container.go();
-    registerShutdownHooks();
-  }
+    private BiliomiContainer() {
+    }
 
-  public static AppParameters getParameters() {
-    return appParameters;
-  }
+    public static void main(String[] args) {
+        appParameters = new AppParameters(args);
+        container = new BiliomiContainer();
+        container.go();
+        registerShutdownHooks();
+    }
 
-  public static BiliomiContainer getContainer() {
-    return container;
-  }
+    public static AppParameters getParameters() {
+        return appParameters;
+    }
 
+    public static BiliomiContainer getContainer() {
+        return container;
+    }
 
-  // Preferably use this method to programmatically exit Biliomi
-  public void shutdownInError() {
-    shutdownNow(1);
-  }
+    private static void registerShutdownHooks() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (LogManager.getContext() instanceof LoggerContext) {
+                Configurator.shutdown((LoggerContext) LogManager.getContext());
+            }
+        }));
+    }
 
-  // Preferably use this method to programmatically exit Biliomi
-  public void shutdownNow(int status) {
-    System.exit(status);
-  }
+    // Preferably use this method to programmatically exit Biliomi
+    public void shutdownInError() {
+        shutdownNow(1);
+    }
 
-  public void restartNow() {
-    this.weld.shutdown();
-    go();
-  }
+    // Preferably use this method to programmatically exit Biliomi
+    public void shutdownNow(int status) {
+        System.exit(status);
+    }
 
-  private static void registerShutdownHooks() {
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-      if (LogManager.getContext() instanceof LoggerContext) {
-        Configurator.shutdown((LoggerContext) LogManager.getContext());
-      }
-    }));
-  }
+    public void restartNow() {
+        this.weld.shutdown();
+        go();
+    }
 
-  private void go() {
-    this.weld = new Weld("Biliomi");
-    this.weld.initialize();
-    Biliomi biliomi = CDI.current().select(Biliomi.class).get();
-    biliomi.run();
-  }
+    private void go() {
+        this.weld = new Weld("Biliomi");
+        this.weld.initialize();
+        Biliomi biliomi = CDI.current().select(Biliomi.class).get();
+        biliomi.run();
+    }
 }

@@ -7,22 +7,22 @@ import java.util.List;
  * Biliomi
  */
 public class YamlGameMessagesConfig {
-  private List<String> wins;
-  private List<String> losts;
+    private List<String> wins;
+    private List<String> losts;
 
-  public List<String> getWins() {
-    return wins;
-  }
+    public List<String> getWins() {
+        return wins;
+    }
 
-  public void setWins(List<String> wins) {
-    this.wins = wins;
-  }
+    public void setWins(List<String> wins) {
+        this.wins = wins;
+    }
 
-  public List<String> getLosts() {
-    return losts;
-  }
+    public List<String> getLosts() {
+        return losts;
+    }
 
-  public void setLosts(List<String> losts) {
-    this.losts = losts;
-  }
+    public void setLosts(List<String> losts) {
+        this.losts = losts;
+    }
 }

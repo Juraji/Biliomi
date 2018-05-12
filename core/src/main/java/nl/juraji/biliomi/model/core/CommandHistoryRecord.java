@@ -19,85 +19,85 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CommandHistoryRecord {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @XmlElement(name = "Id")
-  private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement(name = "Id")
+    private long id;
 
-  @Column
-  @XmlElement(name = "Command")
-  private String command;
+    @Column
+    @XmlElement(name = "Command")
+    private String command;
 
-  @Column
-  @XmlElement(name = "TriggeredBy")
-  private String triggeredBy;
+    @Column
+    @XmlElement(name = "TriggeredBy")
+    private String triggeredBy;
 
-  @Column
-  @XmlElement(name = "Arguments")
-  private String arguments;
+    @Column
+    @XmlElement(name = "Arguments")
+    private String arguments;
 
-  @Column
-  @Type(type = DateTimeISO8601Type.TYPE)
-  @XmlElement(name = "Date")
-  private DateTime date;
+    @Column
+    @Type(type = DateTimeISO8601Type.TYPE)
+    @XmlElement(name = "Date")
+    private DateTime date;
 
-  @OneToOne
-  @XmlElement(name = "User")
-  private User user;
+    @OneToOne
+    @XmlElement(name = "User")
+    private User user;
 
-  @Column
-  @XmlElement(name = "Success")
-  private boolean success;
+    @Column
+    @XmlElement(name = "Success")
+    private boolean success;
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public String getCommand() {
-    return command;
-  }
+    public String getCommand() {
+        return command;
+    }
 
-  public void setCommand(String command) {
-    this.command = command;
-  }
+    public void setCommand(String command) {
+        this.command = command;
+    }
 
-  public String getArguments() {
-    return arguments;
-  }
+    public String getArguments() {
+        return arguments;
+    }
 
-  public void setArguments(String arguments) {
-    this.arguments = arguments;
-  }
+    public void setArguments(String arguments) {
+        this.arguments = arguments;
+    }
 
-  public DateTime getDate() {
-    return date;
-  }
+    public DateTime getDate() {
+        return date;
+    }
 
-  public void setDate(DateTime date) {
-    this.date = date;
-  }
+    public void setDate(DateTime date) {
+        this.date = date;
+    }
 
-  public User getUser() {
-    return user;
-  }
+    public User getUser() {
+        return user;
+    }
 
-  public void setUser(User user) {
-    this.user = user;
-  }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-  public boolean isSuccess() {
-    return success;
-  }
+    public boolean isSuccess() {
+        return success;
+    }
 
-  public void setSuccess(boolean success) {
-    this.success = success;
-  }
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
 
-  public void setTriggeredBy(String usedAlias) {
-    this.triggeredBy = usedAlias;
-  }
+    public String getTriggeredBy() {
+        return triggeredBy;
+    }
 
-  public String getTriggeredBy() {
-    return triggeredBy;
-  }
+    public void setTriggeredBy(String usedAlias) {
+        this.triggeredBy = usedAlias;
+    }
 }

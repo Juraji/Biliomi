@@ -13,36 +13,36 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SpotifyArtist {
 
-  @XmlElement(name = "id")
-  private String id;
+    @XmlElement(name = "id")
+    private String id;
 
-  @XmlElement(name = "name")
-  private String name;
+    @XmlElement(name = "name")
+    private String name;
 
-  @XmlElement(name = "uri")
-  private String uri;
+    @XmlElement(name = "uri")
+    private String uri;
 
-  public String getId() {
-    return id;
-  }
+    public String getId() {
+        return id;
+    }
 
-  public void setId(String id) {
-    this.id = id;
-  }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public String getUri() {
-    return uri;
-  }
+    public String getUri() {
+        return uri;
+    }
 
-  public void setUri(String uri) {
-    this.uri = uri;
-  }
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
 }

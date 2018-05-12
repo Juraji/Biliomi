@@ -1,55 +1,56 @@
 <?xml version="1.0"?>
 <!--suppress XmlDefaultAttributeValue -->
-<persistence xmlns="http://java.sun.com/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://java.sun.com/xml/ns/persistence"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
 
-  <!-- Internal database setup -->
-  <persistence-unit name="Biliomi-H2-DS" transaction-type="JTA">
-    <properties>
-      <property name="hibernate.flushMode" value="AUTO"/>
-      <property name="hibernate.generate_statistics" value="false"/>
-      <property name="hibernate.show_sql" value="false"/>
-      <property name="hibernate.format_sql" value="false"/>
-      <property name="hibernate.use_sql_comments" value="false"/>
+    <!-- Internal database setup -->
+    <persistence-unit name="Biliomi-H2-DS" transaction-type="JTA">
+        <properties>
+            <property name="hibernate.flushMode" value="AUTO"/>
+            <property name="hibernate.generate_statistics" value="false"/>
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.format_sql" value="false"/>
+            <property name="hibernate.use_sql_comments" value="false"/>
 
-      <property name="hibernate.connection.driver_class" value="org.h2.Driver"/>
-      <property name="hibernate.connection.username" value="biliomi"/>
-      <property name="hibernate.connection.password" value="biliomi"/>
-      <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
-      <property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
+            <property name="hibernate.connection.driver_class" value="org.h2.Driver"/>
+            <property name="hibernate.connection.username" value="biliomi"/>
+            <property name="hibernate.connection.password" value="biliomi"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+            <property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
 
-      <property name="hibernate.transaction.factory_class"
-                value="org.hibernate.transaction.JDBCTransactionFactory"/>
-    </properties>
-  </persistence-unit>
+            <property name="hibernate.transaction.factory_class"
+                      value="org.hibernate.transaction.JDBCTransactionFactory"/>
+        </properties>
+    </persistence-unit>
 
-  <!-- External database setup -->
-  <!-- Database login information is supplied programmatically -->
-  <persistence-unit name="Biliomi-MySQL-DS" transaction-type="JTA">
-    <properties>
-      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57InnoDBDialect"/>
-      <property name="hibernate.flushMode" value="AUTO"/>
-      <property name="hibernate.generate_statistics" value="false"/>
-      <property name="hibernate.show_sql" value="false"/>
-      <property name="hibernate.format_sql" value="false"/>
-      <property name="hibernate.use_sql_comments" value="false"/>
+    <!-- External database setup -->
+    <!-- Database login information is supplied programmatically -->
+    <persistence-unit name="Biliomi-MySQL-DS" transaction-type="JTA">
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57InnoDBDialect"/>
+            <property name="hibernate.flushMode" value="AUTO"/>
+            <property name="hibernate.generate_statistics" value="false"/>
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.format_sql" value="false"/>
+            <property name="hibernate.use_sql_comments" value="false"/>
 
-      <property name="hibernate.transaction.factory_class"
-                value="org.hibernate.transaction.JDBCTransactionFactory"/>
+            <property name="hibernate.transaction.factory_class"
+                      value="org.hibernate.transaction.JDBCTransactionFactory"/>
 
-      <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
-      <property name="hibernate.connection.autoReconnect" value="true"/>
-      <property name="hibernate.connection.characterEncoding" value="UTF-8"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.connection.autoReconnect" value="true"/>
+            <property name="hibernate.connection.characterEncoding" value="UTF-8"/>
 
-      <property name="hibernate.c3p0.acquire_increment" value="1"/>
-      <property name="hibernate.c3p0.idle_test_period" value="100"/>
-      <property name="hibernate.c3p0.max_size" value="32"/>
-      <property name="hibernate.c3p0.max_statements" value="0"/>
-      <property name="hibernate.c3p0.min_size" value="0"/>
-      <property name="hibernate.c3p0.timeout" value="30"/>
-      <property name="hibernate.c3p0.validate" value="true"/>
-      <property name="hibernate.c3p0.preferredTestQuery" value="select 1"/>
-    </properties>
-  </persistence-unit>
+            <property name="hibernate.c3p0.acquire_increment" value="1"/>
+            <property name="hibernate.c3p0.idle_test_period" value="100"/>
+            <property name="hibernate.c3p0.max_size" value="32"/>
+            <property name="hibernate.c3p0.max_statements" value="0"/>
+            <property name="hibernate.c3p0.min_size" value="0"/>
+            <property name="hibernate.c3p0.timeout" value="30"/>
+            <property name="hibernate.c3p0.validate" value="true"/>
+            <property name="hibernate.c3p0.preferredTestQuery" value="select 1"/>
+        </properties>
+    </persistence-unit>
 </persistence>

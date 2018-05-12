@@ -13,69 +13,69 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SteamApp {
 
-  @XmlElement(name = "appid")
-  private long appId;
+    @XmlElement(name = "appid")
+    private long appId;
 
-  @XmlElement(name = "name")
-  private String name;
+    @XmlElement(name = "name")
+    private String name;
 
-  @XmlElement(name = "playtime_forever")
-  private long playtimeForever;
+    @XmlElement(name = "playtime_forever")
+    private long playtimeForever;
 
-  @XmlElement(name = "img_icon_url")
-  private String imgIconUrl;
+    @XmlElement(name = "img_icon_url")
+    private String imgIconUrl;
 
-  @XmlElement(name = "img_logo_url")
-  private String imgLogoUrl;
+    @XmlElement(name = "img_logo_url")
+    private String imgLogoUrl;
 
-  @XmlElement(name = "has_community_visible_stats")
-  private boolean hasCommunityVisibleStats;
+    @XmlElement(name = "has_community_visible_stats")
+    private boolean hasCommunityVisibleStats;
 
-  public long getAppId() {
-    return appId;
-  }
+    public long getAppId() {
+        return appId;
+    }
 
-  public void setAppId(long appId) {
-    this.appId = appId;
-  }
+    public void setAppId(long appId) {
+        this.appId = appId;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public long getPlaytimeForever() {
-    return playtimeForever;
-  }
+    public long getPlaytimeForever() {
+        return playtimeForever;
+    }
 
-  public void setPlaytimeForever(long playtimeForever) {
-    this.playtimeForever = playtimeForever;
-  }
+    public void setPlaytimeForever(long playtimeForever) {
+        this.playtimeForever = playtimeForever;
+    }
 
-  public String getImgIconUrl() {
-    return imgIconUrl;
-  }
+    public String getImgIconUrl() {
+        return imgIconUrl;
+    }
 
-  public void setImgIconUrl(String imgIconUrl) {
-    this.imgIconUrl = imgIconUrl;
-  }
+    public void setImgIconUrl(String imgIconUrl) {
+        this.imgIconUrl = imgIconUrl;
+    }
 
-  public String getImgLogoUrl() {
-    return imgLogoUrl;
-  }
+    public String getImgLogoUrl() {
+        return imgLogoUrl;
+    }
 
-  public void setImgLogoUrl(String imgLogoUrl) {
-    this.imgLogoUrl = imgLogoUrl;
-  }
+    public void setImgLogoUrl(String imgLogoUrl) {
+        this.imgLogoUrl = imgLogoUrl;
+    }
 
-  public boolean isHasCommunityVisibleStats() {
-    return hasCommunityVisibleStats;
-  }
+    public boolean isHasCommunityVisibleStats() {
+        return hasCommunityVisibleStats;
+    }
 
-  public void setHasCommunityVisibleStats(boolean hasCommunityVisibleStats) {
-    this.hasCommunityVisibleStats = hasCommunityVisibleStats;
-  }
+    public void setHasCommunityVisibleStats(boolean hasCommunityVisibleStats) {
+        this.hasCommunityVisibleStats = hasCommunityVisibleStats;
+    }
 }

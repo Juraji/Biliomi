@@ -20,81 +20,81 @@ import java.util.List;
 @Path("/core/users")
 public class UserRestService extends ModelRestService<User> {
 
-  @Inject
-  private UserDao userDao;
+    @Inject
+    private UserDao userDao;
 
-  @Inject
-  private UsersService usersService;
+    @Inject
+    private UsersService usersService;
 
-  @Override
-  public List<User> getEntities() {
-    return userDao.getList();
-  }
-
-  @Override
-  public User getEntity(long id) {
-    return userDao.get(id);
-  }
-
-  @Override
-  public User createEntity(User e) {
-    throw new ForbiddenException();
-  }
-
-  @Override
-  public User updateEntity(User e, long id) {
-    User user = userDao.get(id);
-
-    if (user == null) {
-      return null;
+    @Override
+    public List<User> getEntities() {
+        return userDao.getList();
     }
 
-    // Only some of the properties can be changed
-    user.setUserGroup(e.getUserGroup());
-    user.setTitle(e.getTitle());
-    user.setPoints(e.getPoints());
-    user.setRecordedTime(e.getRecordedTime());
-    user.setBlacklistedSince(e.getBlacklistedSince());
-
-    // These can only be changed if
-    if (user.isFollower() && e.getFollowDate() != null) {
-      user.setFollowDate(e.getFollowDate());
-    }
-    if (user.isSubscriber() && e.getSubscribeDate() != null) {
-      user.setFollowDate(e.getSubscribeDate());
+    @Override
+    public User getEntity(long id) {
+        return userDao.get(id);
     }
 
-    userDao.save(user);
+    @Override
+    public User createEntity(User e) {
+        throw new ForbiddenException();
+    }
 
-    return user;
-  }
+    @Override
+    public User updateEntity(User e, long id) {
+        User user = userDao.get(id);
 
-  @Override
-  public boolean deleteEntity(long id) {
-    throw new ForbiddenException();
-  }
+        if (user == null) {
+            return null;
+        }
 
-  @GET
-  @Path("/latest/followers")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getLatestFollowers() {
-    List<User> followers = userDao.getFollowers(20);
-    return PaginatedResponse.create(followers);
-  }
+        // Only some of the properties can be changed
+        user.setUserGroup(e.getUserGroup());
+        user.setTitle(e.getTitle());
+        user.setPoints(e.getPoints());
+        user.setRecordedTime(e.getRecordedTime());
+        user.setBlacklistedSince(e.getBlacklistedSince());
 
-  @GET
-  @Path("/latest/subscribers")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getLatestSubscribers() {
-    List<User> subscribers = userDao.getSubscribers(20);
-    return PaginatedResponse.create(subscribers);
-  }
+        // These can only be changed if
+        if (user.isFollower() && e.getFollowDate() != null) {
+            user.setFollowDate(e.getFollowDate());
+        }
+        if (user.isSubscriber() && e.getSubscribeDate() != null) {
+            user.setFollowDate(e.getSubscribeDate());
+        }
 
-  @GET
-  @Path("/byusername/{username}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getUserByUsername(@PathParam("username") String username) {
-    User user = usersService.getUser(username);
-    return Responses.okOrEmpty(user);
-  }
+        userDao.save(user);
+
+        return user;
+    }
+
+    @Override
+    public boolean deleteEntity(long id) {
+        throw new ForbiddenException();
+    }
+
+    @GET
+    @Path("/latest/followers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLatestFollowers() {
+        List<User> followers = userDao.getFollowers(20);
+        return PaginatedResponse.create(followers);
+    }
+
+    @GET
+    @Path("/latest/subscribers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLatestSubscribers() {
+        List<User> subscribers = userDao.getSubscribers(20);
+        return PaginatedResponse.create(subscribers);
+    }
+
+    @GET
+    @Path("/byusername/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserByUsername(@PathParam("username") String username) {
+        User user = usersService.getUser(username);
+        return Responses.okOrEmpty(user);
+    }
 }

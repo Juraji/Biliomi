@@ -9,19 +9,19 @@ import java.lang.reflect.Method;
  * biliomi
  */
 public final class RegistryEntry {
-  private final Component componentInstance;
-  private final Method method;
+    private final Component componentInstance;
+    private final Method method;
 
-  public RegistryEntry(Component componentInstance, Method method) {
-    this.componentInstance = componentInstance;
-    this.method = method;
-  }
+    public RegistryEntry(Component componentInstance, Method method) {
+        this.componentInstance = componentInstance;
+        this.method = method;
+    }
 
-  public Component getComponentInstance() {
-    return componentInstance;
-  }
+    public Component getComponentInstance() {
+        return componentInstance;
+    }
 
-  public Method getMethod() {
-    return method;
-  }
+    public Method getMethod() {
+        return method;
+    }
 }

@@ -12,19 +12,19 @@ import javax.ws.rs.Path;
 @Path("/core/settings/system")
 public class SystemSettingsRestService extends SettingsModelRestService<SystemSettings> {
 
-  @Override
-  public SystemSettings getEntity() {
-    return settingsService.getSettings(SystemSettings.class);
-  }
+    @Override
+    public SystemSettings getEntity() {
+        return settingsService.getSettings(SystemSettings.class);
+    }
 
-  @Override
-  public SystemSettings updateEntity(SystemSettings e) {
-    SystemSettings settings = settingsService.getSettings(SystemSettings.class);
+    @Override
+    public SystemSettings updateEntity(SystemSettings e) {
+        SystemSettings settings = settingsService.getSettings(SystemSettings.class);
 
-    settings.setMuted(e.isMuted());
-    settings.setEnableWhispers(e.isEnableWhispers());
+        settings.setMuted(e.isMuted());
+        settings.setEnableWhispers(e.isEnableWhispers());
 
-    settingsService.save(settings);
-    return settings;
-  }
+        settingsService.save(settings);
+        return settings;
+    }
 }

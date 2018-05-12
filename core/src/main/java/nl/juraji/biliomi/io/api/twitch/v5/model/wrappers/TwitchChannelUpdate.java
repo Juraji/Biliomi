@@ -15,14 +15,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchChannelUpdate extends TwitchList {
 
-  @XmlElement(name = "channel")
-  private TwitchChannel channel;
+    @XmlElement(name = "channel")
+    private TwitchChannel channel;
 
-  public TwitchChannel getChannel() {
-    return channel;
-  }
+    public TwitchChannel getChannel() {
+        return channel;
+    }
 
-  public void setChannel(TwitchChannel channel) {
-    this.channel = channel;
-  }
+    public void setChannel(TwitchChannel channel) {
+        this.channel = channel;
+    }
 }

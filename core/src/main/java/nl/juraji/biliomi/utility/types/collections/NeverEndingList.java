@@ -11,76 +11,76 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Biliomi
  */
 public class NeverEndingList<T> {
-  private final List<T> list;
-  private final AtomicInteger index;
+    private final List<T> list;
+    private final AtomicInteger index;
 
-  public NeverEndingList() {
-    this(new ArrayList<>());
-  }
-
-  public NeverEndingList(List<T> list) {
-    this.list = list;
-    this.index = new AtomicInteger();
-  }
-
-  public T next() {
-    int size = list.size();
-    int i = index.getAndIncrement();
-
-    if (size > 0 && i >= size) {
-      reset();
+    public NeverEndingList() {
+        this(new ArrayList<>());
     }
 
-    return list.get(i);
-  }
-
-  public T previous() {
-    int size = list.size();
-
-    if (size == 0) {
-      return null;
+    public NeverEndingList(List<T> list) {
+        this.list = list;
+        this.index = new AtomicInteger();
     }
 
-    int i = index.getAndDecrement();
+    public T next() {
+        int size = list.size();
+        int i = index.getAndIncrement();
 
-    if (i < 0) {
-      i = size - 1;
-      index.set(i);
+        if (size > 0 && i >= size) {
+            reset();
+        }
+
+        return list.get(i);
     }
 
-    return list.get(i);
-  }
+    public T previous() {
+        int size = list.size();
 
-  public T random() {
-    index.set(MathUtils.rand(list.size()));
-    return list.get(index.get());
-  }
+        if (size == 0) {
+            return null;
+        }
 
-  public void reset() {
-    this.index.set(0);
-  }
+        int i = index.getAndDecrement();
 
-  public int size() {
-    return list.size();
-  }
+        if (i < 0) {
+            i = size - 1;
+            index.set(i);
+        }
 
-  public boolean isEmpty() {
-    return list.isEmpty();
-  }
+        return list.get(i);
+    }
 
-  public boolean contains(T o) {
-    return list.contains(o);
-  }
+    public T random() {
+        index.set(MathUtils.rand(list.size()));
+        return list.get(index.get());
+    }
 
-  public boolean add(T t) {
-    return list.add(t);
-  }
+    public void reset() {
+        this.index.set(0);
+    }
 
-  public boolean remove(T o) {
-    return list.remove(o);
-  }
+    public int size() {
+        return list.size();
+    }
 
-  public T get(int index) {
-    return list.get(index);
-  }
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
+
+    public boolean contains(T o) {
+        return list.contains(o);
+    }
+
+    public boolean add(T t) {
+        return list.add(t);
+    }
+
+    public boolean remove(T o) {
+        return list.remove(o);
+    }
+
+    public T get(int index) {
+        return list.get(index);
+    }
 }

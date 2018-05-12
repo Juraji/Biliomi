@@ -15,52 +15,52 @@ import java.nio.charset.Charset;
  * Biliomi v3
  */
 public abstract class Exporter {
-  private static final String DEFAULT_EXPORT_DIR = "exports";
-  private static final Charset CHARSET = Charset.forName("UTF-8");
-  private final File targetFile;
-  private final CSVPrinter printer;
+    private static final String DEFAULT_EXPORT_DIR = "exports";
+    private static final Charset CHARSET = Charset.forName("UTF-8");
+    private final File targetFile;
+    private final CSVPrinter printer;
 
-  protected Exporter(String... headers) throws IOException {
-    printer = new CSVPrinter(new StringBuilder(), CSVFormat.RFC4180.withHeader(headers));
+    protected Exporter(String... headers) throws IOException {
+        printer = new CSVPrinter(new StringBuilder(), CSVFormat.RFC4180.withHeader(headers));
 
-    File workingDir = BiliomiContainer.getParameters().getWorkingDir(DEFAULT_EXPORT_DIR);
-    targetFile = new File(workingDir, new MutableString()
-        .append(getClass().getSimpleName())
-        .append('_')
-        .append(DateTime.now().toString("yyyy-MM-dd"))
-        .append(".csv")
-        .toString());
-  }
+        File workingDir = BiliomiContainer.getParameters().getWorkingDir(DEFAULT_EXPORT_DIR);
+        targetFile = new File(workingDir, new MutableString()
+                .append(getClass().getSimpleName())
+                .append('_')
+                .append(DateTime.now().toString("yyyy-MM-dd"))
+                .append(".csv")
+                .toString());
+    }
 
-  /**
-   * The main method for row generation.
-   * Use addRecord() to add rows to the printer
-   */
-  public abstract void generateRows();
+    /**
+     * The main method for row generation.
+     * Use addRecord() to add rows to the printer
+     */
+    public abstract void generateRows();
 
-  public abstract String getDoneMessage();
+    public abstract String getDoneMessage();
 
-  /**
-   * Save all records to file
-   *
-   * @throws IOException When an exception occurs during file access
-   */
-  public void save() throws IOException {
-    String output = printer.getOut().toString();
-    FileUtils.writeStringToFile(targetFile, output, CHARSET, false);
-  }
+    /**
+     * Save all records to file
+     *
+     * @throws IOException When an exception occurs during file access
+     */
+    public void save() throws IOException {
+        String output = printer.getOut().toString();
+        FileUtils.writeStringToFile(targetFile, output, CHARSET, false);
+    }
 
-  public File getTargetFile() {
-    return targetFile;
-  }
+    public File getTargetFile() {
+        return targetFile;
+    }
 
-  /**
-   * Add a new record to the printer
-   *
-   * @param data A value per column
-   * @throws IOException When an error occurs during stream access
-   */
-  protected void addRecord(Object... data) throws IOException {
-    printer.printRecord(data);
-  }
+    /**
+     * Add a new record to the printer
+     *
+     * @param data A value per column
+     * @throws IOException When an error occurs during stream access
+     */
+    protected void addRecord(Object... data) throws IOException {
+        printer.printRecord(data);
+    }
 }

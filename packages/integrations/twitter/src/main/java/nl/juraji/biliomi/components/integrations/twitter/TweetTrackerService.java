@@ -28,97 +28,97 @@ import javax.inject.Inject;
 @Default
 public class TweetTrackerService implements Restartable {
 
-  @Inject
-  private Logger logger;
+    @Inject
+    private Logger logger;
 
-  @Inject
-  private TwitterApi twitterApi;
+    @Inject
+    private TwitterApi twitterApi;
 
-  @Inject
-  private SettingsService settingsService;
+    @Inject
+    private SettingsService settingsService;
 
-  @Inject
-  private TemplateDao templateDao;
+    @Inject
+    private TemplateDao templateDao;
 
-  @Inject
-  private AuthTokenDao authTokenDao;
+    @Inject
+    private AuthTokenDao authTokenDao;
 
-  @Inject
-  private ChatService chat;
-  private TweetStreamFuture tweetStreamFuture;
+    @Inject
+    private ChatService chat;
+    private TweetStreamFuture tweetStreamFuture;
 
-  @Override
-  public void start() {
-    stop(); // Run stop to be sure to have stopped any current listening stream
-    TwitterSettings settings = settingsService.getSettings(TwitterSettings.class);
-    if (!settings.getTrackedKeywords().isEmpty()) {
-      try {
-        AuthToken token = authTokenDao.get(TokenGroup.INTEGRATIONS, "twitter");
-        Template template = templateDao.getByKey(TwitterComponent.TWITTER_TWEET_FOUND_TEMPLATE_ID);
-        Long filteredUserId = NumberConverter.asNumber(token.getUserId()).withDefault(0).toLong();
+    @Override
+    public void start() {
+        stop(); // Run stop to be sure to have stopped any current listening stream
+        TwitterSettings settings = settingsService.getSettings(TwitterSettings.class);
+        if (!settings.getTrackedKeywords().isEmpty()) {
+            try {
+                AuthToken token = authTokenDao.get(TokenGroup.INTEGRATIONS, "twitter");
+                Template template = templateDao.getByKey(TwitterComponent.TWITTER_TWEET_FOUND_TEMPLATE_ID);
+                Long filteredUserId = NumberConverter.asNumber(token.getUserId()).withDefault(0).toLong();
 
-        assert template != null; // Template cannot be null as it is initialized on install/update
-        TweetListener listener = createTweetListener(template.getTemplate(), filteredUserId);
+                assert template != null; // Template cannot be null as it is initialized on install/update
+                TweetListener listener = createTweetListener(template.getTemplate(), filteredUserId);
 
-        tweetStreamFuture = twitterApi.listenForTweets(listener, settings.getTrackedKeywords());
-        logger.info(Templater.template("Listening on Twitter for tweets containing the following words: {{words}}")
-            .add("words", settings.getTrackedKeywords())
-            .apply());
-      } catch (Exception e) {
-        logger.error("Failed starting TweetTrackerService", e);
-      }
-    }
-  }
-
-  @Override
-  public void stop() {
-    if (tweetStreamFuture != null) {
-      tweetStreamFuture.stopStream();
-      tweetStreamFuture = null;
-    }
-  }
-
-
-  public String getStatus() {
-    if (tweetStreamFuture != null && tweetStreamFuture.isTracking()) {
-      TwitterSettings settings = settingsService.getSettings(TwitterSettings.class);
-      return Templater.template("Tracking tweets containing: {{words}}")
-          .add("words", settings::getTrackedKeywords)
-          .apply();
-    }
-
-    return "Tracking is disabled";
-  }
-
-  /**
-   * Create a new TweetListener that will post the set Template
-   * in the chat.
-   *
-   * @param filteredUserId      A Twitter user id to filter out of incoming tweets
-   * @param chatMessageTemplate The template to post in the chat when a new tweet is matched
-   * @return A new instance of TweetListener
-   */
-  private TweetListener createTweetListener(String chatMessageTemplate, long filteredUserId) {
-    return new TweetListener() {
-
-      @Override
-      public void onStatus(Status status) {
-        if (filteredUserId != status.getUser().getId()) {
-          chat.say(Templater.template(chatMessageTemplate)
-              .add("username", status.getUser()::getScreenName));
+                tweetStreamFuture = twitterApi.listenForTweets(listener, settings.getTrackedKeywords());
+                logger.info(Templater.template("Listening on Twitter for tweets containing the following words: {{words}}")
+                        .add("words", settings.getTrackedKeywords())
+                        .apply());
+            } catch (Exception e) {
+                logger.error("Failed starting TweetTrackerService", e);
+            }
         }
-      }
+    }
 
-      @Override
-      public void onStallWarning(StallWarning warning) {
-        logger.warn("Biliomi can't keep up with the stream of tweets, make sure your tracking" +
-            " words are not too common or Biliomi will get disconnected and stop listening for tweets!");
-      }
+    @Override
+    public void stop() {
+        if (tweetStreamFuture != null) {
+            tweetStreamFuture.stopStream();
+            tweetStreamFuture = null;
+        }
+    }
 
-      @Override
-      public void onException(Exception e) {
-        logger.error("And error occurred while listening to tweets", e);
-      }
-    };
-  }
+
+    public String getStatus() {
+        if (tweetStreamFuture != null && tweetStreamFuture.isTracking()) {
+            TwitterSettings settings = settingsService.getSettings(TwitterSettings.class);
+            return Templater.template("Tracking tweets containing: {{words}}")
+                    .add("words", settings::getTrackedKeywords)
+                    .apply();
+        }
+
+        return "Tracking is disabled";
+    }
+
+    /**
+     * Create a new TweetListener that will post the set Template
+     * in the chat.
+     *
+     * @param filteredUserId      A Twitter user id to filter out of incoming tweets
+     * @param chatMessageTemplate The template to post in the chat when a new tweet is matched
+     * @return A new instance of TweetListener
+     */
+    private TweetListener createTweetListener(String chatMessageTemplate, long filteredUserId) {
+        return new TweetListener() {
+
+            @Override
+            public void onStatus(Status status) {
+                if (filteredUserId != status.getUser().getId()) {
+                    chat.say(Templater.template(chatMessageTemplate)
+                            .add("username", status.getUser()::getScreenName));
+                }
+            }
+
+            @Override
+            public void onStallWarning(StallWarning warning) {
+                logger.warn("Biliomi can't keep up with the stream of tweets, make sure your tracking" +
+                        " words are not too common or Biliomi will get disconnected and stop listening for tweets!");
+            }
+
+            @Override
+            public void onException(Exception e) {
+                logger.error("And error occurred while listening to tweets", e);
+            }
+        };
+    }
 }

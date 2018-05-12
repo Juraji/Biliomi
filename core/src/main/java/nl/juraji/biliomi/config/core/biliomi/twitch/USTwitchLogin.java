@@ -5,22 +5,22 @@ package nl.juraji.biliomi.config.core.biliomi.twitch;
  * Biliomi
  */
 public class USTwitchLogin {
-  private String botUsername;
-  private String channelUsername;
+    private String botUsername;
+    private String channelUsername;
 
-  public String getBotUsername() {
-    return botUsername;
-  }
+    public String getBotUsername() {
+        return botUsername;
+    }
 
-  public void setBotUsername(String botUsername) {
-    this.botUsername = botUsername;
-  }
+    public void setBotUsername(String botUsername) {
+        this.botUsername = botUsername;
+    }
 
-  public String getChannelUsername() {
-    return channelUsername;
-  }
+    public String getChannelUsername() {
+        return channelUsername;
+    }
 
-  public void setChannelUsername(String channelUsername) {
-    this.channelUsername = channelUsername;
-  }
+    public void setChannelUsername(String channelUsername) {
+        this.channelUsername = channelUsername;
+    }
 }

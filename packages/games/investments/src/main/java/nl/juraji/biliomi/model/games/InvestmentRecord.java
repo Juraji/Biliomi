@@ -18,103 +18,103 @@ import javax.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class InvestmentRecord {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @XmlElement(name = "Id")
-  private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement(name = "Id")
+    private long id;
 
-  @ManyToOne
-  @XmlElement(name = "Invester")
-  private User invester;
+    @ManyToOne
+    @XmlElement(name = "Invester")
+    private User invester;
 
-  @Column
-  @NotNull
-  @XmlElement(name = "Invested")
-  private long invested;
+    @Column
+    @NotNull
+    @XmlElement(name = "Invested")
+    private long invested;
 
-  @Column
-  @NotNull
-  @XmlElement(name = "Interest")
-  private double interest;
+    @Column
+    @NotNull
+    @XmlElement(name = "Interest")
+    private double interest;
 
-  @Transient // Used during actual investment
-  @XmlTransient
-  private boolean marketStateGood;
+    @Transient // Used during actual investment
+    @XmlTransient
+    private boolean marketStateGood;
 
-  @Column
-  @XmlElement(name = "Project")
-  private String project;
+    @Column
+    @XmlElement(name = "Project")
+    private String project;
 
-  @Column
-  @XmlElement(name = "Payout")
-  private long payout;
+    @Column
+    @XmlElement(name = "Payout")
+    private long payout;
 
-  @Column
-  @Type(type = DateTimeISO8601Type.TYPE)
-  @XmlElement(name = "Date")
-  private DateTime date;
+    @Column
+    @Type(type = DateTimeISO8601Type.TYPE)
+    @XmlElement(name = "Date")
+    private DateTime date;
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-  public User getInvester() {
-    return invester;
-  }
+    public User getInvester() {
+        return invester;
+    }
 
-  public void setInvester(User invester) {
-    this.invester = invester;
-  }
+    public void setInvester(User invester) {
+        this.invester = invester;
+    }
 
-  public long getInvested() {
-    return invested;
-  }
+    public long getInvested() {
+        return invested;
+    }
 
-  public void setInvested(long invested) {
-    this.invested = invested;
-  }
+    public void setInvested(long invested) {
+        this.invested = invested;
+    }
 
-  public double getInterest() {
-    return interest;
-  }
+    public double getInterest() {
+        return interest;
+    }
 
-  public void setInterest(double interest) {
-    this.interest = interest;
-  }
+    public void setInterest(double interest) {
+        this.interest = interest;
+    }
 
-  public boolean isMarketStateGood() {
-    return marketStateGood;
-  }
+    public boolean isMarketStateGood() {
+        return marketStateGood;
+    }
 
-  public void setMarketStateGood(boolean marketStateGood) {
-    this.marketStateGood = marketStateGood;
-  }
+    public void setMarketStateGood(boolean marketStateGood) {
+        this.marketStateGood = marketStateGood;
+    }
 
-  public String getProject() {
-    return project;
-  }
+    public String getProject() {
+        return project;
+    }
 
-  public void setProject(String goal) {
-    this.project = goal;
-  }
+    public void setProject(String goal) {
+        this.project = goal;
+    }
 
-  public long getPayout() {
-    return payout;
-  }
+    public long getPayout() {
+        return payout;
+    }
 
-  public void setPayout(long payout) {
-    this.payout = payout;
-  }
+    public void setPayout(long payout) {
+        this.payout = payout;
+    }
 
-  public DateTime getDate() {
-    return date;
-  }
+    public DateTime getDate() {
+        return date;
+    }
 
-  public void setDate(DateTime date) {
-    this.date = date;
-  }
+    public void setDate(DateTime date) {
+        this.date = date;
+    }
 }

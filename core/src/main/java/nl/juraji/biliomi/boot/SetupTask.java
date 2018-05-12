@@ -9,30 +9,30 @@ import org.apache.commons.lang3.StringUtils;
  */
 public interface SetupTask {
 
-  /**
-   * Called when Biliomi boots normally
-   */
-  default void boot() {
-    // Optional implementation
-  }
+    /**
+     * Called when Biliomi boots normally
+     */
+    default void boot() {
+        // Optional implementation
+    }
 
-  /**
-   * Called when update mode is set to INSTALL
-   */
-  void install();
+    /**
+     * Called when update mode is set to INSTALL
+     */
+    void install();
 
-  /**
-   * Called when update mode is set to UPDATE
-   * By default it calls this.install()
-   */
-  default void update() {
-    this.install();
-  }
+    /**
+     * Called when update mode is set to UPDATE
+     * By default it calls this.install()
+     */
+    default void update() {
+        this.install();
+    }
 
-  /**
-   * @return The name to display in the console when running this task
-   */
-  default String getDisplayName() {
-    return Joiner.on(' ').join(StringUtils.splitByCharacterTypeCamelCase(getClass().getSimpleName()));
-  }
+    /**
+     * @return The name to display in the console when running this task
+     */
+    default String getDisplayName() {
+        return Joiner.on(' ').join(StringUtils.splitByCharacterTypeCamelCase(getClass().getSimpleName()));
+    }
 }

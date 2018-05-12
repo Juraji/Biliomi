@@ -14,58 +14,58 @@ import java.util.Set;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SpotifyAlbum {
 
-  @XmlElement(name = "id")
-  private String id;
+    @XmlElement(name = "id")
+    private String id;
 
-  @XmlElement(name = "album_type")
-  private SpotifyAlbumType albumType;
+    @XmlElement(name = "album_type")
+    private SpotifyAlbumType albumType;
 
-  @XmlElement(name = "artists")
-  private Set<SpotifyArtist> artists;
+    @XmlElement(name = "artists")
+    private Set<SpotifyArtist> artists;
 
-  @XmlElement(name = "name")
-  private String name;
+    @XmlElement(name = "name")
+    private String name;
 
-  @XmlElement(name = "uri")
-  private String uri;
+    @XmlElement(name = "uri")
+    private String uri;
 
-  public String getId() {
-    return id;
-  }
+    public String getId() {
+        return id;
+    }
 
-  public void setId(String id) {
-    this.id = id;
-  }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-  public SpotifyAlbumType getAlbumType() {
-    return albumType;
-  }
+    public SpotifyAlbumType getAlbumType() {
+        return albumType;
+    }
 
-  public void setAlbumType(SpotifyAlbumType albumType) {
-    this.albumType = albumType;
-  }
+    public void setAlbumType(SpotifyAlbumType albumType) {
+        this.albumType = albumType;
+    }
 
-  public Set<SpotifyArtist> getArtists() {
-    return artists;
-  }
+    public Set<SpotifyArtist> getArtists() {
+        return artists;
+    }
 
-  public void setArtists(Set<SpotifyArtist> artists) {
-    this.artists = artists;
-  }
+    public void setArtists(Set<SpotifyArtist> artists) {
+        this.artists = artists;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public String getUri() {
-    return uri;
-  }
+    public String getUri() {
+        return uri;
+    }
 
-  public void setUri(String uri) {
-    this.uri = uri;
-  }
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
 }

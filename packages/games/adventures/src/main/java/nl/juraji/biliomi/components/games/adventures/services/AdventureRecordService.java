@@ -17,35 +17,35 @@ import java.util.List;
 @Default
 public class AdventureRecordService {
 
-  @Inject
-  private AdventureRecordDao adventureRecordDao;
+    @Inject
+    private AdventureRecordDao adventureRecordDao;
 
-  public void recordAdventureRun(User user, long bet, long payout, boolean isByTamagotchi) {
-    AdventureRecord record = new AdventureRecord();
-    record.setAdventurer(user);
-    record.setBet(bet);
-    record.setPayout(payout);
-    record.setByTamagotchi(isByTamagotchi);
-    record.setDate(DateTime.now());
-    adventureRecordDao.save(record);
-  }
-
-  public long getRecordCount(User user) {
-    return adventureRecordDao.getRecordCount(user);
-  }
-
-  public UserAdventureRecordStats getRecordInfo(User user) {
-    List<AdventureRecord> records = adventureRecordDao.getRecords(user);
-
-    if (records.size() == 0) {
-      return null;
+    public void recordAdventureRun(User user, long bet, long payout, boolean isByTamagotchi) {
+        AdventureRecord record = new AdventureRecord();
+        record.setAdventurer(user);
+        record.setBet(bet);
+        record.setPayout(payout);
+        record.setByTamagotchi(isByTamagotchi);
+        record.setDate(DateTime.now());
+        adventureRecordDao.save(record);
     }
 
-    long losses = records.stream().filter(record -> record.getPayout() == 0).count();
-    long wins = records.stream().filter(record -> record.getPayout() > 0).count();
-    long totalPayout = records.stream().mapToLong(AdventureRecord::getPayout).sum();
-    long byTamagotchiCount = records.stream().filter(AdventureRecord::isByTamagotchi).filter(adventureRecord -> adventureRecord.getPayout() > 0).count();
+    public long getRecordCount(User user) {
+        return adventureRecordDao.getRecordCount(user);
+    }
 
-    return new UserAdventureRecordStats(records.size(), losses, wins, totalPayout, byTamagotchiCount);
-  }
+    public UserAdventureRecordStats getRecordInfo(User user) {
+        List<AdventureRecord> records = adventureRecordDao.getRecords(user);
+
+        if (records.size() == 0) {
+            return null;
+        }
+
+        long losses = records.stream().filter(record -> record.getPayout() == 0).count();
+        long wins = records.stream().filter(record -> record.getPayout() > 0).count();
+        long totalPayout = records.stream().mapToLong(AdventureRecord::getPayout).sum();
+        long byTamagotchiCount = records.stream().filter(AdventureRecord::isByTamagotchi).filter(adventureRecord -> adventureRecord.getPayout() > 0).count();
+
+        return new UserAdventureRecordStats(records.size(), losses, wins, totalPayout, byTamagotchiCount);
+    }
 }

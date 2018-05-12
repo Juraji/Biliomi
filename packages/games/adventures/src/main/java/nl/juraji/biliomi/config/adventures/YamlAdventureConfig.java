@@ -8,22 +8,22 @@ import java.util.List;
  */
 public class YamlAdventureConfig {
 
-  private long nextChapterInterval;
-  private List<YamlAdventureStory> stories;
+    private long nextChapterInterval;
+    private List<YamlAdventureStory> stories;
 
-  public long getNextChapterInterval() {
-    return nextChapterInterval;
-  }
+    public long getNextChapterInterval() {
+        return nextChapterInterval;
+    }
 
-  public void setNextChapterInterval(long nextChapterInterval) {
-    this.nextChapterInterval = nextChapterInterval;
-  }
+    public void setNextChapterInterval(long nextChapterInterval) {
+        this.nextChapterInterval = nextChapterInterval;
+    }
 
-  public List<YamlAdventureStory> getStories() {
-    return stories;
-  }
+    public List<YamlAdventureStory> getStories() {
+        return stories;
+    }
 
-  public void setStories(List<YamlAdventureStory> stories) {
-    this.stories = stories;
-  }
+    public void setStories(List<YamlAdventureStory> stories) {
+        this.stories = stories;
+    }
 }

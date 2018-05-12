@@ -10,15 +10,15 @@ import javax.persistence.EntityManagerFactory;
  * Biliomi v3
  */
 public abstract class Managed {
-  protected final Session session;
+    protected final Session session;
 
-  public Managed(EntityManagerFactory emf) {
-    session = emf.createEntityManager().unwrap(HibernateEntityManager.class).getSession();
-  }
-
-  protected void validateSession() {
-    if (!session.isOpen()) {
-      throw new IllegalStateException(getClass().getSimpleName() + " cannot be reused");
+    public Managed(EntityManagerFactory emf) {
+        session = emf.createEntityManager().unwrap(HibernateEntityManager.class).getSession();
     }
-  }
+
+    protected void validateSession() {
+        if (!session.isOpen()) {
+            throw new IllegalStateException(getClass().getSimpleName() + " cannot be reused");
+        }
+    }
 }

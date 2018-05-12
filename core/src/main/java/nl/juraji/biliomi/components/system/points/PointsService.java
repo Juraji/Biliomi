@@ -17,56 +17,56 @@ import javax.inject.Inject;
 @Default
 public class PointsService {
 
-  @Inject
-  private SettingsService settingsService;
+    @Inject
+    private SettingsService settingsService;
 
-  @Inject
-  private UsersService usersService;
-  private PointsSettings settings;
+    @Inject
+    private UsersService usersService;
+    private PointsSettings settings;
 
-  @PostConstruct
-  private void initPointsService() {
-    settings = settingsService.getSettings(PointsSettings.class, s -> settings = s);
-  }
-
-  /**
-   * Take points from a user.
-   *
-   * @param user   The user to modify
-   * @param amount The amount to take
-   * @return The user's final balance or -1 if the user did not have enough
-   */
-  public long take(User user, Number amount) {
-    long realAmount = amount.longValue();
-    if (user.getPoints() >= realAmount) {
-      user.setPoints(user.getPoints() - realAmount);
-      usersService.save(user);
-      return user.getPoints();
+    @PostConstruct
+    private void initPointsService() {
+        settings = settingsService.getSettings(PointsSettings.class, s -> settings = s);
     }
-    return -1;
-  }
 
-  /**
-   * Give points to a user
-   *
-   * @param user   The user to modify
-   * @param amount The amount to give
-   */
-  public void give(User user, Number amount) {
-    long realAmount = amount.longValue();
-    user.setPoints(user.getPoints() + realAmount);
-    usersService.save(user);
-  }
-
-  public String asString(Number points) {
-    long realPoints = points.longValue();
-    if (MathUtils.isPlural(realPoints)) {
-      return realPoints + " " + settings.getPointsNamePlural();
+    /**
+     * Take points from a user.
+     *
+     * @param user   The user to modify
+     * @param amount The amount to take
+     * @return The user's final balance or -1 if the user did not have enough
+     */
+    public long take(User user, Number amount) {
+        long realAmount = amount.longValue();
+        if (user.getPoints() >= realAmount) {
+            user.setPoints(user.getPoints() - realAmount);
+            usersService.save(user);
+            return user.getPoints();
+        }
+        return -1;
     }
-    return realPoints + " " + settings.getPointsNameSingular();
-  }
 
-  public String pointsName() {
-    return settings.getPointsNamePlural();
-  }
+    /**
+     * Give points to a user
+     *
+     * @param user   The user to modify
+     * @param amount The amount to give
+     */
+    public void give(User user, Number amount) {
+        long realAmount = amount.longValue();
+        user.setPoints(user.getPoints() + realAmount);
+        usersService.save(user);
+    }
+
+    public String asString(Number points) {
+        long realPoints = points.longValue();
+        if (MathUtils.isPlural(realPoints)) {
+            return realPoints + " " + settings.getPointsNamePlural();
+        }
+        return realPoints + " " + settings.getPointsNameSingular();
+    }
+
+    public String pointsName() {
+        return settings.getPointsNamePlural();
+    }
 }

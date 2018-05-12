@@ -20,33 +20,33 @@ import java.lang.reflect.Method;
 @Vetoed
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public class SubCommandRouter {
-  private final Component parentComponent;
-  private final Table<String, String, Method> subCommandExecutors = HashBasedTable.create();
+    private final Component parentComponent;
+    private final Table<String, String, Method> subCommandExecutors = HashBasedTable.create();
 
-  public SubCommandRouter(Component parentComponent) {
-    this.parentComponent = parentComponent;
-  }
-
-  public void buildRoutes() throws Exception {
-    if (subCommandExecutors.isEmpty()) {
-      CommandRouter.findCommandMethods(parentComponent.getClass(), SubCommandRoute.class)
-          .forEach((annot, method) -> subCommandExecutors.put(annot.parentCommand(), annot.command(), method));
-    }
-  }
-
-  public boolean invokeSubCommand(String parentCommand, String subCommand, User user, Arguments arguments) throws CommandRouteInvocationException {
-    Method method = subCommandExecutors.get(parentCommand, subCommand);
-
-    if (method == null) {
-      throw new CommandRouteNotFoundException("No executor exists for subcommand " + parentCommand + " -> " + subCommand);
+    public SubCommandRouter(Component parentComponent) {
+        this.parentComponent = parentComponent;
     }
 
-    try {
-      return (boolean) method.invoke(parentComponent, user, arguments);
-    } catch (IllegalAccessException e) {
-      throw new CommandRouteInvocationException("Executor not accessible for subcommand " + parentCommand + " -> " + subCommand, e);
-    } catch (InvocationTargetException e) {
-      throw new CommandRouteInvocationException("Error invoking executor for subcommand " + parentCommand + " -> " + subCommand, e);
+    public void buildRoutes() {
+        if (subCommandExecutors.isEmpty()) {
+            CommandRouter.findCommandMethods(parentComponent.getClass(), SubCommandRoute.class)
+                    .forEach((annot, method) -> subCommandExecutors.put(annot.parentCommand(), annot.command(), method));
+        }
     }
-  }
+
+    public boolean invokeSubCommand(String parentCommand, String subCommand, User user, Arguments arguments) throws CommandRouteInvocationException {
+        Method method = subCommandExecutors.get(parentCommand, subCommand);
+
+        if (method == null) {
+            throw new CommandRouteNotFoundException("No executor exists for subcommand " + parentCommand + " -> " + subCommand);
+        }
+
+        try {
+            return (boolean) method.invoke(parentComponent, user, arguments);
+        } catch (IllegalAccessException e) {
+            throw new CommandRouteInvocationException("Executor not accessible for subcommand " + parentCommand + " -> " + subCommand, e);
+        } catch (InvocationTargetException e) {
+            throw new CommandRouteInvocationException("Error invoking executor for subcommand " + parentCommand + " -> " + subCommand, e);
+        }
+    }
 }

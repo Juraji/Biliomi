@@ -5,5 +5,5 @@ package nl.juraji.biliomi.model.chat;
  * Biliomi v3
  */
 public enum ModerationReason {
-  POSTED_LINK, EXCESSIVE_CAPS, REPEATED_CHARACTERS, UNKNOWN
+    POSTED_LINK, EXCESSIVE_CAPS, REPEATED_CHARACTERS, UNKNOWN
 }

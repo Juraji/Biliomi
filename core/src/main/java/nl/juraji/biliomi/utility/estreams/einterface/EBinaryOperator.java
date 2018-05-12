@@ -6,5 +6,5 @@ package nl.juraji.biliomi.utility.estreams.einterface;
  */
 @FunctionalInterface
 public interface EBinaryOperator<T, E extends Exception> {
-  T apply(T t1, T t2) throws E;
+    T apply(T t1, T t2) throws E;
 }

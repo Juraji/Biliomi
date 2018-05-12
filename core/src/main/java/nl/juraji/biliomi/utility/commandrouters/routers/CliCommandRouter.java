@@ -23,95 +23,92 @@ import java.util.LinkedList;
 @Singleton
 @EventBusSubscriber
 public class CliCommandRouter {
-  public static final char PREFIX_COMMAND = '!';
-  public static final char PREFIX_CMD_COMMAND = '/';
-  public static final char PREFIX_WHISPER = '@';
-  public static final char PREFIX_SAY = '>';
+    public static final char PREFIX_COMMAND = '!';
+    public static final char PREFIX_CMD_COMMAND = '/';
+    public static final char PREFIX_WHISPER = '@';
+    public static final char PREFIX_SAY = '>';
+    @Inject
+    protected ChatService chat;
+    @Inject
+    private Logger logger;
+    @Inject
+    private CommandRouter commandRouter;
 
-  @Inject
-  private Logger logger;
+    @Inject
+    private CliCommandRouterRegistry cmdCommandRegistry;
 
-  @Inject
-  protected ChatService chat;
+    @Inject
+    @ChannelName
+    private String channelName;
 
-  @Inject
-  private CommandRouter commandRouter;
+    @Subscribe
+    public void onConsoleInputEvent(ConsoleInputEvent event) {
+        char identifier = event.getIdentifier();
 
-  @Inject
-  private CliCommandRouterRegistry cmdCommandRegistry;
-
-  @Inject
-  @ChannelName
-  private String channelName;
-
-  @Subscribe
-  public void onConsoleInputEvent(ConsoleInputEvent event) {
-    char identifier = event.getIdentifier();
-
-    switch (identifier) {
-      case PREFIX_COMMAND:
-        runCommand(event);
-        break;
-      case PREFIX_CMD_COMMAND:
-        executeConsoleCommand(event);
-        break;
-      case PREFIX_WHISPER:
-        doWhisper(event);
-        break;
-      case PREFIX_SAY:
-        doSay(event);
-        break;
-      default:
-        break;
-    }
-  }
-
-  private void doSay(ConsoleInputEvent event) {
-    chat.say(event.getInput());
-  }
-
-  private void doWhisper(ConsoleInputEvent event) {
-    LinkedList<String> list = new LinkedList<>(event.getInputSplit());
-
-    if (list.isEmpty()) {
-      return;
+        switch (identifier) {
+            case PREFIX_COMMAND:
+                runCommand(event);
+                break;
+            case PREFIX_CMD_COMMAND:
+                executeConsoleCommand(event);
+                break;
+            case PREFIX_WHISPER:
+                doWhisper(event);
+                break;
+            case PREFIX_SAY:
+                doSay(event);
+                break;
+            default:
+                break;
+        }
     }
 
-    if (list.size() < 2) {
-      logger.error("Whispering empty messages is not allowed");
-      return;
+    private void doSay(ConsoleInputEvent event) {
+        chat.say(event.getInput());
     }
 
-    String username = list.pollFirst();
-    String message = list.stream().reduce((l, r) -> l + r).orElse("");
-    chat.whisper(username, message);
-  }
+    private void doWhisper(ConsoleInputEvent event) {
+        LinkedList<String> list = new LinkedList<>(event.getInputSplit());
 
-  private void runCommand(ConsoleInputEvent event) {
-    logger.info("Executing chat command: {}", event.toString());
-    IrcChatMessageEvent chatEvent = new IrcChatMessageEvent(channelName, null, event.toString());
-    commandRouter.runCommand(chatEvent, false);
-  }
+        if (list.isEmpty()) {
+            return;
+        }
 
-  private void executeConsoleCommand(ConsoleInputEvent event) {
-    LinkedList<String> list = new LinkedList<>(event.getInputSplit());
+        if (list.size() < 2) {
+            logger.error("Whispering empty messages is not allowed");
+            return;
+        }
 
-    if (list.isEmpty()) {
-      logger.info("Usage: /help");
-      return;
+        String username = list.pollFirst();
+        String message = list.stream().reduce((l, r) -> l + r).orElse("");
+        chat.whisper(username, message);
     }
 
-    RegistryEntry registryEntry = cmdCommandRegistry.get(list.pollFirst());
-    if (registryEntry == null) {
-      logger.info("Usage: /help");
-      return;
+    private void runCommand(ConsoleInputEvent event) {
+        logger.info("Executing chat command: {}", event.toString());
+        IrcChatMessageEvent chatEvent = new IrcChatMessageEvent(channelName, null, event.toString());
+        commandRouter.runCommand(chatEvent, false);
     }
 
-    try {
-      registryEntry.getMethod().invoke(registryEntry.getComponentInstance(), event);
-    } catch (IllegalAccessException | InvocationTargetException e) {
-      logger.error("Failed invoking command executor for input /" + event.toString(), e);
+    private void executeConsoleCommand(ConsoleInputEvent event) {
+        LinkedList<String> list = new LinkedList<>(event.getInputSplit());
+
+        if (list.isEmpty()) {
+            logger.info("Usage: /help");
+            return;
+        }
+
+        RegistryEntry registryEntry = cmdCommandRegistry.get(list.pollFirst());
+        if (registryEntry == null) {
+            logger.info("Usage: /help");
+            return;
+        }
+
+        try {
+            registryEntry.getMethod().invoke(registryEntry.getComponentInstance(), event);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            logger.error("Failed invoking command executor for input /" + event.toString(), e);
+        }
     }
-  }
 
 }

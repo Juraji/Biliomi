@@ -16,18 +16,18 @@ import static nl.juraji.biliomi.components.chat.pms.PMResponseComponent.PM_RESPO
 @Default
 public class PMResponseComponentUpdateTask implements SetupTask {
 
-  @Inject
-  private TemplateDao templateDao;
+    @Inject
+    private TemplateDao templateDao;
 
-  @Override
-  public void install() {
-    if (!templateDao.templateExists(PM_RESPONSE_TEMPLATE_ID)) {
-      Template template = new Template();
-      template.setTemplateKey(PM_RESPONSE_TEMPLATE_ID);
-      template.setTemplate("Hi my name is Biliomi, I'm a chatbot. If you have any questions please direct them towards the caster or one of the moderators");
-      template.setDescription("Sent back to anyone whispering to Biliomi");
-      template.getKeyDescriptions().put("moderators", "The current moderators of this channel");
-      templateDao.save(template);
+    @Override
+    public void install() {
+        if (templateDao.templateMissing(PM_RESPONSE_TEMPLATE_ID)) {
+            Template template = new Template();
+            template.setTemplateKey(PM_RESPONSE_TEMPLATE_ID);
+            template.setTemplate("Hi my name is Biliomi, I'm a chatbot. If you have any questions please direct them towards the caster or one of the moderators");
+            template.setDescription("Sent back to anyone whispering to Biliomi");
+            template.getKeyDescriptions().put("moderators", "The current moderators of this channel");
+            templateDao.save(template);
+        }
     }
-  }
 }

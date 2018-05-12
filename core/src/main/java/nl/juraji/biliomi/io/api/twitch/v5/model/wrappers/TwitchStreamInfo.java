@@ -15,14 +15,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchStreamInfo {
 
-  @XmlElement(name = "stream")
-  private TwitchStream stream;
+    @XmlElement(name = "stream")
+    private TwitchStream stream;
 
-  public TwitchStream getStream() {
-    return stream;
-  }
+    public TwitchStream getStream() {
+        return stream;
+    }
 
-  public void setStream(TwitchStream stream) {
-    this.stream = stream;
-  }
+    public void setStream(TwitchStream stream) {
+        this.stream = stream;
+    }
 }

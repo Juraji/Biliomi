@@ -15,20 +15,20 @@ import java.util.List;
 @Default
 public class RouletteRecordDao extends JpaDao<RouletteRecord> {
 
-  public RouletteRecordDao() {
-    super(RouletteRecord.class);
-  }
+    public RouletteRecordDao() {
+        super(RouletteRecord.class);
+    }
 
-  public List<RouletteRecord> getRecords(User user) {
-    return getRecords(user, -1);
-  }
+    public List<RouletteRecord> getRecords(User user) {
+        return getRecords(user, -1);
+    }
 
-  public List<RouletteRecord> getRecords(User user, int limit) {
-    return criteria()
-        .createAlias("user", "u")
-        .add(Restrictions.eq("u.id", user.getId()))
-        .addOrder(Order.desc("id"))
-        .setMaxResults(limit)
-        .getList();
-  }
+    public List<RouletteRecord> getRecords(User user, int limit) {
+        return criteria()
+                .createAlias("user", "u")
+                .add(Restrictions.eq("u.id", user.getId()))
+                .addOrder(Order.desc("id"))
+                .setMaxResults(limit)
+                .getList();
+    }
 }

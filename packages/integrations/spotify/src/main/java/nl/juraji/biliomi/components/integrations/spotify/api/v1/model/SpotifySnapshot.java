@@ -12,14 +12,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "SpotifySnapshot")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SpotifySnapshot {
-  @XmlElement(name = "snapshot_id")
-  private String snapshotId;
+    @XmlElement(name = "snapshot_id")
+    private String snapshotId;
 
-  public String getSnapshotId() {
-    return snapshotId;
-  }
+    public String getSnapshotId() {
+        return snapshotId;
+    }
 
-  public void setSnapshotId(String snapshotId) {
-    this.snapshotId = snapshotId;
-  }
+    public void setSnapshotId(String snapshotId) {
+        this.snapshotId = snapshotId;
+    }
 }

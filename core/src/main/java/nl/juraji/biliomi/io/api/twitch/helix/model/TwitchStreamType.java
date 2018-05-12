@@ -8,10 +8,10 @@ import nl.juraji.biliomi.utility.calculate.EnumUtils;
  * Biliomi
  */
 public enum TwitchStreamType {
-  LIVE, VODCAST, OFFLINE;
+    LIVE, VODCAST, OFFLINE;
 
-  @JsonCreator
-  public static TwitchStreamType fromJson(String streamType) {
-    return EnumUtils.toEnum(streamType, TwitchStreamType.class, OFFLINE);
-  }
+    @JsonCreator
+    public static TwitchStreamType fromJson(String streamType) {
+        return EnumUtils.toEnum(streamType, TwitchStreamType.class, OFFLINE);
+    }
 }

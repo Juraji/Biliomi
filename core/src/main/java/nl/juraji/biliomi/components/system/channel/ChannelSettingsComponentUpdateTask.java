@@ -16,17 +16,17 @@ import static nl.juraji.biliomi.components.system.channel.ChannelSettingsCompone
 @Default
 public class ChannelSettingsComponentUpdateTask implements SetupTask {
 
-  @Inject
-  private TemplateDao templateDao;
+    @Inject
+    private TemplateDao templateDao;
 
-  @Override
-  public void install() {
-    if (!templateDao.templateExists(CHANNEL_TITLE_TEMPLATE_KEY)) {
-      Template template = new Template();
-      template.setTemplateKey(CHANNEL_TITLE_TEMPLATE_KEY);
-      template.setDescription("Used to format input when the channel status is being changed.");
-      template.getKeyDescriptions().put("input", "The actual input for the command");
-      templateDao.save(template);
+    @Override
+    public void install() {
+        if (templateDao.templateMissing(CHANNEL_TITLE_TEMPLATE_KEY)) {
+            Template template = new Template();
+            template.setTemplateKey(CHANNEL_TITLE_TEMPLATE_KEY);
+            template.setDescription("Used to format input when the channel status is being changed.");
+            template.getKeyDescriptions().put("input", "The actual input for the command");
+            templateDao.save(template);
+        }
     }
-  }
 }

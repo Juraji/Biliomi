@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "IrcChatMessageEvent")
 public class IrcChatMessageEvent extends IrcMessageEvent {
-  public IrcChatMessageEvent(String username, Tags tags, String message) {
-    super(username, tags, message);
-  }
+    public IrcChatMessageEvent(String username, Tags tags, String message) {
+        super(username, tags, message);
+    }
 }

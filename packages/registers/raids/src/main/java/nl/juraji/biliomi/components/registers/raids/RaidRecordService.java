@@ -19,65 +19,65 @@ import javax.inject.Inject;
  */
 @Default
 public class RaidRecordService {
-  @Inject
-  private Logger logger;
+    @Inject
+    private Logger logger;
 
-  @Inject
-  private RaidRecordDao raidRecordDao;
+    @Inject
+    private RaidRecordDao raidRecordDao;
 
-  @Inject
-  private ChannelService channelService;
+    @Inject
+    private ChannelService channelService;
 
-  /**
-   * Register an outgoing raid
-   *
-   * @param channel The channel to be raided
-   * @return The persisted RaidRecord or null if the channel is not online
-   */
-  public RaidRecord registerOutgoingRaid(User channel) {
-    RaidRecord raidRecord = new RaidRecord();
+    /**
+     * Register an outgoing raid
+     *
+     * @param channel The channel to be raided
+     * @return The persisted RaidRecord or null if the channel is not online
+     */
+    public RaidRecord registerOutgoingRaid(User channel) {
+        RaidRecord raidRecord = new RaidRecord();
 
-    TwitchStream stream = channelService.getStream(channel.getTwitchUserId());
-    if (stream == null) {
-      return null;
+        TwitchStream stream = channelService.getStream(channel.getTwitchUserId());
+        if (stream == null) {
+            return null;
+        }
+
+        raidRecord.setChannel(channel);
+        raidRecord.setDirection(Direction.OUTGOING);
+        raidRecord.setGameAtMoment(stream.getGame());
+        raidRecord.setDate(DateTime.now());
+
+        raidRecordDao.save(raidRecord);
+
+        return raidRecord;
     }
 
-    raidRecord.setChannel(channel);
-    raidRecord.setDirection(Direction.OUTGOING);
-    raidRecord.setGameAtMoment(stream.getGame());
-    raidRecord.setDate(DateTime.now());
+    /**
+     * Register an incoming raid
+     *
+     * @param channel The raiding channel
+     * @return The persisted RaidRecord or NULL if an error occurred
+     */
+    public RaidRecord registerIncomingRaid(User channel) {
+        RaidRecord raidRecord = new RaidRecord();
+        TwitchChannel twitchChannel = channelService.getChannel(channel.getTwitchUserId());
 
-    raidRecordDao.save(raidRecord);
+        // If channel is NULL, something went wrong
+        if (twitchChannel == null) {
+            return null;
+        }
 
-    return raidRecord;
-  }
+        raidRecord.setChannel(channel);
+        raidRecord.setDirection(Direction.INCOMING);
+        raidRecord.setDate(DateTime.now());
+        raidRecord.setGameAtMoment(twitchChannel.getGame());
 
-  /**
-   * Register an incoming raid
-   *
-   * @param channel The raiding channel
-   * @return The persisted RaidRecord or NULL if an error occurred
-   */
-  public RaidRecord registerIncomingRaid(User channel) {
-    RaidRecord raidRecord = new RaidRecord();
-    TwitchChannel twitchChannel = channelService.getChannel(channel.getTwitchUserId());
+        raidRecordDao.save(raidRecord);
 
-    // If channel is NULL, something went wrong
-    if (twitchChannel == null) {
-      return null;
+        return raidRecord;
     }
 
-    raidRecord.setChannel(channel);
-    raidRecord.setDirection(Direction.INCOMING);
-    raidRecord.setDate(DateTime.now());
-    raidRecord.setGameAtMoment(twitchChannel.getGame());
-
-    raidRecordDao.save(raidRecord);
-
-    return raidRecord;
-  }
-
-  public long getIncomingRaidCount(User channel) {
-    return raidRecordDao.getCount(channel, Direction.INCOMING);
-  }
+    public long getIncomingRaidCount(User channel) {
+        return raidRecordDao.getCount(channel, Direction.INCOMING);
+    }
 }

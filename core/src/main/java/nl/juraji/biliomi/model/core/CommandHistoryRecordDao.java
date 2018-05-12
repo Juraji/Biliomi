@@ -16,31 +16,31 @@ import java.util.List;
 @Default
 public class CommandHistoryRecordDao extends JpaDao<CommandHistoryRecord> {
 
-  public CommandHistoryRecordDao() {
-    super(CommandHistoryRecord.class);
-  }
-
-  public void recordCommand(CommandCall commandCall, Command actualCommand, User user, boolean success) {
-    CommandHistoryRecord record = new CommandHistoryRecord();
-
-    record.setCommand(actualCommand.getCommand());
-    record.setTriggeredBy(commandCall.getCommand());
-    record.setUser(user);
-    record.setSuccess(success);
-    record.setDate(DateTime.now());
-    
-    if (!commandCall.getArguments().isEmpty()) {
-      record.setArguments(commandCall.getArguments().toString());
+    public CommandHistoryRecordDao() {
+        super(CommandHistoryRecord.class);
     }
 
-    save(record);
-  }
+    public void recordCommand(CommandCall commandCall, Command actualCommand, User user, boolean success) {
+        CommandHistoryRecord record = new CommandHistoryRecord();
 
-  public List<CommandHistoryRecord> getLatestHistoryForCommand(String command) {
-    return criteria()
-        .add(Restrictions.eq("command", command))
-        .addOrder(Order.desc("id"))
-        .setMaxResults(20)
-        .getList();
-  }
+        record.setCommand(actualCommand.getCommand());
+        record.setTriggeredBy(commandCall.getCommand());
+        record.setUser(user);
+        record.setSuccess(success);
+        record.setDate(DateTime.now());
+
+        if (!commandCall.getArguments().isEmpty()) {
+            record.setArguments(commandCall.getArguments().toString());
+        }
+
+        save(record);
+    }
+
+    public List<CommandHistoryRecord> getLatestHistoryForCommand(String command) {
+        return criteria()
+                .add(Restrictions.eq("command", command))
+                .addOrder(Order.desc("id"))
+                .setMaxResults(20)
+                .getList();
+    }
 }

@@ -18,45 +18,46 @@ import javax.inject.Inject;
 @Default
 public class GameService {
 
-  @Inject
-  private Logger logger;
+    @Inject
+    private Logger logger;
 
-  @Inject
-  private TwitchApi twitchApi;
+    @Inject
+    private TwitchApi twitchApi;
 
-  @Inject
-  private GameDao gameDao;
+    @Inject
+    private GameDao gameDao;
 
-  @PostConstruct
-  private void initGameService() {
-    // run getCurrent once to persist the current game if it doesn't exist
-    getCurrent();
-  }
-  public Game getByName(String name) {
-    return gameDao.getByName(name);
-  }
-
-  public Game getBySteamId(long steamId) {
-    return gameDao.getBySteamId(steamId);
-  }
-
-  /**
-   * Get the current channel game
-   * Persists the game as Game if it does not exist yet
-   *
-   * @return The current channel game, mapped to a Game object or null if the request failed
-   */
-  public Game getCurrent() {
-    try {
-      Response<TwitchChannel> channel = twitchApi.getChannel();
-
-      if (channel.isOK()) {
-        return gameDao.getByName(channel.getData().getGame());
-      }
-    } catch (Exception e) {
-      logger.error("Error retrieving channel information for caster channel", e);
+    @PostConstruct
+    private void initGameService() {
+        // run getCurrent once to persist the current game if it doesn't exist
+        getCurrent();
     }
 
-    return null;
-  }
+    public Game getByName(String name) {
+        return gameDao.getByName(name);
+    }
+
+    public Game getBySteamId(long steamId) {
+        return gameDao.getBySteamId(steamId);
+    }
+
+    /**
+     * Get the current channel game
+     * Persists the game as Game if it does not exist yet
+     *
+     * @return The current channel game, mapped to a Game object or null if the request failed
+     */
+    public Game getCurrent() {
+        try {
+            Response<TwitchChannel> channel = twitchApi.getChannel();
+
+            if (channel.isOK()) {
+                return gameDao.getByName(channel.getData().getGame());
+            }
+        } catch (Exception e) {
+            logger.error("Error retrieving channel information for caster channel", e);
+        }
+
+        return null;
+    }
 }

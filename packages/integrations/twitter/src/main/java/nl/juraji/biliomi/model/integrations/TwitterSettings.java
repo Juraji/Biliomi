@@ -19,30 +19,30 @@ import java.util.Set;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitterSettings extends Settings {
 
-  @Column
-  @XmlElement(name = "TrackedKeywords")
-  @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(name = "TwitterSettingsTrackedKeywords", joinColumns = @JoinColumn(name = "settings_type"))
-  private Set<String> trackedKeywords;
+    @Column
+    @XmlElement(name = "TrackedKeywords")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "TwitterSettingsTrackedKeywords", joinColumns = @JoinColumn(name = "settings_type"))
+    private Set<String> trackedKeywords;
 
-  @Transient
-  @XmlElement(name = "_IntegrationEnabled")
-  private boolean _integrationEnabled = false;
+    @Transient
+    @XmlElement(name = "_IntegrationEnabled")
+    private boolean _integrationEnabled = false;
 
-  public Set<String> getTrackedKeywords() {
-    trackedKeywords = ModelUtils.initCollection(trackedKeywords);
-    return trackedKeywords;
-  }
+    public Set<String> getTrackedKeywords() {
+        trackedKeywords = ModelUtils.initCollection(trackedKeywords);
+        return trackedKeywords;
+    }
 
-  public boolean is_integrationEnabled() {
-    return _integrationEnabled;
-  }
+    public boolean is_integrationEnabled() {
+        return _integrationEnabled;
+    }
 
-  public void set_integrationEnabled(boolean _integrationEnabled) {
-    this._integrationEnabled = _integrationEnabled;
-  }
+    public void set_integrationEnabled(boolean _integrationEnabled) {
+        this._integrationEnabled = _integrationEnabled;
+    }
 
-  @Override
-  public void setDefaultValues() {
-  }
+    @Override
+    public void setDefaultValues() {
+    }
 }

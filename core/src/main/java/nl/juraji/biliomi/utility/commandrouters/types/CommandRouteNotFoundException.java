@@ -5,7 +5,7 @@ package nl.juraji.biliomi.utility.commandrouters.types;
  * Biliomi v3
  */
 public class CommandRouteNotFoundException extends RuntimeException {
-  public CommandRouteNotFoundException(String message) {
-    super(message);
-  }
+    public CommandRouteNotFoundException(String message) {
+        super(message);
+    }
 }

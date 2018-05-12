@@ -12,22 +12,22 @@ import javax.ws.rs.Path;
 @Path("/games/settings/adventure")
 public class AdventureSettingsRestService extends SettingsModelRestService<AdventureSettings> {
 
-  @Override
-  public AdventureSettings getEntity() {
-    return settingsService.getSettings(AdventureSettings.class);
-  }
+    @Override
+    public AdventureSettings getEntity() {
+        return settingsService.getSettings(AdventureSettings.class);
+    }
 
-  @Override
-  public AdventureSettings updateEntity(AdventureSettings e) {
-    AdventureSettings settings = settingsService.getSettings(AdventureSettings.class);
+    @Override
+    public AdventureSettings updateEntity(AdventureSettings e) {
+        AdventureSettings settings = settingsService.getSettings(AdventureSettings.class);
 
-    settings.setJoinTimeout(e.getJoinTimeout());
-    settings.setMinimumBet(e.getMinimumBet());
-    settings.setMaximumBet(e.getMaximumBet());
-    settings.setCooldown(e.getCooldown());
-    settings.setWinMultiplier(e.getWinMultiplier());
+        settings.setJoinTimeout(e.getJoinTimeout());
+        settings.setMinimumBet(e.getMinimumBet());
+        settings.setMaximumBet(e.getMaximumBet());
+        settings.setCooldown(e.getCooldown());
+        settings.setWinMultiplier(e.getWinMultiplier());
 
-    settingsService.save(settings);
-    return settings;
-  }
+        settingsService.save(settings);
+        return settings;
+    }
 }

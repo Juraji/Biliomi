@@ -19,35 +19,35 @@ import java.lang.reflect.Method;
 @Default
 @Singleton
 public class CliCommandRouterRegistry {
-  private final CIMap<RegistryEntry> registry = new CIMap<>();
+    private final CIMap<RegistryEntry> registry = new CIMap<>();
 
-  public boolean containsKey(String key) {
-    return registry.containsKey(key);
-  }
+    public boolean containsKey(String key) {
+        return registry.containsKey(key);
+    }
 
-  public RegistryEntry get(String key) {
-    return registry.getOrDefault(key, null);
-  }
+    public RegistryEntry get(String key) {
+        return registry.getOrDefault(key, null);
+    }
 
-  public RegistryEntry put(String key, Component component, Method method) {
-    return registry.put(key, new RegistryEntry(component, method));
-  }
+    public RegistryEntry put(String key, Component component, Method method) {
+        return registry.put(key, new RegistryEntry(component, method));
+    }
 
-  public RegistryEntry remove(String key) {
-    return registry.remove(key);
-  }
+    public RegistryEntry remove(String key) {
+        return registry.remove(key);
+    }
 
-  public MultivaluedHashMap<String, CliCommandRoute> getCommandDescriptionsMap() {
-    MultivaluedHashMap<String, CliCommandRoute> map = new MultivaluedHashMap<>();
+    public MultivaluedHashMap<String, CliCommandRoute> getCommandDescriptionsMap() {
+        MultivaluedHashMap<String, CliCommandRoute> map = new MultivaluedHashMap<>();
 
-    EStream.from(registry.values())
-        .map(RegistryEntry::getMethod)
-        .filter(method -> method.isAnnotationPresent(CliCommandRoute.class))
-        .mapToBiEStream(Method::getDeclaringClass, m -> m.getAnnotation(CliCommandRoute.class))
-        .mapKey(WeldUtils::getAbsoluteClassForClass)
-        .mapKey(Class::getSimpleName)
-        .forEach(map::putSingle);
+        EStream.from(registry.values())
+                .map(RegistryEntry::getMethod)
+                .filter(method -> method.isAnnotationPresent(CliCommandRoute.class))
+                .mapToBiEStream(Method::getDeclaringClass, m -> m.getAnnotation(CliCommandRoute.class))
+                .mapKey(WeldUtils::getAbsoluteClassForClass)
+                .mapKey(Class::getSimpleName)
+                .forEach(map::putSingle);
 
-    return map;
-  }
+        return map;
+    }
 }

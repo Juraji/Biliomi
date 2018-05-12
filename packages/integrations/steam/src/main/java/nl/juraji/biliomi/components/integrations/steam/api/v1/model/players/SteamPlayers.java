@@ -14,14 +14,14 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SteamPlayers {
 
-  @XmlElement(name = "players")
-  private List<SteamPlayer> players;
+    @XmlElement(name = "players")
+    private List<SteamPlayer> players;
 
-  public List<SteamPlayer> getPlayers() {
-    return players;
-  }
+    public List<SteamPlayer> getPlayers() {
+        return players;
+    }
 
-  public void setPlayers(List<SteamPlayer> players) {
-    this.players = players;
-  }
+    public void setPlayers(List<SteamPlayer> players) {
+        this.players = players;
+    }
 }

@@ -9,31 +9,31 @@ import nl.juraji.biliomi.config.core.biliomi.USTwitch;
  * Biliomi
  */
 public class USBiliomi {
-  private USCore core;
-  private USDatabase database;
-  private USTwitch twitch;
+    private USCore core;
+    private USDatabase database;
+    private USTwitch twitch;
 
-  public USCore getCore() {
-    return core;
-  }
+    public USCore getCore() {
+        return core;
+    }
 
-  public void setCore(USCore core) {
-    this.core = core;
-  }
+    public void setCore(USCore core) {
+        this.core = core;
+    }
 
-  public USDatabase getDatabase() {
-    return database;
-  }
+    public USDatabase getDatabase() {
+        return database;
+    }
 
-  public void setDatabase(USDatabase database) {
-    this.database = database;
-  }
+    public void setDatabase(USDatabase database) {
+        this.database = database;
+    }
 
-  public USTwitch getTwitch() {
-    return twitch;
-  }
+    public USTwitch getTwitch() {
+        return twitch;
+    }
 
-  public void setTwitch(USTwitch twitch) {
-    this.twitch = twitch;
-  }
+    public void setTwitch(USTwitch twitch) {
+        this.twitch = twitch;
+    }
 }

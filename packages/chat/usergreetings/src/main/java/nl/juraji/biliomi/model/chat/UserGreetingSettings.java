@@ -19,33 +19,33 @@ import java.util.concurrent.TimeUnit;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class UserGreetingSettings extends Settings {
 
-  @Column
-  @XmlElement(name = "EnableGreetings")
-  private boolean enableGreetings;
+    @Column
+    @XmlElement(name = "EnableGreetings")
+    private boolean enableGreetings;
 
-  @Column
-  @XmlElement(name = "GreetingTimeout")
-  private long greetingTimeout;
+    @Column
+    @XmlElement(name = "GreetingTimeout")
+    private long greetingTimeout;
 
-  public boolean isEnableGreetings() {
-    return enableGreetings;
-  }
+    public boolean isEnableGreetings() {
+        return enableGreetings;
+    }
 
-  public void setEnableGreetings(boolean enableGreetings) {
-    this.enableGreetings = enableGreetings;
-  }
+    public void setEnableGreetings(boolean enableGreetings) {
+        this.enableGreetings = enableGreetings;
+    }
 
-  public long getGreetingTimeout() {
-    return greetingTimeout;
-  }
+    public long getGreetingTimeout() {
+        return greetingTimeout;
+    }
 
-  public void setGreetingTimeout(long greetingTimeout) {
-    this.greetingTimeout = greetingTimeout;
-  }
+    public void setGreetingTimeout(long greetingTimeout) {
+        this.greetingTimeout = greetingTimeout;
+    }
 
-  @Override
-  public void setDefaultValues() {
-    enableGreetings = true;
-    greetingTimeout = TimeUnit.MILLISECONDS.convert(6, TimeUnit.HOURS);
-  }
+    @Override
+    public void setDefaultValues() {
+        enableGreetings = true;
+        greetingTimeout = TimeUnit.MILLISECONDS.convert(6, TimeUnit.HOURS);
+    }
 }

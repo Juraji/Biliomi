@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "IrcUserJoinedEvent")
 public class IrcUserJoinedEvent extends IrcUserEvent {
-  public IrcUserJoinedEvent(String username, Tags tags) {
-    super(username, tags);
-  }
+    public IrcUserJoinedEvent(String username, Tags tags) {
+        super(username, tags);
+    }
 }

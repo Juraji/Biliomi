@@ -13,30 +13,30 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class NewFollowWebhookNotification extends WebhookNotification<NewFollowWebhookNotification.FollowDetails> {
 
-  @XmlRootElement(name = "FollowDetails")
-  @XmlAccessorType(XmlAccessType.FIELD)
-  public class FollowDetails {
+    @XmlRootElement(name = "FollowDetails")
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public class FollowDetails {
 
-    @XmlElement(name = "from_id")
-    private String fromId;
+        @XmlElement(name = "from_id")
+        private String fromId;
 
-    @XmlElement(name = "to_id")
-    private String toId;
+        @XmlElement(name = "to_id")
+        private String toId;
 
-    public String getFromId() {
-      return fromId;
+        public String getFromId() {
+            return fromId;
+        }
+
+        public void setFromId(String fromId) {
+            this.fromId = fromId;
+        }
+
+        public String getToId() {
+            return toId;
+        }
+
+        public void setToId(String toId) {
+            this.toId = toId;
+        }
     }
-
-    public void setFromId(String fromId) {
-      this.fromId = fromId;
-    }
-
-    public String getToId() {
-      return toId;
-    }
-
-    public void setToId(String toId) {
-      this.toId = toId;
-    }
-  }
 }

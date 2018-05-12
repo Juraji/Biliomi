@@ -13,15 +13,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class IrcChannelJoinedEvent extends IrcChannelEvent {
 
-  @XmlElement(name = "Username")
-  private final String username;
+    @XmlElement(name = "Username")
+    private final String username;
 
-  public IrcChannelJoinedEvent(String channelName, String username) {
-    super(channelName);
-    this.username = username;
-  }
+    public IrcChannelJoinedEvent(String channelName, String username) {
+        super(channelName);
+        this.username = username;
+    }
 
-  public String getUsername() {
-    return username;
-  }
+    public String getUsername() {
+        return username;
+    }
 }

@@ -28,65 +28,65 @@ import javax.ws.rs.core.Response;
 @Path("/channel")
 public class ChannelStatusService {
 
-  @Inject
-  private GameService gameService;
+    @Inject
+    private GameService gameService;
 
-  @Inject
-  private ChatService chatService;
+    @Inject
+    private ChatService chatService;
 
-  @Inject
-  private UsersService usersService;
+    @Inject
+    private UsersService usersService;
 
-  @Inject
-  private ChannelService channelService;
+    @Inject
+    private ChannelService channelService;
 
-  @Inject
-  private TemplateDao templateDao;
+    @Inject
+    private TemplateDao templateDao;
 
-  @GET
-  @Path("/status")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getChannelStatus() {
-    boolean streamOnline = channelService.isStreamOnline();
-    TwitchStream stream = null;
-    TwitchChannel channel;
-    ChannelStatus status = null;
+    @GET
+    @Path("/status")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getChannelStatus() {
+        boolean streamOnline = channelService.isStreamOnline();
+        TwitchStream stream = null;
+        TwitchChannel channel;
+        ChannelStatus status = null;
 
-    if (streamOnline) {
-      stream = channelService.getStream();
-      channel = stream.getChannel();
-    } else {
-      channel = channelService.getChannel();
+        if (streamOnline) {
+            stream = channelService.getStream();
+            channel = stream.getChannel();
+        } else {
+            channel = channelService.getChannel();
+        }
+
+        if (channel != null) {
+            status = new ChannelStatus();
+            Template statusTemplate = templateDao.getByKey(ChannelSettingsComponent.CHANNEL_TITLE_TEMPLATE_KEY);
+            String statusWithoutTemplate = Templater.removeTemplate(channel.getStatus(), statusTemplate.getTemplate());
+
+            status.setChannelName(channel.getDisplayName());
+            status.setFollowerCount(channel.getFollowers());
+            status.setSubscriberCount(usersService.getSubscriberCount());
+            status.setGame(gameService.getByName(channel.getGame()));
+            status.setStatus(channel.getStatus());
+            status.setStatusWithoutTemplate(statusWithoutTemplate);
+            status.setLogoUri(channel.getLogo());
+            status.setAffiliate(status.getSubscriberCount() > 0 || channel.isPartner());
+            status.setPartner(channel.isPartner());
+
+            if (stream != null) {
+                status.setOnline(true);
+                status.setPreviewUri(stream.getPreview().getLarge());
+            }
+        }
+
+        return Responses.okOrEmpty(status);
     }
 
-    if (channel != null) {
-      status = new ChannelStatus();
-      Template statusTemplate = templateDao.getByKey(ChannelSettingsComponent.CHANNEL_TITLE_TEMPLATE_KEY);
-      String statusWithoutTemplate = Templater.removeTemplate(channel.getStatus(), statusTemplate.getTemplate());
-
-      status.setChannelName(channel.getDisplayName());
-      status.setFollowerCount(channel.getFollowers());
-      status.setSubscriberCount(usersService.getSubscriberCount());
-      status.setGame(gameService.getByName(channel.getGame()));
-      status.setStatus(channel.getStatus());
-      status.setStatusWithoutTemplate(statusWithoutTemplate);
-      status.setLogoUri(channel.getLogo());
-      status.setAffiliate(status.getSubscriberCount() > 0 || channel.isPartner());
-      status.setPartner(channel.isPartner());
-
-      if (stream != null) {
-        status.setOnline(true);
-        status.setPreviewUri(stream.getPreview().getLarge());
-      }
+    @GET
+    @Path("/viewers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getChannelViewers() {
+        return PaginatedResponse.create(chatService.getViewersAsUsers());
     }
-
-    return Responses.okOrEmpty(status);
-  }
-
-  @GET
-  @Path("/viewers")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getChannelViewers() {
-    return PaginatedResponse.create(chatService.getViewersAsUsers());
-  }
 }

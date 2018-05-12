@@ -16,47 +16,47 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class TimerService implements Restartable {
 
-  @Inject
-  protected Logger logger;
+    @Inject
+    protected Logger logger;
 
-  private ScheduledExecutorService timerExecutor;
+    private ScheduledExecutorService timerExecutor;
 
-  @Override
-  public void start() {
-    if (timerExecutor == null) {
-      timerExecutor = ThreadPools.newScheduledExecutorService(WeldUtils.getAbsoluteClass(this).getSimpleName());
+    @Override
+    public void start() {
+        if (timerExecutor == null) {
+            timerExecutor = ThreadPools.newScheduledExecutorService(WeldUtils.getAbsoluteClass(this).getSimpleName());
+        }
     }
-  }
 
-  @PreDestroy
-  @Override
-  public void stop() {
-    try {
-      if (timerExecutor != null) {
-        timerExecutor.shutdownNow();
-        timerExecutor.awaitTermination(5, TimeUnit.SECONDS);
-      }
-    } catch (InterruptedException e) {
-      // An interuption occurred, but that's what we're going for anyway
-      Thread.currentThread().interrupt();
-    } finally {
-      timerExecutor = null;
+    @PreDestroy
+    @Override
+    public void stop() {
+        try {
+            if (timerExecutor != null) {
+                timerExecutor.shutdownNow();
+                timerExecutor.awaitTermination(5, TimeUnit.SECONDS);
+            }
+        } catch (InterruptedException e) {
+            // An interuption occurred, but that's what we're going for anyway
+            Thread.currentThread().interrupt();
+        } finally {
+            timerExecutor = null;
+        }
     }
-  }
 
-  protected void scheduleAtFixedRate(Runnable command, long period, TimeUnit unit) {
-    scheduleAtFixedRate(command, period, period, unit);
-  }
-
-  protected void scheduleAtFixedRate(Runnable command, long initialDelay, long period, TimeUnit unit) {
-    if (timerExecutor != null) {
-      timerExecutor.scheduleAtFixedRate(command, initialDelay, period, unit);
+    protected void scheduleAtFixedRate(Runnable command, long period, TimeUnit unit) {
+        scheduleAtFixedRate(command, period, period, unit);
     }
-  }
 
-  protected void schedule(Runnable command, long delay, TimeUnit unit) {
-    if (timerExecutor != null) {
-      timerExecutor.schedule(command, delay, unit);
+    protected void scheduleAtFixedRate(Runnable command, long initialDelay, long period, TimeUnit unit) {
+        if (timerExecutor != null) {
+            timerExecutor.scheduleAtFixedRate(command, initialDelay, period, unit);
+        }
     }
-  }
+
+    protected void schedule(Runnable command, long delay, TimeUnit unit) {
+        if (timerExecutor != null) {
+            timerExecutor.schedule(command, delay, unit);
+        }
+    }
 }

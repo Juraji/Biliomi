@@ -16,14 +16,14 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchTeams {
 
-  @XmlElement(name = "teams")
-  private List<TwitchTeam> teams;
+    @XmlElement(name = "teams")
+    private List<TwitchTeam> teams;
 
-  public List<TwitchTeam> getTeams() {
-    return teams;
-  }
+    public List<TwitchTeam> getTeams() {
+        return teams;
+    }
 
-  public void setTeams(List<TwitchTeam> teams) {
-    this.teams = teams;
-  }
+    public void setTeams(List<TwitchTeam> teams) {
+        this.teams = teams;
+    }
 }

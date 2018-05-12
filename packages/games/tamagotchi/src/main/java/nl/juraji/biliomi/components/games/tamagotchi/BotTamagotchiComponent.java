@@ -25,82 +25,82 @@ import javax.inject.Singleton;
 @Singleton
 @NormalComponent
 public class BotTamagotchiComponent extends Component {
-  private static final String BOT_TG_NAME = "Tara";
-  private static final String BOT_TG_SPECIES = "robodog";
+    private static final String BOT_TG_NAME = "Tara";
+    private static final String BOT_TG_SPECIES = "robodog";
 
-  @Inject
-  @BotName
-  private String botName;
+    @Inject
+    @BotName
+    private String botName;
 
-  @Inject
-  private TamagotchiService tamagotchiService;
+    @Inject
+    private TamagotchiService tamagotchiService;
 
-  private TamagotchiSettings settings;
+    private TamagotchiSettings settings;
 
-  @Override
-  public void init() {
-    settings = settingsService.getSettings(TamagotchiSettings.class, s -> settings = s);
+    @Override
+    public void init() {
+        settings = settingsService.getSettings(TamagotchiSettings.class, s -> settings = s);
 
-    // Create the bot tamagotchi, if it's enabled, but does't exist yet. Mostly on first boot
-    if (settings.isBotTamagotchiEnabled()) {
-      createBotTGIfNotExists();
-    } else {
-      killBotTgIfExists();
-    }
-  }
-
-  /**
-   * Manage the bot's tamagotchi
-   * Usage: !bottamagotchi [enabled] [more...]
-   */
-  @CommandRoute(command = "bottamagotchi", systemCommand = true)
-  public boolean botTamagotchiCommand(User user, Arguments arguments) {
-    return captureSubCommands("bottamagotchi", i18n.supply("ChatCommand.botTamagotchi.usage"), user, arguments);
-  }
-
-  /**
-   * Enable/disable the bot's tamagotchi
-   * Usage: !bottamagotchi enabled [on|off]
-   */
-  @SubCommandRoute(parentCommand = "bottamagotchi", command = "enabled")
-  public boolean botTamagotchiCommandEnabled(User user, Arguments arguments) {
-    OnOff onOff = EnumUtils.toEnum(arguments.get(0), OnOff.class);
-
-    if (onOff == null) {
-      chat.whisper(user, i18n.get("ChatCommand.botTamagotchi.enabled.usage"));
-      return false;
+        // Create the bot tamagotchi, if it's enabled, but does't exist yet. Mostly on first boot
+        if (settings.isBotTamagotchiEnabled()) {
+            createBotTGIfNotExists();
+        } else {
+            killBotTgIfExists();
+        }
     }
 
-    settings.setBotTamagotchiEnabled(OnOff.ON.equals(onOff));
-    settingsService.save(settings);
-
-    if (settings.isBotTamagotchiEnabled()) {
-      // Create a new Tamagotchi if it hasn't been enabled yet
-      createBotTGIfNotExists();
-    } else {
-      // Kill the current tamagotchi if it exists
-      killBotTgIfExists();
+    /**
+     * Manage the bot's tamagotchi
+     * Usage: !bottamagotchi [enabled] [more...]
+     */
+    @CommandRoute(command = "bottamagotchi", systemCommand = true)
+    public boolean botTamagotchiCommand(User user, Arguments arguments) {
+        return captureSubCommands("bottamagotchi", i18n.supply("ChatCommand.botTamagotchi.usage"), user, arguments);
     }
 
-    chat.whisper(user, i18n.get("ChatCommand.botTamagotchi.enabled.toggled")
-        .add("state", i18n.getEnabledDisabled(settings.isBotTamagotchiEnabled())));
+    /**
+     * Enable/disable the bot's tamagotchi
+     * Usage: !bottamagotchi enabled [on|off]
+     */
+    @SubCommandRoute(parentCommand = "bottamagotchi", command = "enabled")
+    public boolean botTamagotchiCommandEnabled(User user, Arguments arguments) {
+        OnOff onOff = EnumUtils.toEnum(arguments.get(0), OnOff.class);
 
-    return true;
-  }
+        if (onOff == null) {
+            chat.whisper(user, i18n.get("ChatCommand.botTamagotchi.enabled.usage"));
+            return false;
+        }
 
-  private void createBotTGIfNotExists() {
-    User botUser = usersService.getUser(botName);
-    if (!tamagotchiService.userHasTamagotchi(botUser)) {
-      tamagotchiService.createTamagotchi(BOT_TG_NAME, botUser, BOT_TG_SPECIES);
+        settings.setBotTamagotchiEnabled(OnOff.ON.equals(onOff));
+        settingsService.save(settings);
+
+        if (settings.isBotTamagotchiEnabled()) {
+            // Create a new Tamagotchi if it hasn't been enabled yet
+            createBotTGIfNotExists();
+        } else {
+            // Kill the current tamagotchi if it exists
+            killBotTgIfExists();
+        }
+
+        chat.whisper(user, i18n.get("ChatCommand.botTamagotchi.enabled.toggled")
+                .add("state", i18n.getEnabledDisabled(settings.isBotTamagotchiEnabled())));
+
+        return true;
     }
-  }
 
-  private void killBotTgIfExists() {
-    User botUser = usersService.getUser(botName);
-    Tamagotchi tamagotchi = tamagotchiService.getTamagotchi(botUser);
-    if (tamagotchi != null) {
-      tamagotchiService.kill(tamagotchi);
-      tamagotchiService.save(tamagotchi);
+    private void createBotTGIfNotExists() {
+        User botUser = usersService.getUser(botName);
+        if (!tamagotchiService.userHasTamagotchi(botUser)) {
+            tamagotchiService.createTamagotchi(BOT_TG_NAME, botUser, BOT_TG_SPECIES);
+        }
     }
-  }
+
+    private void killBotTgIfExists() {
+        User botUser = usersService.getUser(botName);
+        Tamagotchi tamagotchi = tamagotchiService.getTamagotchi(botUser);
+        if (tamagotchi != null) {
+            tamagotchiService.kill(tamagotchi);
+            tamagotchiService.save(tamagotchi);
+        }
+    }
 }

@@ -5,8 +5,8 @@ package nl.juraji.biliomi.model.internal.rest.query;
  * Biliomi
  */
 public enum RestFilterOperator {
-  EQUALS,
-  CONTAINS,
-  LESSER_THAN,
-  GREATER_THAN
+    EQUALS,
+    CONTAINS,
+    LESSER_THAN,
+    GREATER_THAN
 }

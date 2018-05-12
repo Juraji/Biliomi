@@ -10,31 +10,31 @@ import java.util.Arrays;
  * Biliomi v3
  */
 public enum SubscriberPlanType {
-  PRIME("prime"),
-  TIER1("1000"),
-  TIER2("2000"),
-  TIER3("3000");
+    PRIME("prime"),
+    TIER1("1000"),
+    TIER2("2000"),
+    TIER3("3000");
 
-  private String tier;
+    private String tier;
 
-  SubscriberPlanType(String tier) {
-    this.tier = tier;
-  }
+    SubscriberPlanType(String tier) {
+        this.tier = tier;
+    }
 
-  public String getTier() {
-    return tier;
-  }
+    @JsonValue
+    public static String fromSubscriberPlanType(SubscriberPlanType type) {
+        return type.getTier();
+    }
 
-  @JsonValue
-  public static String fromSubscriberPlanType(SubscriberPlanType type) {
-    return type.getTier();
-  }
+    @JsonCreator
+    public static SubscriberPlanType fromMessagePlanType(String messagePlayType) {
+        return Arrays.stream(SubscriberPlanType.values())
+                .filter(planType -> planType.tier.equalsIgnoreCase(messagePlayType))
+                .findFirst()
+                .orElse(null);
+    }
 
-  @JsonCreator
-  public static SubscriberPlanType fromMessagePlanType(String messagePlayType) {
-    return Arrays.stream(SubscriberPlanType.values())
-        .filter(planType -> planType.tier.equalsIgnoreCase(messagePlayType))
-        .findFirst()
-        .orElse(null);
-  }
+    public String getTier() {
+        return tier;
+    }
 }

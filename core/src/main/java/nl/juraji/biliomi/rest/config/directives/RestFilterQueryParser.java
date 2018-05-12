@@ -15,113 +15,113 @@ import java.util.regex.Pattern;
  * Biliomi
  */
 public class RestFilterQueryParser {
-  private static final Pattern QUERY_PREDICATE_PATTERN = Pattern.compile("^([a-z. ]+)\\s+([!]?[=~<>])\\s+(.*)$", Pattern.CASE_INSENSITIVE);
-  private static final Pattern QUERY_QUOTE_PATTERN = Pattern.compile("^\"(.*)\"$");
-  private static final String QUERY_AND_DELIMITER = "AND";
-  private static final String QUERY_OR_DELIMITER = "OR";
-  private static final String QUERY_NOT_OPERATOR = "!";
+    private static final Pattern QUERY_PREDICATE_PATTERN = Pattern.compile("^([a-z. ]+)\\s+([!]?[=~<>])\\s+(.*)$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern QUERY_QUOTE_PATTERN = Pattern.compile("^\"(.*)\"$");
+    private static final String QUERY_AND_DELIMITER = "AND";
+    private static final String QUERY_OR_DELIMITER = "OR";
+    private static final String QUERY_NOT_OPERATOR = "!";
 
-  private RestFilterQueryParser() {
-    // Private constructor
-  }
+    private RestFilterQueryParser() {
+        // Private constructor
+    }
 
-  public static Collection<RestFilterDirective> parseQuery(String query) throws RestFilterQueryException {
-    return new RestFilterQueryParser().parse(query);
-  }
+    public static Collection<RestFilterDirective> parseQuery(String query) throws RestFilterQueryException {
+        return new RestFilterQueryParser().parse(query);
+    }
 
-  public Collection<RestFilterDirective> parse(String query) throws RestFilterQueryException {
-    String[] queryArray = this.splitQuery(query);
-    final List<RestFilterDirective> directives = new ArrayList<>(queryArray.length);
+    public Collection<RestFilterDirective> parse(String query) throws RestFilterQueryException {
+        String[] queryArray = this.splitQuery(query);
+        final List<RestFilterDirective> directives = new ArrayList<>(queryArray.length);
 
-    for (int i = 0; i < queryArray.length; i++) {
-      RestFilterDirective directive = new RestFilterDirective();
-      String predicate = queryArray[i];
+        for (int i = 0; i < queryArray.length; i++) {
+            RestFilterDirective directive = new RestFilterDirective();
+            String predicate = queryArray[i];
 
-      if (QUERY_AND_DELIMITER.equalsIgnoreCase(predicate) || QUERY_OR_DELIMITER.equalsIgnoreCase(predicate)) {
-        directive.setOrPrevious(QUERY_OR_DELIMITER.equalsIgnoreCase(predicate));
-        try {
-          predicate = queryArray[++i];
-        } catch (ArrayIndexOutOfBoundsException e) {
-          throw new RestFilterQueryException("Got " + predicate.toUpperCase() + " operator but missing next predicate");
+            if (QUERY_AND_DELIMITER.equalsIgnoreCase(predicate) || QUERY_OR_DELIMITER.equalsIgnoreCase(predicate)) {
+                directive.setOrPrevious(QUERY_OR_DELIMITER.equalsIgnoreCase(predicate));
+                try {
+                    predicate = queryArray[++i];
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    throw new RestFilterQueryException("Got " + predicate.toUpperCase() + " operator but missing next predicate");
+                }
+            }
+
+            Matcher predicateMatcher = QUERY_PREDICATE_PATTERN.matcher(predicate);
+            if (!predicateMatcher.matches()) {
+                throw new RestFilterQueryException("Invalid query predicate: " + predicate);
+            }
+
+            directive.setProperty(predicateMatcher.group(1));
+            directive.setOperator(convertOperator(predicateMatcher.group(2)));
+            directive.setValue(getRealValue(predicateMatcher.group(3)));
+            directive.setNegative(isOpGroupNotted(predicateMatcher.group(2)));
+
+            directives.add(directive);
         }
-      }
 
-      Matcher predicateMatcher = QUERY_PREDICATE_PATTERN.matcher(predicate);
-      if (!predicateMatcher.matches()) {
-        throw new RestFilterQueryException("Invalid query predicate: " + predicate);
-      }
-
-      directive.setProperty(predicateMatcher.group(1));
-      directive.setOperator(convertOperator(predicateMatcher.group(2)));
-      directive.setValue(getRealValue(predicateMatcher.group(3)));
-      directive.setNegative(isOpGroupNotted(predicateMatcher.group(2)));
-
-      directives.add(directive);
+        return directives;
     }
 
-    return directives;
-  }
+    private String[] splitQuery(String query) {
+        Pattern delimiterPattern = Pattern.compile("((?<= and )|(?= and )|(?<= or )|(?= or ))", Pattern.CASE_INSENSITIVE);
+        String[] parts = delimiterPattern.split(query);
 
-  private String[] splitQuery(String query) {
-    Pattern delimiterPattern = Pattern.compile("((?<= and )|(?= and )|(?<= or )|(?= or ))", Pattern.CASE_INSENSITIVE);
-    String[] parts = delimiterPattern.split(query);
+        for (int i = 0; i < parts.length; i++) {
+            parts[i] = parts[i].trim();
+        }
 
-    for (int i = 0; i < parts.length; i++) {
-      parts[i] = parts[i].trim();
+        return parts;
     }
 
-    return parts;
-  }
+    private RestFilterOperator convertOperator(String opGroup) throws RestFilterQueryException {
+        if (isOpGroupNotted(opGroup)) {
+            opGroup = opGroup.substring(1, 2);
+        }
 
-  private RestFilterOperator convertOperator(String opGroup) throws RestFilterQueryException {
-    if (isOpGroupNotted(opGroup)) {
-      opGroup = opGroup.substring(1, 2);
+        switch (opGroup) {
+            case "=":
+                return RestFilterOperator.EQUALS;
+            case "~":
+                return RestFilterOperator.CONTAINS;
+            case "<":
+                return RestFilterOperator.LESSER_THAN;
+            case ">":
+                return RestFilterOperator.GREATER_THAN;
+            default:
+                throw new RestFilterQueryException("Invalid operator: " + opGroup);
+        }
     }
 
-    switch (opGroup) {
-      case "=":
-        return RestFilterOperator.EQUALS;
-      case "~":
-        return RestFilterOperator.CONTAINS;
-      case "<":
-        return RestFilterOperator.LESSER_THAN;
-      case ">":
-        return RestFilterOperator.GREATER_THAN;
-      default:
-        throw new RestFilterQueryException("Invalid operator: " + opGroup);
-    }
-  }
+    private Object getRealValue(String valGroup) {
+        // Nulls
+        if (valGroup.equalsIgnoreCase("null")) {
+            return null;
+        }
 
-  private Object getRealValue(String valGroup) {
-    // Nulls
-    if (valGroup.equalsIgnoreCase("null")) {
-      return null;
-    }
+        // Booleans
+        if (valGroup.equalsIgnoreCase("true")) {
+            return true;
+        } else if (valGroup.equalsIgnoreCase("false")) {
+            return false;
+        }
 
-    // Booleans
-    if (valGroup.equalsIgnoreCase("true")) {
-      return true;
-    } else if (valGroup.equalsIgnoreCase("false")) {
-      return false;
+        // NumberConverter
+        NumberConverter numberConverter = NumberConverter.asNumber(valGroup);
+        if (!numberConverter.isNaN()) {
+            return numberConverter.toDouble();
+        }
+
+        // Remove quotes;
+        return valGroup.replaceAll(QUERY_QUOTE_PATTERN.pattern(), "$1");
     }
 
-    // NumberConverter
-    NumberConverter numberConverter = NumberConverter.asNumber(valGroup);
-    if (!numberConverter.isNaN()) {
-      return numberConverter.toDouble();
+    private boolean isOpGroupNotted(String opGroup) {
+        return opGroup.substring(0, 1).equals(QUERY_NOT_OPERATOR);
     }
 
-    // Remove quotes;
-    return valGroup.replaceAll(QUERY_QUOTE_PATTERN.pattern(), "$1");
-  }
-
-  private boolean isOpGroupNotted(String opGroup) {
-    return opGroup.substring(0, 1).equals(QUERY_NOT_OPERATOR);
-  }
-
-  public static class RestFilterQueryException extends Exception {
-    public RestFilterQueryException(String message) {
-      super(message);
+    public static class RestFilterQueryException extends Exception {
+        public RestFilterQueryException(String message) {
+            super(message);
+        }
     }
-  }
 }

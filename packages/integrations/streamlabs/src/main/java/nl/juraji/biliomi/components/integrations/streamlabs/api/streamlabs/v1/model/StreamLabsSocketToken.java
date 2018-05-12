@@ -13,14 +13,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class StreamLabsSocketToken {
 
-  @XmlElement(name = "socket_token")
-  private String token;
+    @XmlElement(name = "socket_token")
+    private String token;
 
-  public String getToken() {
-    return token;
-  }
+    public String getToken() {
+        return token;
+    }
 
-  public void setToken(String token) {
-    this.token = token;
-  }
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

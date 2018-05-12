@@ -16,15 +16,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class IrcUserModeEvent extends IrcUserEvent {
 
-  @XmlElement(name = "IsModeratorMode")
-  private final boolean isModeratorMode;
+    @XmlElement(name = "IsModeratorMode")
+    private final boolean isModeratorMode;
 
-  public IrcUserModeEvent(String username, Tags tags, boolean isModeratorMode) {
-    super(username, tags);
-    this.isModeratorMode = isModeratorMode;
-  }
+    public IrcUserModeEvent(String username, Tags tags, boolean isModeratorMode) {
+        super(username, tags);
+        this.isModeratorMode = isModeratorMode;
+    }
 
-  public boolean isModeratorMode() {
-    return isModeratorMode;
-  }
+    public boolean isModeratorMode() {
+        return isModeratorMode;
+    }
 }

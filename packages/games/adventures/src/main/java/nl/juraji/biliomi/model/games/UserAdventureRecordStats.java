@@ -15,23 +15,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class UserAdventureRecordStats extends UserRecordStats {
 
-  @XmlElement(name = "TotalPayout")
-  private final long totalPayout;
+    @XmlElement(name = "TotalPayout")
+    private final long totalPayout;
 
-  @XmlElement(name = "PercentageByTamagotchi")
-  private final double percentageByTamagotchi;
+    @XmlElement(name = "PercentageByTamagotchi")
+    private final double percentageByTamagotchi;
 
-  public UserAdventureRecordStats(long recordCount, long losses, long wins, long totalPayout, long byTamagotchiCount) {
-    super(recordCount, losses, wins);
-    this.totalPayout = totalPayout;
-    this.percentageByTamagotchi = MathUtils.calcPercentage(byTamagotchiCount, getWins());
-  }
+    public UserAdventureRecordStats(long recordCount, long losses, long wins, long totalPayout, long byTamagotchiCount) {
+        super(recordCount, losses, wins);
+        this.totalPayout = totalPayout;
+        this.percentageByTamagotchi = MathUtils.calcPercentage(byTamagotchiCount, getWins());
+    }
 
-  public long getTotalPayout() {
-    return totalPayout;
-  }
+    public long getTotalPayout() {
+        return totalPayout;
+    }
 
-  public double getPercentageByTamagotchi() {
-    return percentageByTamagotchi;
-  }
+    public double getPercentageByTamagotchi() {
+        return percentageByTamagotchi;
+    }
 }

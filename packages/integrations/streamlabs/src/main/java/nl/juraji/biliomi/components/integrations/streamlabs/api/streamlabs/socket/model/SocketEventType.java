@@ -8,10 +8,10 @@ import nl.juraji.biliomi.utility.calculate.EnumUtils;
  * Biliomi
  */
 public enum SocketEventType {
-  DONATION;
+    DONATION;
 
-  @JsonCreator
-  public static SocketEventType fromString(String type) {
-    return EnumUtils.toEnum(type, SocketEventType.class);
-  }
+    @JsonCreator
+    public static SocketEventType fromString(String type) {
+        return EnumUtils.toEnum(type, SocketEventType.class);
+    }
 }

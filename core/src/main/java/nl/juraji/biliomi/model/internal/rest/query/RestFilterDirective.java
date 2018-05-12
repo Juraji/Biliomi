@@ -12,58 +12,58 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "RestFilterDirective")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RestFilterDirective {
-  @XmlElement(name = "Property")
-  private String property;
+    @XmlElement(name = "Property")
+    private String property;
 
-  @XmlElement(name = "Operator")
-  private RestFilterOperator operator;
+    @XmlElement(name = "Operator")
+    private RestFilterOperator operator;
 
-  @XmlElement(name = "Value")
-  private Object value;
+    @XmlElement(name = "Value")
+    private Object value;
 
-  @XmlElement(name = "Negative")
-  private boolean negative = false;
+    @XmlElement(name = "Negative")
+    private boolean negative = false;
 
-  @XmlElement(name = "OrPrevious")
-  private boolean orPrevious = false;
+    @XmlElement(name = "OrPrevious")
+    private boolean orPrevious = false;
 
-  public String getProperty() {
-    return property;
-  }
+    public String getProperty() {
+        return property;
+    }
 
-  public void setProperty(String property) {
-    this.property = property;
-  }
+    public void setProperty(String property) {
+        this.property = property;
+    }
 
-  public RestFilterOperator getOperator() {
-    return operator;
-  }
+    public RestFilterOperator getOperator() {
+        return operator;
+    }
 
-  public void setOperator(RestFilterOperator operator) {
-    this.operator = operator;
-  }
+    public void setOperator(RestFilterOperator operator) {
+        this.operator = operator;
+    }
 
-  public Object getValue() {
-    return value;
-  }
+    public Object getValue() {
+        return value;
+    }
 
-  public void setValue(Object value) {
-    this.value = value;
-  }
+    public void setValue(Object value) {
+        this.value = value;
+    }
 
-  public boolean isNegative() {
-    return negative;
-  }
+    public boolean isNegative() {
+        return negative;
+    }
 
-  public void setNegative(boolean negative) {
-    this.negative = negative;
-  }
+    public void setNegative(boolean negative) {
+        this.negative = negative;
+    }
 
-  public boolean isOrPrevious() {
-    return orPrevious;
-  }
+    public boolean isOrPrevious() {
+        return orPrevious;
+    }
 
-  public void setOrPrevious(boolean orPrevious) {
-    this.orPrevious = orPrevious;
-  }
+    public void setOrPrevious(boolean orPrevious) {
+        this.orPrevious = orPrevious;
+    }
 }

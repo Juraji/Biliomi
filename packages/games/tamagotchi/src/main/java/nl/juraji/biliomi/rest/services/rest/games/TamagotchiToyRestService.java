@@ -20,55 +20,55 @@ import java.util.List;
 @Path("/games/tamagotchis/toys")
 public class TamagotchiToyRestService extends ModelRestService<TamagotchiToy> {
 
-  @Inject
-  private TamagotchiDao tamagotchiDao;
+    @Inject
+    private TamagotchiDao tamagotchiDao;
 
-  @Inject
-  private ToyFactoryService toyFactoryService;
+    @Inject
+    private ToyFactoryService toyFactoryService;
 
-  @POST
-  @Path("/assign/{tamagotchiid}")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response assignToyToTamagotchi(TamagotchiToy tamagotchiToy, @PathParam("tamagotchiid") long tamagotchiId) {
-    if (tamagotchiToy == null) {
-      return Responses.badRequest();
+    @POST
+    @Path("/assign/{tamagotchiid}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response assignToyToTamagotchi(TamagotchiToy tamagotchiToy, @PathParam("tamagotchiid") long tamagotchiId) {
+        if (tamagotchiToy == null) {
+            return Responses.badRequest();
+        }
+
+        Tamagotchi tamagotchi = tamagotchiDao.get(tamagotchiId);
+        TamagotchiToy toy = toyFactoryService.getToy(tamagotchiToy.getToyName());
+
+        if (tamagotchi == null || toy == null || toyFactoryService.tamagotchiHasToy(tamagotchi, toy)) {
+            return Responses.notModified();
+        }
+
+        tamagotchi.getToys().add(toy);
+        tamagotchiDao.save(tamagotchi);
+        return Responses.ok(tamagotchi);
     }
 
-    Tamagotchi tamagotchi = tamagotchiDao.get(tamagotchiId);
-    TamagotchiToy toy = toyFactoryService.getToy(tamagotchiToy.getToyName());
-
-    if (tamagotchi == null || toy == null || toyFactoryService.tamagotchiHasToy(tamagotchi, toy)) {
-      return Responses.notModified();
+    @Override
+    public List<TamagotchiToy> getEntities() {
+        return toyFactoryService.getList();
     }
 
-    tamagotchi.getToys().add(toy);
-    tamagotchiDao.save(tamagotchi);
-    return Responses.ok(tamagotchi);
-  }
+    @Override
+    public TamagotchiToy getEntity(long id) {
+        throw new ForbiddenException();
+    }
 
-  @Override
-  public List<TamagotchiToy> getEntities() {
-    return toyFactoryService.getList();
-  }
+    @Override
+    public TamagotchiToy createEntity(TamagotchiToy e) {
+        throw new ForbiddenException();
+    }
 
-  @Override
-  public TamagotchiToy getEntity(long id) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public TamagotchiToy updateEntity(TamagotchiToy e, long id) {
+        throw new ForbiddenException();
+    }
 
-  @Override
-  public TamagotchiToy createEntity(TamagotchiToy e) {
-    throw new ForbiddenException();
-  }
-
-  @Override
-  public TamagotchiToy updateEntity(TamagotchiToy e, long id) {
-    throw new ForbiddenException();
-  }
-
-  @Override
-  public boolean deleteEntity(long id) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public boolean deleteEntity(long id) {
+        throw new ForbiddenException();
+    }
 }

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <application xmlns="http://wadl.dev.java.net/2009/02">
     <doc xmlns:jersey="http://jersey.java.net/" jersey:generatedBy="Jersey: 2.25.1 2017-01-19 16:23:50"/>
-    <doc xmlns:jersey="http://jersey.java.net/" jersey:hint="This is simplified WADL with user and core resources only. To get full WADL with extended resources use the query parameter detail. Link: http://localhost:30000/api/application.wadl?detail=true"/>
+    <doc xmlns:jersey="http://jersey.java.net/"
+         jersey:hint="This is simplified WADL with user and core resources only. To get full WADL with extended resources use the query parameter detail. Link: http://localhost:30000/api/application.wadl?detail=true"/>
     <grammars>
         <include href="application.wadl/xsd0.xsd">
             <doc title="Generated" xml:lang="en"/>
@@ -22,14 +23,16 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Community" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Community"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
                 </response>
             </method>
             <resource path="/search/{communityname}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="communityname" style="template" type="xs:string"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="communityname" style="template"
+                       type="xs:string"/>
                 <method id="searchCommunity" name="GET">
                     <response>
                         <representation mediaType="application/json"/>
@@ -50,7 +53,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Community" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Community"
+                                            mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -72,7 +76,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="User" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="User"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -114,7 +119,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="User" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="User"
+                                            mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -130,7 +136,8 @@
             </method>
             <method id="restUpdateEntity" name="PUT">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="achievementsSettings" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                        element="achievementsSettings" mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -165,7 +172,8 @@
             </method>
             <method id="restUpdateEntity" name="PUT">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="TimeTrackingSettings" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                        element="TimeTrackingSettings" mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -180,7 +188,8 @@
             </method>
             <method id="restUpdateEntity" name="PUT">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="subscriberWatchSettings" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                        element="subscriberWatchSettings" mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -195,7 +204,8 @@
             </method>
             <method id="restUpdateEntity" name="PUT">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="RouletteSettings" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="RouletteSettings"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -216,7 +226,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Command" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Command"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -236,7 +247,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Command" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Command"
+                                            mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -252,7 +264,8 @@
             </method>
             <method id="restUpdateEntity" name="PUT">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="FollowerWatchSettings" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                        element="FollowerWatchSettings" mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -273,7 +286,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Announcement" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Announcement"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -293,7 +307,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Announcement" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Announcement"
+                                            mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -309,7 +324,8 @@
             </method>
             <method id="restUpdateEntity" name="PUT">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="CommunitiesSettings" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                        element="CommunitiesSettings" mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -324,7 +340,8 @@
             </method>
             <method id="restUpdateEntity" name="PUT">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="InvestmentSettings" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                        element="InvestmentSettings" mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -345,7 +362,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Tamagotchi" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Tamagotchi"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -372,7 +390,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Tamagotchi" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Tamagotchi"
+                                            mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -394,7 +413,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="CommandHistoryRecord" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                        element="CommandHistoryRecord" mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -422,7 +442,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="CommandHistoryRecord" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                            element="CommandHistoryRecord" mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -444,7 +465,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="AdventureRecord" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="AdventureRecord"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -480,7 +502,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="AdventureRecord" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                            element="AdventureRecord" mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -492,7 +515,8 @@
             <resource path="/login">
                 <method id="login" name="POST">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="RestAuthorizationRequest" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                            element="RestAuthorizationRequest" mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -502,7 +526,8 @@
             <resource path="/refresh">
                 <method id="refresh" name="POST">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="RestRefreshTokenRequest" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                            element="RestRefreshTokenRequest" mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -541,7 +566,8 @@
             </method>
             <method id="restUpdateEntity" name="PUT">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="AdventureSettings" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                        element="AdventureSettings" mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -580,7 +606,8 @@
             </method>
             <method id="restUpdateEntity" name="PUT">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="spotifySettings" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="spotifySettings"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -595,7 +622,8 @@
             </method>
             <method id="restUpdateEntity" name="PUT">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="UserGreetingSettings" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                        element="UserGreetingSettings" mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -618,7 +646,8 @@
             <method id="restCreateEntity" name="POST">
                 <request>
                     <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="direction" style="query" type="xs:string"/>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="RaidRecord" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="RaidRecord"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -628,7 +657,8 @@
                 <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="id" style="template" type="xs:long"/>
                 <method id="restGetEntity" name="GET">
                     <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="direction" style="query" type="xs:string"/>
+                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="direction" style="query"
+                               type="xs:string"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -636,7 +666,8 @@
                 </method>
                 <method id="restDeleteEntity" name="DELETE">
                     <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="direction" style="query" type="xs:string"/>
+                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="direction" style="query"
+                               type="xs:string"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -644,8 +675,10 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="direction" style="query" type="xs:string"/>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="RaidRecord" mediaType="application/json"/>
+                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="direction" style="query"
+                               type="xs:string"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="RaidRecord"
+                                            mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -667,7 +700,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="TamagotchiToy" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="TamagotchiToy"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -677,7 +711,8 @@
                 <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="tamagotchiid" style="template" type="xs:long"/>
                 <method id="assignToyToTamagotchi" name="POST">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="TamagotchiToy" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                            element="TamagotchiToy" mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -698,7 +733,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="TamagotchiToy" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                            element="TamagotchiToy" mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -720,7 +756,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="HostRecord" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="HostRecord"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -740,7 +777,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="HostRecord" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="HostRecord"
+                                            mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -762,7 +800,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="RouletteRecord" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="RouletteRecord"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -798,7 +837,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="RouletteRecord" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                            element="RouletteRecord" mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -814,7 +854,8 @@
             </method>
             <method id="restUpdateEntity" name="PUT">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="twitterSettings" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="twitterSettings"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -835,7 +876,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="KillRecord" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="KillRecord"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -871,7 +913,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="KillRecord" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="KillRecord"
+                                            mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -893,7 +936,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="CustomCommand" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="CustomCommand"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -913,7 +957,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="CustomCommand" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                            element="CustomCommand" mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -935,7 +980,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="UserGroup" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="UserGroup"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -962,7 +1008,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="UserGroup" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="UserGroup"
+                                            mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -978,7 +1025,8 @@
             </method>
             <method id="restUpdateEntity" name="PUT">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="ChatModeratorSettings" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                        element="ChatModeratorSettings" mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -999,7 +1047,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Quote" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Quote"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -1019,7 +1068,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Quote" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Quote"
+                                            mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -1041,7 +1091,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="UserGreeting" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="UserGreeting"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -1061,7 +1112,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="UserGreeting" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="UserGreeting"
+                                            mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -1083,7 +1135,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="InvestmentRecord" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="InvestmentRecord"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -1119,7 +1172,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="InvestmentRecord" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                            element="InvestmentRecord" mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -1135,7 +1189,8 @@
             </method>
             <method id="restUpdateEntity" name="PUT">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="HostWatchSettings" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                        element="HostWatchSettings" mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -1150,7 +1205,8 @@
             </method>
             <method id="restUpdateEntity" name="PUT">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="SystemSettings" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="SystemSettings"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -1161,7 +1217,8 @@
             <resource path="/cli/run">
                 <method id="runCliCommand" name="POST">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="CommandRequest" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                            element="CommandRequest" mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -1171,7 +1228,8 @@
             <resource path="/run">
                 <method id="runBotCommand" name="POST">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="CommandRequest" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                            element="CommandRequest" mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -1187,7 +1245,8 @@
             </method>
             <method id="restUpdateEntity" name="PUT">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="PointsSettings" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="PointsSettings"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -1208,7 +1267,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Template" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Template"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -1236,7 +1296,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Template" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Template"
+                                            mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -1258,7 +1319,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Donation" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Donation"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -1278,7 +1340,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Donation" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Donation"
+                                            mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -1300,7 +1363,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Game" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Game"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -1320,7 +1384,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Game" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="Game"
+                                            mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -1336,7 +1401,8 @@
             </method>
             <method id="restUpdateEntity" name="PUT">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="AnnouncementsSettings" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                        element="AnnouncementsSettings" mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -1357,7 +1423,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="achievementRecord" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                        element="achievementRecord" mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -1377,7 +1444,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="achievementRecord" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                            element="achievementRecord" mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>
@@ -1393,7 +1461,8 @@
             </method>
             <method id="restUpdateEntity" name="PUT">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="TamagotchiSettings" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                        element="TamagotchiSettings" mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -1414,7 +1483,8 @@
             </method>
             <method id="restCreateEntity" name="POST">
                 <request>
-                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="ModerationRecord" mediaType="application/json"/>
+                    <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="ModerationRecord"
+                                        mediaType="application/json"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>
@@ -1434,7 +1504,8 @@
                 </method>
                 <method id="restUpdateEntity" name="PUT">
                     <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="ModerationRecord" mediaType="application/json"/>
+                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns=""
+                                            element="ModerationRecord" mediaType="application/json"/>
                     </request>
                     <response>
                         <representation mediaType="application/json"/>

@@ -22,56 +22,56 @@ import java.util.List;
 @Path("/games/killrecords")
 public class KillRecordRestService extends ModelRestService<KillRecord> {
 
-  @Inject
-  private KillRecordDao killRecordDao;
+    @Inject
+    private KillRecordDao killRecordDao;
 
-  @Inject
-  private KillRecordService killRecordService;
+    @Inject
+    private KillRecordService killRecordService;
 
-  @GET
-  @Path("/stats/{userid}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getStatsForUser(@PathParam("userid") long id) {
-    User user = new User();
-    user.setId(id);
-    UserKDRRecordStats recordInfo = killRecordService.getKDR(user);
+    @GET
+    @Path("/stats/{userid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStatsForUser(@PathParam("userid") long id) {
+        User user = new User();
+        user.setId(id);
+        UserKDRRecordStats recordInfo = killRecordService.getKDR(user);
 
-    return Responses.okOrEmpty(recordInfo);
-  }
+        return Responses.okOrEmpty(recordInfo);
+    }
 
-  @GET
-  @Path("/latest/{userid}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getLatestRecordsForUser(@PathParam("userid") long id) {
-    User user = new User();
-    user.setId(id);
-    List<KillRecord> records = killRecordDao.getRecords(user, 10);
+    @GET
+    @Path("/latest/{userid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLatestRecordsForUser(@PathParam("userid") long id) {
+        User user = new User();
+        user.setId(id);
+        List<KillRecord> records = killRecordDao.getRecords(user, 10);
 
-    return PaginatedResponse.create(records);
-  }
+        return PaginatedResponse.create(records);
+    }
 
-  @Override
-  public List<KillRecord> getEntities() {
-    return killRecordDao.getList();
-  }
+    @Override
+    public List<KillRecord> getEntities() {
+        return killRecordDao.getList();
+    }
 
-  @Override
-  public KillRecord getEntity(long id) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public KillRecord getEntity(long id) {
+        throw new ForbiddenException();
+    }
 
-  @Override
-  public KillRecord createEntity(KillRecord e) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public KillRecord createEntity(KillRecord e) {
+        throw new ForbiddenException();
+    }
 
-  @Override
-  public KillRecord updateEntity(KillRecord e, long id) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public KillRecord updateEntity(KillRecord e, long id) {
+        throw new ForbiddenException();
+    }
 
-  @Override
-  public boolean deleteEntity(long id) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public boolean deleteEntity(long id) {
+        throw new ForbiddenException();
+    }
 }

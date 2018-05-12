@@ -33,123 +33,123 @@ import java.util.concurrent.TimeUnit;
 @Singleton
 public class WebhookReceiver implements Restartable {
 
-  private final Map<String, NotificationHandler> notificationHandlers = new HashMap<>();
-  private NanoHTTPD httpServer;
-  private ExecutorService receiverDataExecutor;
-  private TimedList<String> notificationIdHistory;
+    private final Map<String, NotificationHandler> notificationHandlers = new HashMap<>();
+    private NanoHTTPD httpServer;
+    private ExecutorService receiverDataExecutor;
+    private TimedList<String> notificationIdHistory;
 
-  @Inject
-  @CoreSetting("biliomi.twitch.webhookCallbackUrl")
-  private String webhookCallbackUrl;
+    @Inject
+    @CoreSetting("biliomi.twitch.webhookCallbackUrl")
+    private String webhookCallbackUrl;
 
-  @Inject
-  private Logger logger;
+    @Inject
+    private Logger logger;
 
-  @Inject
-  private EventBus eventBus;
+    @Inject
+    private EventBus eventBus;
 
-  @Override
-  public void start() {
-    int serverPort = 0;
+    @Override
+    public void start() {
+        int serverPort = 0;
 
-    try {
-      URL url = new URL(webhookCallbackUrl);
-      serverPort = url.getPort();
-    } catch (MalformedURLException e) {
-      logger.error("Failed reading configured webhook callback url", e);
-      // If this fails shut down Biliomi
-      BiliomiContainer.getContainer().shutdownNow(1);
-    }
-
-    try {
-      this.receiverDataExecutor = ThreadPools.newExecutorService(4, "WebhookReceiverServer");
-      this.notificationIdHistory = new TimedList<>("WebhookReceiverNotificationIdHistory");
-      this.httpServer = new Server(serverPort);
-      this.httpServer.start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
-      logger.info("Started HTTP server for Twitch webhook updates");
-    } catch (IOException e) {
-      logger.error("Failed starting HTTP server for Twitch webhook updates", e);
-    }
-  }
-
-  @Override
-  public void stop() {
-    if (this.httpServer != null) {
-      this.httpServer.stop();
-      this.httpServer = null;
-    }
-
-    if (this.notificationIdHistory != null) {
-      this.notificationIdHistory.stop();
-      this.notificationIdHistory = null;
-    }
-
-    if (this.receiverDataExecutor != null) {
-      this.receiverDataExecutor.shutdownNow();
-      this.receiverDataExecutor = null;
-    }
-  }
-
-  public void registerNotificationHandler(String endpoint, NotificationHandler handler) {
-    this.notificationHandlers.put(endpoint, handler);
-  }
-
-  private void handleSessionInput(NanoHTTPD.IHTTPSession session) {
-    if (notificationHandlers.containsKey(session.getUri())) {
-      NotificationHandler notificationHandler = notificationHandlers.get(session.getUri());
-      String lengthHeader = session.getHeaders().getOrDefault("content-length", null);
-      int contentLength = NumberConverter.asNumber(lengthHeader).withDefault(0).toInteger();
-      byte[] buffer = new byte[contentLength];
-
-      try {
-        session.getInputStream().read(buffer, 0, contentLength);
-        String data = new String(buffer).trim();
-
-        if (StringUtils.isNotEmpty(data)) {
-          WebhookNotification notification = notificationHandler.unmarshalNotification(data);
-
-          if (!this.notificationIdHistory.contains(notification.getId())) {
-            logger.debug("New notification on topic: " + notification.getTopic());
-            this.notificationIdHistory.add(notification.getId(), 1, TimeUnit.HOURS);
-            //noinspection unchecked Unchecked error can never occur, since the notification is unmarshalled by the handler
-            notificationHandler.handleNotification(eventBus, notification);
-          }
+        try {
+            URL url = new URL(webhookCallbackUrl);
+            serverPort = url.getPort();
+        } catch (MalformedURLException e) {
+            logger.error("Failed reading configured webhook callback url", e);
+            // If this fails shut down Biliomi
+            BiliomiContainer.getContainer().shutdownNow(1);
         }
-      } catch (IOException e) {
-        logger.error("Failed reading input", e);
-      }
-    }
-  }
 
-  private final class Server extends NanoHTTPD {
-
-    public Server(int port) {
-      super(port);
+        try {
+            this.receiverDataExecutor = ThreadPools.newExecutorService(4, "WebhookReceiverServer");
+            this.notificationIdHistory = new TimedList<>("WebhookReceiverNotificationIdHistory");
+            this.httpServer = new Server(serverPort);
+            this.httpServer.start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
+            logger.info("Started HTTP server for Twitch webhook updates");
+        } catch (IOException e) {
+            logger.error("Failed starting HTTP server for Twitch webhook updates", e);
+        }
     }
 
     @Override
-    public Response serve(IHTTPSession session) {
-      String response = null;
-      String queryParameterString = session.getQueryParameterString();
-
-      if (StringUtils.isNotEmpty(queryParameterString)) {
-        Map<String, String> hubQuery = Url.unpackQueryString(queryParameterString, true);
-
-        String hubMode = hubQuery.get("hub.mode");
-        String hubTopic = Url.decode(hubQuery.get("hub.topic"));
-        if ("denied".equals(hubMode)) {
-          // A topic subscription was denied,
-          logger.error("Failed to subscribe to topic: {} ({})", hubTopic, hubQuery.get("hub.reason"));
-        } else if ("subscribe".equals(hubMode)) {
-          logger.info("Succesfully subscribed to topic: {}", hubTopic);
-          response = hubQuery.get("hub.challenge");
+    public void stop() {
+        if (this.httpServer != null) {
+            this.httpServer.stop();
+            this.httpServer = null;
         }
-      } else {
-        receiverDataExecutor.submit(() -> handleSessionInput(session));
-      }
 
-      // Always return a response
-      return newFixedLengthResponse(response);
+        if (this.notificationIdHistory != null) {
+            this.notificationIdHistory.stop();
+            this.notificationIdHistory = null;
+        }
+
+        if (this.receiverDataExecutor != null) {
+            this.receiverDataExecutor.shutdownNow();
+            this.receiverDataExecutor = null;
+        }
     }
-  }
+
+    public void registerNotificationHandler(String endpoint, NotificationHandler handler) {
+        this.notificationHandlers.put(endpoint, handler);
+    }
+
+    private void handleSessionInput(NanoHTTPD.IHTTPSession session) {
+        if (notificationHandlers.containsKey(session.getUri())) {
+            NotificationHandler notificationHandler = notificationHandlers.get(session.getUri());
+            String lengthHeader = session.getHeaders().getOrDefault("content-length", null);
+            int contentLength = NumberConverter.asNumber(lengthHeader).withDefault(0).toInteger();
+            byte[] buffer = new byte[contentLength];
+
+            try {
+                session.getInputStream().read(buffer, 0, contentLength);
+                String data = new String(buffer).trim();
+
+                if (StringUtils.isNotEmpty(data)) {
+                    WebhookNotification notification = notificationHandler.unmarshalNotification(data);
+
+                    if (!this.notificationIdHistory.contains(notification.getId())) {
+                        logger.debug("New notification on topic: " + notification.getTopic());
+                        this.notificationIdHistory.add(notification.getId(), 1, TimeUnit.HOURS);
+                        //noinspection unchecked Unchecked error can never occur, since the notification is unmarshalled by the handler
+                        notificationHandler.handleNotification(eventBus, notification);
+                    }
+                }
+            } catch (IOException e) {
+                logger.error("Failed reading input", e);
+            }
+        }
+    }
+
+    private final class Server extends NanoHTTPD {
+
+        public Server(int port) {
+            super(port);
+        }
+
+        @Override
+        public Response serve(IHTTPSession session) {
+            String response = null;
+            String queryParameterString = session.getQueryParameterString();
+
+            if (StringUtils.isNotEmpty(queryParameterString)) {
+                Map<String, String> hubQuery = Url.unpackQueryString(queryParameterString, true);
+
+                String hubMode = hubQuery.get("hub.mode");
+                String hubTopic = Url.decode(hubQuery.get("hub.topic"));
+                if ("denied".equals(hubMode)) {
+                    // A topic subscription was denied,
+                    logger.error("Failed to subscribe to topic: {} ({})", hubTopic, hubQuery.get("hub.reason"));
+                } else if ("subscribe".equals(hubMode)) {
+                    logger.info("Succesfully subscribed to topic: {}", hubTopic);
+                    response = hubQuery.get("hub.challenge");
+                }
+            } else {
+                receiverDataExecutor.submit(() -> handleSessionInput(session));
+            }
+
+            // Always return a response
+            return newFixedLengthResponse(response);
+        }
+    }
 }

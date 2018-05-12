@@ -13,14 +13,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class StreamLabsTwitchUser {
 
-  @XmlElement(name = "twitch")
-  private StreamLabsUser user;
+    @XmlElement(name = "twitch")
+    private StreamLabsUser user;
 
-  public StreamLabsUser getUser() {
-    return user;
-  }
+    public StreamLabsUser getUser() {
+        return user;
+    }
 
-  public void setUser(StreamLabsUser user) {
-    this.user = user;
-  }
+    public void setUser(StreamLabsUser user) {
+        this.user = user;
+    }
 }

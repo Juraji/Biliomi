@@ -5,5 +5,5 @@ package nl.juraji.biliomi.model.internal.rest.auth;
  * Biliomi v3
  */
 public enum TokenUserType {
-  CASTER, MODERATOR
+    CASTER, MODERATOR
 }

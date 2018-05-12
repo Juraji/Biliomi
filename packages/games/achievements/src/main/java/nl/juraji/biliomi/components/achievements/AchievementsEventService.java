@@ -26,39 +26,39 @@ import javax.inject.Singleton;
 @EventBusSubscriber
 public class AchievementsEventService implements Init {
 
-  @Inject
-  @I18nData(AchievementsComponent.class)
-  private I18nMap i18n;
+    @Inject
+    @I18nData(AchievementsComponent.class)
+    private I18nMap i18n;
 
-  @Inject
-  private ChatService chat;
+    @Inject
+    private ChatService chat;
 
-  @Inject
-  private AchievementRecordDao recordDao;
+    @Inject
+    private AchievementRecordDao recordDao;
 
-  @Inject
-  private SettingsService settingsService;
-  private AchievementsSettings settings;
+    @Inject
+    private SettingsService settingsService;
+    private AchievementsSettings settings;
 
-  @Override
-  public void init() {
-    settings = settingsService.getSettings(AchievementsSettings.class, s -> settings = s);
-  }
-
-  @Subscribe
-  public void onAchievementEvent(AchievementEvent event) {
-    if (settings.isAchievementsEnabled() && !recordDao.recordExists(event.getUser(), event.getAchievementId())) {
-      AchievementRecord record = new AchievementRecord();
-      record.setUser(event.getUser());
-      record.setAchievementId(event.getAchievementId());
-      record.setAchievement(event.getAchievement());
-      record.setDate(DateTime.now());
-
-      recordDao.save(record);
-
-      chat.say(i18n.get("AchievementEvent.get")
-          .add("username", event.getUser()::getDisplayName)
-          .add("achievement", event::getAchievement));
+    @Override
+    public void init() {
+        settings = settingsService.getSettings(AchievementsSettings.class, s -> settings = s);
     }
-  }
+
+    @Subscribe
+    public void onAchievementEvent(AchievementEvent event) {
+        if (settings.isAchievementsEnabled() && !recordDao.recordExists(event.getUser(), event.getAchievementId())) {
+            AchievementRecord record = new AchievementRecord();
+            record.setUser(event.getUser());
+            record.setAchievementId(event.getAchievementId());
+            record.setAchievement(event.getAchievement());
+            record.setDate(DateTime.now());
+
+            recordDao.save(record);
+
+            chat.say(i18n.get("AchievementEvent.get")
+                    .add("username", event.getUser()::getDisplayName)
+                    .add("achievement", event::getAchievement));
+        }
+    }
 }

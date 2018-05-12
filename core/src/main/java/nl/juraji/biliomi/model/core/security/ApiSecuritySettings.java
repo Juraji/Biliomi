@@ -19,28 +19,28 @@ import java.util.Set;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ApiSecuritySettings extends Settings {
 
-  @Column
-  @NotNull
-  @XmlTransient
-  private byte[] secret;
+    @Column
+    @NotNull
+    @XmlTransient
+    private byte[] secret;
 
-  @Column
-  @XmlElement(name = "Logins")
-  @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(name = "ApiLogin", joinColumns = @JoinColumn(name = "settings_type"))
-  private Set<ApiLogin> logins;
+    @Column
+    @XmlElement(name = "Logins")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "ApiLogin", joinColumns = @JoinColumn(name = "settings_type"))
+    private Set<ApiLogin> logins;
 
-  public byte[] getSecret() {
-    return secret;
-  }
+    public byte[] getSecret() {
+        return secret;
+    }
 
-  public Set<ApiLogin> getLogins() {
-    logins = ModelUtils.initCollection(logins);
-    return logins;
-  }
+    public Set<ApiLogin> getLogins() {
+        logins = ModelUtils.initCollection(logins);
+        return logins;
+    }
 
-  @Override
-  public void setDefaultValues() {
-    secret = DatatypeConverter.parseBase64Binary(new TokenGenerator(20).generate());
-  }
+    @Override
+    public void setDefaultValues() {
+        secret = DatatypeConverter.parseBase64Binary(new TokenGenerator(20).generate());
+    }
 }

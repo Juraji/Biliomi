@@ -16,21 +16,21 @@ import java.io.IOException;
  */
 public class FollowsNotificationHandler implements NotificationHandler<NewFollowWebhookNotification> {
 
-  private final UsersService usersService;
+    private final UsersService usersService;
 
-  public FollowsNotificationHandler(UsersService usersService) {
-    this.usersService = usersService;
-  }
+    public FollowsNotificationHandler(UsersService usersService) {
+        this.usersService = usersService;
+    }
 
-  @Override
-  public NewFollowWebhookNotification unmarshalNotification(String notificationData) throws IOException {
-    return JacksonMarshaller.unmarshal(notificationData, NewFollowWebhookNotification.class);
-  }
+    @Override
+    public NewFollowWebhookNotification unmarshalNotification(String notificationData) throws IOException {
+        return JacksonMarshaller.unmarshal(notificationData, NewFollowWebhookNotification.class);
+    }
 
-  @Override
-  public void handleNotification(EventBus eventBus, NewFollowWebhookNotification notification) {
-    long userId = NumberConverter.asNumber(notification.getData().getFromId()).toLong();
-    User user = usersService.getUserByTwitchId(userId);
-    eventBus.post(new TwitchFollowEvent(user, notification.getTimestamp()));
-  }
+    @Override
+    public void handleNotification(EventBus eventBus, NewFollowWebhookNotification notification) {
+        long userId = NumberConverter.asNumber(notification.getData().getFromId()).toLong();
+        User user = usersService.getUserByTwitchId(userId);
+        eventBus.post(new TwitchFollowEvent(user, notification.getTimestamp()));
+    }
 }

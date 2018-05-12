@@ -8,35 +8,35 @@ import twitter4j.TwitterStream;
  * Biliomi v3
  */
 public class TweetStreamFuture {
-  private final TwitterStream stream;
-  private boolean isTracking = true;
+    private final TwitterStream stream;
+    private boolean isTracking = true;
 
-  public TweetStreamFuture(TwitterStream stream) {
-    this.stream = stream;
+    public TweetStreamFuture(TwitterStream stream) {
+        this.stream = stream;
 
-    stream.addConnectionLifeCycleListener(new ConnectionLifeCycleListener() {
-      @Override
-      public void onConnect() {
-        isTracking = true;
-      }
+        stream.addConnectionLifeCycleListener(new ConnectionLifeCycleListener() {
+            @Override
+            public void onConnect() {
+                isTracking = true;
+            }
 
-      @Override
-      public void onDisconnect() {
-        isTracking = false;
-      }
+            @Override
+            public void onDisconnect() {
+                isTracking = false;
+            }
 
-      @Override
-      public void onCleanUp() {
+            @Override
+            public void onCleanUp() {
 
-      }
-    });
-  }
+            }
+        });
+    }
 
-  public boolean isTracking() {
-    return isTracking;
-  }
+    public boolean isTracking() {
+        return isTracking;
+    }
 
-  public void stopStream() {
-    stream.shutdown();
-  }
+    public void stopStream() {
+        stream.shutdown();
+    }
 }

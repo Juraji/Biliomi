@@ -21,65 +21,65 @@ import javax.inject.Singleton;
 @Singleton
 public class TimeTrackingComponent extends Component {
 
-  @Inject
-  private TimeTrackingTimerService timeTrackingTimer;
+    @Inject
+    private TimeTrackingTimerService timeTrackingTimer;
 
-  @Override
-  public void init() {
-    timeTrackingTimer.start();
-  }
-
-  /**
-   * The main command for setting timetracker settings
-   * Only contains subcommand, so all calls are pushed to captureSubCommands
-   * Usage: !timetracker [trackonlinetime|trackofflinetime] [more...]
-   */
-  @CommandRoute(command = "timetracker", systemCommand = true)
-  public boolean timeTrackerCommand(User user, Arguments arguments) {
-    return captureSubCommands("timetracker", i18n.supply("ChatCommand.timeTrackerCommand.usage"), user, arguments);
-  }
-
-  /**
-   * The sub command for enabling/disabling timetracking while stream is online
-   * Usage: !timetracker trackonlinetime [on/off]
-   */
-  @SubCommandRoute(parentCommand = "timetracker", command = "trackonlinetime")
-  public boolean timeTrackerCommandTrackOnlineTime(User user, Arguments arguments) {
-    OnOff onOff = EnumUtils.toEnum(arguments.getSafe(0), OnOff.class);
-
-    if (onOff == null) {
-      chat.whisper(user, i18n.get("ChatCommand.timeTrackerCommand.trackOnlineTime.usage"));
-      return false;
+    @Override
+    public void init() {
+        timeTrackingTimer.start();
     }
 
-    TimeTrackingSettings settings = settingsService.getSettings(TimeTrackingSettings.class);
-    settings.setTrackOnline(OnOff.ON.equals(onOff));
-    settingsService.save(settings);
-
-    chat.whisper(user, i18n.get("ChatCommand.timeTrackerCommand.trackOnlineTime.set")
-        .add("state", i18n.getEnabledDisabled(settings.isTrackOnline())));
-    return true;
-  }
-
-  /**
-   * The sub command for enabling/disabling timetracking while stream is offline
-   * Usage: !timetracker trackofflinetime [on/off]
-   */
-  @SubCommandRoute(parentCommand = "timetracker", command = "trackofflinetime")
-  public boolean timeTrackerCommandTrackOfflineTime(User user, Arguments arguments) {
-    OnOff onOff = EnumUtils.toEnum(arguments.getSafe(0), OnOff.class);
-
-    if (onOff == null) {
-      chat.whisper(user, i18n.get("ChatCommand.timeTrackerCommand.trackOfflineTime.usage"));
-      return false;
+    /**
+     * The main command for setting timetracker settings
+     * Only contains subcommand, so all calls are pushed to captureSubCommands
+     * Usage: !timetracker [trackonlinetime|trackofflinetime] [more...]
+     */
+    @CommandRoute(command = "timetracker", systemCommand = true)
+    public boolean timeTrackerCommand(User user, Arguments arguments) {
+        return captureSubCommands("timetracker", i18n.supply("ChatCommand.timeTrackerCommand.usage"), user, arguments);
     }
 
-    TimeTrackingSettings settings = settingsService.getSettings(TimeTrackingSettings.class);
-    settings.setTrackOffline(OnOff.ON.equals(onOff));
-    settingsService.save(settings);
+    /**
+     * The sub command for enabling/disabling timetracking while stream is online
+     * Usage: !timetracker trackonlinetime [on/off]
+     */
+    @SubCommandRoute(parentCommand = "timetracker", command = "trackonlinetime")
+    public boolean timeTrackerCommandTrackOnlineTime(User user, Arguments arguments) {
+        OnOff onOff = EnumUtils.toEnum(arguments.getSafe(0), OnOff.class);
 
-    chat.whisper(user, i18n.get("ChatCommand.timeTrackerCommand.trackOfflineTime.set")
-        .add("state", i18n.getEnabledDisabled(settings.isTrackOffline())));
-    return true;
-  }
+        if (onOff == null) {
+            chat.whisper(user, i18n.get("ChatCommand.timeTrackerCommand.trackOnlineTime.usage"));
+            return false;
+        }
+
+        TimeTrackingSettings settings = settingsService.getSettings(TimeTrackingSettings.class);
+        settings.setTrackOnline(OnOff.ON.equals(onOff));
+        settingsService.save(settings);
+
+        chat.whisper(user, i18n.get("ChatCommand.timeTrackerCommand.trackOnlineTime.set")
+                .add("state", i18n.getEnabledDisabled(settings.isTrackOnline())));
+        return true;
+    }
+
+    /**
+     * The sub command for enabling/disabling timetracking while stream is offline
+     * Usage: !timetracker trackofflinetime [on/off]
+     */
+    @SubCommandRoute(parentCommand = "timetracker", command = "trackofflinetime")
+    public boolean timeTrackerCommandTrackOfflineTime(User user, Arguments arguments) {
+        OnOff onOff = EnumUtils.toEnum(arguments.getSafe(0), OnOff.class);
+
+        if (onOff == null) {
+            chat.whisper(user, i18n.get("ChatCommand.timeTrackerCommand.trackOfflineTime.usage"));
+            return false;
+        }
+
+        TimeTrackingSettings settings = settingsService.getSettings(TimeTrackingSettings.class);
+        settings.setTrackOffline(OnOff.ON.equals(onOff));
+        settingsService.save(settings);
+
+        chat.whisper(user, i18n.get("ChatCommand.timeTrackerCommand.trackOfflineTime.set")
+                .add("state", i18n.getEnabledDisabled(settings.isTrackOffline())));
+        return true;
+    }
 }

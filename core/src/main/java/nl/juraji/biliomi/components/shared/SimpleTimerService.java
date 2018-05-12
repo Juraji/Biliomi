@@ -15,12 +15,12 @@ import java.util.concurrent.TimeUnit;
 @Singleton
 public class SimpleTimerService extends TimerService {
 
-  @PostConstruct
-  private void initMessageTimerService() {
-    this.start();
-  }
+    @PostConstruct
+    private void initMessageTimerService() {
+        this.start();
+    }
 
-  public void schedule(Runnable command, long delay, TimeUnit unit) {
-    super.schedule(command, delay, unit);
-  }
+    public void schedule(Runnable command, long delay, TimeUnit unit) {
+        super.schedule(command, delay, unit);
+    }
 }

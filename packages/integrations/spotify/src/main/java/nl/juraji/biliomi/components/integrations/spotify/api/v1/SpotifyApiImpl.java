@@ -38,21 +38,16 @@ import java.util.Arrays;
 public class SpotifyApiImpl implements SpotifyApi {
     private static final String OAUTH_HEADER_PREFIX = "Bearer ";
     private static final String API_BASE_URI = "https://api.spotify.com/v1";
-
+    private final HttpFields headers = new HttpFields();
     @Inject
     private SpotifyConfigService configService;
-
     @Inject
     @CoreSetting("biliomi.core.countryCode")
     private String countryCode;
-
     @Inject
     private WebClient webClient;
-
     @Inject
     private AuthTokenDao authTokenDao;
-
-    private final HttpFields headers = new HttpFields();
 
     @PostConstruct
     private void initSpotifyApi() {

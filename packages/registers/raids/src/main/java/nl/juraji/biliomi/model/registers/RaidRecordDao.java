@@ -15,18 +15,18 @@ import javax.enterprise.inject.Default;
 @Default
 public class RaidRecordDao extends JpaDao<RaidRecord> {
 
-  public RaidRecordDao() {
-    super(RaidRecord.class);
-  }
+    public RaidRecordDao() {
+        super(RaidRecord.class);
+    }
 
-  public long getCount(User channel, Direction direction) {
-    return criteria()
-        .createAlias("channel", "c")
-        .add(Restrictions.and(
-            Restrictions.eq("c.id", channel.getId()),
-            Restrictions.eq("direction", direction)
-        ))
-        .addOrder(Order.desc("id"))
-        .getCount();
-  }
+    public long getCount(User channel, Direction direction) {
+        return criteria()
+                .createAlias("channel", "c")
+                .add(Restrictions.and(
+                        Restrictions.eq("c.id", channel.getId()),
+                        Restrictions.eq("direction", direction)
+                ))
+                .addOrder(Order.desc("id"))
+                .getCount();
+    }
 }

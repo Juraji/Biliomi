@@ -18,24 +18,24 @@ import java.util.List;
 @Default
 public class ModerationRecordService {
 
-  @Inject
-  private ModerationRecordDao moderationRecordDao;
+    @Inject
+    private ModerationRecordDao moderationRecordDao;
 
-  public void recordModeration(User user, ModerationAction action) {
-    recordModeration(user, ModerationReason.UNKNOWN, action, null);
-  }
+    public void recordModeration(User user, ModerationAction action) {
+        recordModeration(user, ModerationReason.UNKNOWN, action, null);
+    }
 
-  public void recordModeration(User user, ModerationReason reason, ModerationAction action, String message) {
-    ModerationRecord record = new ModerationRecord();
-    record.setUser(user);
-    record.setReason(reason);
-    record.setAction(action);
-    record.setMessage(message);
-    record.setDate(DateTime.now());
-    moderationRecordDao.save(record);
-  }
+    public void recordModeration(User user, ModerationReason reason, ModerationAction action, String message) {
+        ModerationRecord record = new ModerationRecord();
+        record.setUser(user);
+        record.setReason(reason);
+        record.setAction(action);
+        record.setMessage(message);
+        record.setDate(DateTime.now());
+        moderationRecordDao.save(record);
+    }
 
-  public List<ModerationRecord> getRecords(User user) {
-    return moderationRecordDao.getRecords(user);
-  }
+    public List<ModerationRecord> getRecords(User user) {
+        return moderationRecordDao.getRecords(user);
+    }
 }

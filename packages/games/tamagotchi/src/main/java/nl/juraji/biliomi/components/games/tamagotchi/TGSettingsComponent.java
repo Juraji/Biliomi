@@ -27,198 +27,198 @@ import java.util.concurrent.TimeUnit;
 @NormalComponent
 public class TGSettingsComponent extends Component {
 
-  @Inject
-  private PointsService pointsService;
+    @Inject
+    private PointsService pointsService;
 
-  @Inject
-  private TimeFormatter timeFormatter;
+    @Inject
+    private TimeFormatter timeFormatter;
 
-  private TamagotchiSettings settings;
+    private TamagotchiSettings settings;
 
-  @Override
-  public void init() {
-    super.init();
-    settings = settingsService.getSettings(TamagotchiSettings.class, s -> settings = s);
-  }
-
-  /**
-   * Manage Tamagotchi settings
-   * Usage: !tamagotchisettings [newprice|foodprice|maxfood|maxmood|maxhygiene|namemaxlength] [more...]
-   */
-  @CommandRoute(command = "tamagotchisettings", systemCommand = true)
-  public boolean tamagotchisettingsCommand(User user, Arguments arguments) {
-    return captureSubCommands("tamagotchisettings", i18n.supply("ChatCommand.tamagotchisettings.usage"), user, arguments);
-  }
-
-  /**
-   * Set the price for buying a new Tamagotchi
-   * Usage: !tamagotchisettings newprice [amount of points]
-   */
-  @SubCommandRoute(parentCommand = "tamagotchisettings", command = "newprice")
-  public boolean tamagotchisettingsCommandNewPrice(User user, Arguments arguments) {
-    Long points = NumberConverter.asNumber(arguments.get(0)).toLong();
-
-    if (points == null || points < 0) {
-      chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.newprice.usage"));
-      return false;
+    @Override
+    public void init() {
+        super.init();
+        settings = settingsService.getSettings(TamagotchiSettings.class, s -> settings = s);
     }
 
-    settings.setNewPrice(points);
-    settingsService.save(settings);
-
-    chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.newprice.updated")
-        .add("points", pointsService.asString(points)));
-    return true;
-  }
-
-  /**
-   * Set the price for a single piece of food
-   * Usage: !tamagotchisettings foodprice [amount of points]
-   */
-  @SubCommandRoute(parentCommand = "tamagotchisettings", command = "foodprice")
-  public boolean tamagotchisettingsCommandFoodPrice(User user, Arguments arguments) {
-    Long points = NumberConverter.asNumber(arguments.get(0)).toLong();
-
-    if (points == null || points < 0) {
-      chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.foodprice.usage"));
-      return false;
+    /**
+     * Manage Tamagotchi settings
+     * Usage: !tamagotchisettings [newprice|foodprice|maxfood|maxmood|maxhygiene|namemaxlength] [more...]
+     */
+    @CommandRoute(command = "tamagotchisettings", systemCommand = true)
+    public boolean tamagotchisettingsCommand(User user, Arguments arguments) {
+        return captureSubCommands("tamagotchisettings", i18n.supply("ChatCommand.tamagotchisettings.usage"), user, arguments);
     }
 
-    settings.setFoodPrice(points);
-    settingsService.save(settings);
+    /**
+     * Set the price for buying a new Tamagotchi
+     * Usage: !tamagotchisettings newprice [amount of points]
+     */
+    @SubCommandRoute(parentCommand = "tamagotchisettings", command = "newprice")
+    public boolean tamagotchisettingsCommandNewPrice(User user, Arguments arguments) {
+        Long points = NumberConverter.asNumber(arguments.get(0)).toLong();
 
-    chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.foodprice.updated")
-        .add("points", pointsService.asString(points)));
-    return true;
-  }
+        if (points == null || points < 0) {
+            chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.newprice.usage"));
+            return false;
+        }
 
-  /**
-   * Set the price for a cleanup of a Tamagotchi
-   * Usage: !tamagotchisettings soapprice [amount of points]
-   */
-  @SubCommandRoute(parentCommand = "tamagotchisettings", command = "soapprice")
-  public boolean tamagotchisettingsCommandSoapPrice(User user, Arguments arguments) {
-    Long points = NumberConverter.asNumber(arguments.get(0)).toLong();
+        settings.setNewPrice(points);
+        settingsService.save(settings);
 
-    if (points == null || points < 0) {
-      chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.soapprice.usage"));
-      return false;
+        chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.newprice.updated")
+                .add("points", pointsService.asString(points)));
+        return true;
     }
 
-    settings.setSoapPrice(points);
-    settingsService.save(settings);
+    /**
+     * Set the price for a single piece of food
+     * Usage: !tamagotchisettings foodprice [amount of points]
+     */
+    @SubCommandRoute(parentCommand = "tamagotchisettings", command = "foodprice")
+    public boolean tamagotchisettingsCommandFoodPrice(User user, Arguments arguments) {
+        Long points = NumberConverter.asNumber(arguments.get(0)).toLong();
 
-    chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.soapprice.updated")
-        .add("points", pointsService.asString(points)));
-    return true;
-  }
+        if (points == null || points < 0) {
+            chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.foodprice.usage"));
+            return false;
+        }
 
-  /**
-   * Set the maximum of food a Tamagotchi can have at any time
-   * Note: This value translates to days before ful decay
-   * Usage: !tamagotchisettings maxfood [amount]
-   */
-  @SubCommandRoute(parentCommand = "tamagotchisettings", command = "maxfood")
-  public boolean tamagotchisettingsCommandMaxFood(User user, Arguments arguments) {
-    Double max = NumberConverter.asNumber(arguments.get(0)).toDouble();
+        settings.setFoodPrice(points);
+        settingsService.save(settings);
 
-    if (max == null || max < 0) {
-      chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxfood.usage"));
-      return false;
+        chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.foodprice.updated")
+                .add("points", pointsService.asString(points)));
+        return true;
     }
 
-    settings.setMaxFood(max);
-    settingsService.save(settings);
+    /**
+     * Set the price for a cleanup of a Tamagotchi
+     * Usage: !tamagotchisettings soapprice [amount of points]
+     */
+    @SubCommandRoute(parentCommand = "tamagotchisettings", command = "soapprice")
+    public boolean tamagotchisettingsCommandSoapPrice(User user, Arguments arguments) {
+        Long points = NumberConverter.asNumber(arguments.get(0)).toLong();
 
-    int maxAbs = max.intValue();
-    chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxfood.updated")
-        .add("max", maxAbs)
-        .add("ttl", this.getTimeToLiveString(maxAbs)));
-    return true;
-  }
+        if (points == null || points < 0) {
+            chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.soapprice.usage"));
+            return false;
+        }
 
-  /**
-   * Set the maximum mood level a Tamagotchi can achieve
-   * Note: This value translates to days before ful decay
-   * Usage: !tamagotchisettings maxmood [amount]
-   */
-  @SubCommandRoute(parentCommand = "tamagotchisettings", command = "maxmood")
-  public boolean tamagotchisettingsCommandMaxMood(User user, Arguments arguments) {
-    Double max = NumberConverter.asNumber(arguments.get(0)).toDouble();
+        settings.setSoapPrice(points);
+        settingsService.save(settings);
 
-    if (max == null || max < 0) {
-      chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxmood.usage"));
-      return false;
+        chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.soapprice.updated")
+                .add("points", pointsService.asString(points)));
+        return true;
     }
 
-    settings.setMaxMood(max);
-    settingsService.save(settings);
+    /**
+     * Set the maximum of food a Tamagotchi can have at any time
+     * Note: This value translates to days before ful decay
+     * Usage: !tamagotchisettings maxfood [amount]
+     */
+    @SubCommandRoute(parentCommand = "tamagotchisettings", command = "maxfood")
+    public boolean tamagotchisettingsCommandMaxFood(User user, Arguments arguments) {
+        Double max = NumberConverter.asNumber(arguments.get(0)).toDouble();
 
-    chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxmood.updated")
-        .add("max", max::intValue)
-        .add("ttl", this.getTimeToLiveString(max))
-        .add("boredaftertime", this.getBoredAfterTime(max))
-        .add("sadaftertime", this.getSadAfterTime(max)));
-    return true;
-  }
+        if (max == null || max < 0) {
+            chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxfood.usage"));
+            return false;
+        }
 
-  /**
-   * Set the maximum mood level a Tamagotchi can achieve
-   * Note: This value translates to days before ful decay
-   * Usage: !tamagotchisettings maxhygiene [amount]
-   */
-  @SubCommandRoute(parentCommand = "tamagotchisettings", command = "maxhygiene")
-  public boolean tamagotchisettingsCommandMaxHygiene(User user, Arguments arguments) {
-    Double max = NumberConverter.asNumber(arguments.get(0)).toDouble();
+        settings.setMaxFood(max);
+        settingsService.save(settings);
 
-    if (max == null || max < 0) {
-      chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxhygiene.usage"));
-      return false;
+        int maxAbs = max.intValue();
+        chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxfood.updated")
+                .add("max", maxAbs)
+                .add("ttl", this.getTimeToLiveString(maxAbs)));
+        return true;
     }
 
-    settings.setMaxHygiene(max);
-    settingsService.save(settings);
+    /**
+     * Set the maximum mood level a Tamagotchi can achieve
+     * Note: This value translates to days before ful decay
+     * Usage: !tamagotchisettings maxmood [amount]
+     */
+    @SubCommandRoute(parentCommand = "tamagotchisettings", command = "maxmood")
+    public boolean tamagotchisettingsCommandMaxMood(User user, Arguments arguments) {
+        Double max = NumberConverter.asNumber(arguments.get(0)).toDouble();
 
-    int maxAbs = max.intValue();
-    chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxhygiene.updated")
-        .add("max", maxAbs)
-        .add("ttl", this.getTimeToLiveString(maxAbs)));
-    return true;
-  }
+        if (max == null || max < 0) {
+            chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxmood.usage"));
+            return false;
+        }
 
-  /**
-   * Set the maximum amount of characters a tamagotchi name can contain
-   * Usage: !tamagotchisettings namemaxlength [amount]
-   */
-  @SubCommandRoute(parentCommand = "tamagotchisettings", command = "namemaxlength")
-  public boolean tamagotchisettingsCommandNameMaxLength(User user, Arguments arguments) {
-    Integer maxLength = NumberConverter.asNumber(arguments.get(0)).toInteger();
+        settings.setMaxMood(max);
+        settingsService.save(settings);
 
-    if (maxLength == null || maxLength < 0) {
-      chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.namemaxlength.usage"));
-      return false;
+        chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxmood.updated")
+                .add("max", max::intValue)
+                .add("ttl", this.getTimeToLiveString(max))
+                .add("boredaftertime", this.getBoredAfterTime(max))
+                .add("sadaftertime", this.getSadAfterTime(max)));
+        return true;
     }
 
-    settings.setNameMaxLength(maxLength);
-    settingsService.save(settings);
+    /**
+     * Set the maximum mood level a Tamagotchi can achieve
+     * Note: This value translates to days before ful decay
+     * Usage: !tamagotchisettings maxhygiene [amount]
+     */
+    @SubCommandRoute(parentCommand = "tamagotchisettings", command = "maxhygiene")
+    public boolean tamagotchisettingsCommandMaxHygiene(User user, Arguments arguments) {
+        Double max = NumberConverter.asNumber(arguments.get(0)).toDouble();
 
-    chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.namemaxlength.updated")
-        .add("length", maxLength));
-    return true;
-  }
+        if (max == null || max < 0) {
+            chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxhygiene.usage"));
+            return false;
+        }
 
-  private String getTimeToLiveString(double max) {
-    int totalHours = (int) (max / TamagotchiConstants.PROPERTY_DECAY_PER_HOUR);
-    return timeFormatter.timeQuantity(Duration.standardHours(totalHours), TimeUnit.HOURS);
-  }
+        settings.setMaxHygiene(max);
+        settingsService.save(settings);
 
-  private String getBoredAfterTime(double max) {
-    int totalHours = (int) (max / TamagotchiConstants.PROPERTY_DECAY_PER_HOUR - max * TamagotchiConstants.MOOD_BORED_THRESHOLD / TamagotchiConstants.PROPERTY_DECAY_PER_HOUR);
-    return timeFormatter.timeQuantity(Duration.standardHours(totalHours), TimeUnit.HOURS);
-  }
+        int maxAbs = max.intValue();
+        chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.maxhygiene.updated")
+                .add("max", maxAbs)
+                .add("ttl", this.getTimeToLiveString(maxAbs)));
+        return true;
+    }
 
-  private String getSadAfterTime(double max) {
-    int totalHours = (int) (max / TamagotchiConstants.PROPERTY_DECAY_PER_HOUR - max * TamagotchiConstants.MOOD_SAD_THRESHOLD / TamagotchiConstants.PROPERTY_DECAY_PER_HOUR);
-    return timeFormatter.timeQuantity(Duration.standardHours(totalHours), TimeUnit.HOURS);
-  }
+    /**
+     * Set the maximum amount of characters a tamagotchi name can contain
+     * Usage: !tamagotchisettings namemaxlength [amount]
+     */
+    @SubCommandRoute(parentCommand = "tamagotchisettings", command = "namemaxlength")
+    public boolean tamagotchisettingsCommandNameMaxLength(User user, Arguments arguments) {
+        Integer maxLength = NumberConverter.asNumber(arguments.get(0)).toInteger();
+
+        if (maxLength == null || maxLength < 0) {
+            chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.namemaxlength.usage"));
+            return false;
+        }
+
+        settings.setNameMaxLength(maxLength);
+        settingsService.save(settings);
+
+        chat.whisper(user, i18n.get("ChatCommand.tamagotchisettings.namemaxlength.updated")
+                .add("length", maxLength));
+        return true;
+    }
+
+    private String getTimeToLiveString(double max) {
+        int totalHours = (int) (max / TamagotchiConstants.PROPERTY_DECAY_PER_HOUR);
+        return timeFormatter.timeQuantity(Duration.standardHours(totalHours), TimeUnit.HOURS);
+    }
+
+    private String getBoredAfterTime(double max) {
+        int totalHours = (int) (max / TamagotchiConstants.PROPERTY_DECAY_PER_HOUR - max * TamagotchiConstants.MOOD_BORED_THRESHOLD / TamagotchiConstants.PROPERTY_DECAY_PER_HOUR);
+        return timeFormatter.timeQuantity(Duration.standardHours(totalHours), TimeUnit.HOURS);
+    }
+
+    private String getSadAfterTime(double max) {
+        int totalHours = (int) (max / TamagotchiConstants.PROPERTY_DECAY_PER_HOUR - max * TamagotchiConstants.MOOD_SAD_THRESHOLD / TamagotchiConstants.PROPERTY_DECAY_PER_HOUR);
+        return timeFormatter.timeQuantity(Duration.standardHours(totalHours), TimeUnit.HOURS);
+    }
 }

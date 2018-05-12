@@ -15,30 +15,30 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ChannelStateEvent extends TwitchEvent {
 
-  @XmlElement(name = "ChannelId")
-  private final String channelId;
+    @XmlElement(name = "ChannelId")
+    private final String channelId;
 
-  @XmlElement(name = "IsOnline")
-  private final boolean isOnline;
+    @XmlElement(name = "IsOnline")
+    private final boolean isOnline;
 
-  @XmlElement(name = "GameId")
-  private final String gameId;
+    @XmlElement(name = "GameId")
+    private final String gameId;
 
-  public ChannelStateEvent(String channelId, boolean isOnline, String gameId) {
-    this.channelId = channelId;
-    this.isOnline = isOnline;
-    this.gameId = gameId;
-  }
+    public ChannelStateEvent(String channelId, boolean isOnline, String gameId) {
+        this.channelId = channelId;
+        this.isOnline = isOnline;
+        this.gameId = gameId;
+    }
 
-  public String getChannelId() {
-    return channelId;
-  }
+    public String getChannelId() {
+        return channelId;
+    }
 
-  public boolean isOnline() {
-    return isOnline;
-  }
+    public boolean isOnline() {
+        return isOnline;
+    }
 
-  public String getGameId() {
-    return gameId;
-  }
+    public String getGameId() {
+        return gameId;
+    }
 }

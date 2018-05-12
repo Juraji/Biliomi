@@ -16,25 +16,25 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchFollows extends TwitchList {
 
-  @XmlElement(name = "_cursor")
-  private long cursor;
+    @XmlElement(name = "_cursor")
+    private long cursor;
 
-  @XmlElement(name = "follows")
-  private List<TwitchFollower> follows;
+    @XmlElement(name = "follows")
+    private List<TwitchFollower> follows;
 
-  public long getCursor() {
-    return cursor;
-  }
+    public long getCursor() {
+        return cursor;
+    }
 
-  public void setCursor(long cursor) {
-    this.cursor = cursor;
-  }
+    public void setCursor(long cursor) {
+        this.cursor = cursor;
+    }
 
-  public List<TwitchFollower> getFollows() {
-    return follows;
-  }
+    public List<TwitchFollower> getFollows() {
+        return follows;
+    }
 
-  public void setFollows(List<TwitchFollower> follows) {
-    this.follows = follows;
-  }
+    public void setFollows(List<TwitchFollower> follows) {
+        this.follows = follows;
+    }
 }

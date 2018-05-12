@@ -12,18 +12,18 @@ import javax.ws.rs.Path;
 @Path("/chat/settings/hostwatch")
 public class HostWatchSettingsRestService extends SettingsModelRestService<HostWatchSettings> {
 
-  @Override
-  public HostWatchSettings getEntity() {
-    return settingsService.getSettings(HostWatchSettings.class);
-  }
+    @Override
+    public HostWatchSettings getEntity() {
+        return settingsService.getSettings(HostWatchSettings.class);
+    }
 
-  @Override
-  public HostWatchSettings updateEntity(HostWatchSettings e) {
-    HostWatchSettings settings = settingsService.getSettings(HostWatchSettings.class);
+    @Override
+    public HostWatchSettings updateEntity(HostWatchSettings e) {
+        HostWatchSettings settings = settingsService.getSettings(HostWatchSettings.class);
 
-    settings.setReward(e.getReward());
+        settings.setReward(e.getReward());
 
-    settingsService.save(settings);
-    return settings;
-  }
+        settingsService.save(settings);
+        return settings;
+    }
 }

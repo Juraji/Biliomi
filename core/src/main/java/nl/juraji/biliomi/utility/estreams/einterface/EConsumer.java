@@ -6,5 +6,5 @@ package nl.juraji.biliomi.utility.estreams.einterface;
  */
 @FunctionalInterface
 public interface EConsumer<T, E extends Exception> {
-  void accept(T t) throws E;
+    void accept(T t) throws E;
 }

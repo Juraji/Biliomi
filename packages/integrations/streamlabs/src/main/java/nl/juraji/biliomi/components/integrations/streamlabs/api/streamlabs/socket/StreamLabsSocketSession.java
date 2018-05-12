@@ -19,57 +19,57 @@ import java.net.URISyntaxException;
 @Default
 @Singleton
 public class StreamLabsSocketSession implements Restartable {
-  private static final String SOCKET_URI = "https://sockets.streamlabs.com";
+    private static final String SOCKET_URI = "https://sockets.streamlabs.com";
 
-  @Inject
-  private Logger logger;
+    @Inject
+    private Logger logger;
 
-  @Inject
-  private EventBus eventBus;
+    @Inject
+    private EventBus eventBus;
 
-  private String socketToken;
-  private Socket socket;
+    private String socketToken;
+    private Socket socket;
 
-  @Override
-  public void start() {
-    if (socketToken == null) {
-      return;
+    @Override
+    public void start() {
+        if (socketToken == null) {
+            return;
+        }
+
+        if (socket == null) {
+            try {
+                socket = IO.socket(SOCKET_URI, getIOOptions());
+                socket.on("event", new StreamLabsEventListener(eventBus));
+            } catch (URISyntaxException e) {
+                logger.error("Failed connection to Stream Labs socket.io", e);
+            }
+        } else {
+            stop();
+        }
+
+        socket.connect();
     }
 
-    if (socket == null) {
-      try {
-        socket = IO.socket(SOCKET_URI, getIOOptions());
-        socket.on("event", new StreamLabsEventListener(eventBus));
-      } catch (URISyntaxException e) {
-        logger.error("Failed connection to Stream Labs socket.io", e);
-      }
-    } else {
-      stop();
+    @Override
+    public void stop() {
+        if (socket != null && socket.connected()) {
+            socket.disconnect();
+        }
     }
 
-    socket.connect();
-  }
-
-  @Override
-  public void stop() {
-    if (socket != null && socket.connected()) {
-      socket.disconnect();
+    public void setSocketToken(String socketToken) {
+        this.socketToken = socketToken;
     }
-  }
 
-  public void setSocketToken(String socketToken) {
-    this.socketToken = socketToken;
-  }
+    private IO.Options getIOOptions() {
+        IO.Options options = new IO.Options();
 
-  private IO.Options getIOOptions() {
-    IO.Options options = new IO.Options();
+        options.query = "token=" + socketToken;
+        options.reconnection = true;
+        options.reconnectionAttempts = 3;
+        options.reconnectionDelay = 10000;
+        options.reconnectionDelayMax = 60000;
 
-    options.query = "token=" + socketToken;
-    options.reconnection = true;
-    options.reconnectionAttempts = 3;
-    options.reconnectionDelay = 10000;
-    options.reconnectionDelayMax = 60000;
-
-    return options;
-  }
+        return options;
+    }
 }

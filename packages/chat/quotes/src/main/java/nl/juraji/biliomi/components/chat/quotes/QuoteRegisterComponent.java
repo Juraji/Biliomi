@@ -23,107 +23,107 @@ import javax.inject.Singleton;
 @NormalComponent
 public class QuoteRegisterComponent extends Component {
 
-  @Inject
-  private QuoteService quoteService;
+    @Inject
+    private QuoteService quoteService;
 
-  @Inject
-  private TimeFormatter timeFormatter;
+    @Inject
+    private TimeFormatter timeFormatter;
 
-  /**
-   * Get a quote from the quote register
-   * Usage: !quote or !quote [quote id]
-   */
-  @CommandRoute(command = "quote")
-  public boolean quoteCommand(User user, Arguments arguments) {
-    Quote quote;
+    /**
+     * Get a quote from the quote register
+     * Usage: !quote or !quote [quote id]
+     */
+    @CommandRoute(command = "quote")
+    public boolean quoteCommand(User user, Arguments arguments) {
+        Quote quote;
 
-    if (arguments.assertSize(1)) {
-      // If quoteId is present in args, try and retrieve it that way
-      Long quoteId = NumberConverter.asNumber(arguments.get(0)).toLong();
+        if (arguments.assertSize(1)) {
+            // If quoteId is present in args, try and retrieve it that way
+            Long quoteId = NumberConverter.asNumber(arguments.get(0)).toLong();
 
-      if (quoteId == null) {
-        chat.whisper(user, i18n.get("ChatCommand.quote.usage"));
-        return false;
-      }
+            if (quoteId == null) {
+                chat.whisper(user, i18n.get("ChatCommand.quote.usage"));
+                return false;
+            }
 
-      quote = quoteService.getQuote(quoteId);
-    } else {
-      // No quoteId is given, try and retrieve a random quote
-      quote = quoteService.getRandom();
+            quote = quoteService.getQuote(quoteId);
+        } else {
+            // No quoteId is given, try and retrieve a random quote
+            quote = quoteService.getRandom();
+        }
+
+        if (quote == null) {
+            chat.whisper(user, i18n.get("ChatCommand.quote.notFound"));
+            return false;
+        }
+
+        chat.say(i18n.get("ChatCommand.quote.quoteTemplate")
+                .add("message", quote::getMessage)
+                .add("date", () -> timeFormatter.fullDate(quote.getDate()))
+                .add("user", quote.getUser().getNameAndTitle()));
+        return true;
     }
 
-    if (quote == null) {
-      chat.whisper(user, i18n.get("ChatCommand.quote.notFound"));
-      return false;
+    /**
+     * Manage quotes
+     * Usage: !quotes [add|remove] [more...]
+     */
+    @CommandRoute(command = "quotes", systemCommand = true)
+    public boolean managequotesCommand(User user, Arguments arguments) {
+        return captureSubCommands("quotes", i18n.supply("ChatCommand.quotes.usage"), user, arguments);
     }
 
-    chat.say(i18n.get("ChatCommand.quote.quoteTemplate")
-        .add("message", quote::getMessage)
-        .add("date", () -> timeFormatter.fullDate(quote.getDate()))
-        .add("user", quote.getUser().getNameAndTitle()));
-    return true;
-  }
+    /**
+     * Add a new quote
+     * Usage: !quotes add [username] [message...]
+     */
+    @SubCommandRoute(parentCommand = "quotes", command = "add")
+    public boolean managequotesCommandAdd(User user, Arguments arguments) {
+        if (!arguments.assertMinSize(2)) {
+            chat.whisper(user, i18n.get("ChatCommand.quotes.add.usage"));
+            return false;
+        }
 
-  /**
-   * Manage quotes
-   * Usage: !quotes [add|remove] [more...]
-   */
-  @CommandRoute(command = "quotes", systemCommand = true)
-  public boolean managequotesCommand(User user, Arguments arguments) {
-    return captureSubCommands("quotes", i18n.supply("ChatCommand.quotes.usage"), user, arguments);
-  }
+        String qUsername = arguments.pop();
+        User qUser = usersService.getUser(qUsername);
+        if (qUser == null) {
+            chat.whisper(user, i18n.getUserNonExistent(qUsername));
+            return false;
+        }
 
-  /**
-   * Add a new quote
-   * Usage: !quotes add [username] [message...]
-   */
-  @SubCommandRoute(parentCommand = "quotes", command = "add")
-  public boolean managequotesCommandAdd(User user, Arguments arguments) {
-    if (!arguments.assertMinSize(2)) {
-      chat.whisper(user, i18n.get("ChatCommand.quotes.add.usage"));
-      return false;
+        String message = arguments.toString();
+
+        Quote quote = quoteService.registerQuote(qUser, message);
+
+        chat.say(i18n.get("ChatCommand.quotes.add.saved")
+                .add("username", user::getNameAndTitle)
+                .add("id", quote::getId));
+        return true;
     }
 
-    String qUsername = arguments.pop();
-    User qUser = usersService.getUser(qUsername);
-    if (qUser == null) {
-      chat.whisper(user, i18n.getUserNonExistent(qUsername));
-      return false;
+    /**
+     * Remove a quote
+     * Usage: !quotes remove [quote id]
+     */
+    @SubCommandRoute(parentCommand = "quotes", command = "remove")
+    public boolean managequotesCommandRemove(User user, Arguments arguments) {
+        Long quoteId = NumberConverter.asNumber(arguments.get(0)).toLong();
+
+        if (quoteId == null) {
+            chat.whisper(user, i18n.get("ChatCommand.quotes.remove.usage"));
+            return false;
+        }
+
+        Quote quote = quoteService.getQuote(quoteId);
+        if (quote == null) {
+            chat.whisper(user, i18n.get("ChatCommand.quote.notFound"));
+            return false;
+        }
+
+        quoteService.delete(quote);
+        chat.whisper(user, i18n.get("ChatCommand.quotes.remove.removed")
+                .add("username", quote.getUser().getDisplayName())
+                .add("id", quote::getId));
+        return true;
     }
-
-    String message = arguments.toString();
-
-    Quote quote = quoteService.registerQuote(qUser, message);
-
-    chat.say(i18n.get("ChatCommand.quotes.add.saved")
-        .add("username", user::getNameAndTitle)
-        .add("id", quote::getId));
-    return true;
-  }
-
-  /**
-   * Remove a quote
-   * Usage: !quotes remove [quote id]
-   */
-  @SubCommandRoute(parentCommand = "quotes", command = "remove")
-  public boolean managequotesCommandRemove(User user, Arguments arguments) {
-    Long quoteId = NumberConverter.asNumber(arguments.get(0)).toLong();
-
-    if (quoteId == null) {
-      chat.whisper(user, i18n.get("ChatCommand.quotes.remove.usage"));
-      return false;
-    }
-
-    Quote quote = quoteService.getQuote(quoteId);
-    if (quote == null) {
-      chat.whisper(user, i18n.get("ChatCommand.quote.notFound"));
-      return false;
-    }
-
-    quoteService.delete(quote);
-    chat.whisper(user, i18n.get("ChatCommand.quotes.remove.removed")
-        .add("username", quote.getUser().getDisplayName())
-        .add("id", quote::getId));
-    return true;
-  }
 }

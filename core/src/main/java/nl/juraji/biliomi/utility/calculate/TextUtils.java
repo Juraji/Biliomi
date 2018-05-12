@@ -12,66 +12,66 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public final class TextUtils {
-  private static final String COMMA_LIST_SEPARATOR = ", ";
+    private static final String COMMA_LIST_SEPARATOR = ", ";
 
-  private TextUtils() {
-  }
-
-  /**
-   * Chunkify strings to a set length, but do not break words
-   *
-   * @param string The string to chunkify
-   * @param length The max length of the chunks
-   * @return A list containing the resulting chunks
-   */
-  public static List<String> chunkify(String string, int length) {
-    List<String> chunks = new ArrayList<>();
-
-    if (StringUtils.isEmpty(string) || string.length() <= length) {
-      chunks.add(string);
-      return chunks;
+    private TextUtils() {
     }
 
-    Iterator<String> words = Iterators.forArray(string.split(" "));
-    int chunkCount = (int) Math.ceil(((double) string.length()) / length);
+    /**
+     * Chunkify strings to a set length, but do not break words
+     *
+     * @param string The string to chunkify
+     * @param length The max length of the chunks
+     * @return A list containing the resulting chunks
+     */
+    public static List<String> chunkify(String string, int length) {
+        List<String> chunks = new ArrayList<>();
 
-    IntStream.rangeClosed(1, chunkCount).forEach(ci -> {
-      StringBuilder newChunk = new StringBuilder();
+        if (StringUtils.isEmpty(string) || string.length() <= length) {
+            chunks.add(string);
+            return chunks;
+        }
 
-      while (newChunk.length() < length) {
-        if (!words.hasNext()) break;
-        newChunk.append(" ").append(words.next());
-      }
+        Iterator<String> words = Iterators.forArray(string.split(" "));
+        int chunkCount = (int) Math.ceil(((double) string.length()) / length);
 
-      if (StringUtils.isNotEmpty(newChunk)) chunks.add(newChunk.toString().trim());
-    });
+        IntStream.rangeClosed(1, chunkCount).forEach(ci -> {
+            StringBuilder newChunk = new StringBuilder();
 
-    return chunks;
-  }
+            while (newChunk.length() < length) {
+                if (!words.hasNext()) break;
+                newChunk.append(" ").append(words.next());
+            }
 
-  /**
-   * Merge a collection of strings separating each item with a comma
-   *
-   * @param collection The collection to merge
-   * @return The resulting string. May be empty if the collection was empty or null
-   */
-  @NotNull
-  public static String commaList(Collection<String> collection) {
-    if (collection == null || collection.isEmpty()) {
-      return "";
+            if (StringUtils.isNotEmpty(newChunk)) chunks.add(newChunk.toString().trim());
+        });
+
+        return chunks;
     }
-    return commaList(collection.stream());
-  }
 
-  /**
-   * Merge a stream of strings separating each item with a comma
-   *
-   * @param stream The stream to merge
-   * @return The resulting string. May be empty if the stream was empty
-   */
-  public static String commaList(Stream<String> stream) {
-    return stream
-        .reduce((l, r) -> l + COMMA_LIST_SEPARATOR + r)
-        .orElse("");
-  }
+    /**
+     * Merge a collection of strings separating each item with a comma
+     *
+     * @param collection The collection to merge
+     * @return The resulting string. May be empty if the collection was empty or null
+     */
+    @NotNull
+    public static String commaList(Collection<String> collection) {
+        if (collection == null || collection.isEmpty()) {
+            return "";
+        }
+        return commaList(collection.stream());
+    }
+
+    /**
+     * Merge a stream of strings separating each item with a comma
+     *
+     * @param stream The stream to merge
+     * @return The resulting string. May be empty if the stream was empty
+     */
+    public static String commaList(Stream<String> stream) {
+        return stream
+                .reduce((l, r) -> l + COMMA_LIST_SEPARATOR + r)
+                .orElse("");
+    }
 }

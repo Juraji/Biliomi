@@ -14,19 +14,19 @@ import javax.inject.Inject;
 @Default
 public class FollowerWatchComponentUpdateTask implements SetupTask {
 
-  @Inject
-  private TemplateDao templateDao;
+    @Inject
+    private TemplateDao templateDao;
 
-  @Override
-  public void install() {
-    if (!templateDao.templateExists(FollowerWatchComponent.INCOMING_FOLLOW_NOTICE)) {
-      Template template = new Template();
-      template.setTemplateKey(FollowerWatchComponent.INCOMING_FOLLOW_NOTICE);
-      template.setTemplate("Welcome @{{username}}, thank you for the follow! I've rewarded you {{points}} for use in botgames!");
-      template.setDescription("Posted in the chat when a new follower registers");
-      template.getKeyDescriptions().put("username", "The username of the new follower");
-      template.getKeyDescriptions().put("points", "The amount of points being paid out to the following user");
-      templateDao.save(template);
+    @Override
+    public void install() {
+        if (templateDao.templateMissing(FollowerWatchComponent.INCOMING_FOLLOW_NOTICE)) {
+            Template template = new Template();
+            template.setTemplateKey(FollowerWatchComponent.INCOMING_FOLLOW_NOTICE);
+            template.setTemplate("Welcome @{{username}}, thank you for the follow! I've rewarded you {{points}} for use in botgames!");
+            template.setDescription("Posted in the chat when a new follower registers");
+            template.getKeyDescriptions().put("username", "The username of the new follower");
+            template.getKeyDescriptions().put("points", "The amount of points being paid out to the following user");
+            templateDao.save(template);
+        }
     }
-  }
 }

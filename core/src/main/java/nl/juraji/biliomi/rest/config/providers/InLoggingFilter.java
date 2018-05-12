@@ -18,16 +18,16 @@ import javax.ws.rs.ext.Provider;
 @Priority(0) // Absolute first
 public class InLoggingFilter implements ContainerRequestFilter {
 
-  @Inject
-  @LoggerFor(RestServerController.class)
-  private Logger logger;
+    @Inject
+    @LoggerFor(RestServerController.class)
+    private Logger logger;
 
-  @Override
-  public void filter(ContainerRequestContext containerRequestContext) {
-    if (logger.isDebugEnabled()) {
-      String method = containerRequestContext.getRequest().getMethod();
-      String uri = containerRequestContext.getUriInfo().getRequestUri().toString();
-      logger.debug("Incoming request: {} {}", method, uri);
+    @Override
+    public void filter(ContainerRequestContext containerRequestContext) {
+        if (logger.isDebugEnabled()) {
+            String method = containerRequestContext.getRequest().getMethod();
+            String uri = containerRequestContext.getUriInfo().getRequestUri().toString();
+            logger.debug("Incoming request: {} {}", method, uri);
+        }
     }
-  }
 }

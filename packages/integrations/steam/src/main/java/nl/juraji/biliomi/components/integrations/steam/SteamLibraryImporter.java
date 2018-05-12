@@ -20,52 +20,52 @@ import javax.inject.Inject;
 @Default
 public class SteamLibraryImporter implements Runnable {
 
-  @Inject
-  private Logger logger;
+    @Inject
+    private Logger logger;
 
-  @Inject
-  private GameDao gameDao;
+    @Inject
+    private GameDao gameDao;
 
-  @Inject
-  private SteamApi steamApi;
+    @Inject
+    private SteamApi steamApi;
 
 
-  @Override
-  public void run() {
-    logger.info("Importing games for Steam...");
+    @Override
+    public void run() {
+        logger.info("Importing games for Steam...");
 
-    SteamLibrary library = null;
+        SteamLibrary library = null;
 
-    try {
-      Response<SteamLibraryResponse> libraryResponse = steamApi.getOwnedGames();
+        try {
+            Response<SteamLibraryResponse> libraryResponse = steamApi.getOwnedGames();
 
-      if (libraryResponse.isOK() && libraryResponse.getData() != null) {
-        library = libraryResponse.getData().getResponse();
-      }
-    } catch (Exception e) {
-      logger.error("Failed retrieving Steam library information", e);
+            if (libraryResponse.isOK() && libraryResponse.getData() != null) {
+                library = libraryResponse.getData().getResponse();
+            }
+        } catch (Exception e) {
+            logger.error("Failed retrieving Steam library information", e);
+        }
+
+        if (library == null) {
+            return;
+        }
+
+        EStream.from(library.getGames())
+                .mapToBiEStream(steamApp -> steamApp, steamApp -> gameDao.getBySteamIdOrName(steamApp.getAppId(), steamApp.getName()))
+                .mapValue(game -> (game == null ? new Game() : game))
+                .filterValue(game -> game.getSteamId() == null)
+                .map((app, game) -> {
+                    game.setName(app.getName());
+                    game.setSteamId(app.getAppId());
+
+                    if (game.getFirstPlayedOn() == null) {
+                        game.setFirstPlayedOn(DateTime.now());
+                    }
+
+                    return game;
+                })
+                .forEach(gameDao::save);
+
+        logger.info("Done! Imported {} items from your Steam library", library.getGameCount());
     }
-
-    if (library == null) {
-      return;
-    }
-
-    EStream.from(library.getGames())
-        .mapToBiEStream(steamApp -> steamApp, steamApp -> gameDao.getBySteamIdOrName(steamApp.getAppId(), steamApp.getName()))
-        .mapValue(game -> (game == null ? new Game() : game))
-        .filterValue(game -> game.getSteamId() == null)
-        .map((app, game) -> {
-          game.setName(app.getName());
-          game.setSteamId(app.getAppId());
-
-          if (game.getFirstPlayedOn() == null) {
-            game.setFirstPlayedOn(DateTime.now());
-          }
-
-          return game;
-        })
-        .forEach(gameDao::save);
-
-    logger.info("Done! Imported {} items from your Steam library", library.getGameCount());
-  }
 }

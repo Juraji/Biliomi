@@ -15,39 +15,39 @@ import java.util.List;
 @Path("/games/achievements")
 public class AchievementRecordRestService extends ModelRestService<AchievementRecord> {
 
-  @Inject
-  private AchievementRecordDao recordDao;
+    @Inject
+    private AchievementRecordDao recordDao;
 
-  @Override
-  public List<AchievementRecord> getEntities() {
-    return recordDao.getList();
-  }
-
-  @Override
-  public AchievementRecord getEntity(long id) {
-    return recordDao.get(id);
-  }
-
-  @Override
-  public AchievementRecord createEntity(AchievementRecord e) {
-    recordDao.save(e);
-    return e;
-  }
-
-  @Override
-  public AchievementRecord updateEntity(AchievementRecord e, long id) {
-    return null;
-  }
-
-  @Override
-  public boolean deleteEntity(long id) {
-    AchievementRecord record = recordDao.get(id);
-
-    if (record == null) {
-      return false;
+    @Override
+    public List<AchievementRecord> getEntities() {
+        return recordDao.getList();
     }
 
-    recordDao.delete(record);
-    return true;
-  }
+    @Override
+    public AchievementRecord getEntity(long id) {
+        return recordDao.get(id);
+    }
+
+    @Override
+    public AchievementRecord createEntity(AchievementRecord e) {
+        recordDao.save(e);
+        return e;
+    }
+
+    @Override
+    public AchievementRecord updateEntity(AchievementRecord e, long id) {
+        return null;
+    }
+
+    @Override
+    public boolean deleteEntity(long id) {
+        AchievementRecord record = recordDao.get(id);
+
+        if (record == null) {
+            return false;
+        }
+
+        recordDao.delete(record);
+        return true;
+    }
 }

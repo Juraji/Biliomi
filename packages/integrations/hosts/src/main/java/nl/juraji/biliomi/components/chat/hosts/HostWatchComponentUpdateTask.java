@@ -14,19 +14,19 @@ import javax.inject.Inject;
 @Default
 public class HostWatchComponentUpdateTask implements SetupTask {
 
-  @Inject
-  private TemplateDao templateDao;
+    @Inject
+    private TemplateDao templateDao;
 
-  @Override
-  public void install() {
-    if (!templateDao.templateExists(HostWatchComponent.INCOMING_HOST_NOTICE_TEMPLATE)) {
-      Template template = new Template();
-      template.setTemplateKey(HostWatchComponent.INCOMING_HOST_NOTICE_TEMPLATE);
-      template.setTemplate("Hey @{{username}}, thank you for hosting! I've rewarded you {{points}} cuz you're lovely!");
-      template.setDescription("Posted in the chat when another channel initiates a host to your channel");
-      template.getKeyDescriptions().put("username", "The hosting channel's name");
-      template.getKeyDescriptions().put("points", "The amount of points being paid out to the hosting user");
-      templateDao.save(template);
+    @Override
+    public void install() {
+        if (templateDao.templateMissing(HostWatchComponent.INCOMING_HOST_NOTICE_TEMPLATE)) {
+            Template template = new Template();
+            template.setTemplateKey(HostWatchComponent.INCOMING_HOST_NOTICE_TEMPLATE);
+            template.setTemplate("Hey @{{username}}, thank you for hosting! I've rewarded you {{points}} cuz you're lovely!");
+            template.setDescription("Posted in the chat when another channel initiates a host to your channel");
+            template.getKeyDescriptions().put("username", "The hosting channel's name");
+            template.getKeyDescriptions().put("points", "The amount of points being paid out to the hosting user");
+            templateDao.save(template);
+        }
     }
-  }
 }

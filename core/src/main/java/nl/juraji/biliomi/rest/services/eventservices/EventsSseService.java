@@ -31,54 +31,54 @@ import java.util.concurrent.TimeUnit;
 @Path("/events")
 @EventBusSubscriber
 public class EventsSseService {
-  private final TimedList<String> SLTRegister = new TimedList<>("EventsSseService-SLTRegister");
-  private final SseBroadcaster sseBroadcaster = new SseBroadcaster();
+    private final TimedList<String> SLTRegister = new TimedList<>("EventsSseService-SLTRegister");
+    private final SseBroadcaster sseBroadcaster = new SseBroadcaster();
 
-  @Inject
-  private Logger logger;
+    @Inject
+    private Logger logger;
 
-  @Subscribe
-  public void onEvent(Event event) {
-    try {
-      String eventData = JacksonMarshaller.marshal(event);
+    @Subscribe
+    public void onEvent(Event event) {
+        try {
+            String eventData = JacksonMarshaller.marshal(event);
 
-      OutboundEvent outboundEvent = new OutboundEvent.Builder()
-          .mediaType(MediaType.APPLICATION_JSON_TYPE)
-          .data(String.class, eventData)
-          .build();
+            OutboundEvent outboundEvent = new OutboundEvent.Builder()
+                    .mediaType(MediaType.APPLICATION_JSON_TYPE)
+                    .data(String.class, eventData)
+                    .build();
 
-      sseBroadcaster.broadcast(outboundEvent);
-    } catch (JsonProcessingException e) {
-      logger.error("Failed marshalling event for REST SSE events", e);
-    }
-  }
-
-  @GET
-  @PermitAll
-  @Produces(SseFeature.SERVER_SENT_EVENTS)
-  public EventOutput listenToEvents(@QueryParam("token") String token) {
-    String removedToken = SLTRegister.remove(token);
-
-    if (removedToken == null) {
-      return null;
+            sseBroadcaster.broadcast(outboundEvent);
+        } catch (JsonProcessingException e) {
+            logger.error("Failed marshalling event for REST SSE events", e);
+        }
     }
 
-    final EventOutput eventOutput = new EventOutput();
-    sseBroadcaster.add(eventOutput);
-    return eventOutput;
-  }
+    @GET
+    @PermitAll
+    @Produces(SseFeature.SERVER_SENT_EVENTS)
+    public EventOutput listenToEvents(@QueryParam("token") String token) {
+        String removedToken = SLTRegister.remove(token);
 
-  @GET
-  @Path("/token")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getShortLivedToken() {
-    String SLT = new TokenGenerator(20, false).generate();
-    SLTRegister.add(SLT, 10, TimeUnit.SECONDS);
+        if (removedToken == null) {
+            return null;
+        }
 
-    RestAuthorizationResponse authorizationResponse = new RestAuthorizationResponse();
-    authorizationResponse.setAuthorizationToken(SLT);
+        final EventOutput eventOutput = new EventOutput();
+        sseBroadcaster.add(eventOutput);
+        return eventOutput;
+    }
 
-    return Responses.ok(authorizationResponse);
-  }
+    @GET
+    @Path("/token")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getShortLivedToken() {
+        String SLT = new TokenGenerator(20, false).generate();
+        SLTRegister.add(SLT, 10, TimeUnit.SECONDS);
+
+        RestAuthorizationResponse authorizationResponse = new RestAuthorizationResponse();
+        authorizationResponse.setAuthorizationToken(SLT);
+
+        return Responses.ok(authorizationResponse);
+    }
 }

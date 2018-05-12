@@ -38,164 +38,164 @@ import java.util.stream.IntStream;
 @Singleton
 public class SubscriberWatchUpdateService extends TimerService {
 
-  @Inject
-  private EventBus eventBus;
+    @Inject
+    private EventBus eventBus;
 
-  @Inject
-  private TwitchApi twitchApi;
+    @Inject
+    private TwitchApi twitchApi;
 
-  @Inject
-  private ChannelService channelService;
+    @Inject
+    private ChannelService channelService;
 
-  @Inject
-  private UsersService usersService;
+    @Inject
+    private UsersService usersService;
 
-  @Override
-  public void start() {
-    super.start();
-    // Incrementals at 30 seconds intervals
-    scheduleAtFixedRate(this::incrementalUpdate, 30, TimeUnit.SECONDS);
-    // Full at 10 seconds and every 6 hours after that
-    scheduleAtFixedRate(this::update, 10,21600, TimeUnit.SECONDS);
-  }
-
-  private void incrementalUpdate() {
-    try {
-      Response<TwitchSubscriptions> followsResponse = twitchApi.getChannelSubscriptions(channelService.getChannelId(), 20, 0);
-
-      if (followsResponse.isOK()) {
-        List<TwitchSubscription> twitchSubscriptions = followsResponse.getData().getSubscriptions();
-        updateChangedUsernames(twitchSubscriptions);
-        updateNewSubscribers(twitchSubscriptions);
-      }
-    } catch (Exception e) {
-      logger.error("Failed incremental update of followers", e);
+    @Override
+    public void start() {
+        super.start();
+        // Incrementals at 30 seconds intervals
+        scheduleAtFixedRate(this::incrementalUpdate, 30, TimeUnit.SECONDS);
+        // Full at 10 seconds and every 6 hours after that
+        scheduleAtFixedRate(this::update, 10, 21600, TimeUnit.SECONDS);
     }
-  }
 
-  private void update() {
-    ExecutorService chunkExecutor = ThreadPools.newExecutorService(8, "SubscriberWatchTimerServiceFullUpdateChunks");
-    try {
-      // Calculate how many pages to fetch (A page can have a max of 100 users)
-      int pageCount = (int) Math.ceil(getSubscriberCount() / 100.0);
-      List<Future<Response<TwitchSubscriptions>>> futures = new ArrayList<>();
+    private void incrementalUpdate() {
+        try {
+            Response<TwitchSubscriptions> followsResponse = twitchApi.getChannelSubscriptions(channelService.getChannelId(), 20, 0);
 
-      // Fetch subscribers from Twitch (8 pages of 100 at a time)
-      IntStream.range(0, pageCount)
-          .mapToObj(page -> page * 100)
-          .map(offset -> chunkExecutor.submit(() -> twitchApi.getChannelSubscriptions(channelService.getChannelId(), 100, offset)))
-          .forEachOrdered(futures::add);
-
-      // Map all requests to a single list of subscribed twitch user ids
-      // Failes when one or more pages failed to fetch
-      List<TwitchSubscription> twitchSubscriptions = EStream.from(futures)
-          .map(Future::get)
-          .peek(r -> {
-            if (r == null || !r.isOK()) {
-              throw new Exception("A response was not OK, cannot make a complete comparison");
+            if (followsResponse.isOK()) {
+                List<TwitchSubscription> twitchSubscriptions = followsResponse.getData().getSubscriptions();
+                updateChangedUsernames(twitchSubscriptions);
+                updateNewSubscribers(twitchSubscriptions);
             }
-          })
-          .flatMap(r -> r.getData().getSubscriptions().stream())
-          .collect(Collectors.toList());
-
-      updateChangedUsernames(twitchSubscriptions);
-      updateUnsubscribers(twitchSubscriptions);
-      updateNewSubscribers(twitchSubscriptions);
-    } catch (UnavailableException e) {
-      logger.info("Subscriptions are not available for this channel, the SubscriberWatch will be disabled");
-      this.stop();
-    } catch (Exception e) {
-      logger.error("Failed update of subscribers", e);
-    } finally {
-      chunkExecutor.shutdownNow();
-    }
-  }
-
-  /**
-   * Compare Twitch subscribers with local subscribers.
-   * If a local subscriber is not in the Twitch subscribers,
-   * they will be removed as local subscriber
-   *
-   * @param twitchSubscriptions A list with Twitch subscriber user ids
-   */
-  private void updateUnsubscribers(List<TwitchSubscription> twitchSubscriptions) {
-    List<Long> tids = twitchSubscriptions.stream()
-        .map(twitchSubscription -> twitchSubscription.getUser().getId())
-        .collect(Collectors.toList());
-    List<User> localSubscriptions = usersService.getSubscribers();
-
-    List<User> unsubscribers = localSubscriptions.stream()
-        .filter(user -> !tids.contains(user.getTwitchUserId()))
-        .peek(user -> {
-          user.setSubscriber(false);
-          user.setSubscribeDate(null);
-        })
-        .collect(Collectors.toList());
-
-    usersService.save(unsubscribers);
-  }
-
-  /**
-   * Compare local subscribers with Twitch subscribers.
-   * If a Twitch subscribers is NOT in the local subscribers,
-   * they will get added as local subscriber and get the Tier 1 reward
-   *
-   * @param twitchSubscriptions A list with Twitch subscriber user ids
-   */
-  private void updateNewSubscribers(List<TwitchSubscription> twitchSubscriptions) {
-    // Fetch currently known subbed users from the database
-    List<Long> localSubscriptions = usersService.getSubscribers().stream()
-        .map(User::getTwitchUserId)
-        .collect(Collectors.toList());
-
-    twitchSubscriptions.stream()
-        .filter(twitchSubscription -> !localSubscriptions.contains(twitchSubscription.getUser().getId()))
-        .forEach(twitchSubscription -> eventBus.post(new TwitchSubscriberEvent(
-            usersService.getUserByTwitchId(twitchSubscription.getUser().getId()),
-            new DateTime(twitchSubscription.getCreatedAt()),
-            SubscriberPlanType.TIER1,
-            false
-        )));
-  }
-
-
-  /**
-   * Update local users using the Twitch followers
-   * (Oppertunity, since the data's already retrieved)
-   *
-   * @param twitchSubscriptions A list with Twitch follower objects
-   */
-  private void updateChangedUsernames(List<TwitchSubscription> twitchSubscriptions) {
-    List<User> users = usersService.getList();
-
-    Map<Long, TwitchUser> twitchUserMap = EStream.from(twitchSubscriptions)
-        .map(TwitchSubscription::getUser)
-        .mapToBiEStream(TwitchUser::getId)
-        .invert()
-        .toMap();
-
-    List<User> updatedUsers = EStream.from(users)
-        .mapToBiEStream(u -> twitchUserMap.get(u.getTwitchUserId()))
-        .filterValue(Objects::nonNull)
-        .filter((u, f) -> !u.getUsername().equals(f.getName()))
-        .peek((u, f) -> {
-          logger.info(u.getDisplayName() + " Changed their username to " + f.getDisplayName());
-          u.setUsername(f.getName());
-          u.setDisplayName(f.getDisplayName());
-        })
-        .map((u, f) -> u)
-        .collect(Collectors.toList());
-
-    usersService.save(updatedUsers);
-  }
-
-  private int getSubscriberCount() throws Exception {
-    long channelId = channelService.getChannelId();
-    Response<TwitchSubscriptions> response = twitchApi.getChannelSubscriptions(channelId, 0, 0);
-    if (!response.isOK()) {
-      throw new UnavailableException();
+        } catch (Exception e) {
+            logger.error("Failed incremental update of followers", e);
+        }
     }
 
-    return response.getData().getTotal();
-  }
+    private void update() {
+        ExecutorService chunkExecutor = ThreadPools.newExecutorService(8, "SubscriberWatchTimerServiceFullUpdateChunks");
+        try {
+            // Calculate how many pages to fetch (A page can have a max of 100 users)
+            int pageCount = (int) Math.ceil(getSubscriberCount() / 100.0);
+            List<Future<Response<TwitchSubscriptions>>> futures = new ArrayList<>();
+
+            // Fetch subscribers from Twitch (8 pages of 100 at a time)
+            IntStream.range(0, pageCount)
+                    .mapToObj(page -> page * 100)
+                    .map(offset -> chunkExecutor.submit(() -> twitchApi.getChannelSubscriptions(channelService.getChannelId(), 100, offset)))
+                    .forEachOrdered(futures::add);
+
+            // Map all requests to a single list of subscribed twitch user ids
+            // Failes when one or more pages failed to fetch
+            List<TwitchSubscription> twitchSubscriptions = EStream.from(futures)
+                    .map(Future::get)
+                    .peek(r -> {
+                        if (r == null || !r.isOK()) {
+                            throw new Exception("A response was not OK, cannot make a complete comparison");
+                        }
+                    })
+                    .flatMap(r -> r.getData().getSubscriptions().stream())
+                    .collect(Collectors.toList());
+
+            updateChangedUsernames(twitchSubscriptions);
+            updateUnsubscribers(twitchSubscriptions);
+            updateNewSubscribers(twitchSubscriptions);
+        } catch (UnavailableException e) {
+            logger.info("Subscriptions are not available for this channel, the SubscriberWatch will be disabled");
+            this.stop();
+        } catch (Exception e) {
+            logger.error("Failed update of subscribers", e);
+        } finally {
+            chunkExecutor.shutdownNow();
+        }
+    }
+
+    /**
+     * Compare Twitch subscribers with local subscribers.
+     * If a local subscriber is not in the Twitch subscribers,
+     * they will be removed as local subscriber
+     *
+     * @param twitchSubscriptions A list with Twitch subscriber user ids
+     */
+    private void updateUnsubscribers(List<TwitchSubscription> twitchSubscriptions) {
+        List<Long> tids = twitchSubscriptions.stream()
+                .map(twitchSubscription -> twitchSubscription.getUser().getId())
+                .collect(Collectors.toList());
+        List<User> localSubscriptions = usersService.getSubscribers();
+
+        List<User> unsubscribers = localSubscriptions.stream()
+                .filter(user -> !tids.contains(user.getTwitchUserId()))
+                .peek(user -> {
+                    user.setSubscriber(false);
+                    user.setSubscribeDate(null);
+                })
+                .collect(Collectors.toList());
+
+        usersService.save(unsubscribers);
+    }
+
+    /**
+     * Compare local subscribers with Twitch subscribers.
+     * If a Twitch subscribers is NOT in the local subscribers,
+     * they will get added as local subscriber and get the Tier 1 reward
+     *
+     * @param twitchSubscriptions A list with Twitch subscriber user ids
+     */
+    private void updateNewSubscribers(List<TwitchSubscription> twitchSubscriptions) {
+        // Fetch currently known subbed users from the database
+        List<Long> localSubscriptions = usersService.getSubscribers().stream()
+                .map(User::getTwitchUserId)
+                .collect(Collectors.toList());
+
+        twitchSubscriptions.stream()
+                .filter(twitchSubscription -> !localSubscriptions.contains(twitchSubscription.getUser().getId()))
+                .forEach(twitchSubscription -> eventBus.post(new TwitchSubscriberEvent(
+                        usersService.getUserByTwitchId(twitchSubscription.getUser().getId()),
+                        new DateTime(twitchSubscription.getCreatedAt()),
+                        SubscriberPlanType.TIER1,
+                        false
+                )));
+    }
+
+
+    /**
+     * Update local users using the Twitch followers
+     * (Oppertunity, since the data's already retrieved)
+     *
+     * @param twitchSubscriptions A list with Twitch follower objects
+     */
+    private void updateChangedUsernames(List<TwitchSubscription> twitchSubscriptions) {
+        List<User> users = usersService.getList();
+
+        Map<Long, TwitchUser> twitchUserMap = EStream.from(twitchSubscriptions)
+                .map(TwitchSubscription::getUser)
+                .mapToBiEStream(TwitchUser::getId)
+                .invert()
+                .toMap();
+
+        List<User> updatedUsers = EStream.from(users)
+                .mapToBiEStream(u -> twitchUserMap.get(u.getTwitchUserId()))
+                .filterValue(Objects::nonNull)
+                .filter((u, f) -> !u.getUsername().equals(f.getName()))
+                .peek((u, f) -> {
+                    logger.info(u.getDisplayName() + " Changed their username to " + f.getDisplayName());
+                    u.setUsername(f.getName());
+                    u.setDisplayName(f.getDisplayName());
+                })
+                .map((u, f) -> u)
+                .collect(Collectors.toList());
+
+        usersService.save(updatedUsers);
+    }
+
+    private int getSubscriberCount() throws Exception {
+        long channelId = channelService.getChannelId();
+        Response<TwitchSubscriptions> response = twitchApi.getChannelSubscriptions(channelId, 0, 0);
+        if (!response.isOK()) {
+            throw new UnavailableException();
+        }
+
+        return response.getData().getTotal();
+    }
 }

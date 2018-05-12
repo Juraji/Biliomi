@@ -17,22 +17,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchFollowEvent extends TwitchEvent {
 
-  @XmlElement(name = "User")
-  private final User user;
+    @XmlElement(name = "User")
+    private final User user;
 
-  @XmlElement(name = "FollowsSince")
-  private final DateTime followsSince;
+    @XmlElement(name = "FollowsSince")
+    private final DateTime followsSince;
 
-  public TwitchFollowEvent(User user, DateTime followsSince) {
-    this.user = user;
-    this.followsSince = followsSince;
-  }
+    public TwitchFollowEvent(User user, DateTime followsSince) {
+        this.user = user;
+        this.followsSince = followsSince;
+    }
 
-  public User getUser() {
-    return user;
-  }
+    public User getUser() {
+        return user;
+    }
 
-  public DateTime getFollowsSince() {
-    return followsSince;
-  }
+    public DateTime getFollowsSince() {
+        return followsSince;
+    }
 }

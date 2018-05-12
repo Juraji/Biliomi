@@ -21,54 +21,54 @@ import javax.inject.Singleton;
 @Default
 @Singleton
 public class TwitchHelixWebhookApiImpl implements TwitchHelixWebhookApi {
-  private final HttpFields headers = new HttpFields();
+    private final HttpFields headers = new HttpFields();
 
-  @Inject
-  @AppData("apis.twitch.helix.baseUri")
-  private String apiBaseUri;
+    @Inject
+    @AppData("apis.twitch.helix.baseUri")
+    private String apiBaseUri;
 
-  @Inject
-  @CoreSetting("biliomi.twitch.clientId")
-  private String clientId;
+    @Inject
+    @CoreSetting("biliomi.twitch.clientId")
+    private String clientId;
 
-  @Inject
-  @CoreSetting("biliomi.twitch.webhookCallbackUrl")
-  private String webhookCallbackUrl;
+    @Inject
+    @CoreSetting("biliomi.twitch.webhookCallbackUrl")
+    private String webhookCallbackUrl;
 
-  @Inject
-  private WebClient webClient;
+    @Inject
+    private WebClient webClient;
 
-  @PostConstruct
-  public void initTwitchApi() {
-    headers.put("Client-ID", clientId);
-    headers.put(HttpHeader.ACCEPT, "application/vnd.twitchtv.v5+json");
-  }
+    @PostConstruct
+    public void initTwitchApi() {
+        headers.put("Client-ID", clientId);
+        headers.put(HttpHeader.ACCEPT, "application/vnd.twitchtv.v5+json");
+    }
 
-  @Override
-  public Response<Void> subscribeToStreamsWebhookTopic(String localEndpoint, long leaseDurationSeconds, String targetChannelId) throws Exception {
-    Url hubTopic = Url.url(apiBaseUri, "streams")
-        .withQueryParam("user_id", targetChannelId);
+    @Override
+    public Response<Void> subscribeToStreamsWebhookTopic(String localEndpoint, long leaseDurationSeconds, String targetChannelId) throws Exception {
+        Url hubTopic = Url.url(apiBaseUri, "streams")
+                .withQueryParam("user_id", targetChannelId);
 
-    Url url = Url.url(apiBaseUri, "webhooks", "hub")
-        .withQueryParam("hub.callback", webhookCallbackUrl + localEndpoint)
-        .withQueryParam("hub.mode", "subscribe")
-        .withQueryParam("hub.topic", hubTopic)
-        .withQueryParam("hub.lease_seconds", leaseDurationSeconds);
+        Url url = Url.url(apiBaseUri, "webhooks", "hub")
+                .withQueryParam("hub.callback", webhookCallbackUrl + localEndpoint)
+                .withQueryParam("hub.mode", "subscribe")
+                .withQueryParam("hub.topic", hubTopic)
+                .withQueryParam("hub.lease_seconds", leaseDurationSeconds);
 
-    return webClient.post(url, headers, "", MediaType.PLAIN_TEXT_UTF_8, Void.class);
-  }
+        return webClient.post(url, headers, "", MediaType.PLAIN_TEXT_UTF_8, Void.class);
+    }
 
-  @Override
-  public Response<Void> subscribeToFollowersWebhookTopic(String localEndpoint, long leaseDurationSeconds, String targetChannelId) throws Exception {
-    Url hubTopic = Url.url(apiBaseUri, "users", "follows")
-        .withQueryParam("to_id", targetChannelId);
+    @Override
+    public Response<Void> subscribeToFollowersWebhookTopic(String localEndpoint, long leaseDurationSeconds, String targetChannelId) throws Exception {
+        Url hubTopic = Url.url(apiBaseUri, "users", "follows")
+                .withQueryParam("to_id", targetChannelId);
 
-    Url url = Url.url(apiBaseUri, "webhooks", "hub")
-        .withQueryParam("hub.callback", webhookCallbackUrl + localEndpoint)
-        .withQueryParam("hub.mode", "subscribe")
-        .withQueryParam("hub.topic", hubTopic)
-        .withQueryParam("hub.lease_seconds", leaseDurationSeconds);
+        Url url = Url.url(apiBaseUri, "webhooks", "hub")
+                .withQueryParam("hub.callback", webhookCallbackUrl + localEndpoint)
+                .withQueryParam("hub.mode", "subscribe")
+                .withQueryParam("hub.topic", hubTopic)
+                .withQueryParam("hub.lease_seconds", leaseDurationSeconds);
 
-    return webClient.post(url, headers, "", MediaType.PLAIN_TEXT_UTF_8, Void.class);
-  }
+        return webClient.post(url, headers, "", MediaType.PLAIN_TEXT_UTF_8, Void.class);
+    }
 }

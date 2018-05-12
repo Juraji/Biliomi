@@ -22,60 +22,57 @@ import java.util.Objects;
 @SetupTaskPriority(priority = 2)
 public class DefaultSettingsTask implements SetupTask {
 
-  @Inject
-  private Logger logger;
+    private final AppParameters parameters;
+    @Inject
+    private Logger logger;
+    @Inject
+    private SettingsDao settingsDao;
+    @Inject
+    private AuthTokenDao authTokenDao;
 
-  @Inject
-  private SettingsDao settingsDao;
-
-  @Inject
-  private AuthTokenDao authTokenDao;
-
-  private final AppParameters parameters;
-
-  public DefaultSettingsTask() {
-    parameters = BiliomiContainer.getParameters();
-  }
-
-  @Override
-  public void install() {
-    // Load all Settings objects and save their initial state to the database
-    ReflectionUtils.forPackages("nl.juraji.biliomi.model")
-        .subTypes(Settings.class)
-        .mapToBiEStream(settingsDao::getSettings)
-        .mapValue((clazz, obj) -> (obj == null ? clazz.getDeclaredConstructor().newInstance() : obj))
-        .forEach((clazz, obj) -> {
-          obj.setDefaultValues();
-          settingsDao.save(obj);
-          logger.info("Saved {}", clazz.getSimpleName());
-        });
-
-    if (parameters.isResetAuth()) {
-      authTokenDao.delete(authTokenDao.getList());
+    public DefaultSettingsTask() {
+        parameters = BiliomiContainer.getParameters();
     }
-  }
 
-  @Override
-  public void update() {
-    // Load all Settings objects and save their initial state to the database if no entry exists
-    ReflectionUtils.forPackages("nl.juraji.biliomi.model")
-        .subTypes(Settings.class)
-        .mapToBiEStream(settingsDao::getSettings)
-        .mapValue((clazz, obj) -> (obj == null ? clazz.getDeclaredConstructor().newInstance() : null))
-        .filterValue(Objects::nonNull)
-        .forEach((clazz, obj) -> {
-          obj.setDefaultValues();
-          settingsDao.save(obj);
-          logger.info("Saved {}", clazz.getSimpleName());
-        });
+    @Override
+    public void install() {
+        // Load all Settings objects and save their initial state to the database
+        ReflectionUtils.forPackages("nl.juraji.biliomi.model")
+                .subTypes(Settings.class)
+                .mapToBiEStream(settingsDao::getSettings)
+                .mapValue((clazz, obj) -> (obj == null ? clazz.getDeclaredConstructor().newInstance() : obj))
+                .forEach((clazz, obj) -> {
+                    obj.setDefaultValues();
+                    settingsDao.save(obj);
+                    logger.info("Saved {}", clazz.getSimpleName());
+                });
 
-    if (parameters.isResetAuth()) {
-      authTokenDao.delete(authTokenDao.getList());
+        if (parameters.isResetAuth()) {
+            authTokenDao.delete(authTokenDao.getList());
+        }
     }
-  }
 
-  @Override
-  public String getDisplayName() {
-    return "Install/update default settings";
-  }
+    @Override
+    public void update() {
+        // Load all Settings objects and save their initial state to the database if no entry exists
+        ReflectionUtils.forPackages("nl.juraji.biliomi.model")
+                .subTypes(Settings.class)
+                .mapToBiEStream(settingsDao::getSettings)
+                .mapValue((clazz, obj) -> (obj == null ? clazz.getDeclaredConstructor().newInstance() : null))
+                .filterValue(Objects::nonNull)
+                .forEach((clazz, obj) -> {
+                    obj.setDefaultValues();
+                    settingsDao.save(obj);
+                    logger.info("Saved {}", clazz.getSimpleName());
+                });
+
+        if (parameters.isResetAuth()) {
+            authTokenDao.delete(authTokenDao.getList());
+        }
+    }
+
+    @Override
+    public String getDisplayName() {
+        return "Install/update default settings";
+    }
 }

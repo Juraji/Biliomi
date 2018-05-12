@@ -1,5 +1,6 @@
-from obs_biliomi_api import OBSBiliomiApi, BiliomiApiException
 import obspython as obs
+
+from obs_biliomi_api import OBSBiliomiApi, BiliomiApiException
 
 # Biliomi for OBS.
 # Facilitates authentication for the other OBS scripts

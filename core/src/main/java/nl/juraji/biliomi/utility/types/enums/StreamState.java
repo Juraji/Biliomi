@@ -5,5 +5,5 @@ package nl.juraji.biliomi.utility.types.enums;
  * mei 2017
  */
 public enum StreamState {
-  ONLINE, OFFLINE
+    ONLINE, OFFLINE
 }

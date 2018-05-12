@@ -14,15 +14,15 @@ import javax.inject.Singleton;
 @Singleton
 public class RouletteConfigService extends ConfigService<YamlRouletteConfig> {
 
-  public RouletteConfigService() {
-    super("games/roulette.yml", YamlRouletteConfig.class);
-  }
+    public RouletteConfigService() {
+        super("games/roulette.yml", YamlRouletteConfig.class);
+    }
 
-  public String getRandomWin() {
-    return MathUtils.listRand(config.getWins());
-  }
+    public String getRandomWin() {
+        return MathUtils.listRand(config.getWins());
+    }
 
-  public String getRandomLost() {
-    return MathUtils.listRand(config.getLosts());
-  }
+    public String getRandomLost() {
+        return MathUtils.listRand(config.getLosts());
+    }
 }

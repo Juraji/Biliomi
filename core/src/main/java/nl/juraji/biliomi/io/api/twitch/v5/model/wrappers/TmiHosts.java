@@ -16,14 +16,14 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TmiHosts {
 
-  @XmlElement(name = "hosts")
-  private List<TmiHost> hosts;
+    @XmlElement(name = "hosts")
+    private List<TmiHost> hosts;
 
-  public List<TmiHost> getHosts() {
-    return hosts;
-  }
+    public List<TmiHost> getHosts() {
+        return hosts;
+    }
 
-  public void setHosts(List<TmiHost> hosts) {
-    this.hosts = hosts;
-  }
+    public void setHosts(List<TmiHost> hosts) {
+        this.hosts = hosts;
+    }
 }

@@ -15,30 +15,30 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchHostInEvent extends TwitchEvent {
 
-  @XmlElement(name = "ChannelName")
-  private final String channelName;
+    @XmlElement(name = "ChannelName")
+    private final String channelName;
 
-  @XmlElement(name = "ChannelId")
-  private final Integer channelId;
+    @XmlElement(name = "ChannelId")
+    private final Integer channelId;
 
-  @XmlElement(name = "IsAuto")
-  private final boolean isAuto;
+    @XmlElement(name = "IsAuto")
+    private final boolean isAuto;
 
-  public TwitchHostInEvent(String channelName, Integer channelId, boolean isAuto) {
-    this.channelName = channelName;
-    this.channelId = channelId;
-    this.isAuto = isAuto;
-  }
+    public TwitchHostInEvent(String channelName, Integer channelId, boolean isAuto) {
+        this.channelName = channelName;
+        this.channelId = channelId;
+        this.isAuto = isAuto;
+    }
 
-  public String getChannelName() {
-    return channelName;
-  }
+    public String getChannelName() {
+        return channelName;
+    }
 
-  public Integer getChannelId() {
-    return channelId;
-  }
+    public Integer getChannelId() {
+        return channelId;
+    }
 
-  public boolean isAuto() {
-    return isAuto;
-  }
+    public boolean isAuto() {
+        return isAuto;
+    }
 }

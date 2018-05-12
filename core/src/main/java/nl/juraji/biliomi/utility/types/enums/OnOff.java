@@ -5,9 +5,9 @@ package nl.juraji.biliomi.utility.types.enums;
  * mei 2017
  */
 public enum OnOff {
-  ON, OFF;
+    ON, OFF;
 
-  public static OnOff fromBoolean(boolean state) {
-    return (state ? ON : OFF);
-  }
+    public static OnOff fromBoolean(boolean state) {
+        return (state ? ON : OFF);
+    }
 }

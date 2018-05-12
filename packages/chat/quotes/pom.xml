@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <artifactId>biliomi</artifactId>
-    <groupId>nl.juraji</groupId>
-    <version>3.19.0</version>
-    <relativePath>../../../pom.xml</relativePath>
-  </parent>
-  <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>biliomi</artifactId>
+        <groupId>nl.juraji</groupId>
+        <version>3.19.0</version>
+        <relativePath>../../../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>biliomi-chat-quotes</artifactId>
+    <artifactId>biliomi-chat-quotes</artifactId>
 
-  <dependencies>
-    <dependency>
-      <groupId>nl.juraji</groupId>
-      <artifactId>biliomi-core</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>nl.juraji</groupId>
+            <artifactId>biliomi-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

@@ -15,20 +15,20 @@ import java.util.List;
 @Default
 public class InvestmentRecordDao extends JpaDao<InvestmentRecord> {
 
-  public InvestmentRecordDao() {
-    super(InvestmentRecord.class);
-  }
+    public InvestmentRecordDao() {
+        super(InvestmentRecord.class);
+    }
 
-  public List<InvestmentRecord> getRecords(User user) {
-    return getRecords(user, -1);
-  }
+    public List<InvestmentRecord> getRecords(User user) {
+        return getRecords(user, -1);
+    }
 
-  public List<InvestmentRecord> getRecords(User user, int limit) {
-    return criteria()
-        .createAlias("invester", "i")
-        .add(Restrictions.eq("i.id", user.getId()))
-        .addOrder(Order.desc("id"))
-        .setMaxResults(limit)
-        .getList();
-  }
+    public List<InvestmentRecord> getRecords(User user, int limit) {
+        return criteria()
+                .createAlias("invester", "i")
+                .add(Restrictions.eq("i.id", user.getId()))
+                .addOrder(Order.desc("id"))
+                .setMaxResults(limit)
+                .getList();
+    }
 }

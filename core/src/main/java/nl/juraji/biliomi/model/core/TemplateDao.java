@@ -14,26 +14,26 @@ import java.util.List;
 @Default
 public class TemplateDao extends JpaDao<Template> {
 
-  public TemplateDao() {
-    super(Template.class);
-  }
+    public TemplateDao() {
+        super(Template.class);
+    }
 
-  @Override
-  public List<Template> getList() {
-    return criteria()
-        .addOrder(Order.asc("templateKey"))
-        .getList();
-  }
+    @Override
+    public List<Template> getList() {
+        return criteria()
+                .addOrder(Order.asc("templateKey"))
+                .getList();
+    }
 
-  public Template getByKey(String key) {
-    return criteria()
-        .add(Restrictions.eq("templateKey", key))
-        .getResult();
-  }
+    public Template getByKey(String key) {
+        return criteria()
+                .add(Restrictions.eq("templateKey", key))
+                .getResult();
+    }
 
-  public boolean templateExists(String key) {
-    return criteria()
-        .add(Restrictions.eq("templateKey", key))
-        .getCount() > 0;
-  }
+    public boolean templateMissing(String key) {
+        return criteria()
+                .add(Restrictions.eq("templateKey", key))
+                .getCount() <= 0;
+    }
 }

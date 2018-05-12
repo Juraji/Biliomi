@@ -15,29 +15,29 @@ import javax.ws.rs.Path;
 @Path("/social/steam/settings")
 public class SteamSettingsRestService extends SettingsModelRestService<SteamSettings> {
 
-  @Inject
-  private SteamApi steamApi;
+    @Inject
+    private SteamApi steamApi;
 
-  @Inject
-  private SettingsService settingsService;
+    @Inject
+    private SettingsService settingsService;
 
-  @Override
-  public SteamSettings getEntity() {
-    SteamSettings settings = settingsService.getSettings(SteamSettings.class);
+    @Override
+    public SteamSettings getEntity() {
+        SteamSettings settings = settingsService.getSettings(SteamSettings.class);
 
-    // Set integration enabled process variable
-    settings.set_integrationEnabled(steamApi.isAvailable());
+        // Set integration enabled process variable
+        settings.set_integrationEnabled(steamApi.isAvailable());
 
-    return settings;
-  }
+        return settings;
+    }
 
-  @Override
-  public SteamSettings updateEntity(SteamSettings e) {
-    SteamSettings settings = settingsService.getSettings(SteamSettings.class);
+    @Override
+    public SteamSettings updateEntity(SteamSettings e) {
+        SteamSettings settings = settingsService.getSettings(SteamSettings.class);
 
-    settings.setAutoUpdateChannelGame(e.isAutoUpdateChannelGame());
+        settings.setAutoUpdateChannelGame(e.isAutoUpdateChannelGame());
 
-    settingsService.save(settings);
-    return settings;
-  }
+        settingsService.save(settings);
+        return settings;
+    }
 }

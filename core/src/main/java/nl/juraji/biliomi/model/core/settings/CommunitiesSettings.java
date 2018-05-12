@@ -22,29 +22,29 @@ import java.util.Set;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CommunitiesSettings extends Settings {
 
-  @Column
-  @XmlElement(name = "AutoUpdateCommunities")
-  private boolean autoUpdateCommunities;
+    @Column
+    @XmlElement(name = "AutoUpdateCommunities")
+    private boolean autoUpdateCommunities;
 
-  @ManyToMany(fetch = FetchType.EAGER)
-  @XmlElement(name = "DefaultCommunities")
-  private Set<Community> defaultCommunities;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @XmlElement(name = "DefaultCommunities")
+    private Set<Community> defaultCommunities;
 
-  public boolean isAutoUpdateCommunities() {
-    return autoUpdateCommunities;
-  }
+    public boolean isAutoUpdateCommunities() {
+        return autoUpdateCommunities;
+    }
 
-  public void setAutoUpdateCommunities(boolean communitiesPerGameEnabled) {
-    this.autoUpdateCommunities = communitiesPerGameEnabled;
-  }
+    public void setAutoUpdateCommunities(boolean communitiesPerGameEnabled) {
+        this.autoUpdateCommunities = communitiesPerGameEnabled;
+    }
 
-  public Set<Community> getDefaultCommunities() {
-    defaultCommunities = ModelUtils.initCollection(defaultCommunities);
-    return defaultCommunities;
-  }
+    public Set<Community> getDefaultCommunities() {
+        defaultCommunities = ModelUtils.initCollection(defaultCommunities);
+        return defaultCommunities;
+    }
 
-  @Override
-  public void setDefaultValues() {
-    autoUpdateCommunities = false;
-  }
+    @Override
+    public void setDefaultValues() {
+        autoUpdateCommunities = false;
+    }
 }

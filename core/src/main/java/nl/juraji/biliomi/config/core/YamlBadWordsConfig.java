@@ -7,13 +7,13 @@ import java.util.List;
  * Biliomi
  */
 public class YamlBadWordsConfig {
-  private List<String> badwords;
+    private List<String> badwords;
 
-  public List<String> getBadwords() {
-    return badwords;
-  }
+    public List<String> getBadwords() {
+        return badwords;
+    }
 
-  public void setBadwords(List<String> badwords) {
-    this.badwords = badwords;
-  }
+    public void setBadwords(List<String> badwords) {
+        this.badwords = badwords;
+    }
 }

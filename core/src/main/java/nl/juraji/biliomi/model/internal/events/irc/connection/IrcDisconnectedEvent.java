@@ -15,38 +15,38 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class IrcDisconnectedEvent extends IrcEvent {
 
-  @XmlElement(name = "Status")
-  private final int status;
+    @XmlElement(name = "Status")
+    private final int status;
 
-  @XmlElement(name = "Reason")
-  private final String reason;
+    @XmlElement(name = "Reason")
+    private final String reason;
 
-  @XmlElement(name = "Remote")
-  private final boolean remote;
+    @XmlElement(name = "Remote")
+    private final boolean remote;
 
-  @XmlElement(name = "WillRestart")
-  private final boolean willRestart;
+    @XmlElement(name = "WillRestart")
+    private final boolean willRestart;
 
-  public IrcDisconnectedEvent(int status, String reason, boolean remote, boolean willRestart) {
-    this.status = status;
-    this.reason = reason;
-    this.remote = remote;
-    this.willRestart = willRestart;
-  }
+    public IrcDisconnectedEvent(int status, String reason, boolean remote, boolean willRestart) {
+        this.status = status;
+        this.reason = reason;
+        this.remote = remote;
+        this.willRestart = willRestart;
+    }
 
-  public int getStatus() {
-    return status;
-  }
+    public int getStatus() {
+        return status;
+    }
 
-  public String getReason() {
-    return reason;
-  }
+    public String getReason() {
+        return reason;
+    }
 
-  public boolean isRemote() {
-    return remote;
-  }
+    public boolean isRemote() {
+        return remote;
+    }
 
-  public boolean isWillRestart() {
-    return willRestart;
-  }
+    public boolean isWillRestart() {
+        return willRestart;
+    }
 }

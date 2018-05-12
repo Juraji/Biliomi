@@ -12,14 +12,14 @@ import javax.enterprise.inject.Default;
  */
 @Default
 public class UserGreetingDao extends JpaDao<UserGreeting> {
-  public UserGreetingDao() {
-    super(UserGreeting.class);
-  }
+    public UserGreetingDao() {
+        super(UserGreeting.class);
+    }
 
-  public UserGreeting getByUser(User user) {
-    return criteria()
-        .createAlias("user", "u")
-        .add(Restrictions.eq("u.id", user.getId()))
-        .getResult();
-  }
+    public UserGreeting getByUser(User user) {
+        return criteria()
+                .createAlias("user", "u")
+                .add(Restrictions.eq("u.id", user.getId()))
+                .getResult();
+    }
 }

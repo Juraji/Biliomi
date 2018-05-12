@@ -16,19 +16,19 @@ import java.util.Map;
  */
 public class StreamsNotificationHandler implements NotificationHandler<StreamsWebhookNotification> {
 
-  @Override
-  public StreamsWebhookNotification unmarshalNotification(String notificationData) throws IOException {
-    return JacksonMarshaller.unmarshal(notificationData, StreamsWebhookNotification.class);
-  }
-
-  @Override
-  public void handleNotification(EventBus eventBus, StreamsWebhookNotification notification) {
-    if (notification.getData() == null || notification.getData().isEmpty()) {
-      Map<String, String> topicQuery = Url.unpackQueryString(notification.getTopic());
-      eventBus.post(new ChannelStateEvent(topicQuery.get("user_id"), false, null));
-    } else {
-      TwitchStream twitchStream = notification.getData().get(0);
-      eventBus.post(new ChannelStateEvent(twitchStream.getUserId(), true, twitchStream.getGameId()));
+    @Override
+    public StreamsWebhookNotification unmarshalNotification(String notificationData) throws IOException {
+        return JacksonMarshaller.unmarshal(notificationData, StreamsWebhookNotification.class);
     }
-  }
+
+    @Override
+    public void handleNotification(EventBus eventBus, StreamsWebhookNotification notification) {
+        if (notification.getData() == null || notification.getData().isEmpty()) {
+            Map<String, String> topicQuery = Url.unpackQueryString(notification.getTopic());
+            eventBus.post(new ChannelStateEvent(topicQuery.get("user_id"), false, null));
+        } else {
+            TwitchStream twitchStream = notification.getData().get(0);
+            eventBus.post(new ChannelStateEvent(twitchStream.getUserId(), true, twitchStream.getGameId()));
+        }
+    }
 }

@@ -13,38 +13,35 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class UserRecordStats {
 
-  @XmlElement(name = "RecordCount")
-  private final long recordCount;
+    @XmlElement(name = "Losses")
+    protected final long losses;
+    @XmlElement(name = "Wins")
+    protected final long wins;
+    @XmlElement(name = "RecordCount")
+    private final long recordCount;
+    @XmlElement(name = "IsMoreWins")
+    private final boolean isMoreWins;
 
-  @XmlElement(name = "Losses")
-  protected final long losses;
+    public UserRecordStats(long recordCount, long losses, long wins) {
+        this.recordCount = recordCount;
+        this.losses = losses;
+        this.wins = wins;
+        this.isMoreWins = wins > losses;
+    }
 
-  @XmlElement(name = "Wins")
-  protected final long wins;
+    public long getRecordCount() {
+        return recordCount;
+    }
 
-  @XmlElement(name = "IsMoreWins")
-  private final boolean isMoreWins;
+    public long getLosses() {
+        return losses;
+    }
 
-  public UserRecordStats(long recordCount, long losses, long wins) {
-    this.recordCount = recordCount;
-    this.losses = losses;
-    this.wins = wins;
-    this.isMoreWins = wins > losses;
-  }
+    public long getWins() {
+        return wins;
+    }
 
-  public long getRecordCount() {
-    return recordCount;
-  }
-
-  public long getLosses() {
-    return losses;
-  }
-
-  public long getWins() {
-    return wins;
-  }
-
-  public boolean isMoreWins() {
-    return isMoreWins;
-  }
+    public boolean isMoreWins() {
+        return isMoreWins;
+    }
 }

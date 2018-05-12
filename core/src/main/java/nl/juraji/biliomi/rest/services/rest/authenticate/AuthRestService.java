@@ -33,101 +33,101 @@ import java.security.spec.InvalidKeySpecException;
 @Path("/auth")
 public class AuthRestService {
 
-  @Inject
-  private SettingsDao settingsDao;
+    @Inject
+    private SettingsDao settingsDao;
 
-  @Inject
-  private JWTGenerator jwtGenerator;
+    @Inject
+    private JWTGenerator jwtGenerator;
 
-  @POST
-  @PermitAll
-  @Path("/login")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response login(RestAuthorizationRequest authorization) throws InvalidKeySpecException, NoSuchAlgorithmException {
-    RestAuthorizationResponse authorizationResponse = new RestAuthorizationResponse();
+    @POST
+    @PermitAll
+    @Path("/login")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response login(RestAuthorizationRequest authorization) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        RestAuthorizationResponse authorizationResponse = new RestAuthorizationResponse();
 
-    // Check if username and password are defined in request
-    if (authorization == null || authorization.isEmpty()) {
-      authorizationResponse.setMessage(RestAuthorizationResponse.getFaultLoginEmptyMsg());
-      return Responses.ok(authorizationResponse);
+        // Check if username and password are defined in request
+        if (authorization == null || authorization.isEmpty()) {
+            authorizationResponse.setMessage(RestAuthorizationResponse.getFaultLoginEmptyMsg());
+            return Responses.ok(authorizationResponse);
+        }
+
+        ApiSecuritySettings settings = settingsDao.getSettings(ApiSecuritySettings.class);
+
+        // Search for credentials by username (ignores casing)
+        ApiLogin userCredentials = settings.getLogins().stream()
+                .filter(apiLogin -> apiLogin.getUser().getUsername().equalsIgnoreCase(authorization.getUsername()))
+                .findFirst()
+                .orElse(null);
+
+        // Check if user was found within credentialsSets
+        if (userCredentials == null) {
+            authorizationResponse.setMessage(RestAuthorizationResponse.getFaultUsernameInvalidMsg());
+            return Responses.ok(authorizationResponse);
+        }
+
+        byte[] encryptedPassword = userCredentials.getPassword();
+        byte[] passwordSalt = userCredentials.getSalt();
+
+        // Check request password against database values
+        PasswordEncryptor encryptor = new PasswordEncryptor();
+        if (!encryptor.authenticate(authorization.getPassword(), encryptedPassword, passwordSalt)) {
+            authorizationResponse.setMessage(RestAuthorizationResponse.getFaultPasswordInvalidMsg());
+            return Responses.ok(authorizationResponse);
+        }
+
+        String token = jwtGenerator.generateAuthorizationToken(settings.getSecret(), userCredentials.getUser());
+        String refreshToken = jwtGenerator.generateRefreshToken(settings.getSecret(), userCredentials.getUser());
+        authorizationResponse.setMessage(RestAuthorizationResponse.getLoginOkMsg());
+        authorizationResponse.setAuthorizationToken(token);
+        authorizationResponse.setRefreshToken(refreshToken);
+        return Responses.ok(authorizationResponse);
     }
 
-    ApiSecuritySettings settings = settingsDao.getSettings(ApiSecuritySettings.class);
+    @POST
+    @PermitAll
+    @Path("/refresh")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response refresh(RestRefreshTokenRequest refreshTokenRequest) {
+        RestAuthorizationResponse authorizationResponse = new RestAuthorizationResponse();
 
-    // Search for credentials by username (ignores casing)
-    ApiLogin userCredentials = settings.getLogins().stream()
-        .filter(apiLogin -> apiLogin.getUser().getUsername().equalsIgnoreCase(authorization.getUsername()))
-        .findFirst()
-        .orElse(null);
+        // Check if username and password are defined in request
+        if (refreshTokenRequest == null || StringUtils.isEmpty(refreshTokenRequest.getRefreshToken())) {
+            authorizationResponse.setMessage(RestAuthorizationResponse.getFaultLoginEmptyMsg());
+            return Responses.ok(authorizationResponse);
+        }
 
-    // Check if user was found within credentialsSets
-    if (userCredentials == null) {
-      authorizationResponse.setMessage(RestAuthorizationResponse.getFaultUsernameInvalidMsg());
-      return Responses.ok(authorizationResponse);
+        ApiSecuritySettings settings = settingsDao.getSettings(ApiSecuritySettings.class);
+
+        // Decode refresh token
+        Claims claims;
+        try {
+            claims = jwtGenerator.validateToken(settings.getSecret(), refreshTokenRequest.getRefreshToken(), TokenType.REFRESH);
+        } catch (JwtException e) {
+            authorizationResponse.setMessage(e.getMessage());
+            return Responses.ok(authorizationResponse);
+        }
+
+        // Search for credentials by token subject (user display name, exact)
+        User user = settings.getLogins().stream()
+                .filter(apiLogin -> apiLogin.getUser().getUsername().equals(claims.getSubject()))
+                .map(ApiLogin::getUser)
+                .findFirst()
+                .orElse(null);
+
+        // Check if user was found within credentialsSets
+        if (user == null) {
+            authorizationResponse.setMessage(RestAuthorizationResponse.getFaultInvalidTokenMsg());
+            return Responses.ok(authorizationResponse);
+        }
+
+        String token = jwtGenerator.generateAuthorizationToken(settings.getSecret(), user);
+        String refreshToken = jwtGenerator.generateRefreshToken(settings.getSecret(), user);
+        authorizationResponse.setMessage(RestAuthorizationResponse.getLoginOkMsg());
+        authorizationResponse.setAuthorizationToken(token);
+        authorizationResponse.setRefreshToken(refreshToken);
+        return Responses.ok(authorizationResponse);
     }
-
-    byte[] encryptedPassword = userCredentials.getPassword();
-    byte[] passwordSalt = userCredentials.getSalt();
-
-    // Check request password against database values
-    PasswordEncryptor encryptor = new PasswordEncryptor();
-    if (!encryptor.authenticate(authorization.getPassword(), encryptedPassword, passwordSalt)) {
-      authorizationResponse.setMessage(RestAuthorizationResponse.getFaultPasswordInvalidMsg());
-      return Responses.ok(authorizationResponse);
-    }
-
-    String token = jwtGenerator.generateAuthorizationToken(settings.getSecret(), userCredentials.getUser());
-    String refreshToken = jwtGenerator.generateRefreshToken(settings.getSecret(), userCredentials.getUser());
-    authorizationResponse.setMessage(RestAuthorizationResponse.getLoginOkMsg());
-    authorizationResponse.setAuthorizationToken(token);
-    authorizationResponse.setRefreshToken(refreshToken);
-    return Responses.ok(authorizationResponse);
-  }
-
-  @POST
-  @PermitAll
-  @Path("/refresh")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response refresh(RestRefreshTokenRequest refreshTokenRequest) throws InvalidKeySpecException, NoSuchAlgorithmException {
-    RestAuthorizationResponse authorizationResponse = new RestAuthorizationResponse();
-
-    // Check if username and password are defined in request
-    if (refreshTokenRequest == null || StringUtils.isEmpty(refreshTokenRequest.getRefreshToken())) {
-      authorizationResponse.setMessage(RestAuthorizationResponse.getFaultLoginEmptyMsg());
-      return Responses.ok(authorizationResponse);
-    }
-
-    ApiSecuritySettings settings = settingsDao.getSettings(ApiSecuritySettings.class);
-
-    // Decode refresh token
-    Claims claims;
-    try {
-      claims = jwtGenerator.validateToken(settings.getSecret(), refreshTokenRequest.getRefreshToken(), TokenType.REFRESH);
-    } catch (JwtException e) {
-      authorizationResponse.setMessage(e.getMessage());
-      return Responses.ok(authorizationResponse);
-    }
-
-    // Search for credentials by token subject (user display name, exact)
-    User user = settings.getLogins().stream()
-        .filter(apiLogin -> apiLogin.getUser().getUsername().equals(claims.getSubject()))
-        .map(ApiLogin::getUser)
-        .findFirst()
-        .orElse(null);
-
-    // Check if user was found within credentialsSets
-    if (user == null) {
-      authorizationResponse.setMessage(RestAuthorizationResponse.getFaultInvalidTokenMsg());
-      return Responses.ok(authorizationResponse);
-    }
-
-    String token = jwtGenerator.generateAuthorizationToken(settings.getSecret(), user);
-    String refreshToken = jwtGenerator.generateRefreshToken(settings.getSecret(), user);
-    authorizationResponse.setMessage(RestAuthorizationResponse.getLoginOkMsg());
-    authorizationResponse.setAuthorizationToken(token);
-    authorizationResponse.setRefreshToken(refreshToken);
-    return Responses.ok(authorizationResponse);
-  }
 }

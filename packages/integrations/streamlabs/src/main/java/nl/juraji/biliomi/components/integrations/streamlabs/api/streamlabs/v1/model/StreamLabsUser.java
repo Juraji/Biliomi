@@ -13,36 +13,36 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class StreamLabsUser {
 
-  @XmlElement(name = "id")
-  private String id;
+    @XmlElement(name = "id")
+    private String id;
 
-  @XmlElement(name = "display_name")
-  private String displayName;
+    @XmlElement(name = "display_name")
+    private String displayName;
 
-  @XmlElement(name = "name")
-  private String username;
+    @XmlElement(name = "name")
+    private String username;
 
-  public String getId() {
-    return id;
-  }
+    public String getId() {
+        return id;
+    }
 
-  public void setId(String id) {
-    this.id = id;
-  }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-  public String getDisplayName() {
-    return displayName;
-  }
+    public String getDisplayName() {
+        return displayName;
+    }
 
-  public void setDisplayName(String displayName) {
-    this.displayName = displayName;
-  }
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
 
-  public String getUsername() {
-    return username;
-  }
+    public String getUsername() {
+        return username;
+    }
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

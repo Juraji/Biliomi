@@ -12,18 +12,18 @@ import javax.ws.rs.Path;
 @Path("/games/settings/achievements")
 public class AchievementsSettingsRestService extends SettingsModelRestService<AchievementsSettings> {
 
-  @Override
-  public AchievementsSettings getEntity() {
-    return settingsService.getSettings(AchievementsSettings.class);
-  }
+    @Override
+    public AchievementsSettings getEntity() {
+        return settingsService.getSettings(AchievementsSettings.class);
+    }
 
-  @Override
-  public AchievementsSettings updateEntity(AchievementsSettings e) {
-    AchievementsSettings settings = settingsService.getSettings(AchievementsSettings.class);
+    @Override
+    public AchievementsSettings updateEntity(AchievementsSettings e) {
+        AchievementsSettings settings = settingsService.getSettings(AchievementsSettings.class);
 
-    settings.setAchievementsEnabled(e.isAchievementsEnabled());
+        settings.setAchievementsEnabled(e.isAchievementsEnabled());
 
-    settingsService.save(settings);
-    return settings;
-  }
+        settingsService.save(settings);
+        return settings;
+    }
 }

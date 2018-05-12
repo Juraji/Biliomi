@@ -12,25 +12,25 @@ import javax.ws.rs.Path;
 @Path("/games/settings/tamagotchi")
 public class TamagotchiSettingsRestService extends SettingsModelRestService<TamagotchiSettings> {
 
-  @Override
-  public TamagotchiSettings getEntity() {
-    return settingsService.getSettings(TamagotchiSettings.class);
-  }
+    @Override
+    public TamagotchiSettings getEntity() {
+        return settingsService.getSettings(TamagotchiSettings.class);
+    }
 
-  @Override
-  public TamagotchiSettings updateEntity(TamagotchiSettings e) {
-    TamagotchiSettings settings = settingsService.getSettings(TamagotchiSettings.class);
+    @Override
+    public TamagotchiSettings updateEntity(TamagotchiSettings e) {
+        TamagotchiSettings settings = settingsService.getSettings(TamagotchiSettings.class);
 
-    settings.setNewPrice(e.getNewPrice());
-    settings.setFoodPrice(e.getFoodPrice());
-    settings.setSoapPrice(e.getSoapPrice());
-    settings.setMaxFood(e.getMaxFood());
-    settings.setMaxMood(e.getMaxMood());
-    settings.setMaxHygiene(e.getMaxHygiene());
-    settings.setNameMaxLength(e.getNameMaxLength());
-    settings.setBotTamagotchiEnabled(e.isBotTamagotchiEnabled());
+        settings.setNewPrice(e.getNewPrice());
+        settings.setFoodPrice(e.getFoodPrice());
+        settings.setSoapPrice(e.getSoapPrice());
+        settings.setMaxFood(e.getMaxFood());
+        settings.setMaxMood(e.getMaxMood());
+        settings.setMaxHygiene(e.getMaxHygiene());
+        settings.setNameMaxLength(e.getNameMaxLength());
+        settings.setBotTamagotchiEnabled(e.isBotTamagotchiEnabled());
 
-    settingsService.save(settings);
-    return settings;
-  }
+        settingsService.save(settings);
+        return settings;
+    }
 }

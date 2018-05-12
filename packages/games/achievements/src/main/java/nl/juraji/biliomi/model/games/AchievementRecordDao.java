@@ -15,28 +15,28 @@ import java.util.List;
 @Default
 public class AchievementRecordDao extends JpaDao<AchievementRecord> {
 
-  public AchievementRecordDao() {
-    super(AchievementRecord.class);
-  }
+    public AchievementRecordDao() {
+        super(AchievementRecord.class);
+    }
 
-  public List<AchievementRecord> getRecords(User user) {
-    return getRecords(user, -1);
-  }
+    public List<AchievementRecord> getRecords(User user) {
+        return getRecords(user, -1);
+    }
 
-  public List<AchievementRecord> getRecords(User user, int limit) {
-    return criteria()
-        .createAlias("user", "u")
-        .add(Restrictions.eq("u.id", user.getId()))
-        .addOrder(Order.desc("id"))
-        .setMaxResults(limit)
-        .getList();
-  }
+    public List<AchievementRecord> getRecords(User user, int limit) {
+        return criteria()
+                .createAlias("user", "u")
+                .add(Restrictions.eq("u.id", user.getId()))
+                .addOrder(Order.desc("id"))
+                .setMaxResults(limit)
+                .getList();
+    }
 
-  public boolean recordExists(User user, String achievementId) {
-    return criteria()
-        .createAlias("user", "u")
-        .add(Restrictions.eq("u.id", user.getId()))
-        .add(Restrictions.eq("achievementId", achievementId))
-        .getCount() > 0;
-  }
+    public boolean recordExists(User user, String achievementId) {
+        return criteria()
+                .createAlias("user", "u")
+                .add(Restrictions.eq("u.id", user.getId()))
+                .add(Restrictions.eq("achievementId", achievementId))
+                .getCount() > 0;
+    }
 }

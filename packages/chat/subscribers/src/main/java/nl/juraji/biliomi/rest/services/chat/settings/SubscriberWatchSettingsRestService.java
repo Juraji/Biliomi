@@ -12,20 +12,20 @@ import javax.ws.rs.Path;
 @Path("/chat/settings/subscriberwatch")
 public class SubscriberWatchSettingsRestService extends SettingsModelRestService<SubscriberWatchSettings> {
 
-  @Override
-  public SubscriberWatchSettings getEntity() {
-    return settingsService.getSettings(SubscriberWatchSettings.class);
-  }
+    @Override
+    public SubscriberWatchSettings getEntity() {
+        return settingsService.getSettings(SubscriberWatchSettings.class);
+    }
 
-  @Override
-  public SubscriberWatchSettings updateEntity(SubscriberWatchSettings e) {
-    SubscriberWatchSettings settings = settingsService.getSettings(SubscriberWatchSettings.class);
+    @Override
+    public SubscriberWatchSettings updateEntity(SubscriberWatchSettings e) {
+        SubscriberWatchSettings settings = settingsService.getSettings(SubscriberWatchSettings.class);
 
-    settings.setRewardTier1(e.getRewardTier1());
-    settings.setRewardTier2(e.getRewardTier2());
-    settings.setRewardTier3(e.getRewardTier3());
+        settings.setRewardTier1(e.getRewardTier1());
+        settings.setRewardTier2(e.getRewardTier2());
+        settings.setRewardTier3(e.getRewardTier3());
 
-    settingsService.save(settings);
-    return settings;
-  }
+        settingsService.save(settings);
+        return settings;
+    }
 }

@@ -17,17 +17,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Settings {
 
-  public abstract void setDefaultValues();
+    @Id
+    @XmlElement(name = "Type")
+    private String id = getClass().getSimpleName();
 
-  @Id
-  @XmlElement(name = "Type")
-  private String id = getClass().getSimpleName();
+    public abstract void setDefaultValues();
 
-  public String getId() {
-    return id;
-  }
+    public String getId() {
+        return id;
+    }
 
-  public void setId(String id) {
-    this.id = id;
-  }
+    public void setId(String id) {
+        this.id = id;
+    }
 }

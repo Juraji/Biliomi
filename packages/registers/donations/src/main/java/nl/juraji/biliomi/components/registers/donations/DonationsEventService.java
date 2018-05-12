@@ -26,43 +26,43 @@ import javax.inject.Singleton;
 @EventBusSubscriber
 public class DonationsEventService implements Init {
 
-  @Inject
-  private DonationsService donationsService;
+    @Inject
+    private DonationsService donationsService;
 
-  @Inject
-  private UsersService usersService;
+    @Inject
+    private UsersService usersService;
 
-  @Inject
-  private PointsService pointsService;
+    @Inject
+    private PointsService pointsService;
 
-  @Inject
-  private ChatService chat;
+    @Inject
+    private ChatService chat;
 
-  @Inject
-  private TemplateDao templateDao;
+    @Inject
+    private TemplateDao templateDao;
 
-  @Override
-  public void init() {
-    // Call me
-  }
-
-  @Subscribe
-  public void onStreamLabsDonationEvent(StreamLabsDonationEvent event) {
-    User user = usersService.getUser(event.getUsername());
-    if (user != null) {
-      double reward = (event.getAmount() * DonationRegisterConstants.POINTS_MULTIPLIER);
-      donationsService.registerDonation(user, event.getFormattedAmount(), event.getMessage());
-      pointsService.give(user, reward);
-
-      Template template = templateDao.getByKey(DonationRegisterConstants.INCOMING_DONATION_NOTICE);
-      assert template != null; // Template cannot be null since it's set during install/update
-      if (StringUtils.isNotEmpty(template.getTemplate())) {
-        chat.say(Templater.template(template.getTemplate())
-            .add("username", user::getDisplayName)
-            .add("points", pointsService.asString(reward))
-            .add("formattedamount", event::getFormattedAmount)
-            .add("message", event::getMessage));
-      }
+    @Override
+    public void init() {
+        // Call me
     }
-  }
+
+    @Subscribe
+    public void onStreamLabsDonationEvent(StreamLabsDonationEvent event) {
+        User user = usersService.getUser(event.getUsername());
+        if (user != null) {
+            double reward = (event.getAmount() * DonationRegisterConstants.POINTS_MULTIPLIER);
+            donationsService.registerDonation(user, event.getFormattedAmount(), event.getMessage());
+            pointsService.give(user, reward);
+
+            Template template = templateDao.getByKey(DonationRegisterConstants.INCOMING_DONATION_NOTICE);
+            assert template != null; // Template cannot be null since it's set during install/update
+            if (StringUtils.isNotEmpty(template.getTemplate())) {
+                chat.say(Templater.template(template.getTemplate())
+                        .add("username", user::getDisplayName)
+                        .add("points", pointsService.asString(reward))
+                        .add("formattedamount", event::getFormattedAmount)
+                        .add("message", event::getMessage));
+            }
+        }
+    }
 }

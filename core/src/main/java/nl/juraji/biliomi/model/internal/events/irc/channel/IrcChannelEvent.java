@@ -15,14 +15,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class IrcChannelEvent extends IrcEvent {
 
-  @XmlElement(name = "ChannelName")
-  private final String channelName;
+    @XmlElement(name = "ChannelName")
+    private final String channelName;
 
-  public IrcChannelEvent(String channelName) {
-    this.channelName = channelName;
-  }
+    public IrcChannelEvent(String channelName) {
+        this.channelName = channelName;
+    }
 
-  public String getChannelName() {
-    return channelName;
-  }
+    public String getChannelName() {
+        return channelName;
+    }
 }

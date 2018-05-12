@@ -16,15 +16,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class IrcMessageEvent extends IrcUserEvent {
 
-  @XmlElement(name = "Message")
-  private final String message;
+    @XmlElement(name = "Message")
+    private final String message;
 
-  public IrcMessageEvent(String username, Tags tags, String message) {
-    super(username, tags);
-    this.message = message;
-  }
+    public IrcMessageEvent(String username, Tags tags, String message) {
+        super(username, tags);
+        this.message = message;
+    }
 
-  public String getMessage() {
-    return message;
-  }
+    public String getMessage() {
+        return message;
+    }
 }

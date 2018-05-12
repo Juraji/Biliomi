@@ -16,38 +16,38 @@ import java.util.List;
 @Path("/chat/moderationrecords")
 public class ModerationRecordRestService extends ModelRestService<ModerationRecord> {
 
-  @Inject
-  private ModerationRecordDao moderationRecordDao;
+    @Inject
+    private ModerationRecordDao moderationRecordDao;
 
-  @Override
-  public List<ModerationRecord> getEntities() {
-    return moderationRecordDao.getList();
-  }
-
-  @Override
-  public ModerationRecord getEntity(long id) {
-    throw new ForbiddenException();
-  }
-
-  @Override
-  public ModerationRecord createEntity(ModerationRecord e) {
-    throw new ForbiddenException();
-  }
-
-  @Override
-  public ModerationRecord updateEntity(ModerationRecord e, long id) {
-    throw new ForbiddenException();
-  }
-
-  @Override
-  public boolean deleteEntity(long id) {
-    ModerationRecord moderationRecord = this.moderationRecordDao.get(id);
-
-    if (moderationRecord == null) {
-      return false;
+    @Override
+    public List<ModerationRecord> getEntities() {
+        return moderationRecordDao.getList();
     }
 
-    moderationRecordDao.delete(moderationRecord);
-    return true;
-  }
+    @Override
+    public ModerationRecord getEntity(long id) {
+        throw new ForbiddenException();
+    }
+
+    @Override
+    public ModerationRecord createEntity(ModerationRecord e) {
+        throw new ForbiddenException();
+    }
+
+    @Override
+    public ModerationRecord updateEntity(ModerationRecord e, long id) {
+        throw new ForbiddenException();
+    }
+
+    @Override
+    public boolean deleteEntity(long id) {
+        ModerationRecord moderationRecord = this.moderationRecordDao.get(id);
+
+        if (moderationRecord == null) {
+            return false;
+        }
+
+        moderationRecordDao.delete(moderationRecord);
+        return true;
+    }
 }

@@ -5,7 +5,7 @@ package nl.juraji.biliomi.components.registers.donations;
  * Biliomi
  */
 public class DonationRegisterConstants {
-  public static final double POINTS_MULTIPLIER = 100.0;
-  public static final String INCOMING_DONATION_NOTICE = "IncomingDonationNotice";
-  public static final String MANUAL_DONATION_NOTICE = "ManualDonationNotice";
+    public static final double POINTS_MULTIPLIER = 100.0;
+    public static final String INCOMING_DONATION_NOTICE = "IncomingDonationNotice";
+    public static final String MANUAL_DONATION_NOTICE = "ManualDonationNotice";
 }

@@ -5,31 +5,31 @@ package nl.juraji.biliomi.config.core.biliomi;
  * Biliomi
  */
 public class USCore {
-  private String updateMode;
-  private boolean checkForUpdates;
-  private String countryCode;
+    private String updateMode;
+    private boolean checkForUpdates;
+    private String countryCode;
 
-  public String getUpdateMode() {
-    return updateMode;
-  }
+    public String getUpdateMode() {
+        return updateMode;
+    }
 
-  public void setUpdateMode(String updateMode) {
-    this.updateMode = updateMode;
-  }
+    public void setUpdateMode(String updateMode) {
+        this.updateMode = updateMode;
+    }
 
-  public boolean isCheckForUpdates() {
-    return checkForUpdates;
-  }
+    public boolean isCheckForUpdates() {
+        return checkForUpdates;
+    }
 
-  public void setCheckForUpdates(boolean checkForUpdates) {
-    this.checkForUpdates = checkForUpdates;
-  }
+    public void setCheckForUpdates(boolean checkForUpdates) {
+        this.checkForUpdates = checkForUpdates;
+    }
 
-  public String getCountryCode() {
-    return countryCode;
-  }
+    public String getCountryCode() {
+        return countryCode;
+    }
 
-  public void setCountryCode(String countryCode) {
-    this.countryCode = countryCode;
-  }
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
 }

@@ -21,107 +21,107 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Command {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @XmlElement(name = "Id")
-  private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement(name = "Id")
+    private long id;
 
-  @Column(unique = true)
-  @NotNull
-  @XmlElement(name = "Command")
-  private String command;
+    @Column(unique = true)
+    @NotNull
+    @XmlElement(name = "Command")
+    private String command;
 
-  @Column
-  @NotNull
-  @ColumnDefault("0")
-  @XmlElement(name = "Price")
-  private long price;
+    @Column
+    @NotNull
+    @ColumnDefault("0")
+    @XmlElement(name = "Price")
+    private long price;
 
-  @Column
-  @NotNull
-  @ColumnDefault("0")
-  @XmlElement(name = "Cooldown")
-  private long cooldown;
+    @Column
+    @NotNull
+    @ColumnDefault("0")
+    @XmlElement(name = "Cooldown")
+    private long cooldown;
 
-  @Column
-  @ColumnDefault("FALSE")
-  @XmlElement(name = "ModeratorCanAlwaysActivate")
-  private boolean moderatorCanActivate;
+    @Column
+    @ColumnDefault("FALSE")
+    @XmlElement(name = "ModeratorCanAlwaysActivate")
+    private boolean moderatorCanActivate;
 
-  @Column
-  @ColumnDefault("FALSE")
-  @XmlElement(name = "SystemCommand")
-  private boolean systemCommand;
+    @Column
+    @ColumnDefault("FALSE")
+    @XmlElement(name = "SystemCommand")
+    private boolean systemCommand;
 
-  @ManyToOne
-  @NotNull
-  @XmlElement(name = "UserGroup")
-  private UserGroup userGroup;
+    @ManyToOne
+    @NotNull
+    @XmlElement(name = "UserGroup")
+    private UserGroup userGroup;
 
-  @Column
-  @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(name = "CommandAliasses")
-  @XmlElement(name = "Aliasses")
-  private Set<String> aliasses;
+    @Column
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "CommandAliasses")
+    @XmlElement(name = "Aliasses")
+    private Set<String> aliasses;
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-  public String getCommand() {
-    return command;
-  }
+    public String getCommand() {
+        return command;
+    }
 
-  public void setCommand(String command) {
-    this.command = command;
-  }
+    public void setCommand(String command) {
+        this.command = command;
+    }
 
-  public long getPrice() {
-    return price;
-  }
+    public long getPrice() {
+        return price;
+    }
 
-  public void setPrice(long price) {
-    this.price = price;
-  }
+    public void setPrice(long price) {
+        this.price = price;
+    }
 
-  public long getCooldown() {
-    return cooldown;
-  }
+    public long getCooldown() {
+        return cooldown;
+    }
 
-  public void setCooldown(long cooldown) {
-    this.cooldown = cooldown;
-  }
+    public void setCooldown(long cooldown) {
+        this.cooldown = cooldown;
+    }
 
-  public boolean isModeratorCanActivate() {
-    return moderatorCanActivate;
-  }
+    public boolean isModeratorCanActivate() {
+        return moderatorCanActivate;
+    }
 
-  public void setModeratorCanActivate(boolean moderatorCanAlwaysActivate) {
-    this.moderatorCanActivate = moderatorCanAlwaysActivate;
-  }
+    public void setModeratorCanActivate(boolean moderatorCanAlwaysActivate) {
+        this.moderatorCanActivate = moderatorCanAlwaysActivate;
+    }
 
-  public boolean isSystemCommand() {
-    return systemCommand;
-  }
+    public boolean isSystemCommand() {
+        return systemCommand;
+    }
 
-  public void setSystemCommand(boolean systemCommand) {
-    this.systemCommand = systemCommand;
-  }
+    public void setSystemCommand(boolean systemCommand) {
+        this.systemCommand = systemCommand;
+    }
 
-  public UserGroup getUserGroup() {
-    return userGroup;
-  }
+    public UserGroup getUserGroup() {
+        return userGroup;
+    }
 
-  public void setUserGroup(UserGroup userGroup) {
-    this.userGroup = userGroup;
-  }
+    public void setUserGroup(UserGroup userGroup) {
+        this.userGroup = userGroup;
+    }
 
-  public Set<String> getAliasses() {
-    aliasses = ModelUtils.initCollection(aliasses);
-    return aliasses;
-  }
+    public Set<String> getAliasses() {
+        aliasses = ModelUtils.initCollection(aliasses);
+        return aliasses;
+    }
 }

@@ -18,39 +18,39 @@ import java.util.List;
 @Path("/core/commandhistoryrecords")
 public class CommandHistoryRecordRestService extends ModelRestService<CommandHistoryRecord> {
 
-  @Inject
-  private CommandHistoryRecordDao commandHistoryRecordDao;
+    @Inject
+    private CommandHistoryRecordDao commandHistoryRecordDao;
 
-  @GET
-  @Path("/latest/{command}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getHistoryForCommand(@PathParam("command") String command) {
-    List<CommandHistoryRecord> records = commandHistoryRecordDao.getLatestHistoryForCommand(command);
-    return PaginatedResponse.create(records);
-  }
+    @GET
+    @Path("/latest/{command}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getHistoryForCommand(@PathParam("command") String command) {
+        List<CommandHistoryRecord> records = commandHistoryRecordDao.getLatestHistoryForCommand(command);
+        return PaginatedResponse.create(records);
+    }
 
-  @Override
-  public List<CommandHistoryRecord> getEntities() {
-    return commandHistoryRecordDao.getList();
-  }
+    @Override
+    public List<CommandHistoryRecord> getEntities() {
+        return commandHistoryRecordDao.getList();
+    }
 
-  @Override
-  public CommandHistoryRecord getEntity(long id) {
-    return commandHistoryRecordDao.get(id);
-  }
+    @Override
+    public CommandHistoryRecord getEntity(long id) {
+        return commandHistoryRecordDao.get(id);
+    }
 
-  @Override
-  public CommandHistoryRecord createEntity(CommandHistoryRecord e) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public CommandHistoryRecord createEntity(CommandHistoryRecord e) {
+        throw new ForbiddenException();
+    }
 
-  @Override
-  public CommandHistoryRecord updateEntity(CommandHistoryRecord e, long id) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public CommandHistoryRecord updateEntity(CommandHistoryRecord e, long id) {
+        throw new ForbiddenException();
+    }
 
-  @Override
-  public boolean deleteEntity(long id) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public boolean deleteEntity(long id) {
+        throw new ForbiddenException();
+    }
 }

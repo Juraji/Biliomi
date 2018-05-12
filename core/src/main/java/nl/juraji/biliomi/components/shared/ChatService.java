@@ -34,146 +34,140 @@ import java.util.stream.Collectors;
 @Singleton
 @EventBusSubscriber
 public class ChatService {
-  private static final TimeUnit TIMEOUT_TUNIT = TimeUnit.SECONDS;
-  public static final String TIMEOUT_PREFIX = ".timeout";
-  public static final String BAN_PREFIX = ".ban";
-  public static final String UNBAN_PREFIX = ".unban";
+    public static final String TIMEOUT_PREFIX = ".timeout";
+    public static final String BAN_PREFIX = ".ban";
+    public static final String UNBAN_PREFIX = ".unban";
+    private static final TimeUnit TIMEOUT_TUNIT = TimeUnit.SECONDS;
+    private final List<String> viewers = new FastList<>();
+    private SystemSettings systemSettings;
+    @Inject
+    private Logger logger;
+    @Inject
+    private IrcSession session;
+    @Inject
+    private UsersService usersService;
+    @Inject
+    private UserDao userDao;
+    @Inject
+    private SettingsService settingsService;
 
-  private final List<String> viewers = new FastList<>();
-  private SystemSettings systemSettings;
-
-  @PostConstruct
-  private void initChatService() {
-    systemSettings = settingsService.getSettings(SystemSettings.class, s -> systemSettings = s);
-  }
-
-  @Inject
-  private Logger logger;
-
-  @Inject
-  private IrcSession session;
-
-  @Inject
-  private UsersService usersService;
-
-  @Inject
-  private UserDao userDao;
-
-  @Inject
-  private SettingsService settingsService;
-
-  @Subscribe
-  public void onIrcUserJoinedEvent(IrcUserJoinedEvent event) {
-    if (!viewers.contains(event.getUsername())) {
-      // Since the part event is not always emitted we need to check
-      // if we don't already know this user is present
-      logger.info("[JOIN] {}", event.getUsername());
-      viewers.add(event.getUsername());
+    @PostConstruct
+    private void initChatService() {
+        systemSettings = settingsService.getSettings(SystemSettings.class, s -> systemSettings = s);
     }
-  }
 
-  @Subscribe
-  public void onIrcUserLeftEvent(IrcUserLeftEvent event) {
-    logger.info("[PART] {}", event.getUsername());
-    viewers.remove(event.getUsername());
-  }
-
-  @Subscribe
-  public void onIrcUserModeEvent(IrcUserModeEvent event) {
-    if (event.isModeratorMode()) {
-      User user = usersService.getUser(event.getUsername());
-      if (!user.isModerator()) {
-        user.setModerator(true);
-        userDao.save(user);
-      }
+    @Subscribe
+    public void onIrcUserJoinedEvent(IrcUserJoinedEvent event) {
+        if (!viewers.contains(event.getUsername())) {
+            // Since the part event is not always emitted we need to check
+            // if we don't already know this user is present
+            logger.info("[JOIN] {}", event.getUsername());
+            viewers.add(event.getUsername());
+        }
     }
-  }
 
-  @Subscribe
-  public void onIrcChatMessageEvent(IrcChatMessageEvent event) {
-    logger.info("[MSG] [CHAT] {}: {}", event.getUsername(), event.getMessage());
-  }
-
-  @Subscribe
-  public void onIrcPrivateMessageEvent(IrcPrivateMessageEvent event) {
-    logger.info("[MSG] [PM] {}: {}", event.getUsername(), event.getMessage());
-  }
-
-  @Subscribe
-  public void onIrcSystemMessageEvent(IrcSystemMessageEvent event) {
-    logger.info("[MSG] [SYS] {}: {}", event.getUsername(), event.getMessage());
-  }
-
-  public List<String> getViewers() {
-    return viewers;
-  }
-
-  public List<User> getViewersAsUsers() {
-    return viewers.stream()
-        .map(username -> usersService.getUser(username))
-        .collect(Collectors.toList());
-  }
-
-  public void say(String message) {
-    if (systemSettings.isMuted()) {
-      logger.info("[SAY MUTED] {}", message);
-    } else {
-      session.getChatClient().say(message);
-      logger.info("[SAY] {}", message);
+    @Subscribe
+    public void onIrcUserLeftEvent(IrcUserLeftEvent event) {
+        logger.info("[PART] {}", event.getUsername());
+        viewers.remove(event.getUsername());
     }
-  }
 
-  public void say(Templater template) {
-    say(template.apply());
-  }
-
-  public void whisper(String username, String message) {
-    if (systemSettings.isMuted()) {
-      logger.info("[@{} MUTED] {}", username, message);
-    } else {
-      if (systemSettings.isEnableWhispers()) {
-        session.getChatClient().whisper(username, message);
-      } else {
-        String atMessage = Templater.template("@{{wtargetusername}}, {{wmessage}}")
-            .add("wtargetusername", username)
-            .add("wmessage", message)
-            .apply();
-        session.getChatClient().say(atMessage);
-      }
-
-      logger.info("[@{}] {}", username, message);
+    @Subscribe
+    public void onIrcUserModeEvent(IrcUserModeEvent event) {
+        if (event.isModeratorMode()) {
+            User user = usersService.getUser(event.getUsername());
+            if (!user.isModerator()) {
+                user.setModerator(true);
+                userDao.save(user);
+            }
+        }
     }
-  }
 
-  public void whisper(String username, Templater message) {
-    whisper(username, message.apply());
-  }
+    @Subscribe
+    public void onIrcChatMessageEvent(IrcChatMessageEvent event) {
+        logger.info("[MSG] [CHAT] {}: {}", event.getUsername(), event.getMessage());
+    }
 
-  public void whisper(User user, String message) {
-    whisper(user.getUsername(), message);
-  }
+    @Subscribe
+    public void onIrcPrivateMessageEvent(IrcPrivateMessageEvent event) {
+        logger.info("[MSG] [PM] {}: {}", event.getUsername(), event.getMessage());
+    }
 
-  public void whisper(User user, Templater message) {
-    whisper(user.getUsername(), message);
-  }
+    @Subscribe
+    public void onIrcSystemMessageEvent(IrcSystemMessageEvent event) {
+        logger.info("[MSG] [SYS] {}: {}", event.getUsername(), event.getMessage());
+    }
 
-  public void purgeUser(String username) {
-    session.getChatClient().say(Templater.spaced(TIMEOUT_PREFIX, username, "1"));
-  }
+    public List<String> getViewers() {
+        return viewers;
+    }
 
-  public void timeoutUser(String username) {
-    session.getChatClient().say(Templater.spaced(TIMEOUT_PREFIX, username));
-  }
+    public List<User> getViewersAsUsers() {
+        return viewers.stream()
+                .map(username -> usersService.getUser(username))
+                .collect(Collectors.toList());
+    }
 
-  public void timeoutUser(String username, long timeoutMillis) {
-    session.getChatClient().say(Templater.spaced(TIMEOUT_PREFIX, username, TIMEOUT_TUNIT.convert(timeoutMillis, TimeUnit.MILLISECONDS)));
-  }
+    public void say(String message) {
+        if (systemSettings.isMuted()) {
+            logger.info("[SAY MUTED] {}", message);
+        } else {
+            session.getChatClient().say(message);
+            logger.info("[SAY] {}", message);
+        }
+    }
 
-  public void banUser(String username) {
-    session.getChatClient().say(Templater.spaced(BAN_PREFIX, username));
-  }
+    public void say(Templater template) {
+        say(template.apply());
+    }
 
-  public void unbanUser(String username) {
-    session.getChatClient().say(Templater.spaced(UNBAN_PREFIX, username));
-  }
+    public void whisper(String username, String message) {
+        if (systemSettings.isMuted()) {
+            logger.info("[@{} MUTED] {}", username, message);
+        } else {
+            if (systemSettings.isEnableWhispers()) {
+                session.getChatClient().whisper(username, message);
+            } else {
+                String atMessage = Templater.template("@{{wtargetusername}}, {{wmessage}}")
+                        .add("wtargetusername", username)
+                        .add("wmessage", message)
+                        .apply();
+                session.getChatClient().say(atMessage);
+            }
+
+            logger.info("[@{}] {}", username, message);
+        }
+    }
+
+    public void whisper(String username, Templater message) {
+        whisper(username, message.apply());
+    }
+
+    public void whisper(User user, String message) {
+        whisper(user.getUsername(), message);
+    }
+
+    public void whisper(User user, Templater message) {
+        whisper(user.getUsername(), message);
+    }
+
+    public void purgeUser(String username) {
+        session.getChatClient().say(Templater.spaced(TIMEOUT_PREFIX, username, "1"));
+    }
+
+    public void timeoutUser(String username) {
+        session.getChatClient().say(Templater.spaced(TIMEOUT_PREFIX, username));
+    }
+
+    public void timeoutUser(String username, long timeoutMillis) {
+        session.getChatClient().say(Templater.spaced(TIMEOUT_PREFIX, username, TIMEOUT_TUNIT.convert(timeoutMillis, TimeUnit.MILLISECONDS)));
+    }
+
+    public void banUser(String username) {
+        session.getChatClient().say(Templater.spaced(BAN_PREFIX, username));
+    }
+
+    public void unbanUser(String username) {
+        session.getChatClient().say(Templater.spaced(UNBAN_PREFIX, username));
+    }
 }

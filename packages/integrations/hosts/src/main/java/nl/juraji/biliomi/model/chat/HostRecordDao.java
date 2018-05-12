@@ -16,26 +16,26 @@ import java.util.List;
 @Default
 public class HostRecordDao extends JpaDao<HostRecord> {
 
-  public HostRecordDao() {
-    super(HostRecord.class);
-  }
+    public HostRecordDao() {
+        super(HostRecord.class);
+    }
 
-  public HostRecord getLatestRecord(User channel, Direction direction) {
-    return criteria()
-        .createAlias("user", "u")
-        .add(Restrictions.and(
-            Restrictions.eq("u.id", channel.getId()),
-            Restrictions.eq("direction", direction)
-        ))
-        .addOrder(Order.desc("id"))
-        .setMaxResults(1)
-        .getResult();
-  }
+    public HostRecord getLatestRecord(User channel, Direction direction) {
+        return criteria()
+                .createAlias("user", "u")
+                .add(Restrictions.and(
+                        Restrictions.eq("u.id", channel.getId()),
+                        Restrictions.eq("direction", direction)
+                ))
+                .addOrder(Order.desc("id"))
+                .setMaxResults(1)
+                .getResult();
+    }
 
-  public List<HostRecord> getListByDirection(Direction direction) {
-    return criteria()
-        .add(Restrictions.eq("direction", direction))
-        .addOrder(Order.desc("id"))
-        .getList();
-  }
+    public List<HostRecord> getListByDirection(Direction direction) {
+        return criteria()
+                .add(Restrictions.eq("direction", direction))
+                .addOrder(Order.desc("id"))
+                .getList();
+    }
 }

@@ -13,11 +13,11 @@ import java.util.List;
 @Default
 @Singleton
 public class EightballConfigService extends ConfigService<YamlEightBallConfig> {
-  public EightballConfigService() {
-    super("games/8ball.yml", YamlEightBallConfig.class);
-  }
+    public EightballConfigService() {
+        super("games/8ball.yml", YamlEightBallConfig.class);
+    }
 
-  public List<String> getEightballMessages() {
-    return config.getEightballMessages();
-  }
+    public List<String> getEightballMessages() {
+        return config.getEightballMessages();
+    }
 }

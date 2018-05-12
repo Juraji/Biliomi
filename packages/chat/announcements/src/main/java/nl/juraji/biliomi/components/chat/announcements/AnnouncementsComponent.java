@@ -26,121 +26,121 @@ import java.util.concurrent.TimeUnit;
 @NormalComponent
 public class AnnouncementsComponent extends Component {
 
-  @Inject
-  private AnnouncementDao announcementDao;
+    @Inject
+    private AnnouncementDao announcementDao;
 
-  @Inject
-  private AnnouncementTimerService announcementTimerService;
+    @Inject
+    private AnnouncementTimerService announcementTimerService;
 
-  @Inject
-  private TimeFormatter timeFormatter;
+    @Inject
+    private TimeFormatter timeFormatter;
 
-  private AnnouncementsSettings settings;
+    private AnnouncementsSettings settings;
 
-  @Override
-  public void init() {
-    settings = settingsService.getSettings(AnnouncementsSettings.class, s -> settings = s);
-    announcementTimerService.start();
-  }
-
-  /**
-   * Add/remove announcements and update announcement settings
-   * Usage: !announcement [add|remove|interval|minmsgs] [more...]
-   */
-  @CommandRoute(command = "announcement", systemCommand = true)
-  public boolean announcementCommand(User user, Arguments arguments) {
-    return captureSubCommands("announcement", i18n.supply("ChatCommand.announcement.usage"), user, arguments);
-  }
-
-  /**
-   * Add an announcement
-   * Usage: !announcement add [message...]
-   */
-  @SubCommandRoute(parentCommand = "announcement", command = "add")
-  public boolean announcementCommandAdd(User user, Arguments arguments) {
-    if (!arguments.assertMinSize(1)) {
-      chat.whisper(user, i18n.get("ChatCommand.announcement.add.usage"));
-      return false;
+    @Override
+    public void init() {
+        settings = settingsService.getSettings(AnnouncementsSettings.class, s -> settings = s);
+        announcementTimerService.start();
     }
 
-    String message = arguments.toString();
-    announcementDao.create(message);
-    announcementTimerService.restart();
-
-    chat.whisper(user, i18n.get("ChatCommand.announcement.add.added")
-        .add("message", message));
-    return true;
-  }
-
-  /**
-   * Remove an announcement
-   * Usage: !announcement remove [announcement id]
-   */
-  @SubCommandRoute(parentCommand = "announcement", command = "remove")
-  public boolean announcementCommandRemove(User user, Arguments arguments) {
-    Long id = NumberConverter.asNumber(arguments.get(0)).toLong();
-
-    if (id == null) {
-      chat.whisper(user, i18n.get("ChatCommand.announcement.remove.usage"));
-      return false;
+    /**
+     * Add/remove announcements and update announcement settings
+     * Usage: !announcement [add|remove|interval|minmsgs] [more...]
+     */
+    @CommandRoute(command = "announcement", systemCommand = true)
+    public boolean announcementCommand(User user, Arguments arguments) {
+        return captureSubCommands("announcement", i18n.supply("ChatCommand.announcement.usage"), user, arguments);
     }
 
-    Announcement announcement = announcementDao.get(id);
-    if (announcement == null) {
-      chat.whisper(user, i18n.get("ChatCommand.announcement.remove.notFound")
-          .add("id", id));
-      return false;
+    /**
+     * Add an announcement
+     * Usage: !announcement add [message...]
+     */
+    @SubCommandRoute(parentCommand = "announcement", command = "add")
+    public boolean announcementCommandAdd(User user, Arguments arguments) {
+        if (!arguments.assertMinSize(1)) {
+            chat.whisper(user, i18n.get("ChatCommand.announcement.add.usage"));
+            return false;
+        }
+
+        String message = arguments.toString();
+        announcementDao.create(message);
+        announcementTimerService.restart();
+
+        chat.whisper(user, i18n.get("ChatCommand.announcement.add.added")
+                .add("message", message));
+        return true;
     }
 
-    announcementDao.delete(announcement);
-    announcementTimerService.restart();
+    /**
+     * Remove an announcement
+     * Usage: !announcement remove [announcement id]
+     */
+    @SubCommandRoute(parentCommand = "announcement", command = "remove")
+    public boolean announcementCommandRemove(User user, Arguments arguments) {
+        Long id = NumberConverter.asNumber(arguments.get(0)).toLong();
 
-    chat.whisper(user, i18n.get("ChatCommand.announcement.remove.deleted")
-        .add("message", announcement::getMessage));
-    return true;
-  }
+        if (id == null) {
+            chat.whisper(user, i18n.get("ChatCommand.announcement.remove.usage"));
+            return false;
+        }
 
-  /**
-   * Set the interval between announcements
-   * Usage: !announcement interval [amount of minutes]
-   */
-  @SubCommandRoute(parentCommand = "announcement", command = "interval")
-  public boolean announcementCommandInterval(User user, Arguments arguments) {
-    Integer intervalMinutes = NumberConverter.asNumber(arguments.get(0)).toInteger();
+        Announcement announcement = announcementDao.get(id);
+        if (announcement == null) {
+            chat.whisper(user, i18n.get("ChatCommand.announcement.remove.notFound")
+                    .add("id", id));
+            return false;
+        }
 
-    if (intervalMinutes == null || intervalMinutes < 1) {
-      chat.whisper(user, i18n.get("ChatCommand.announcement.interval.usage"));
-      return false;
+        announcementDao.delete(announcement);
+        announcementTimerService.restart();
+
+        chat.whisper(user, i18n.get("ChatCommand.announcement.remove.deleted")
+                .add("message", announcement::getMessage));
+        return true;
     }
 
-    long intervalMillis = TimeUnit.MILLISECONDS.convert(intervalMinutes, TimeUnit.MINUTES);
-    settings.setRunInterval(intervalMillis);
-    settingsService.save(settings);
-    announcementTimerService.restart();
+    /**
+     * Set the interval between announcements
+     * Usage: !announcement interval [amount of minutes]
+     */
+    @SubCommandRoute(parentCommand = "announcement", command = "interval")
+    public boolean announcementCommandInterval(User user, Arguments arguments) {
+        Integer intervalMinutes = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
-    chat.whisper(user, i18n.get("ChatCommand.announcement.interval.set")
-        .add("time", () -> timeFormatter.timeQuantity(settings.getRunInterval())));
-    return true;
-  }
+        if (intervalMinutes == null || intervalMinutes < 1) {
+            chat.whisper(user, i18n.get("ChatCommand.announcement.interval.usage"));
+            return false;
+        }
 
-  /**
-   * Set the minimum amount of message in the chat before posting an announcement
-   * Usage: !announcement minmsgs [amount of messages]
-   */
-  @SubCommandRoute(parentCommand = "announcement", command = "minmsgs")
-  public boolean announcementCommandMinMsgs(User user, Arguments arguments) {
-    Integer minMsgs = NumberConverter.asNumber(arguments.get(0)).toInteger();
+        long intervalMillis = TimeUnit.MILLISECONDS.convert(intervalMinutes, TimeUnit.MINUTES);
+        settings.setRunInterval(intervalMillis);
+        settingsService.save(settings);
+        announcementTimerService.restart();
 
-    if (minMsgs == null || minMsgs < 0) {
-      chat.whisper(user, i18n.get("ChatCommand.announcement.minMsgs.usage"));
-      return false;
+        chat.whisper(user, i18n.get("ChatCommand.announcement.interval.set")
+                .add("time", () -> timeFormatter.timeQuantity(settings.getRunInterval())));
+        return true;
     }
 
-    settings.setMinChatMessages(minMsgs);
-    settingsService.save(settings);
+    /**
+     * Set the minimum amount of message in the chat before posting an announcement
+     * Usage: !announcement minmsgs [amount of messages]
+     */
+    @SubCommandRoute(parentCommand = "announcement", command = "minmsgs")
+    public boolean announcementCommandMinMsgs(User user, Arguments arguments) {
+        Integer minMsgs = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
-    chat.whisper(user, i18n.get("ChatCommand.announcement.minMsgs.set")
-        .add("amount", settings::getMinChatMessages));
-    return true;
-  }
+        if (minMsgs == null || minMsgs < 0) {
+            chat.whisper(user, i18n.get("ChatCommand.announcement.minMsgs.usage"));
+            return false;
+        }
+
+        settings.setMinChatMessages(minMsgs);
+        settingsService.save(settings);
+
+        chat.whisper(user, i18n.get("ChatCommand.announcement.minMsgs.set")
+                .add("amount", settings::getMinChatMessages));
+        return true;
+    }
 }

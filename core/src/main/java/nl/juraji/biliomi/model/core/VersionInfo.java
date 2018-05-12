@@ -14,36 +14,36 @@ import javax.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class VersionInfo {
 
-  @XmlElement(name = "Version")
-  private String version;
+    @XmlElement(name = "Version")
+    private String version;
 
-  @XmlTransient
-  private String userAgent;
+    @XmlTransient
+    private String userAgent;
 
-  @XmlElement(name = "BuildDate")
-  private DateTime buildDate;
+    @XmlElement(name = "BuildDate")
+    private DateTime buildDate;
 
-  public String getVersion() {
-    return version;
-  }
+    public String getVersion() {
+        return version;
+    }
 
-  public void setVersion(String version) {
-    this.version = version;
-  }
+    public void setVersion(String version) {
+        this.version = version;
+    }
 
-  public String getUserAgent() {
-    return userAgent;
-  }
+    public String getUserAgent() {
+        return userAgent;
+    }
 
-  public void setUserAgent(String userAgent) {
-    this.userAgent = userAgent;
-  }
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+    }
 
-  public DateTime getBuildDate() {
-    return buildDate;
-  }
+    public DateTime getBuildDate() {
+        return buildDate;
+    }
 
-  public void setBuildDate(DateTime buildDate) {
-    this.buildDate = buildDate;
-  }
+    public void setBuildDate(DateTime buildDate) {
+        this.buildDate = buildDate;
+    }
 }

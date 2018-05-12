@@ -15,22 +15,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchBitsEvent extends TwitchEvent {
 
-  @XmlElement(name = "Username")
-  private final String username;
+    @XmlElement(name = "Username")
+    private final String username;
 
-  @XmlElement(name = "BitsAmount")
-  private final long bitsAmount;
+    @XmlElement(name = "BitsAmount")
+    private final long bitsAmount;
 
-  public TwitchBitsEvent(String username, long bitsAmount) {
-    this.username = username;
-    this.bitsAmount = bitsAmount;
-  }
+    public TwitchBitsEvent(String username, long bitsAmount) {
+        this.username = username;
+        this.bitsAmount = bitsAmount;
+    }
 
-  public String getUsername() {
-    return username;
-  }
+    public String getUsername() {
+        return username;
+    }
 
-  public long getBitsAmount() {
-    return bitsAmount;
-  }
+    public long getBitsAmount() {
+        return bitsAmount;
+    }
 }

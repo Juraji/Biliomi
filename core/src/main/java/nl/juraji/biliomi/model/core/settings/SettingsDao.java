@@ -14,22 +14,22 @@ import java.util.Collection;
 @Default
 @Singleton
 public class SettingsDao extends JpaDao<Settings> {
-  public SettingsDao() {
-    super(Settings.class);
-  }
+    public SettingsDao() {
+        super(Settings.class);
+    }
 
-  @SuppressWarnings("unchecked")
-  public <T extends Settings> T getSettings(Class<T> type) {
-    return (T) criteria().add(Restrictions.eq("id", type.getSimpleName())).getResult();
-  }
+    @SuppressWarnings("unchecked")
+    public <T extends Settings> T getSettings(Class<T> type) {
+        return (T) criteria().add(Restrictions.eq("id", type.getSimpleName())).getResult();
+    }
 
-  @Override
-  public void delete(Settings object) {
-    throw new UnsupportedOperationException("Settings can not be deleted");
-  }
+    @Override
+    public void delete(Settings object) {
+        throw new UnsupportedOperationException("Settings can not be deleted");
+    }
 
-  @Override
-  public void delete(Collection<Settings> objects) {
-    throw new UnsupportedOperationException("Settings can not be deleted");
-  }
+    @Override
+    public void delete(Collection<Settings> objects) {
+        throw new UnsupportedOperationException("Settings can not be deleted");
+    }
 }

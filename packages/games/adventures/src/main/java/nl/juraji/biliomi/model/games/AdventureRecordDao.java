@@ -15,27 +15,27 @@ import java.util.List;
 @Default
 public class AdventureRecordDao extends JpaDao<AdventureRecord> {
 
-  public AdventureRecordDao() {
-    super(AdventureRecord.class);
-  }
+    public AdventureRecordDao() {
+        super(AdventureRecord.class);
+    }
 
-  public List<AdventureRecord> getRecords(User user) {
-    return getRecords(user, -1);
-  }
+    public List<AdventureRecord> getRecords(User user) {
+        return getRecords(user, -1);
+    }
 
-  public List<AdventureRecord> getRecords(User user, int limit) {
-    return criteria()
-        .createAlias("adventurer", "a")
-        .add(Restrictions.eq("a.id", user.getId()))
-        .addOrder(Order.desc("id"))
-        .setMaxResults(limit)
-        .getList();
-  }
+    public List<AdventureRecord> getRecords(User user, int limit) {
+        return criteria()
+                .createAlias("adventurer", "a")
+                .add(Restrictions.eq("a.id", user.getId()))
+                .addOrder(Order.desc("id"))
+                .setMaxResults(limit)
+                .getList();
+    }
 
-  public long getRecordCount(User user) {
-    return criteria()
-        .createAlias("adventurer", "a")
-        .add(Restrictions.eq("a.id", user.getId()))
-        .getCount();
-  }
+    public long getRecordCount(User user) {
+        return criteria()
+                .createAlias("adventurer", "a")
+                .add(Restrictions.eq("a.id", user.getId()))
+                .getCount();
+    }
 }

@@ -7,13 +7,14 @@ import nl.juraji.biliomi.model.internal.events.twitch.webhook.ChannelStateEvent;
 import nl.juraji.biliomi.model.internal.twitch.hosting.TwitchHostInEvent;
 import nl.juraji.biliomi.model.internal.twitch.hosting.TwitchUnhostEvent;
 import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
-import nl.juraji.biliomi.utility.types.collections.FastList;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -24,43 +25,39 @@ import java.util.stream.Collectors;
 @Singleton
 @EventBusSubscriber
 public class HostersService {
-  private final List<String> hosters = new FastList<>();
+    private final Set<String> hosters = new HashSet<>();
 
-  @Inject
-  private UsersService usersService;
+    @Inject
+    private UsersService usersService;
 
-  @Subscribe
-  public void onTwitchHostInEvent(TwitchHostInEvent event) {
-    String channelName = event.getChannelName();
-    if (!hosters.contains(channelName)) {
-      hosters.add(channelName);
+    @Subscribe
+    public void onTwitchHostInEvent(TwitchHostInEvent event) {
+        String channelName = event.getChannelName();
+        hosters.add(channelName);
     }
-  }
 
-  @Subscribe
-  public void onTwitchUnhostEvent(TwitchUnhostEvent event) {
-    String channelName = event.getChannelName();
-    if (hosters.contains(channelName)) {
-      hosters.remove(channelName);
+    @Subscribe
+    public void onTwitchUnhostEvent(TwitchUnhostEvent event) {
+        String channelName = event.getChannelName();
+        hosters.remove(channelName);
     }
-  }
 
-  @Subscribe
-  public void onChannelStateEvent(ChannelStateEvent event) {
-    if (!event.isOnline()) {
-      // Clear the hosters list when the channel went offline,
-      // since it will no longer get updated by the watch service
-      this.hosters.clear();
+    @Subscribe
+    public void onChannelStateEvent(ChannelStateEvent event) {
+        if (!event.isOnline()) {
+            // Clear the hosters list when the channel went offline,
+            // since it will no longer get updated by the watch service
+            this.hosters.clear();
+        }
     }
-  }
 
-  public List<String> getHosters() {
-    return Collections.unmodifiableList(hosters);
-  }
+    public Set<String> getHosters() {
+        return Collections.unmodifiableSet(hosters);
+    }
 
-  public List<User> getHostersAsUsers() {
-    return hosters.stream()
-        .map(username -> usersService.getUser(username))
-        .collect(Collectors.toList());
-  }
+    public List<User> getHostersAsUsers() {
+        return hosters.stream()
+                .map(username -> usersService.getUser(username))
+                .collect(Collectors.toList());
+    }
 }

@@ -16,39 +16,39 @@ import java.util.List;
 @Default
 public class GameMessagesService extends ConfigService<YamlGameMessagesConfig> {
 
-  public GameMessagesService() {
-    super("core/gamemessages.yml", YamlGameMessagesConfig.class);
-  }
-
-  /**
-   * Retrieve a win message from the default pool
-   *
-   * @param username The target username (Some message implement the "{{username}}" template key)
-   * @return A templated message
-   */
-  public String getWinMessage(String username) {
-    return buildMessage(config.getWins(), username);
-  }
-
-  /**
-   * Retrieve a lost message from the default pool
-   *
-   * @param username The target username (Some message implement the "{{username}}" template key)
-   * @return A templated message
-   */
-  public String getLostMessage(String username) {
-    return buildMessage(config.getLosts(), username);
-  }
-
-  private String buildMessage(List<String> list, String username) {
-    String message = MathUtils.listRand(list);
-
-    if (message == null) {
-      throw new SettingsDefinitionException("Missing game messages definition, check the settings");
+    public GameMessagesService() {
+        super("core/gamemessages.yml", YamlGameMessagesConfig.class);
     }
 
-    return Templater.template(message)
-        .add("username", username)
-        .apply();
-  }
+    /**
+     * Retrieve a win message from the default pool
+     *
+     * @param username The target username (Some message implement the "{{username}}" template key)
+     * @return A templated message
+     */
+    public String getWinMessage(String username) {
+        return buildMessage(config.getWins(), username);
+    }
+
+    /**
+     * Retrieve a lost message from the default pool
+     *
+     * @param username The target username (Some message implement the "{{username}}" template key)
+     * @return A templated message
+     */
+    public String getLostMessage(String username) {
+        return buildMessage(config.getLosts(), username);
+    }
+
+    private String buildMessage(List<String> list, String username) {
+        String message = MathUtils.listRand(list);
+
+        if (message == null) {
+            throw new SettingsDefinitionException("Missing game messages definition, check the settings");
+        }
+
+        return Templater.template(message)
+                .add("username", username)
+                .apply();
+    }
 }

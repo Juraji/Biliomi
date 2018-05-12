@@ -35,128 +35,125 @@ import java.util.concurrent.TimeUnit;
 @EventBusSubscriber
 public class UserGreetingComponent extends Component {
 
-  @Inject
-  private UserGreetingDao userGreetingDao;
+    private final TimedMap<Long, Boolean> timeoutRegister = new TimedMap<>(getClass());
+    @Inject
+    private UserGreetingDao userGreetingDao;
+    @Inject
+    private TimeFormatter timeFormatter;
+    @Inject
+    private BadWordsService badWordsService;
+    private UserGreetingSettings settings;
 
-  @Inject
-  private TimeFormatter timeFormatter;
-
-  @Inject
-  private BadWordsService badWordsService;
-
-  private final TimedMap<Long, Boolean> timeoutRegister = new TimedMap<>(getClass());
-  private UserGreetingSettings settings;
-
-  @Override
-  public void init() {
-    settings = settingsService.getSettings(UserGreetingSettings.class, s -> settings = s);
-  }
-
-  @Subscribe
-  public void onIrcUserJoinedEvent(IrcUserJoinedEvent event) {
-    User user = usersService.getUser(event.getUsername());
-    if (user != null && !timeoutRegister.containsKey(user.getId())) {
-      UserGreeting greeting = userGreetingDao.getByUser(user);
-
-      if (greeting != null) {
-        timeoutRegister.put(user.getId(), true, settings.getGreetingTimeout());
-        chat.say(Templater.template(greeting.getMessage())
-            .add("name", user::getNameAndTitle));
-      }
-    }
-  }
-
-  /**
-   * Set your personal greeting
-   * Use "{{name}}", without quotes, in your message to have it be replaced with your own name. Usage: !setgreeting [message... or OFF to disable]
-   */
-  @CommandRoute(command = "setgreeting")
-  public boolean setgreetingCommand(User user, Arguments arguments) {
-    if (!arguments.assertMinSize(1)) {
-      chat.whisper(user, i18n.get("ChatCommand.setGreeting.usage"));
-      return false;
+    @Override
+    public void init() {
+        settings = settingsService.getSettings(UserGreetingSettings.class, s -> settings = s);
     }
 
-    UserGreeting greeting = userGreetingDao.getByUser(user);
+    @Subscribe
+    public void onIrcUserJoinedEvent(IrcUserJoinedEvent event) {
+        User user = usersService.getUser(event.getUsername());
+        if (user != null && !timeoutRegister.containsKey(user.getId())) {
+            UserGreeting greeting = userGreetingDao.getByUser(user);
 
-    OnOff off = EnumUtils.toEnum(arguments.get(0), OnOff.class);
-    if (off != null) {
-      if (OnOff.OFF.equals(off) && greeting != null) {
-        userGreetingDao.delete(greeting);
-        chat.whisper(user, i18n.get("ChatCommand.setGreeting.deleted"));
+            if (greeting != null) {
+                timeoutRegister.put(user.getId(), true, settings.getGreetingTimeout());
+                chat.say(Templater.template(greeting.getMessage())
+                        .add("name", user::getNameAndTitle));
+            }
+        }
+    }
+
+    /**
+     * Set your personal greeting
+     * Use "{{name}}", without quotes, in your message to have it be replaced with your own name. Usage: !setgreeting [message... or OFF to disable]
+     */
+    @CommandRoute(command = "setgreeting")
+    public boolean setgreetingCommand(User user, Arguments arguments) {
+        if (!arguments.assertMinSize(1)) {
+            chat.whisper(user, i18n.get("ChatCommand.setGreeting.usage"));
+            return false;
+        }
+
+        UserGreeting greeting = userGreetingDao.getByUser(user);
+
+        OnOff off = EnumUtils.toEnum(arguments.get(0), OnOff.class);
+        if (off != null) {
+            if (OnOff.OFF.equals(off) && greeting != null) {
+                userGreetingDao.delete(greeting);
+                chat.whisper(user, i18n.get("ChatCommand.setGreeting.deleted"));
+                return true;
+            }
+            return false;
+        }
+
+        String message = arguments.toString();
+        if (badWordsService.containsBadWords(message)) {
+            chat.whisper(user, i18n.getInputContainsBadWords());
+            return false;
+        }
+
+        if (greeting == null) {
+            greeting = new UserGreeting();
+            greeting.setUser(user);
+        }
+
+        greeting.setMessage(message);
+        userGreetingDao.save(greeting);
+
+        chat.whisper(user, i18n.get("ChatCommand.setGreeting.saved"));
         return true;
-      }
-      return false;
     }
 
-    String message = arguments.toString();
-    if (badWordsService.containsBadWords(message)) {
-      chat.whisper(user, i18n.getInputContainsBadWords());
-      return false;
+    /**
+     * Update user greeting settings
+     * Usage: !greetingsettings [enabled|timeout] [more...]
+     */
+    @CommandRoute(command = "greetingsettings", systemCommand = true)
+    public boolean greetingSettingsCommand(User user, Arguments arguments) {
+        return captureSubCommands("greetingsettings", i18n.supply("ChatCommand.greetingSettings.usage"), user, arguments);
     }
 
-    if (greeting == null) {
-      greeting = new UserGreeting();
-      greeting.setUser(user);
+    /**
+     * Enable/disable user greetings
+     * Usage: !greetingsettings enabled [on|off]
+     */
+    @SubCommandRoute(parentCommand = "greetingsettings", command = "enabled")
+    public boolean greetingSettingsCommandEnabled(User user, Arguments arguments) {
+        OnOff onOff = EnumUtils.toEnum(arguments.get(0), OnOff.class);
+
+        if (onOff == null) {
+            chat.whisper(user, i18n.get("ChatCommand.greetingSettings.enabled.usage"));
+            return false;
+        }
+
+        settings.setEnableGreetings(OnOff.ON.equals(onOff));
+        settingsService.save(settings);
+
+        chat.whisper(user, i18n.get("ChatCommand.greetingSettings.enabled.toggled")
+                .add("state", i18n.getEnabledDisabled(settings.isEnableGreetings())));
+        return true;
     }
 
-    greeting.setMessage(message);
-    userGreetingDao.save(greeting);
+    /**
+     * Set the timeout for user greetings
+     * Timouts will be reset when Biliomi restarts
+     * Usage: !greetingsettings timeout [hours, 1 or more]
+     */
+    @SubCommandRoute(parentCommand = "greetingsettings", command = "timeout")
+    public boolean greetingSettingsCommandTimeout(User user, Arguments arguments) {
+        Integer timeoutHours = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
-    chat.whisper(user, i18n.get("ChatCommand.setGreeting.saved"));
-    return true;
-  }
+        if (timeoutHours == null || timeoutHours < 1) {
+            chat.whisper(user, i18n.get("ChatCommand.greetingSettings.timeout.usage"));
+            return false;
+        }
 
-  /**
-   * Update user greeting settings
-   * Usage: !greetingsettings [enabled|timeout] [more...]
-   */
-  @CommandRoute(command = "greetingsettings", systemCommand = true)
-  public boolean greetingSettingsCommand(User user, Arguments arguments) {
-    return captureSubCommands("greetingsettings", i18n.supply("ChatCommand.greetingSettings.usage"), user, arguments);
-  }
+        long timeoutMillis = TimeUnit.MILLISECONDS.convert(timeoutHours, TimeUnit.HOURS);
+        settings.setGreetingTimeout(timeoutHours);
+        settingsService.save(settings);
 
-  /**
-   * Enable/disable user greetings
-   * Usage: !greetingsettings enabled [on|off]
-   */
-  @SubCommandRoute(parentCommand = "greetingsettings", command = "enabled")
-  public boolean greetingSettingsCommandEnabled(User user, Arguments arguments) {
-    OnOff onOff = EnumUtils.toEnum(arguments.get(0), OnOff.class);
-
-    if (onOff == null) {
-      chat.whisper(user, i18n.get("ChatCommand.greetingSettings.enabled.usage"));
-      return false;
+        chat.whisper(user, i18n.get("ChatCommand.greetingSettings.timeout.set")
+                .add("time", () -> timeFormatter.timeQuantity(timeoutMillis)));
+        return true;
     }
-
-    settings.setEnableGreetings(OnOff.ON.equals(onOff));
-    settingsService.save(settings);
-
-    chat.whisper(user, i18n.get("ChatCommand.greetingSettings.enabled.toggled")
-        .add("state", i18n.getEnabledDisabled(settings.isEnableGreetings())));
-    return true;
-  }
-
-  /**
-   * Set the timeout for user greetings
-   * Timouts will be reset when Biliomi restarts
-   * Usage: !greetingsettings timeout [hours, 1 or more]
-   */
-  @SubCommandRoute(parentCommand = "greetingsettings", command = "timeout")
-  public boolean greetingSettingsCommandTimeout(User user, Arguments arguments) {
-    Integer timeoutHours = NumberConverter.asNumber(arguments.get(0)).toInteger();
-
-    if (timeoutHours == null || timeoutHours < 1) {
-      chat.whisper(user, i18n.get("ChatCommand.greetingSettings.timeout.usage"));
-      return false;
-    }
-
-    long timeoutMillis = TimeUnit.MILLISECONDS.convert(timeoutHours, TimeUnit.HOURS);
-    settings.setGreetingTimeout(timeoutHours);
-    settingsService.save(settings);
-
-    chat.whisper(user, i18n.get("ChatCommand.greetingSettings.timeout.set")
-        .add("time", () -> timeFormatter.timeQuantity(timeoutMillis)));
-    return true;
-  }
 }

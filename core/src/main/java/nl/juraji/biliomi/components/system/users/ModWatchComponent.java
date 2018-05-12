@@ -16,17 +16,17 @@ import javax.inject.Singleton;
 @SystemComponent
 public class ModWatchComponent extends Component {
 
-  @Inject
-  private ModWatchTimerService modWatchTimer;
+    @Inject
+    private ModWatchTimerService modWatchTimer;
 
-  @Override
-  public void init() {
-    modWatchTimer.start();
-  }
+    @Override
+    public void init() {
+        modWatchTimer.start();
+    }
 
-  @CliCommandRoute(command = "updatemods", description = "Manually run the ModWatch")
-  public boolean restartCommand(ConsoleInputEvent event) {
-    modWatchTimer.updateNow();
-    return true;
-  }
+    @CliCommandRoute(command = "updatemods", description = "Manually run the ModWatch")
+    public boolean restartCommand(ConsoleInputEvent event) {
+        modWatchTimer.updateNow();
+        return true;
+    }
 }

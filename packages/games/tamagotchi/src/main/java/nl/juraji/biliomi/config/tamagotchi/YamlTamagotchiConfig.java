@@ -7,22 +7,22 @@ import java.util.List;
  * Biliomi
  */
 public class YamlTamagotchiConfig {
-  private List<String> species;
-  private List<YamlTamagotchiToy> toys;
+    private List<String> species;
+    private List<YamlTamagotchiToy> toys;
 
-  public List<String> getSpecies() {
-    return species;
-  }
+    public List<String> getSpecies() {
+        return species;
+    }
 
-  public void setSpecies(List<String> species) {
-    this.species = species;
-  }
+    public void setSpecies(List<String> species) {
+        this.species = species;
+    }
 
-  public List<YamlTamagotchiToy> getToys() {
-    return toys;
-  }
+    public List<YamlTamagotchiToy> getToys() {
+        return toys;
+    }
 
-  public void setToys(List<YamlTamagotchiToy> toys) {
-    this.toys = toys;
-  }
+    public void setToys(List<YamlTamagotchiToy> toys) {
+        this.toys = toys;
+    }
 }

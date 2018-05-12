@@ -18,20 +18,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class HostWatchSettings extends Settings {
 
-  @Column
-  @XmlElement(name = "Reward")
-  private long reward = 0;
+    @Column
+    @XmlElement(name = "Reward")
+    private long reward = 0;
 
-  public long getReward() {
-    return reward;
-  }
+    public long getReward() {
+        return reward;
+    }
 
-  public void setReward(long reward) {
-    this.reward = reward;
-  }
+    public void setReward(long reward) {
+        this.reward = reward;
+    }
 
-  @Override
-  public void setDefaultValues() {
-    this.reward = 0;
-  }
+    @Override
+    public void setDefaultValues() {
+        this.reward = 0;
+    }
 }

@@ -5,5 +5,5 @@ package nl.juraji.biliomi.model.core.security.tokens;
  * Biliomi v3
  */
 public enum TokenGroup {
-  TWITCH, INTEGRATIONS
+    TWITCH, INTEGRATIONS
 }

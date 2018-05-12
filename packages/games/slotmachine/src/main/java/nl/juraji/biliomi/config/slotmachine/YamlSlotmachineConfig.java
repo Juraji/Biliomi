@@ -7,13 +7,13 @@ import java.util.List;
  * Biliomi
  */
 public class YamlSlotmachineConfig {
-  private List<YamlSlotmachineEmote> emotes;
+    private List<YamlSlotmachineEmote> emotes;
 
-  public List<YamlSlotmachineEmote> getEmotes() {
-    return emotes;
-  }
+    public List<YamlSlotmachineEmote> getEmotes() {
+        return emotes;
+    }
 
-  public void setEmotes(List<YamlSlotmachineEmote> emotes) {
-    this.emotes = emotes;
-  }
+    public void setEmotes(List<YamlSlotmachineEmote> emotes) {
+        this.emotes = emotes;
+    }
 }

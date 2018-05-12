@@ -13,60 +13,60 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RestAuthorizationResponse {
 
-  @XmlElement(name = "AuthorizationToken")
-  private String authorizationToken;
+    @XmlElement(name = "AuthorizationToken")
+    private String authorizationToken;
 
-  @XmlElement(name = "RefreshToken")
-  private String refreshToken;
+    @XmlElement(name = "RefreshToken")
+    private String refreshToken;
 
-  @XmlElement(name = "Message")
-  private String message;
+    @XmlElement(name = "Message")
+    private String message;
 
-  public String getAuthorizationToken() {
-    return authorizationToken;
-  }
+    public static String getFaultAuthorizationMissingMsg() {
+        return "Authorization header is empty or not present";
+    }
 
-  public void setAuthorizationToken(String authorizationToken) {
-    this.authorizationToken = authorizationToken;
-  }
+    public static String getFaultInvalidTokenMsg() {
+        return "Token unuseable";
+    }
 
-  public String getRefreshToken() {
-    return refreshToken;
-  }
+    public static String getFaultLoginEmptyMsg() {
+        return "Username or password is empty";
+    }
 
-  public void setRefreshToken(String refreshToken) {
-    this.refreshToken = refreshToken;
-  }
+    public static String getFaultUsernameInvalidMsg() {
+        return "Invalid username";
+    }
 
-  public String getMessage() {
-    return message;
-  }
+    public static String getFaultPasswordInvalidMsg() {
+        return "Invalid password";
+    }
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+    public static String getLoginOkMsg() {
+        return "Login OK";
+    }
 
-  public static String getFaultAuthorizationMissingMsg() {
-    return "Authorization header is empty or not present";
-  }
+    public String getAuthorizationToken() {
+        return authorizationToken;
+    }
 
-  public static String getFaultInvalidTokenMsg() {
-    return "Token unuseable";
-  }
+    public void setAuthorizationToken(String authorizationToken) {
+        this.authorizationToken = authorizationToken;
+    }
 
-  public static String getFaultLoginEmptyMsg() {
-    return "Username or password is empty";
-  }
+    public String getRefreshToken() {
+        return refreshToken;
+    }
 
-  public static String getFaultUsernameInvalidMsg() {
-    return "Invalid username";
-  }
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 
-  public static String getFaultPasswordInvalidMsg() {
-    return "Invalid password";
-  }
+    public String getMessage() {
+        return message;
+    }
 
-  public static String getLoginOkMsg() {
-    return "Login OK";
-  }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

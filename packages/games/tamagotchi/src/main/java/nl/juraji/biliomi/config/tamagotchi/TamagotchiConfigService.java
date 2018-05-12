@@ -14,22 +14,22 @@ import java.util.List;
 @Singleton
 public class TamagotchiConfigService extends ConfigService<YamlTamagotchiConfig> {
 
-  public TamagotchiConfigService() {
-    super("games/tamagotchis.yml", YamlTamagotchiConfig.class);
-  }
+    public TamagotchiConfigService() {
+        super("games/tamagotchis.yml", YamlTamagotchiConfig.class);
+    }
 
-  public List<YamlTamagotchiToy> getToys() {
-    return config.getToys();
-  }
+    public List<YamlTamagotchiToy> getToys() {
+        return config.getToys();
+    }
 
-  public List<String> getAvailableSpecies() {
-    return config.getSpecies();
-  }
+    public List<String> getAvailableSpecies() {
+        return config.getSpecies();
+    }
 
-  public String getSpeciesIfExists(String input) {
-    return config.getSpecies().stream()
-        .filter(species -> species.equalsIgnoreCase(input))
-        .findFirst()
-        .orElse(null);
-  }
+    public String getSpeciesIfExists(String input) {
+        return config.getSpecies().stream()
+                .filter(species -> species.equalsIgnoreCase(input))
+                .findFirst()
+                .orElse(null);
+    }
 }

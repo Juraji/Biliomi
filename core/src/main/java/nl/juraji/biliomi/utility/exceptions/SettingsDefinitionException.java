@@ -5,7 +5,7 @@ package nl.juraji.biliomi.utility.exceptions;
  * Biliomi v3
  */
 public class SettingsDefinitionException extends RuntimeException {
-  public SettingsDefinitionException(String message) {
-    super(message);
-  }
+    public SettingsDefinitionException(String message) {
+        super(message);
+    }
 }

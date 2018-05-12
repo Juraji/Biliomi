@@ -19,57 +19,57 @@ import java.util.List;
 @Path("/core/templates")
 public class TemplateRestService extends ModelRestService<Template> {
 
-  @Inject
-  private TemplateDao templateDao;
+    @Inject
+    private TemplateDao templateDao;
 
-  @Override
-  public List<Template> getEntities() {
-    return templateDao.getList();
-  }
-
-  @Override
-  public Template getEntity(long id) {
-    return templateDao.get(id);
-  }
-
-  @Override
-  public Template createEntity(Template e) {
-    throw new ForbiddenException();
-  }
-
-  @Override
-  public Template updateEntity(Template e, long id) {
-    Template template = templateDao.get(id);
-
-    if (template == null) {
-      return null;
+    @Override
+    public List<Template> getEntities() {
+        return templateDao.getList();
     }
 
-    if (StringUtils.isEmpty(e.getTemplate())) {
-      template.setTemplate(null);
-    } else {
-      template.setTemplate(e.getTemplate());
+    @Override
+    public Template getEntity(long id) {
+        return templateDao.get(id);
     }
 
-    templateDao.save(template);
-    return template;
-  }
-
-  @Override
-  public boolean deleteEntity(long id) {
-    throw new ForbiddenException();
-  }
-
-  @GET
-  @Path("/bykey/{key}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getTemplateByKey(@PathParam("key") String key) {
-    Template template = templateDao.getByKey(key);
-
-    if (template == null) {
-      return Responses.noContent();
+    @Override
+    public Template createEntity(Template e) {
+        throw new ForbiddenException();
     }
 
-    return Responses.ok(template);
-  }
+    @Override
+    public Template updateEntity(Template e, long id) {
+        Template template = templateDao.get(id);
+
+        if (template == null) {
+            return null;
+        }
+
+        if (StringUtils.isEmpty(e.getTemplate())) {
+            template.setTemplate(null);
+        } else {
+            template.setTemplate(e.getTemplate());
+        }
+
+        templateDao.save(template);
+        return template;
+    }
+
+    @Override
+    public boolean deleteEntity(long id) {
+        throw new ForbiddenException();
+    }
+
+    @GET
+    @Path("/bykey/{key}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTemplateByKey(@PathParam("key") String key) {
+        Template template = templateDao.getByKey(key);
+
+        if (template == null) {
+            return Responses.noContent();
+        }
+
+        return Responses.ok(template);
+    }
 }

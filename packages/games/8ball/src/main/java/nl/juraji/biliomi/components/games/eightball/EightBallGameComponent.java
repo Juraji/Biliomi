@@ -22,24 +22,24 @@ import javax.inject.Singleton;
 @NormalComponent
 public class EightBallGameComponent extends Component {
 
-  @Inject
-  private EightballConfigService configService;
+    @Inject
+    private EightballConfigService configService;
 
-  /**
-   * The 8ball knows all
-   * Usage: !8ball question
-   */
-  @CommandRoute(command = "8ball")
-  public boolean eightBallCommand(User user, Arguments arguments) {
-    if (!arguments.assertMinSize(1)) {
-      chat.say(i18n.get("ChatCommand.8ball.noQuestion"));
-      return false;
+    /**
+     * The 8ball knows all
+     * Usage: !8ball question
+     */
+    @CommandRoute(command = "8ball")
+    public boolean eightBallCommand(User user, Arguments arguments) {
+        if (!arguments.assertMinSize(1)) {
+            chat.say(i18n.get("ChatCommand.8ball.noQuestion"));
+            return false;
+        }
+
+        eventBus.post(new AchievementEvent(user, "USE_EIGHTBALL", i18n.getString("Achievement.use8ball")));
+
+        String message = MathUtils.listRand(configService.getEightballMessages());
+        chat.say(message);
+        return true;
     }
-
-    eventBus.post(new AchievementEvent(user, "USE_EIGHTBALL", i18n.getString("Achievement.use8ball")));
-
-    String message = MathUtils.listRand(configService.getEightballMessages());
-    chat.say(message);
-    return true;
-  }
 }

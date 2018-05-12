@@ -14,39 +14,39 @@ import java.util.List;
 @Default
 public class TamagotchiDao extends JpaDao<Tamagotchi> {
 
-  public TamagotchiDao() {
-    super(Tamagotchi.class);
-  }
+    public TamagotchiDao() {
+        super(Tamagotchi.class);
+    }
 
-  public boolean userHasTamagotchi(User user) {
-    return criteria()
-        .createAlias("owner", "o")
-        .add(Restrictions.and(
-            Restrictions.eq("o.id", user.getId()),
-            Restrictions.eq("deceased", false)
-        ))
-        .getCount() > 0;
-  }
+    public boolean userHasTamagotchi(User user) {
+        return criteria()
+                .createAlias("owner", "o")
+                .add(Restrictions.and(
+                        Restrictions.eq("o.id", user.getId()),
+                        Restrictions.eq("deceased", false)
+                ))
+                .getCount() > 0;
+    }
 
-  public Tamagotchi getByUser(User user) {
-    return criteria()
-        .createAlias("owner", "o")
-        .add(Restrictions.and(
-            Restrictions.eq("o.id", user.getId()),
-            Restrictions.eq("deceased", false)
-        ))
-        .getResult();
-  }
+    public Tamagotchi getByUser(User user) {
+        return criteria()
+                .createAlias("owner", "o")
+                .add(Restrictions.and(
+                        Restrictions.eq("o.id", user.getId()),
+                        Restrictions.eq("deceased", false)
+                ))
+                .getResult();
+    }
 
-  public List<Tamagotchi> getAliveTamagotchis() {
-    return criteria()
-        .add(Restrictions.eq("deceased", false))
-        .getList();
-  }
+    public List<Tamagotchi> getAliveTamagotchis() {
+        return criteria()
+                .add(Restrictions.eq("deceased", false))
+                .getList();
+    }
 
-  public List<Tamagotchi> getDeceasedTamagotchis() {
-    return criteria()
-        .add(Restrictions.eq("deceased", true))
-        .getList();
-  }
+    public List<Tamagotchi> getDeceasedTamagotchis() {
+        return criteria()
+                .add(Restrictions.eq("deceased", true))
+                .getList();
+    }
 }

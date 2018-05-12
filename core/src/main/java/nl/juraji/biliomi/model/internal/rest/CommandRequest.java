@@ -13,14 +13,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CommandRequest {
 
-  @XmlElement(name = "Command")
-  private String command;
+    @XmlElement(name = "Command")
+    private String command;
 
-  public void setCommand(String command) {
-    this.command = command;
-  }
+    public String getCommand() {
+        return command;
+    }
 
-  public String getCommand() {
-    return command;
-  }
+    public void setCommand(String command) {
+        this.command = command;
+    }
 }

@@ -5,5 +5,5 @@ package nl.juraji.biliomi.model.internal.rest.auth;
  * Biliomi
  */
 public enum TokenType {
-  AUTH, REFRESH
+    AUTH, REFRESH
 }

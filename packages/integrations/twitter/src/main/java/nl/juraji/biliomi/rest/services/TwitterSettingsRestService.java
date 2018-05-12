@@ -18,43 +18,43 @@ import java.util.Set;
 @Path("/social/twitter/settings")
 public class TwitterSettingsRestService extends SettingsModelRestService<TwitterSettings> {
 
-  @Inject
-  private AuthTokenDao authTokenDao;
+    @Inject
+    private AuthTokenDao authTokenDao;
 
-  @Inject
-  private SettingsService settingsService;
+    @Inject
+    private SettingsService settingsService;
 
-  @Inject
-  private TweetTrackerService tweetTrackerService;
+    @Inject
+    private TweetTrackerService tweetTrackerService;
 
-  @Override
-  public TwitterSettings getEntity() {
-    TwitterSettings settings = settingsService.getSettings(TwitterSettings.class);
+    @Override
+    public TwitterSettings getEntity() {
+        TwitterSettings settings = settingsService.getSettings(TwitterSettings.class);
 
-    // Set integration enabled process variable
-    settings.set_integrationEnabled(authTokenDao.isTokenPresent(TokenGroup.INTEGRATIONS, "twitter"));
+        // Set integration enabled process variable
+        settings.set_integrationEnabled(authTokenDao.isTokenPresent(TokenGroup.INTEGRATIONS, "twitter"));
 
-    return settings;
-  }
-
-  @Override
-  public TwitterSettings updateEntity(TwitterSettings e) {
-    TwitterSettings settings = settingsService.getSettings(TwitterSettings.class);
-
-    // Check if both TrackedKeywords lists are equal
-    // If they are, nothing should be done and we can return the settings object
-    Set<String> dbWords = settings.getTrackedKeywords();
-    Set<String> entWords = e.getTrackedKeywords();
-    if (dbWords.containsAll(entWords) && entWords.containsAll(dbWords)) {
-      return settings;
+        return settings;
     }
 
+    @Override
+    public TwitterSettings updateEntity(TwitterSettings e) {
+        TwitterSettings settings = settingsService.getSettings(TwitterSettings.class);
 
-    dbWords.clear();
-    dbWords.addAll(e.getTrackedKeywords());
-    settingsService.save(settings);
-    tweetTrackerService.restart();
+        // Check if both TrackedKeywords lists are equal
+        // If they are, nothing should be done and we can return the settings object
+        Set<String> dbWords = settings.getTrackedKeywords();
+        Set<String> entWords = e.getTrackedKeywords();
+        if (dbWords.containsAll(entWords) && entWords.containsAll(dbWords)) {
+            return settings;
+        }
 
-    return settings;
-  }
+
+        dbWords.clear();
+        dbWords.addAll(e.getTrackedKeywords());
+        settingsService.save(settings);
+        tweetTrackerService.restart();
+
+        return settings;
+    }
 }

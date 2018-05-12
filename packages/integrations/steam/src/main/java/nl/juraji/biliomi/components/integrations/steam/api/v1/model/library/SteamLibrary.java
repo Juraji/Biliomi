@@ -14,25 +14,25 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SteamLibrary {
 
-  @XmlElement(name = "game_count")
-  private long gameCount;
+    @XmlElement(name = "game_count")
+    private long gameCount;
 
-  @XmlElement(name = "games")
-  private List<SteamApp> games;
+    @XmlElement(name = "games")
+    private List<SteamApp> games;
 
-  public long getGameCount() {
-    return gameCount;
-  }
+    public long getGameCount() {
+        return gameCount;
+    }
 
-  public void setGameCount(long gameCount) {
-    this.gameCount = gameCount;
-  }
+    public void setGameCount(long gameCount) {
+        this.gameCount = gameCount;
+    }
 
-  public List<SteamApp> getGames() {
-    return games;
-  }
+    public List<SteamApp> getGames() {
+        return games;
+    }
 
-  public void setGames(List<SteamApp> games) {
-    this.games = games;
-  }
+    public void setGames(List<SteamApp> games) {
+        this.games = games;
+    }
 }

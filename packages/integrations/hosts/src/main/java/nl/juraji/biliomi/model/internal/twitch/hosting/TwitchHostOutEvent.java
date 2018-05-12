@@ -15,14 +15,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchHostOutEvent extends TwitchEvent {
 
-  @XmlElement(name = "Target")
-  private final String target;
+    @XmlElement(name = "Target")
+    private final String target;
 
-  public TwitchHostOutEvent(String target) {
-    this.target = target;
-  }
+    public TwitchHostOutEvent(String target) {
+        this.target = target;
+    }
 
-  public String getTarget() {
-    return target;
-  }
+    public String getTarget() {
+        return target;
+    }
 }

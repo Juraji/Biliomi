@@ -8,11 +8,11 @@ import nl.juraji.biliomi.utility.jpa.JpaDao;
  */
 public class QuoteDao extends JpaDao<Quote> {
 
-  public QuoteDao() {
-    super(Quote.class);
-  }
+    public QuoteDao() {
+        super(Quote.class);
+    }
 
-  public Quote getRandom() {
-    return criteria().getRandom();
-  }
+    public Quote getRandom() {
+        return criteria().getRandom();
+    }
 }

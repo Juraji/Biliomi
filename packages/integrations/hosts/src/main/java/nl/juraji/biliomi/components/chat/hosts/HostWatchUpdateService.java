@@ -14,6 +14,7 @@ import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -25,58 +26,58 @@ import java.util.stream.Collectors;
 @Singleton
 public class HostWatchUpdateService extends TimerService {
 
-  @Inject
-  private EventBus eventBus;
+    @Inject
+    private EventBus eventBus;
 
-  @Inject
-  private TwitchApi twitchApi;
+    @Inject
+    private TwitchApi twitchApi;
 
-  @Inject
-  private ChannelService channelService;
+    @Inject
+    private ChannelService channelService;
 
-  @Inject
-  private HostersService hostersService;
+    @Inject
+    private HostersService hostersService;
 
-  @Override
-  public void start() {
-    // Start updates only when channel is online
-    if (channelService.isStreamOnline()) {
-      super.start();
-      // Update every minute
-      scheduleAtFixedRate(this::update,1, TimeUnit.MINUTES);
+    @Override
+    public void start() {
+        // Start updates only when channel is online
+        if (channelService.isStreamOnline()) {
+            super.start();
+            // Update every minute
+            scheduleAtFixedRate(this::update, 1, TimeUnit.MINUTES);
+        }
     }
-  }
 
-  private void update() {
-    try {
-      Response<TmiHosts> hostersResponse = twitchApi.getHostUsers(String.valueOf(channelService.getChannelId()));
+    private void update() {
+        try {
+            Response<TmiHosts> hostersResponse = twitchApi.getHostUsers(String.valueOf(channelService.getChannelId()));
 
-      if (hostersResponse.isOK()) {
-        List<String> currentHosters = hostersService.getHosters();
-        List<TmiHost> tmiHosts = hostersResponse.getData().getHosts();
-        updateNewHosts(currentHosters, tmiHosts);
-        updateUnhosts(currentHosters, tmiHosts);
-      }
-    } catch (Exception e) {
-      logger.error("Failed updating hosts", e);
+            if (hostersResponse.isOK()) {
+                Set<String> currentHosters = hostersService.getHosters();
+                List<TmiHost> tmiHosts = hostersResponse.getData().getHosts();
+                updateNewHosts(currentHosters, tmiHosts);
+                updateUnhosts(currentHosters, tmiHosts);
+            }
+        } catch (Exception e) {
+            logger.error("Failed updating hosts", e);
+        }
     }
-  }
 
-  private void updateNewHosts(List<String> currentHosters, List<TmiHost> tmiHosts) {
-    tmiHosts.stream()
-        .filter(tmiHost -> !currentHosters.contains(tmiHost.getHostUsername()))
-        .map(tmiHost -> new TwitchHostInEvent(tmiHost.getHostUsername(), tmiHost.getHostId(), false))
-        .forEach(eventBus::post);
-  }
+    private void updateNewHosts(Set<String> currentHosters, List<TmiHost> tmiHosts) {
+        tmiHosts.stream()
+                .filter(tmiHost -> !currentHosters.contains(tmiHost.getHostUsername()))
+                .map(tmiHost -> new TwitchHostInEvent(tmiHost.getHostUsername(), tmiHost.getHostId(), false))
+                .forEach(eventBus::post);
+    }
 
-  private void updateUnhosts(List<String> currentHosters, List<TmiHost> tmiHosts) {
-    List<String> tmiHostUsernames = tmiHosts.stream()
-        .map(TmiHost::getHostUsername)
-        .collect(Collectors.toList());
+    private void updateUnhosts(Set<String> currentHosters, List<TmiHost> tmiHosts) {
+        List<String> tmiHostUsernames = tmiHosts.stream()
+                .map(TmiHost::getHostUsername)
+                .collect(Collectors.toList());
 
-    currentHosters.stream()
-        .filter(username -> !tmiHostUsernames.contains(username))
-        .map(TwitchUnhostEvent::new)
-        .forEach(eventBus::post);
-  }
+        currentHosters.stream()
+                .filter(username -> !tmiHostUsernames.contains(username))
+                .map(TwitchUnhostEvent::new)
+                .forEach(eventBus::post);
+    }
 }

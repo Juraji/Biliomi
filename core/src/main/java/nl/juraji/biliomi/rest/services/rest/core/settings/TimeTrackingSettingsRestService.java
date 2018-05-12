@@ -12,19 +12,19 @@ import javax.ws.rs.Path;
 @Path("/core/settings/timetracking")
 public class TimeTrackingSettingsRestService extends SettingsModelRestService<TimeTrackingSettings> {
 
-  @Override
-  public TimeTrackingSettings getEntity() {
-    return settingsService.getSettings(TimeTrackingSettings.class);
-  }
+    @Override
+    public TimeTrackingSettings getEntity() {
+        return settingsService.getSettings(TimeTrackingSettings.class);
+    }
 
-  @Override
-  public TimeTrackingSettings updateEntity(TimeTrackingSettings e) {
-    TimeTrackingSettings settings = settingsService.getSettings(TimeTrackingSettings.class);
+    @Override
+    public TimeTrackingSettings updateEntity(TimeTrackingSettings e) {
+        TimeTrackingSettings settings = settingsService.getSettings(TimeTrackingSettings.class);
 
-    settings.setTrackOnline(e.isTrackOnline());
-    settings.setTrackOffline(e.isTrackOffline());
+        settings.setTrackOnline(e.isTrackOnline());
+        settings.setTrackOffline(e.isTrackOffline());
 
-    settingsService.save(settings);
-    return settings;
-  }
+        settingsService.save(settings);
+        return settings;
+    }
 }

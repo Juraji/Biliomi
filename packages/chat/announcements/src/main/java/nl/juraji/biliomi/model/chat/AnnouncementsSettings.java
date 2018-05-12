@@ -19,59 +19,59 @@ import java.util.concurrent.TimeUnit;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AnnouncementsSettings extends Settings {
 
-  @Column
-  @XmlElement(name = "Enabled")
-  private boolean enabled;
+    @Column
+    @XmlElement(name = "Enabled")
+    private boolean enabled;
 
-  @Column
-  @XmlElement(name = "Shuffle")
-  private boolean shuffle;
+    @Column
+    @XmlElement(name = "Shuffle")
+    private boolean shuffle;
 
-  @Column
-  @XmlElement(name = "RunInterval")
-  private long runInterval;
+    @Column
+    @XmlElement(name = "RunInterval")
+    private long runInterval;
 
-  @Column
-  @XmlElement(name = "MinChatMessages")
-  private int minChatMessages;
+    @Column
+    @XmlElement(name = "MinChatMessages")
+    private int minChatMessages;
 
-  public boolean isEnabled() {
-    return enabled;
-  }
+    public boolean isEnabled() {
+        return enabled;
+    }
 
-  public void setEnabled(boolean enabled) {
-    this.enabled = enabled;
-  }
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
-  public boolean isShuffle() {
-    return shuffle;
-  }
+    public boolean isShuffle() {
+        return shuffle;
+    }
 
-  public void setShuffle(boolean shuffle) {
-    this.shuffle = shuffle;
-  }
+    public void setShuffle(boolean shuffle) {
+        this.shuffle = shuffle;
+    }
 
-  public long getRunInterval() {
-    return runInterval;
-  }
+    public long getRunInterval() {
+        return runInterval;
+    }
 
-  public void setRunInterval(long interval) {
-    this.runInterval = interval;
-  }
+    public void setRunInterval(long interval) {
+        this.runInterval = interval;
+    }
 
-  public int getMinChatMessages() {
-    return minChatMessages;
-  }
+    public int getMinChatMessages() {
+        return minChatMessages;
+    }
 
-  public void setMinChatMessages(int minChatMessages) {
-    this.minChatMessages = minChatMessages;
-  }
+    public void setMinChatMessages(int minChatMessages) {
+        this.minChatMessages = minChatMessages;
+    }
 
-  @Override
-  public void setDefaultValues() {
-    enabled = false;
-    shuffle = false;
-    runInterval = TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES);
-    minChatMessages = 10;
-  }
+    @Override
+    public void setDefaultValues() {
+        enabled = false;
+        shuffle = false;
+        runInterval = TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES);
+        minChatMessages = 10;
+    }
 }

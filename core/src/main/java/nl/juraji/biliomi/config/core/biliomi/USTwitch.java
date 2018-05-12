@@ -7,40 +7,40 @@ import nl.juraji.biliomi.config.core.biliomi.twitch.USTwitchLogin;
  * Biliomi
  */
 public class USTwitch {
-  private String clientId;
-  private String clientSecret;
-  private String webhookCallbackUrl;
-  private USTwitchLogin login;
+    private String clientId;
+    private String clientSecret;
+    private String webhookCallbackUrl;
+    private USTwitchLogin login;
 
-  public String getClientId() {
-    return clientId;
-  }
+    public String getClientId() {
+        return clientId;
+    }
 
-  public void setClientId(String clientId) {
-    this.clientId = clientId;
-  }
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
 
-  public String getClientSecret() {
-    return clientSecret;
-  }
+    public String getClientSecret() {
+        return clientSecret;
+    }
 
-  public void setClientSecret(String clientSecret) {
-    this.clientSecret = clientSecret;
-  }
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
+    }
 
-  public String getWebhookCallbackUrl() {
-    return webhookCallbackUrl;
-  }
+    public String getWebhookCallbackUrl() {
+        return webhookCallbackUrl;
+    }
 
-  public void setWebhookCallbackUrl(String webhookCallbackUrl) {
-    this.webhookCallbackUrl = webhookCallbackUrl;
-  }
+    public void setWebhookCallbackUrl(String webhookCallbackUrl) {
+        this.webhookCallbackUrl = webhookCallbackUrl;
+    }
 
-  public USTwitchLogin getLogin() {
-    return login;
-  }
+    public USTwitchLogin getLogin() {
+        return login;
+    }
 
-  public void setLogin(USTwitchLogin login) {
-    this.login = login;
-  }
+    public void setLogin(USTwitchLogin login) {
+        this.login = login;
+    }
 }

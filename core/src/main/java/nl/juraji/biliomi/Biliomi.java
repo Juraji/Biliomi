@@ -20,37 +20,37 @@ import java.util.logging.Logger;
 @Singleton
 public class Biliomi implements Runnable {
 
-  public void run() {
-    CDI<Object> cdi = CDI.current();
+    public void run() {
+        CDI<Object> cdi = CDI.current();
 
-    // Start console listener
-    ConsoleApi consoleApi = cdi.select(ConsoleApi.class).get();
-    consoleApi.init();
+        // Start console listener
+        ConsoleApi consoleApi = cdi.select(ConsoleApi.class).get();
+        consoleApi.init();
 
-    // Run system boot
-    SystemBoot systemBoot = cdi.select(SystemBoot.class).get();
-    systemBoot.runSetupTasks();
-    cdi.destroy(systemBoot);
+        // Run system boot
+        SystemBoot systemBoot = cdi.select(SystemBoot.class).get();
+        systemBoot.runSetupTasks();
+        cdi.destroy(systemBoot);
 
-    // Init ComponentManager
-    cdi.select(ComponentManager.class).get();
+        // Init ComponentManager
+        cdi.select(ComponentManager.class).get();
 
-    // Start IrcSession
-    cdi.select(IrcSession.class).get().start();
-    cdi.select(TwitchWebhookSession.class).get().start();
+        // Start IrcSession
+        cdi.select(IrcSession.class).get().start();
+        cdi.select(TwitchWebhookSession.class).get().start();
 
-    // Start REST API
-    cdi.select(RestServerController.class).get().start();
+        // Start REST API
+        cdi.select(RestServerController.class).get().start();
 
-    // Start listening for console commands
-    consoleApi.initCliCommands();
+        // Start listening for console commands
+        consoleApi.initCliCommands();
 
-    // The EventBusSubscriberInterceptor will register subscribers
-    // Events are emitted by the IRC clients to bootstrap components and services
-  }
+        // The EventBusSubscriberInterceptor will register subscribers
+        // Events are emitted by the IRC clients to bootstrap components and services
+    }
 
-  @PreDestroy
-  public void destroyBiliomi() {
-    Logger.getLogger(this.getClass().getName()).info("See you soon \u2764");
-  }
+    @PreDestroy
+    public void destroyBiliomi() {
+        Logger.getLogger(this.getClass().getName()).info("See you soon \u2764");
+    }
 }

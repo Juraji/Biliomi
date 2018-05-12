@@ -25,47 +25,47 @@ import javax.inject.Singleton;
 @EventBusSubscriber
 public class ComponentManager {
 
-  private boolean isInitialized = false;
+    private boolean isInitialized = false;
 
-  @Inject
-  private Logger logger;
+    @Inject
+    private Logger logger;
 
-  @Inject
-  private CommandRouter commandRouter;
+    @Inject
+    private CommandRouter commandRouter;
 
-  @Inject
-  @SystemComponent
-  private Instance<Component> systemComponents;
+    @Inject
+    @SystemComponent
+    private Instance<Component> systemComponents;
 
-  @Inject
-  @NormalComponent
-  private Instance<Component> normalComponents;
+    @Inject
+    @NormalComponent
+    private Instance<Component> normalComponents;
 
-  @PreDestroy
-  public void destroyComponentManager() {
-    normalComponents.forEach(normalComponents::destroy);
-    systemComponents.forEach(systemComponents::destroy);
-    isInitialized = false;
-  }
-
-  @Subscribe
-  public void onIrcConnectedEvent(IrcChannelJoinedEvent event) {
-    if (isInitialized) {
-      logger.info("IRC connected, components were already initialized... So... moving on!");
-    } else {
-      isInitialized = true;
-      logger.info("IRC connected, initializing components...");
-
-      systemComponents.forEach(Component::init);
-      normalComponents.forEach(Component::init);
-
-      logger.info("All components loaded succesfully");
-      logger.info("Biliomi is ready for commands!");
+    @PreDestroy
+    public void destroyComponentManager() {
+        normalComponents.forEach(normalComponents::destroy);
+        systemComponents.forEach(systemComponents::destroy);
+        isInitialized = false;
     }
-  }
 
-  @Subscribe
-  public void onIrcChatMessageEvent(IrcChatMessageEvent event) {
-    commandRouter.runCommand(event, false);
-  }
+    @Subscribe
+    public void onIrcConnectedEvent(IrcChannelJoinedEvent event) {
+        if (isInitialized) {
+            logger.info("IRC connected, components were already initialized... So... moving on!");
+        } else {
+            isInitialized = true;
+            logger.info("IRC connected, initializing components...");
+
+            systemComponents.forEach(Component::init);
+            normalComponents.forEach(Component::init);
+
+            logger.info("All components loaded succesfully");
+            logger.info("Biliomi is ready for commands!");
+        }
+    }
+
+    @Subscribe
+    public void onIrcChatMessageEvent(IrcChatMessageEvent event) {
+        commandRouter.runCommand(event, false);
+    }
 }

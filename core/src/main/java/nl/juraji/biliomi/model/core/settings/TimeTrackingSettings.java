@@ -16,33 +16,33 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TimeTrackingSettings extends Settings {
 
-  @Column
-  @XmlElement(name = "TrackOnline")
-  private boolean trackOnline;
+    @Column
+    @XmlElement(name = "TrackOnline")
+    private boolean trackOnline;
 
-  @Column
-  @XmlElement(name = "TrackOffline")
-  private boolean trackOffline;
+    @Column
+    @XmlElement(name = "TrackOffline")
+    private boolean trackOffline;
 
-  public boolean isTrackOnline() {
-    return trackOnline;
-  }
+    public boolean isTrackOnline() {
+        return trackOnline;
+    }
 
-  public void setTrackOnline(boolean trackOnlineTime) {
-    this.trackOnline = trackOnlineTime;
-  }
+    public void setTrackOnline(boolean trackOnlineTime) {
+        this.trackOnline = trackOnlineTime;
+    }
 
-  public boolean isTrackOffline() {
-    return trackOffline;
-  }
+    public boolean isTrackOffline() {
+        return trackOffline;
+    }
 
-  public void setTrackOffline(boolean trackOfflineTime) {
-    this.trackOffline = trackOfflineTime;
-  }
+    public void setTrackOffline(boolean trackOfflineTime) {
+        this.trackOffline = trackOfflineTime;
+    }
 
-  @Override
-  public void setDefaultValues() {
-    trackOnline = true;
-    trackOffline = false;
-  }
+    @Override
+    public void setDefaultValues() {
+        trackOnline = true;
+        trackOffline = false;
+    }
 }

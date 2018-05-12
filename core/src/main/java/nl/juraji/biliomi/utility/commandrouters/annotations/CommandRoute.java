@@ -12,9 +12,13 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CommandRoute {
-  String command();
-  boolean systemCommand() default false;  // Caster only
-  boolean modCanActivate() default false; // Moderators can always activate (overrides systemCommand value)
-  long defaultCooldown() default 0;
-  long defaultPrice() default 0;
+    String command();
+
+    boolean systemCommand() default false;  // Caster only
+
+    boolean modCanActivate() default false; // Moderators can always activate (overrides systemCommand value)
+
+    long defaultCooldown() default 0;
+
+    long defaultPrice() default 0;
 }

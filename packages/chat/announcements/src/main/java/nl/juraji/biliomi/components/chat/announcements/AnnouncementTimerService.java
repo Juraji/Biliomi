@@ -27,62 +27,57 @@ import java.util.concurrent.TimeUnit;
 @Singleton
 @EventBusSubscriber
 public class AnnouncementTimerService extends TimerService {
-  private static final String ANNOUNTEMENT_TEMPLATE = "{{message}} ({{id}})";
+    private static final String ANNOUNTEMENT_TEMPLATE = "{{message}} ({{id}})";
+    private final Counter messageCounter = new Counter();
+    @Inject
+    private SettingsService settingsService;
+    @Inject
+    private ChatService chat;
+    @Inject
+    private AnnouncementDao announcementDao;
+    @Inject
+    @BotName
+    private String botName;
+    private NeverEndingList<Announcement> announcements;
+    private AnnouncementsSettings settings;
 
-  @Inject
-  private SettingsService settingsService;
+    @Override
+    public void start() {
+        super.start();
 
-  @Inject
-  private ChatService chat;
+        if (settings == null) {
+            settings = settingsService.getSettings(AnnouncementsSettings.class, s -> settings = s);
+        }
 
-  @Inject
-  private AnnouncementDao announcementDao;
+        this.announcements = new NeverEndingList<>(announcementDao.getList());
 
-  @Inject
-  @BotName
-  private String botName;
-
-  private final Counter messageCounter = new Counter();
-  private NeverEndingList<Announcement> announcements;
-  private AnnouncementsSettings settings;
-
-  @Override
-  public void start() {
-    super.start();
-
-    if (settings == null) {
-      settings = settingsService.getSettings(AnnouncementsSettings.class, s -> settings = s);
+        if (!announcements.isEmpty()) {
+            scheduleAtFixedRate(this::runAnnouncements, settings.getRunInterval(), TimeUnit.MILLISECONDS);
+        }
     }
 
-    this.announcements = new NeverEndingList<>(announcementDao.getList());
-
-    if (!announcements.isEmpty()) {
-      scheduleAtFixedRate(this::runAnnouncements, settings.getRunInterval(), TimeUnit.MILLISECONDS);
+    @Subscribe
+    public void onIrcChatMessageEvent(IrcChatMessageEvent event) {
+        if (!botName.equalsIgnoreCase(event.getUsername())) {
+            messageCounter.getAndIncrement();
+        }
     }
-  }
 
-  @Subscribe
-  public void onIrcChatMessageEvent(IrcChatMessageEvent event) {
-    if (!botName.equalsIgnoreCase(event.getUsername())) {
-      messageCounter.getAndIncrement();
+    private void runAnnouncements() {
+        if (settings.isEnabled() && announcements.size() > 0 && messageCounter.isMoreThan(settings.getMinChatMessages())) {
+            Announcement announcement;
+
+            if (settings.isShuffle()) {
+                announcement = announcements.random();
+            } else {
+                announcement = announcements.next();
+            }
+
+            chat.say(Templater.template(ANNOUNTEMENT_TEMPLATE)
+                    .add("message", announcement::getMessage)
+                    .add("id", announcement::getId));
+
+            messageCounter.reset();
+        }
     }
-  }
-
-  private void runAnnouncements() {
-    if (settings.isEnabled() && announcements.size() > 0 && messageCounter.isMoreThan(settings.getMinChatMessages())) {
-      Announcement announcement;
-
-      if (settings.isShuffle()) {
-        announcement = announcements.random();
-      } else {
-        announcement = announcements.next();
-      }
-
-      chat.say(Templater.template(ANNOUNTEMENT_TEMPLATE)
-          .add("message", announcement::getMessage)
-          .add("id", announcement::getId));
-
-      messageCounter.reset();
-    }
-  }
 }

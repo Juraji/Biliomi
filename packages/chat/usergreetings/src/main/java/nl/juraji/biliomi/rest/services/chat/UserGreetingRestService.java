@@ -15,47 +15,47 @@ import java.util.List;
 @Path("/chat/usergreetings")
 public class UserGreetingRestService extends ModelRestService<UserGreeting> {
 
-  @Inject
-  private UserGreetingDao userGreetingDao;
+    @Inject
+    private UserGreetingDao userGreetingDao;
 
-  @Override
-  public List<UserGreeting> getEntities() {
-    return userGreetingDao.getList();
-  }
-
-  @Override
-  public UserGreeting getEntity(long id) {
-    return userGreetingDao.get(id);
-  }
-
-  @Override
-  public UserGreeting createEntity(UserGreeting e) {
-    userGreetingDao.save(e);
-    return e;
-  }
-
-  @Override
-  public UserGreeting updateEntity(UserGreeting e, long id) {
-    UserGreeting greeting = userGreetingDao.get(id);
-
-    if (greeting == null) {
-      return null;
+    @Override
+    public List<UserGreeting> getEntities() {
+        return userGreetingDao.getList();
     }
 
-    greeting.setMessage(e.getMessage());
-    userGreetingDao.save(greeting);
-    return greeting;
-  }
-
-  @Override
-  public boolean deleteEntity(long id) {
-    UserGreeting greeting = userGreetingDao.get(id);
-
-    if (greeting == null) {
-      return false;
+    @Override
+    public UserGreeting getEntity(long id) {
+        return userGreetingDao.get(id);
     }
 
-    userGreetingDao.delete(greeting);
-    return true;
-  }
+    @Override
+    public UserGreeting createEntity(UserGreeting e) {
+        userGreetingDao.save(e);
+        return e;
+    }
+
+    @Override
+    public UserGreeting updateEntity(UserGreeting e, long id) {
+        UserGreeting greeting = userGreetingDao.get(id);
+
+        if (greeting == null) {
+            return null;
+        }
+
+        greeting.setMessage(e.getMessage());
+        userGreetingDao.save(greeting);
+        return greeting;
+    }
+
+    @Override
+    public boolean deleteEntity(long id) {
+        UserGreeting greeting = userGreetingDao.get(id);
+
+        if (greeting == null) {
+            return false;
+        }
+
+        userGreetingDao.delete(greeting);
+        return true;
+    }
 }

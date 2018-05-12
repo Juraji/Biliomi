@@ -11,20 +11,20 @@ import java.io.Console;
  */
 public class ModernConsoleListener extends ConsoleListener {
 
-  private final Console console;
+    private final Console console;
 
-  public ModernConsoleListener(EventBus eventBus, Logger logger) {
-    super(eventBus, logger);
-    console = System.console();
-  }
+    public ModernConsoleListener(EventBus eventBus, Logger logger) {
+        super(eventBus, logger);
+        console = System.console();
+    }
 
-  @Override
-  protected boolean isLegacy() {
-    return false;
-  }
+    @Override
+    protected boolean isLegacy() {
+        return false;
+    }
 
-  @Override
-  protected String readLine() {
-    return console.readLine();
-  }
+    @Override
+    protected String readLine() {
+        return console.readLine();
+    }
 }

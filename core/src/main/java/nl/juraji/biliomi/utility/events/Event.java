@@ -10,10 +10,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "Event")
 public class Event {
 
-  @XmlElement(name = "EventType")
-  private final String eventType = getClass().getSimpleName();
+    @XmlElement(name = "EventType")
+    private final String eventType = getClass().getSimpleName();
 
-  public String getEventType() {
-    return eventType;
-  }
+    public String getEventType() {
+        return eventType;
+    }
 }

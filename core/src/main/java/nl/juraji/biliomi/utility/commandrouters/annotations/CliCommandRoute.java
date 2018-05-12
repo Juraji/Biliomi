@@ -12,6 +12,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CliCommandRoute {
-  String command();
-  String description();
+    String command();
+
+    String description();
 }

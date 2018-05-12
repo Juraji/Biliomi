@@ -13,14 +13,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class TwitchList {
 
-  @XmlElement(name = "_total")
-  private int total;
+    @XmlElement(name = "_total")
+    private int total;
 
-  public int getTotal() {
-    return total;
-  }
+    public int getTotal() {
+        return total;
+    }
 
-  public void setTotal(int total) {
-    this.total = total;
-  }
+    public void setTotal(int total) {
+        this.total = total;
+    }
 }

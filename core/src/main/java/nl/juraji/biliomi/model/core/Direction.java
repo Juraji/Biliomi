@@ -5,5 +5,5 @@ package nl.juraji.biliomi.model.core;
  * Biliomi v3
  */
 public enum Direction {
-  INCOMING, OUTGOING
+    INCOMING, OUTGOING
 }

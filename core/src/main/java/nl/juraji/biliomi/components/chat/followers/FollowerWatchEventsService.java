@@ -29,55 +29,55 @@ import javax.inject.Singleton;
 @EventBusSubscriber
 public class FollowerWatchEventsService implements Init {
 
-  @Inject
-  private UsersService usersService;
+    @Inject
+    private UsersService usersService;
 
-  @Inject
-  private PointsService pointsService;
+    @Inject
+    private PointsService pointsService;
 
-  @Inject
-  private ChatService chat;
+    @Inject
+    private ChatService chat;
 
-  @Inject
-  private TemplateDao templateDao;
+    @Inject
+    private TemplateDao templateDao;
 
-  @Inject
-  @ChannelName
-  private String channelName;
+    @Inject
+    @ChannelName
+    private String channelName;
 
-  @Inject
-  private SettingsService settingsService;
+    @Inject
+    private SettingsService settingsService;
 
-  private FollowerWatchSettings settings;
+    private FollowerWatchSettings settings;
 
-  @Override
-  public void init() {
-    settings = settingsService.getSettings(FollowerWatchSettings.class, e -> settings = e);
-  }
-
-  @Subscribe
-  public void onTwitchFollowEvent(TwitchFollowEvent event) {
-    User user = event.getUser();
-    user.setFollower(true);
-
-    // If the follow date is not null the user has followed before.
-    // In this case skip the welcome and just save the follow status
-    if (user.getFollowDate() == null) {
-      user.setFollowDate(event.getFollowsSince());
-
-      if (settings.getReward() > 0) {
-        user.setPoints(user.getPoints() + settings.getReward());
-      }
-
-      Template template = templateDao.getByKey(FollowerWatchComponent.INCOMING_FOLLOW_NOTICE);
-      assert template != null; // Template cannot be null since it's set during install/update
-      if (StringUtils.isNotEmpty(template.getTemplate())) {
-        chat.say(Templater.template(template.getTemplate())
-            .add("username", user::getDisplayName)
-            .add("points", pointsService.asString(settings.getReward())));
-      }
+    @Override
+    public void init() {
+        settings = settingsService.getSettings(FollowerWatchSettings.class, e -> settings = e);
     }
 
-    usersService.save(user);
-  }
+    @Subscribe
+    public void onTwitchFollowEvent(TwitchFollowEvent event) {
+        User user = event.getUser();
+        user.setFollower(true);
+
+        // If the follow date is not null the user has followed before.
+        // In this case skip the welcome and just save the follow status
+        if (user.getFollowDate() == null) {
+            user.setFollowDate(event.getFollowsSince());
+
+            if (settings.getReward() > 0) {
+                user.setPoints(user.getPoints() + settings.getReward());
+            }
+
+            Template template = templateDao.getByKey(FollowerWatchComponent.INCOMING_FOLLOW_NOTICE);
+            assert template != null; // Template cannot be null since it's set during install/update
+            if (StringUtils.isNotEmpty(template.getTemplate())) {
+                chat.say(Templater.template(template.getTemplate())
+                        .add("username", user::getDisplayName)
+                        .add("points", pointsService.asString(settings.getReward())));
+            }
+        }
+
+        usersService.save(user);
+    }
 }

@@ -6,5 +6,5 @@ package nl.juraji.biliomi.utility.estreams.einterface;
  */
 @FunctionalInterface
 public interface ESupplier<T, E extends Exception> {
-  T get() throws E;
+    T get() throws E;
 }

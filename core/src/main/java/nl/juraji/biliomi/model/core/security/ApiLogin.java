@@ -17,42 +17,42 @@ import javax.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ApiLogin {
 
-  @OneToOne
-  @NotNull
-  @XmlElement(name = "User")
-  private User user;
+    @OneToOne
+    @NotNull
+    @XmlElement(name = "User")
+    private User user;
 
-  @Column
-  @NotNull
-  @XmlTransient
-  private byte[] password;
+    @Column
+    @NotNull
+    @XmlTransient
+    private byte[] password;
 
-  @Column
-  @NotNull
-  @XmlTransient
-  private byte[] salt;
+    @Column
+    @NotNull
+    @XmlTransient
+    private byte[] salt;
 
-  public User getUser() {
-    return user;
-  }
+    public User getUser() {
+        return user;
+    }
 
-  public void setUser(User user) {
-    this.user = user;
-  }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-  public byte[] getPassword() {
-    return password;
-  }
+    public byte[] getPassword() {
+        return password;
+    }
 
-  public void setPassword(byte[] password) {
-    this.password = password;
-  }
+    public void setPassword(byte[] password) {
+        this.password = password;
+    }
 
-  public byte[] getSalt() {
-    return salt;
-  }
+    public byte[] getSalt() {
+        return salt;
+    }
 
-  public void setSalt(byte[] salt) {
-    this.salt = salt;
-  }
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
+    }
 }

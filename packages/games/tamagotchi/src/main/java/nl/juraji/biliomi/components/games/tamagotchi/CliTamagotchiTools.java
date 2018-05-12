@@ -19,18 +19,18 @@ import javax.inject.Singleton;
 @SystemComponent
 public class CliTamagotchiTools extends Component {
 
-  @Inject
-  private AgingTimerService agingTimerService;
+    @Inject
+    private AgingTimerService agingTimerService;
 
-  /**
-   * Run tamagotchi aging now
-   * Note: This is a debug command, it ages all tamagotchis by one hour, regardless of how much time passed
-   * Usage: /forcetamagotchiaging
-   */
-  @CliCommandRoute(command = "forcetamagotchiaging", description = "Force the Tamagotchi Aging service to run aging")
-  public boolean forceTamagotchiAgingCommand(ConsoleInputEvent event) {
-    agingTimerService.runNow();
-    logger.info("Tamagotchi aging has been scheduled to run immediately");
-    return true;
-  }
+    /**
+     * Run tamagotchi aging now
+     * Note: This is a debug command, it ages all tamagotchis by one hour, regardless of how much time passed
+     * Usage: /forcetamagotchiaging
+     */
+    @CliCommandRoute(command = "forcetamagotchiaging", description = "Force the Tamagotchi Aging service to run aging")
+    public boolean forceTamagotchiAgingCommand(ConsoleInputEvent event) {
+        agingTimerService.runNow();
+        logger.info("Tamagotchi aging has been scheduled to run immediately");
+        return true;
+    }
 }

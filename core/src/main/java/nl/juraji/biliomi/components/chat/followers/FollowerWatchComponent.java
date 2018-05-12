@@ -22,71 +22,71 @@ import javax.inject.Singleton;
 @SystemComponent
 @Singleton
 public class FollowerWatchComponent extends Component {
-  public static final String INCOMING_FOLLOW_NOTICE = "IncomingFollowNotice";
+    public static final String INCOMING_FOLLOW_NOTICE = "IncomingFollowNotice";
 
-  @Inject
-  private PointsService pointsService;
+    @Inject
+    private PointsService pointsService;
 
-  @Inject
-  private TemplateDao templateDao;
+    @Inject
+    private TemplateDao templateDao;
 
-  @Inject
-  private FollowerWatchUpdateService followerWatchTimer;
+    @Inject
+    private FollowerWatchUpdateService followerWatchTimer;
 
-  @Inject
-  private FollowerWatchEventsService followerWatchEventsService;
+    @Inject
+    private FollowerWatchEventsService followerWatchEventsService;
 
-  private FollowerWatchSettings settings;
+    private FollowerWatchSettings settings;
 
-  @Override
-  public void init() {
-    settings = settingsService.getSettings(FollowerWatchSettings.class, e -> settings = e);
-    followerWatchEventsService.init();
-    followerWatchTimer.start();
-  }
-
-  /**
-   * The main command for setting followerwatch settings
-   * Only contains subcommand, so all calls are pushed to captureSubCommands
-   * Usage: !followerwatch [reward|setfollowernotice] [value]
-   */
-  @CommandRoute(command = "followerwatch", systemCommand = true)
-  public boolean followerWatchCommand(User user, Arguments arguments) {
-    return captureSubCommands("followerwatch", i18n.supply("ChatCommand.followerWatch.usage"), user, arguments);
-  }
-
-  /**
-   * Set the reward in points when a user follows.
-   * Note: Payouts only happen on first-time-follows, any subsequent follow is skipped
-   * Usage: !followerwatch reward [amount of points]
-   */
-  @SubCommandRoute(parentCommand = "followerwatch", command = "reward")
-  public boolean followerWatchCommandReward(User user, Arguments arguments) {
-    Long newReward = NumberConverter.asNumber(arguments.popSafe()).toLong();
-
-    if (newReward == null || newReward < 0) {
-      chat.whisper(user, i18n.get("ChatCommand.followerWatch.reward.usage"));
-      return false;
+    @Override
+    public void init() {
+        settings = settingsService.getSettings(FollowerWatchSettings.class, e -> settings = e);
+        followerWatchEventsService.init();
+        followerWatchTimer.start();
     }
 
-    settings.setReward(newReward);
-    settingsService.save(settings);
-    chat.whisper(user, i18n.get("ChatCommand.followerWatch.reward.saved")
-        .add("points", pointsService.asString(newReward)));
+    /**
+     * The main command for setting followerwatch settings
+     * Only contains subcommand, so all calls are pushed to captureSubCommands
+     * Usage: !followerwatch [reward|setfollowernotice] [value]
+     */
+    @CommandRoute(command = "followerwatch", systemCommand = true)
+    public boolean followerWatchCommand(User user, Arguments arguments) {
+        return captureSubCommands("followerwatch", i18n.supply("ChatCommand.followerWatch.usage"), user, arguments);
+    }
 
-    return true;
-  }
+    /**
+     * Set the reward in points when a user follows.
+     * Note: Payouts only happen on first-time-follows, any subsequent follow is skipped
+     * Usage: !followerwatch reward [amount of points]
+     */
+    @SubCommandRoute(parentCommand = "followerwatch", command = "reward")
+    public boolean followerWatchCommandReward(User user, Arguments arguments) {
+        Long newReward = NumberConverter.asNumber(arguments.popSafe()).toLong();
 
-  /**
-   * Set the notice to post in the chat when a new follower registers
-   * Usage: !followerwatch setfollowernotice [message... or OFF to disable]
-   */
-  @SubCommandRoute(parentCommand = "followerwatch", command = "setfollowernotice")
-  public boolean followerWatchsetfollowernoticeCommand(User user, Arguments arguments) {
-    return new TemplateSetup(templateDao, chat)
-        .withCommandUsageMessage(i18n.getString("ChatCommand.followerWatch.setfollowernotice.usage"))
-        .withTemplateDisabledMessage(i18n.getString("ChatCommand.followerWatch.setfollowernotice.disabled"))
-        .withTemplatedSavedMessage(i18n.getString("ChatCommand.followerWatch.setfollowernotice.saved"))
-        .apply(user, arguments.toString(), INCOMING_FOLLOW_NOTICE);
-  }
+        if (newReward == null || newReward < 0) {
+            chat.whisper(user, i18n.get("ChatCommand.followerWatch.reward.usage"));
+            return false;
+        }
+
+        settings.setReward(newReward);
+        settingsService.save(settings);
+        chat.whisper(user, i18n.get("ChatCommand.followerWatch.reward.saved")
+                .add("points", pointsService.asString(newReward)));
+
+        return true;
+    }
+
+    /**
+     * Set the notice to post in the chat when a new follower registers
+     * Usage: !followerwatch setfollowernotice [message... or OFF to disable]
+     */
+    @SubCommandRoute(parentCommand = "followerwatch", command = "setfollowernotice")
+    public boolean followerWatchsetfollowernoticeCommand(User user, Arguments arguments) {
+        return new TemplateSetup(templateDao, chat)
+                .withCommandUsageMessage(i18n.getString("ChatCommand.followerWatch.setfollowernotice.usage"))
+                .withTemplateDisabledMessage(i18n.getString("ChatCommand.followerWatch.setfollowernotice.disabled"))
+                .withTemplatedSavedMessage(i18n.getString("ChatCommand.followerWatch.setfollowernotice.saved"))
+                .apply(user, arguments.toString(), INCOMING_FOLLOW_NOTICE);
+    }
 }

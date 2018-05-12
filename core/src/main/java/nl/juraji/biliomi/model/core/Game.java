@@ -22,64 +22,64 @@ import java.util.Set;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Game {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @XmlElement(name = "Id")
-  private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement(name = "Id")
+    private long id;
 
-  @Column(unique = true)
-  @NotNull
-  @XmlElement(name = "Name")
-  private String name;
+    @Column(unique = true)
+    @NotNull
+    @XmlElement(name = "Name")
+    private String name;
 
-  @Column
-  @NotNull
-  @Type(type = DateTimeISO8601Type.TYPE)
-  @XmlElement(name = "FirstPlayedOn")
-  private DateTime firstPlayedOn;
+    @Column
+    @NotNull
+    @Type(type = DateTimeISO8601Type.TYPE)
+    @XmlElement(name = "FirstPlayedOn")
+    private DateTime firstPlayedOn;
 
-  @Column
-  @XmlElement(name = "SteamId")
-  private Long steamId;
+    @Column
+    @XmlElement(name = "SteamId")
+    private Long steamId;
 
-  @ManyToMany(fetch = FetchType.EAGER)
-  @XmlElement(name = "Communities")
-  private Set<Community> communities;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @XmlElement(name = "Communities")
+    private Set<Community> communities;
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public DateTime getFirstPlayedOn() {
-    return firstPlayedOn;
-  }
+    public DateTime getFirstPlayedOn() {
+        return firstPlayedOn;
+    }
 
-  public void setFirstPlayedOn(DateTime firstPlayedOn) {
-    this.firstPlayedOn = firstPlayedOn;
-  }
+    public void setFirstPlayedOn(DateTime firstPlayedOn) {
+        this.firstPlayedOn = firstPlayedOn;
+    }
 
-  public Long getSteamId() {
-    return steamId;
-  }
+    public Long getSteamId() {
+        return steamId;
+    }
 
-  public void setSteamId(Long steamId) {
-    this.steamId = steamId;
-  }
+    public void setSteamId(Long steamId) {
+        this.steamId = steamId;
+    }
 
-  public Set<Community> getCommunities() {
-    communities = ModelUtils.initCollection(communities);
-    return communities;
-  }
+    public Set<Community> getCommunities() {
+        communities = ModelUtils.initCollection(communities);
+        return communities;
+    }
 }

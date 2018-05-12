@@ -14,31 +14,31 @@ import javax.inject.Inject;
 @Default
 public class RaidRegisterComponentUpdateTask implements SetupTask {
 
-  @Inject
-  private TemplateDao templateDao;
+    @Inject
+    private TemplateDao templateDao;
 
 
-  @Override
-  public void install() {
-    if (!templateDao.templateExists(RaidRegisterComponent.RAID_MESSAGE_TEMPLATE_ID)) {
-      Template template = new Template();
-      template.setTemplateKey(RaidRegisterComponent.RAID_MESSAGE_TEMPLATE_ID);
-      template.setTemplate("We are raiding {{channeldisplayname}} over at https://www.twitch.tv/{{channelname}}");
-      template.setDescription("Used when throwing outgoing raids using the Raid Register");
-      template.getKeyDescriptions().put("channeldisplayname", "The target channel's display name");
-      template.getKeyDescriptions().put("channelname", "The target channel name");
-      templateDao.save(template);
+    @Override
+    public void install() {
+        if (templateDao.templateMissing(RaidRegisterComponent.RAID_MESSAGE_TEMPLATE_ID)) {
+            Template template = new Template();
+            template.setTemplateKey(RaidRegisterComponent.RAID_MESSAGE_TEMPLATE_ID);
+            template.setTemplate("We are raiding {{channeldisplayname}} over at https://www.twitch.tv/{{channelname}}");
+            template.setDescription("Used when throwing outgoing raids using the Raid Register");
+            template.getKeyDescriptions().put("channeldisplayname", "The target channel's display name");
+            template.getKeyDescriptions().put("channelname", "The target channel name");
+            templateDao.save(template);
+        }
+
+        if (templateDao.templateMissing(RaidRegisterComponent.INCOMING_RAID_MESSAGE_TEMPLATE_ID)) {
+            Template template = new Template();
+            template.setTemplateKey(RaidRegisterComponent.INCOMING_RAID_MESSAGE_TEMPLATE_ID);
+            template.setTemplate("We've just been raided by {{channelname}} for the {{ordinalrecordcount}} time! {{channelname}} was playing {{game}}.");
+            template.setDescription("Used when registering incoming raids using the Raid Register");
+            template.getKeyDescriptions().put("channelname", "The target channel's display name");
+            template.getKeyDescriptions().put("ordinalrecordcount", "The nth count this channel has raided (current record count)");
+            template.getKeyDescriptions().put("game", "The target channel current game");
+            templateDao.save(template);
+        }
     }
-
-    if (!templateDao.templateExists(RaidRegisterComponent.INCOMING_RAID_MESSAGE_TEMPLATE_ID)) {
-      Template template = new Template();
-      template.setTemplateKey(RaidRegisterComponent.INCOMING_RAID_MESSAGE_TEMPLATE_ID);
-      template.setTemplate("We've just been raided by {{channelname}} for the {{ordinalrecordcount}} time! {{channelname}} was playing {{game}}.");
-      template.setDescription("Used when registering incoming raids using the Raid Register");
-      template.getKeyDescriptions().put("channelname", "The target channel's display name");
-      template.getKeyDescriptions().put("ordinalrecordcount", "The nth count this channel has raided (current record count)");
-      template.getKeyDescriptions().put("game", "The target channel current game");
-      templateDao.save(template);
-    }
-  }
 }

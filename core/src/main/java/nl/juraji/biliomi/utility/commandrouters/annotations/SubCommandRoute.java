@@ -8,13 +8,14 @@ import java.lang.annotation.Target;
 /**
  * Created by Juraji on 1-5-2017.
  * Biliomi v3
- *
+ * <p>
  * Add this annotation to methods implementing subcommands.
  * Then call captureSubCommand(...) inside the parent method to have the SubCommandRouter execute it.
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SubCommandRoute {
-  String parentCommand();
-  String command();
+    String parentCommand();
+
+    String command();
 }

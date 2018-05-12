@@ -20,50 +20,50 @@ import javax.ws.rs.Path;
 @Path("/social/spotify/settings")
 public class SpotifySettingsRestService extends SettingsModelRestService<SpotifySettings> {
 
-  @Inject
-  private AuthTokenDao authTokenDao;
+    @Inject
+    private AuthTokenDao authTokenDao;
 
-  @Inject
-  private Logger logger;
+    @Inject
+    private Logger logger;
 
-  @Inject
-  private SpotifyApi spotifyApi;
+    @Inject
+    private SpotifyApi spotifyApi;
 
-  @Override
-  public SpotifySettings getEntity() {
-    SpotifySettings settings = settingsService.getSettings(SpotifySettings.class);
+    @Override
+    public SpotifySettings getEntity() {
+        SpotifySettings settings = settingsService.getSettings(SpotifySettings.class);
 
-    // Set integration enabled process variable
-    settings.set_integrationEnabled(authTokenDao.isTokenPresent(TokenGroup.INTEGRATIONS, "spotify"));
+        // Set integration enabled process variable
+        settings.set_integrationEnabled(authTokenDao.isTokenPresent(TokenGroup.INTEGRATIONS, "spotify"));
 
-    return settings;
-  }
-
-  @Override
-  public SpotifySettings updateEntity(SpotifySettings e) {
-    SpotifySettings settings = settingsService.getSettings(SpotifySettings.class);
-
-    settings.setSongrequestsEnabled(e.isSongrequestsEnabled());
-
-    if (StringUtils.isEmpty(e.getSongRequestPlaylistId())) {
-      settings.setSongRequestPlaylistId(null);
-    } else {
-      if (!settings.getSongRequestPlaylistId().equals(e.getSongRequestPlaylistId())) {
-        try {
-          Response<SpotifyPlaylist> response = spotifyApi.getPlaylist(e.getSongRequestPlaylistId());
-          if (response.isOK()) {
-            settings.setSongRequestPlaylistId(e.getSongRequestPlaylistId());
-          } else {
-            throw new Exception(response.getRawData());
-          }
-        } catch (Exception e1) {
-          logger.error("Failed communication with Spotify", e);
-          return null;
-        }
-      }
+        return settings;
     }
 
-    settingsService.save(settings);
-    return settings;
-  }
+    @Override
+    public SpotifySettings updateEntity(SpotifySettings e) {
+        SpotifySettings settings = settingsService.getSettings(SpotifySettings.class);
+
+        settings.setSongrequestsEnabled(e.isSongrequestsEnabled());
+
+        if (StringUtils.isEmpty(e.getSongRequestPlaylistId())) {
+            settings.setSongRequestPlaylistId(null);
+        } else {
+            if (!settings.getSongRequestPlaylistId().equals(e.getSongRequestPlaylistId())) {
+                try {
+                    Response<SpotifyPlaylist> response = spotifyApi.getPlaylist(e.getSongRequestPlaylistId());
+                    if (response.isOK()) {
+                        settings.setSongRequestPlaylistId(e.getSongRequestPlaylistId());
+                    } else {
+                        throw new Exception(response.getRawData());
+                    }
+                } catch (Exception e1) {
+                    logger.error("Failed communication with Spotify", e);
+                    return null;
+                }
+            }
+        }
+
+        settingsService.save(settings);
+        return settings;
+    }
 }

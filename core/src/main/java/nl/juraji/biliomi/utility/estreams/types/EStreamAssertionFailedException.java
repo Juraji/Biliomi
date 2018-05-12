@@ -6,7 +6,7 @@ package nl.juraji.biliomi.utility.estreams.types;
  */
 public class EStreamAssertionFailedException extends Exception {
 
-  public EStreamAssertionFailedException(String message) {
-    super(message);
-  }
+    public EStreamAssertionFailedException(String message) {
+        super(message);
+    }
 }

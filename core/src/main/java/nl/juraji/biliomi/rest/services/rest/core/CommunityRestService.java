@@ -18,38 +18,38 @@ import java.util.List;
 @Path("/core/communities")
 public class CommunityRestService extends ModelRestService<Community> {
 
-  @Inject
-  private CommunitiesService communitiesService;
+    @Inject
+    private CommunitiesService communitiesService;
 
-  @Override
-  public List<Community> getEntities() {
-    return communitiesService.getCommunities();
-  }
+    @Override
+    public List<Community> getEntities() {
+        return communitiesService.getCommunities();
+    }
 
-  @Override
-  public Community getEntity(long id) {
-    return communitiesService.getCommunity(id);
-  }
+    @Override
+    public Community getEntity(long id) {
+        return communitiesService.getCommunity(id);
+    }
 
-  @Override
-  public Community createEntity(Community e) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public Community createEntity(Community e) {
+        throw new ForbiddenException();
+    }
 
-  @Override
-  public Community updateEntity(Community e, long id) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public Community updateEntity(Community e, long id) {
+        throw new ForbiddenException();
+    }
 
-  @Override
-  public boolean deleteEntity(long id) {
-    throw new ForbiddenException();
-  }
+    @Override
+    public boolean deleteEntity(long id) {
+        throw new ForbiddenException();
+    }
 
-  @GET
-  @Path("/search/{communityname}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response searchCommunity(@PathParam("communityname") String communityName) {
-    return Responses.okOrEmpty(communitiesService.getCommunityByName(communityName));
-  }
+    @GET
+    @Path("/search/{communityname}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response searchCommunity(@PathParam("communityname") String communityName) {
+        return Responses.okOrEmpty(communitiesService.getCommunityByName(communityName));
+    }
 }

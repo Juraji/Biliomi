@@ -13,113 +13,113 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchStream {
 
-  @XmlElement(name = "_id")
-  private Long id;
+    @XmlElement(name = "_id")
+    private Long id;
 
-  @XmlElement(name = "game")
-  private String game;
+    @XmlElement(name = "game")
+    private String game;
 
-  @XmlElement(name = "viewers")
-  private Integer viewers;
+    @XmlElement(name = "viewers")
+    private Integer viewers;
 
-  @XmlElement(name = "video_height")
-  private Integer videoHeight;
+    @XmlElement(name = "video_height")
+    private Integer videoHeight;
 
-  @XmlElement(name = "average_fps")
-  private Integer averageFps;
+    @XmlElement(name = "average_fps")
+    private Integer averageFps;
 
-  @XmlElement(name = "delay")
-  private Integer delay;
+    @XmlElement(name = "delay")
+    private Integer delay;
 
-  @XmlElement(name = "created_at")
-  private String createdAt;
+    @XmlElement(name = "created_at")
+    private String createdAt;
 
-  @XmlElement(name = "is_playlist")
-  private Boolean isPlaylist;
+    @XmlElement(name = "is_playlist")
+    private Boolean isPlaylist;
 
-  @XmlElement(name = "preview")
-  private TwitchImageInfo preview;
+    @XmlElement(name = "preview")
+    private TwitchImageInfo preview;
 
-  @XmlElement(name = "channel")
-  private TwitchChannel channel;
+    @XmlElement(name = "channel")
+    private TwitchChannel channel;
 
-  public Long getId() {
-    return id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public String getGame() {
-    return game;
-  }
+    public String getGame() {
+        return game;
+    }
 
-  public void setGame(String game) {
-    this.game = game;
-  }
+    public void setGame(String game) {
+        this.game = game;
+    }
 
-  public Integer getViewers() {
-    return viewers;
-  }
+    public Integer getViewers() {
+        return viewers;
+    }
 
-  public void setViewers(Integer viewers) {
-    this.viewers = viewers;
-  }
+    public void setViewers(Integer viewers) {
+        this.viewers = viewers;
+    }
 
-  public Integer getVideoHeight() {
-    return videoHeight;
-  }
+    public Integer getVideoHeight() {
+        return videoHeight;
+    }
 
-  public void setVideoHeight(Integer videoHeight) {
-    this.videoHeight = videoHeight;
-  }
+    public void setVideoHeight(Integer videoHeight) {
+        this.videoHeight = videoHeight;
+    }
 
-  public Integer getAverageFps() {
-    return averageFps;
-  }
+    public Integer getAverageFps() {
+        return averageFps;
+    }
 
-  public void setAverageFps(Integer averageFps) {
-    this.averageFps = averageFps;
-  }
+    public void setAverageFps(Integer averageFps) {
+        this.averageFps = averageFps;
+    }
 
-  public Integer getDelay() {
-    return delay;
-  }
+    public Integer getDelay() {
+        return delay;
+    }
 
-  public void setDelay(Integer delay) {
-    this.delay = delay;
-  }
+    public void setDelay(Integer delay) {
+        this.delay = delay;
+    }
 
-  public String getCreatedAt() {
-    return createdAt;
-  }
+    public String getCreatedAt() {
+        return createdAt;
+    }
 
-  public void setCreatedAt(String createdAt) {
-    this.createdAt = createdAt;
-  }
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
 
-  public Boolean getPlaylist() {
-    return isPlaylist;
-  }
+    public Boolean getPlaylist() {
+        return isPlaylist;
+    }
 
-  public void setPlaylist(Boolean playlist) {
-    isPlaylist = playlist;
-  }
+    public void setPlaylist(Boolean playlist) {
+        isPlaylist = playlist;
+    }
 
-  public TwitchImageInfo getPreview() {
-    return preview;
-  }
+    public TwitchImageInfo getPreview() {
+        return preview;
+    }
 
-  public void setPreview(TwitchImageInfo preview) {
-    this.preview = preview;
-  }
+    public void setPreview(TwitchImageInfo preview) {
+        this.preview = preview;
+    }
 
-  public TwitchChannel getChannel() {
-    return channel;
-  }
+    public TwitchChannel getChannel() {
+        return channel;
+    }
 
-  public void setChannel(TwitchChannel channel) {
-    this.channel = channel;
-  }
+    public void setChannel(TwitchChannel channel) {
+        this.channel = channel;
+    }
 }

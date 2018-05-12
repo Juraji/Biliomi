@@ -22,55 +22,55 @@ import java.util.stream.Collectors;
 @Default
 public class ToyFactoryService {
 
-  @Inject
-  private TamagotchiConfigService configService;
+    @Inject
+    private TamagotchiConfigService configService;
 
-  public Set<String> getToyNameSet() {
-    return configService.getToys().stream()
-        .map(YamlTamagotchiToy::getName)
-        .collect(Collectors.toSet());
-  }
+    private static TamagotchiToy generateToy(YamlTamagotchiToy toyDef) {
+        long daysInMillis = TimeUnit.MILLISECONDS.convert(toyDef.getDurationDays(), TimeUnit.DAYS);
+        DateTime expiryDate = DateTime.now().plus(Duration.millis(daysInMillis));
+        TamagotchiToy toy = new TamagotchiToy();
 
-  public TamagotchiToy getToy(String toyName) {
-    YamlTamagotchiToy toyDef = configService.getToys().stream()
-        .filter(YamlTamagotchiToy -> YamlTamagotchiToy.getName().equalsIgnoreCase(toyName))
-        .findFirst()
-        .orElse(null);
+        toy.setToyName(toyDef.getName());
+        toy.setExpiresAt(expiryDate);
+        toy.setFoodModifier(toyDef.getFoodModifier());
+        toy.setMoodModifier(toyDef.getMoodModifier());
+        toy.setHygieneModifier(toyDef.getHygieneModifier());
+        toy.setCost(toyDef.getCost());
 
-    if (toyDef == null) {
-      return null;
+        return toy;
     }
 
-    return generateToy(toyDef);
-  }
+    public Set<String> getToyNameSet() {
+        return configService.getToys().stream()
+                .map(YamlTamagotchiToy::getName)
+                .collect(Collectors.toSet());
+    }
 
-  public List<TamagotchiToy> getList() {
-    return configService.getToys().stream()
-        .map(ToyFactoryService::generateToy)
-        .collect(Collectors.toList());
-  }
+    public TamagotchiToy getToy(String toyName) {
+        YamlTamagotchiToy toyDef = configService.getToys().stream()
+                .filter(YamlTamagotchiToy -> YamlTamagotchiToy.getName().equalsIgnoreCase(toyName))
+                .findFirst()
+                .orElse(null);
 
-  public TamagotchiToy getRandom() {
-    return MathUtils.listRand(getList());
-  }
+        if (toyDef == null) {
+            return null;
+        }
 
-  public boolean tamagotchiHasToy(Tamagotchi tamagotchi, TamagotchiToy toy) {
-    return tamagotchi.getToys().stream()
-        .anyMatch(tamagotchiToy -> tamagotchiToy.getToyName().equals(toy.getToyName()));
-  }
+        return generateToy(toyDef);
+    }
 
-  private static TamagotchiToy generateToy(YamlTamagotchiToy toyDef) {
-    long daysInMillis = TimeUnit.MILLISECONDS.convert(toyDef.getDurationDays(), TimeUnit.DAYS);
-    DateTime expiryDate = DateTime.now().plus(Duration.millis(daysInMillis));
-    TamagotchiToy toy = new TamagotchiToy();
+    public List<TamagotchiToy> getList() {
+        return configService.getToys().stream()
+                .map(ToyFactoryService::generateToy)
+                .collect(Collectors.toList());
+    }
 
-    toy.setToyName(toyDef.getName());
-    toy.setExpiresAt(expiryDate);
-    toy.setFoodModifier(toyDef.getFoodModifier());
-    toy.setMoodModifier(toyDef.getMoodModifier());
-    toy.setHygieneModifier(toyDef.getHygieneModifier());
-    toy.setCost(toyDef.getCost());
+    public TamagotchiToy getRandom() {
+        return MathUtils.listRand(getList());
+    }
 
-    return toy;
-  }
+    public boolean tamagotchiHasToy(Tamagotchi tamagotchi, TamagotchiToy toy) {
+        return tamagotchi.getToys().stream()
+                .anyMatch(tamagotchiToy -> tamagotchiToy.getToyName().equals(toy.getToyName()));
+    }
 }

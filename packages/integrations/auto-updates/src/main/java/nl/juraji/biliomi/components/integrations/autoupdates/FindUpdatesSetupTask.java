@@ -18,7 +18,6 @@ import org.apache.logging.log4j.Logger;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,171 +31,165 @@ import java.util.stream.Collectors;
 @Default
 @SetupTaskPriority(priority = 1)
 public class FindUpdatesSetupTask implements SetupTask {
-  private static final String DOWNLOAD_CONTENT_TYPE = "application/x-gzip";
-  private static final String GH_REPO_OWNER = "Juraji";
-  private static final String GH_REPO_NAME = "Biliomi";
-  private static final String[] INSTALLER_DIRS = {"i18n", "lib", "default-config"};
+    private static final String DOWNLOAD_CONTENT_TYPE = "application/x-gzip";
+    private static final String GH_REPO_OWNER = "Juraji";
+    private static final String GH_REPO_NAME = "Biliomi";
+    private static final String[] INSTALLER_DIRS = {"i18n", "lib", "default-config"};
+    private final File downloadDir;
+    private final File installDir;
+    @Inject
+    @CoreSetting("biliomi.core.checkForUpdates")
+    private String isCheckForUpdates;
+    @Inject
+    private Logger logger;
+    @Inject
+    private VersionInfo versionInfo;
+    @Inject
+    private GithubApi githubApi;
+    @Inject
+    private ConsoleApi console;
 
-  @Inject
-  @CoreSetting("biliomi.core.checkForUpdates")
-  private String isCheckForUpdates;
-
-  @Inject
-  private Logger logger;
-
-  @Inject
-  private VersionInfo versionInfo;
-
-  @Inject
-  private GithubApi githubApi;
-
-  @Inject
-  private ConsoleApi console;
-
-  private final File downloadDir;
-  private final File installDir;
-
-  public FindUpdatesSetupTask() {
-    downloadDir = BiliomiContainer.getParameters().getWorkingDir("Updates");
-    installDir = new File("./");
-  }
-
-  @Override
-  public void boot() {
-    // Run updater on boot
-    this.update();
-  }
-
-  @Override
-  public void install() {
-    // Do nothing
-  }
-
-  @Override
-  public void update() {
-    if (!"true".equals(isCheckForUpdates)) {
-      return;
+    public FindUpdatesSetupTask() {
+        downloadDir = BiliomiContainer.getParameters().getWorkingDir("Updates");
+        installDir = new File("./");
     }
 
-    try {
-      Response<GithubRelease> response = githubApi.getLatestRelease(GH_REPO_OWNER, GH_REPO_NAME);
+    @Override
+    public void boot() {
+        // Run updater on boot
+        this.update();
+    }
 
-      if (response.isOK()) {
-        GithubRelease githubRelease = response.getData();
+    @Override
+    public void install() {
+        // Do nothing
+    }
 
-        if (!githubRelease.isDraft() && !githubRelease.isPrerelease() && isNonSemVer(versionInfo.getVersion(), githubRelease.getTagName())) {
-          runUpdateInstaller(githubRelease);
-        } else {
-          logger.info("You are running the latest version of Biliomi, awesome!");
+    @Override
+    public void update() {
+        if (!"true".equals(isCheckForUpdates)) {
+            return;
         }
-      } else {
-        throw new Exception(response.getRawData());
-      }
-    } catch (Exception e) {
-      logger.error("Failed update", e);
-    }
-  }
 
-  @Override
-  public String getDisplayName() {
-    return "Find updates on GitHub";
-  }
+        try {
+            Response<GithubRelease> response = githubApi.getLatestRelease(GH_REPO_OWNER, GH_REPO_NAME);
 
-  private void runUpdateInstaller(GithubRelease githubRelease) throws Exception {
-    console.println();
-    console.println("A new version of Biliomi is available: " + versionInfo.getVersion() + " -> " + githubRelease.getTagName() + ".");
-    console.println("More information about this release can be found at " + githubRelease.getUrl() + ".");
-    console.print("I can perform this update for you, would you like me to go ahead and install the latest version? [y/n]: ");
-    if (!console.awaitYesNo()) {
-      // User does not wish to update, continue boot
-      return;
+            if (response.isOK()) {
+                GithubRelease githubRelease = response.getData();
+
+                if (!githubRelease.isDraft() && !githubRelease.isPrerelease() && isNonSemVer(versionInfo.getVersion(), githubRelease.getTagName())) {
+                    runUpdateInstaller(githubRelease);
+                } else {
+                    logger.info("You are running the latest version of Biliomi, awesome!");
+                }
+            } else {
+                throw new Exception(response.getRawData());
+            }
+        } catch (Exception e) {
+            logger.error("Failed update", e);
+        }
     }
 
-    console.println();
-    console.println("Downloading Biliomi " + githubRelease.getTagName() + "...");
-    File archiveFile = downloadReleaseTar(githubRelease);
-
-    console.println("Removing old files...");
-    removeOldInstall();
-
-    console.println("Unpacking new release...");
-    TarArchiveUtils.extract(archiveFile);
-
-    console.println("Finalizing installation...");
-    FileUtils.copyDirectory(new File(archiveFile.getParent(), "Biliomi"), installDir);
-    FileUtils.deleteDirectory(downloadDir);
-
-    console.println();
-    console.println("Biliomi has been updated successfully");
-    console.println();
-
-    String coreConfigFile = BiliomiContainer.getParameters().getConfigurationDir().getAbsolutePath() + "/core.yml";
-    console.println("The following actions are up to you:");
-    console.println("- The i18n directory has been replaced, if you were using a custom language I recommend you download the latest and replace the i18n directory.");
-    console.println("- Check if there are any new settings you need to copy over from the default-config.");
-    console.println("- Set the update mode to UPDATE in " + coreConfigFile + " in order to run database updates.");
-    console.println();
-
-    console.println("Restart Biliomi whenever you are ready...");
-    console.println();
-    BiliomiContainer.getContainer().shutdownNow(0);
-  }
-
-  private File downloadReleaseTar(GithubRelease githubRelease) throws Exception {
-    GithubReleaseAsset asset = githubRelease.getAssets().stream()
-        .filter(githubReleaseAsset -> DOWNLOAD_CONTENT_TYPE.equals(githubReleaseAsset.getContentType()))
-        .findFirst()
-        .orElse(null);
-
-    if (asset == null) {
-      throw new Exception("Could not find a TAR asset to download in the release");
+    @Override
+    public String getDisplayName() {
+        return "Find updates on GitHub";
     }
 
-    // Create the download directory if it does not already exist.
-    FileUtils.forceMkdir(downloadDir);
+    private void runUpdateInstaller(GithubRelease githubRelease) throws Exception {
+        console.println();
+        console.println("A new version of Biliomi is available: " + versionInfo.getVersion() + " -> " + githubRelease.getTagName() + ".");
+        console.println("More information about this release can be found at " + githubRelease.getUrl() + ".");
+        console.print("I can perform this update for you, would you like me to go ahead and install the latest version? [y/n]: ");
+        if (!console.awaitYesNo()) {
+            // User does not wish to update, continue boot
+            return;
+        }
 
-    URL url = new URL(asset.getDownloadUrl());
-    File targetFile = new File(downloadDir, url.getFile());
-    if (!targetFile.exists()) {
-      FileUtils.copyURLToFile(url, targetFile);
-    }
-    return targetFile;
-  }
+        console.println();
+        console.println("Downloading Biliomi " + githubRelease.getTagName() + "...");
+        File archiveFile = downloadReleaseTar(githubRelease);
 
-  private void removeOldInstall() throws IOException {
-    Collection<File> filesToDelete = FileUtils.listFiles(installDir, new String[]{"jar"}, false);
-    List<File> directories = Arrays.stream(INSTALLER_DIRS)
-        .map(s -> new File(installDir, s))
-        .collect(Collectors.toList());
+        console.println("Removing old files...");
+        removeOldInstall();
 
-    filesToDelete.addAll(directories);
+        console.println("Unpacking new release...");
+        TarArchiveUtils.extract(archiveFile);
 
-    EStream.from(filesToDelete)
-        .filter(File::exists)
-        .forEach(FileUtils::forceDelete);
-  }
+        console.println("Finalizing installation...");
+        FileUtils.copyDirectory(new File(archiveFile.getParent(), "Biliomi"), installDir);
+        FileUtils.deleteDirectory(downloadDir);
 
-  private boolean isNonSemVer(String currentVersionTag, String newVersionTag) {
-    if (currentVersionTag == null || newVersionTag == null) {
-      return false;
-    }
+        console.println();
+        console.println("Biliomi has been updated successfully");
+        console.println();
 
-    // Snapshot releases should always be treated as an older version
-    if (currentVersionTag.contains("SNAPSHOT")) {
-      return true;
-    }
+        String coreConfigFile = BiliomiContainer.getParameters().getConfigurationDir().getAbsolutePath() + "/core.yml";
+        console.println("The following actions are up to you:");
+        console.println("- The i18n directory has been replaced, if you were using a custom language I recommend you download the latest and replace the i18n directory.");
+        console.println("- Check if there are any new settings you need to copy over from the default-config.");
+        console.println("- Set the update mode to UPDATE in " + coreConfigFile + " in order to run database updates.");
+        console.println();
 
-    // Turns both versions in to arrays like {MAJOR, MINOR, MICRO}
-    String[] cvs = currentVersionTag.replaceAll("v([0-9.]+).*", "$1").split("\\.");
-    String[] nvs = newVersionTag.replaceAll("v([0-9.]+).*", "$1").split("\\.");
-
-    // Starts at the second element, since major versions are never updateable
-    for (int i = 1; i < 3; i++) {
-      if (Integer.valueOf(cvs[i]) < Integer.valueOf(nvs[i])) {
-        return true;
-      }
+        console.println("Restart Biliomi whenever you are ready...");
+        console.println();
+        BiliomiContainer.getContainer().shutdownNow(0);
     }
 
-    return false;
-  }
+    private File downloadReleaseTar(GithubRelease githubRelease) throws Exception {
+        GithubReleaseAsset asset = githubRelease.getAssets().stream()
+                .filter(githubReleaseAsset -> DOWNLOAD_CONTENT_TYPE.equals(githubReleaseAsset.getContentType()))
+                .findFirst()
+                .orElse(null);
+
+        if (asset == null) {
+            throw new Exception("Could not find a TAR asset to download in the release");
+        }
+
+        // Create the download directory if it does not already exist.
+        FileUtils.forceMkdir(downloadDir);
+
+        URL url = new URL(asset.getDownloadUrl());
+        File targetFile = new File(downloadDir, url.getFile());
+        if (!targetFile.exists()) {
+            FileUtils.copyURLToFile(url, targetFile);
+        }
+        return targetFile;
+    }
+
+    private void removeOldInstall() {
+        Collection<File> filesToDelete = FileUtils.listFiles(installDir, new String[]{"jar"}, false);
+        List<File> directories = Arrays.stream(INSTALLER_DIRS)
+                .map(s -> new File(installDir, s))
+                .collect(Collectors.toList());
+
+        filesToDelete.addAll(directories);
+
+        EStream.from(filesToDelete)
+                .filter(File::exists)
+                .forEach(FileUtils::forceDelete);
+    }
+
+    private boolean isNonSemVer(String currentVersionTag, String newVersionTag) {
+        if (currentVersionTag == null || newVersionTag == null) {
+            return false;
+        }
+
+        // Snapshot releases should always be treated as an older version
+        if (currentVersionTag.contains("SNAPSHOT")) {
+            return true;
+        }
+
+        // Turns both versions in to arrays like {MAJOR, MINOR, MICRO}
+        String[] cvs = currentVersionTag.replaceAll("v([0-9.]+).*", "$1").split("\\.");
+        String[] nvs = newVersionTag.replaceAll("v([0-9.]+).*", "$1").split("\\.");
+
+        // Starts at the second element, since major versions are never updateable
+        for (int i = 1; i < 3; i++) {
+            if (Integer.valueOf(cvs[i]) < Integer.valueOf(nvs[i])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

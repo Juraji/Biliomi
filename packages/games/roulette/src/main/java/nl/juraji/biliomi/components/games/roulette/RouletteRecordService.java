@@ -17,22 +17,22 @@ import java.util.List;
 @Default
 public class RouletteRecordService {
 
-  @Inject
-  private RouletteRecordDao rouletteRecordDao;
+    @Inject
+    private RouletteRecordDao rouletteRecordDao;
 
-  public void recordRouletteRun(User user, boolean died) {
-    RouletteRecord record = new RouletteRecord();
-    record.setUser(user);
-    record.setFatal(died);
-    record.setDate(DateTime.now());
-    rouletteRecordDao.save(record);
-  }
+    public void recordRouletteRun(User user, boolean died) {
+        RouletteRecord record = new RouletteRecord();
+        record.setUser(user);
+        record.setFatal(died);
+        record.setDate(DateTime.now());
+        rouletteRecordDao.save(record);
+    }
 
-  public UserRecordStats getRecordInfo(User user) {
-    List<RouletteRecord> records = rouletteRecordDao.getRecords(user);
-    long losses = records.stream().filter(RouletteRecord::isFatal).count();
-    long wins = records.stream().filter(rouletteRecord -> !rouletteRecord.isFatal()).count();
+    public UserRecordStats getRecordInfo(User user) {
+        List<RouletteRecord> records = rouletteRecordDao.getRecords(user);
+        long losses = records.stream().filter(RouletteRecord::isFatal).count();
+        long wins = records.stream().filter(rouletteRecord -> !rouletteRecord.isFatal()).count();
 
-    return new UserRecordStats(records.size(), losses, wins);
-  }
+        return new UserRecordStats(records.size(), losses, wins);
+    }
 }

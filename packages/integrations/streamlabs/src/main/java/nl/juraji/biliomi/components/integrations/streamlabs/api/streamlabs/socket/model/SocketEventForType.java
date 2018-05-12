@@ -8,10 +8,10 @@ import nl.juraji.biliomi.utility.calculate.EnumUtils;
  * Biliomi
  */
 public enum SocketEventForType {
-  TWITCH_ACCOUNT, MIXER_ACCOUNT, YOUTUBE_ACCOUNT;
+    TWITCH_ACCOUNT, MIXER_ACCOUNT, YOUTUBE_ACCOUNT;
 
-  @JsonCreator
-  public static SocketEventForType fromString(String type) {
-    return EnumUtils.toEnum(type, SocketEventForType.class);
-  }
+    @JsonCreator
+    public static SocketEventForType fromString(String type) {
+        return EnumUtils.toEnum(type, SocketEventForType.class);
+    }
 }

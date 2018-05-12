@@ -27,27 +27,27 @@ import java.util.stream.Stream;
 @NormalComponent
 @EventBusSubscriber
 public class PMResponseComponent extends Component {
-  public static final String PM_RESPONSE_TEMPLATE_ID = "PMResponse";
+    public static final String PM_RESPONSE_TEMPLATE_ID = "PMResponse";
 
-  @Inject
-  private TemplateDao templateDao;
+    @Inject
+    private TemplateDao templateDao;
 
-  @Subscribe
-  public void onIrcPrivateMessageEvent(IrcPrivateMessageEvent event) {
-    if (event.getUsername().equalsIgnoreCase(IrcSession.SYSTEM_USER)) {
-      return;
+    @Subscribe
+    public void onIrcPrivateMessageEvent(IrcPrivateMessageEvent event) {
+        if (event.getUsername().equalsIgnoreCase(IrcSession.SYSTEM_USER)) {
+            return;
+        }
+
+        Template template = templateDao.getByKey(PM_RESPONSE_TEMPLATE_ID);
+        if (template == null || StringUtils.isEmpty(template.getTemplate())) {
+            return;
+        }
+        chat.whisper(event.getUsername(), Templater.template(template.getTemplate())
+                .add("moderators", this::createModeratorList));
     }
 
-    Template template = templateDao.getByKey(PM_RESPONSE_TEMPLATE_ID);
-    if (template == null || StringUtils.isEmpty(template.getTemplate())) {
-      return;
+    private String createModeratorList() {
+        Stream<String> moderators = usersService.getModerators().stream().map(User::getDisplayName);
+        return TextUtils.commaList(moderators);
     }
-    chat.whisper(event.getUsername(), Templater.template(template.getTemplate())
-        .add("moderators", this::createModeratorList));
-  }
-
-  private String createModeratorList() {
-    Stream<String> moderators = usersService.getModerators().stream().map(User::getDisplayName);
-    return TextUtils.commaList(moderators);
-  }
 }

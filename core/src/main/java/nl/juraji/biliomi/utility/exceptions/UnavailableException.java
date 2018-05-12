@@ -5,10 +5,10 @@ package nl.juraji.biliomi.utility.exceptions;
  * Biliomi v3
  */
 public class UnavailableException extends Exception {
-  public UnavailableException() {
-  }
+    public UnavailableException() {
+    }
 
-  public UnavailableException(String message) {
-    super(message);
-  }
+    public UnavailableException(String message) {
+        super(message);
+    }
 }

@@ -13,17 +13,17 @@ import java.util.Arrays;
 @Default
 public class BadWordsService extends ConfigService<YamlBadWordsConfig> {
 
-  public BadWordsService() {
-    super("core/badwords.yml", YamlBadWordsConfig.class);
-  }
+    public BadWordsService() {
+        super("core/badwords.yml", YamlBadWordsConfig.class);
+    }
 
-  public boolean isBadWord(String word) {
-    return config.getBadwords().stream()
-        .anyMatch(word::equalsIgnoreCase);
-  }
+    public boolean isBadWord(String word) {
+        return config.getBadwords().stream()
+                .anyMatch(word::equalsIgnoreCase);
+    }
 
-  public boolean containsBadWords(String input) {
-    return Arrays.stream(input.split(" "))
-        .anyMatch(config.getBadwords()::contains);
-  }
+    public boolean containsBadWords(String input) {
+        return Arrays.stream(input.split(" "))
+                .anyMatch(config.getBadwords()::contains);
+    }
 }

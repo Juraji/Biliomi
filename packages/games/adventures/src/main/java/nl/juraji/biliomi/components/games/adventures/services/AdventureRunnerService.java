@@ -44,204 +44,204 @@ import static nl.juraji.biliomi.components.games.adventures.services.AdventureSt
 @Singleton
 public class AdventureRunnerService {
 
-  private final List<Adventurer> survivors = new ArrayList<>();
-  private final List<Adventurer> victims = new ArrayList<>();
+    private final List<Adventurer> survivors = new ArrayList<>();
+    private final List<Adventurer> victims = new ArrayList<>();
 
-  @Inject
-  private EventBus eventBus;
+    @Inject
+    private EventBus eventBus;
 
-  @Inject
-  private SettingsService settingsService;
+    @Inject
+    private SettingsService settingsService;
 
-  @Inject
-  private PointsService pointsService;
+    @Inject
+    private PointsService pointsService;
 
-  @Inject
-  private ChatService chat;
+    @Inject
+    private ChatService chat;
 
-  @Inject
-  private AdventuresConfigService configService;
+    @Inject
+    private AdventuresConfigService configService;
 
-  @Inject
-  private UsersService usersService;
+    @Inject
+    private UsersService usersService;
 
-  @Inject
-  private AdventureRecordService adventureRecordService;
+    @Inject
+    private AdventureRecordService adventureRecordService;
 
-  @Inject
-  @I18nData(AdventureComponent.class)
-  private I18nMap i18n;
+    @Inject
+    @I18nData(AdventureComponent.class)
+    private I18nMap i18n;
 
-  private AdventureSettings settings;
-  private AdventureState state = NOT_RUNNING;
-  private ScheduledExecutorService executor = null;
-  private DateTime nextRun = DateTime.now();
-  private YamlAdventureStory story = null;
+    private AdventureSettings settings;
+    private AdventureState state = NOT_RUNNING;
+    private ScheduledExecutorService executor = null;
+    private DateTime nextRun = DateTime.now();
+    private YamlAdventureStory story = null;
 
-  @PostConstruct
-  private void initAdventureRunnerService() {
-    settings = settingsService.getSettings(AdventureSettings.class, s -> settings = s);
-  }
-
-  public AdventureState getState() {
-    return state;
-  }
-
-  public DateTime getNextRun() {
-    return nextRun;
-  }
-
-  public boolean userExists(User user) {
-    Supplier<Boolean> isSurvivor = () -> survivors.stream()
-        .map(Adventurer::getUser)
-        .anyMatch(survivor -> user.getId() == survivor.getId());
-    Supplier<Boolean> isVictim = () -> victims.stream()
-        .map(Adventurer::getUser)
-        .anyMatch(victim -> user.getId() == victim.getId());
-    return isSurvivor.get() || isVictim.get();
-  }
-
-  public void join(User user, Tamagotchi tamagotchi, long bet) {
-    // Adventure is not running, set to join
-    if (NOT_RUNNING.equals(state)) {
-      state = JOIN;
-      story = configService.getRandomStory();
-      executor = ThreadPools.newScheduledExecutorService("AdventureRunner");
-      executor.schedule(this::runAdventure, settings.getJoinTimeout(), TimeUnit.MILLISECONDS);
+    @PostConstruct
+    private void initAdventureRunnerService() {
+        settings = settingsService.getSettings(AdventureSettings.class, s -> settings = s);
     }
 
-    // Add tamagotchi if exists and affection is high enough
-    if (tamagotchi != null) {
-      addAdventurer(new Adventurer(tamagotchi, bet / 2, settings.getWinMultiplier()));
+    public AdventureState getState() {
+        return state;
     }
 
-    eventBus.post(new AchievementEvent(user, "ADV_GO_ON_ADVENTURE", i18n.getString("Achievement.goOnAdventure")));
-
-    Adventurer adventurer = new Adventurer(user, bet, settings.getWinMultiplier());
-    addAdventurer(adventurer);
-  }
-
-  private void addAdventurer(Adventurer adventurer) {
-    if (MathUtils.randChoice()) {
-      survivors.add(adventurer);
-    } else {
-      victims.add(adventurer);
+    public DateTime getNextRun() {
+        return nextRun;
     }
-  }
 
-  private void runAdventure() {
-    state = RUNNING;
+    public boolean userExists(User user) {
+        Supplier<Boolean> isSurvivor = () -> survivors.stream()
+                .map(Adventurer::getUser)
+                .anyMatch(survivor -> user.getId() == survivor.getId());
+        Supplier<Boolean> isVictim = () -> victims.stream()
+                .map(Adventurer::getUser)
+                .anyMatch(victim -> user.getId() == victim.getId());
+        return isSurvivor.get() || isVictim.get();
+    }
 
-    chat.say(i18n.get("Adventure.runAdventure")
-        .add("title", story::getTitle)
-        .add("count", () -> survivors.size() + victims.size()));
+    public void join(User user, Tamagotchi tamagotchi, long bet) {
+        // Adventure is not running, set to join
+        if (NOT_RUNNING.equals(state)) {
+            state = JOIN;
+            story = configService.getRandomStory();
+            executor = ThreadPools.newScheduledExecutorService("AdventureRunner");
+            executor.schedule(this::runAdventure, settings.getJoinTimeout(), TimeUnit.MILLISECONDS);
+        }
 
-    Counter counter = new Counter(1);
-    story.getChapters().stream()
-        .map(Templater::template)
-        .forEach(templater -> {
-          executor.schedule(() -> formatAndPostChapter(templater), counter.get() * configService.getNextChapterInterval(), TimeUnit.MILLISECONDS);
-          counter.getAndIncrement();
+        // Add tamagotchi if exists and affection is high enough
+        if (tamagotchi != null) {
+            addAdventurer(new Adventurer(tamagotchi, bet / 2, settings.getWinMultiplier()));
+        }
+
+        eventBus.post(new AchievementEvent(user, "ADV_GO_ON_ADVENTURE", i18n.getString("Achievement.goOnAdventure")));
+
+        Adventurer adventurer = new Adventurer(user, bet, settings.getWinMultiplier());
+        addAdventurer(adventurer);
+    }
+
+    private void addAdventurer(Adventurer adventurer) {
+        if (MathUtils.randChoice()) {
+            survivors.add(adventurer);
+        } else {
+            victims.add(adventurer);
+        }
+    }
+
+    private void runAdventure() {
+        state = RUNNING;
+
+        chat.say(i18n.get("Adventure.runAdventure")
+                .add("title", story::getTitle)
+                .add("count", () -> survivors.size() + victims.size()));
+
+        Counter counter = new Counter(1);
+        story.getChapters().stream()
+                .map(Templater::template)
+                .forEach(templater -> {
+                    executor.schedule(() -> formatAndPostChapter(templater), counter.get() * configService.getNextChapterInterval(), TimeUnit.MILLISECONDS);
+                    counter.getAndIncrement();
+                });
+
+        executor.schedule(() -> {
+            runPayouts();
+            resetAdventure();
+        }, counter.get() * configService.getNextChapterInterval(), TimeUnit.MILLISECONDS);
+    }
+
+    private void formatAndPostChapter(Templater templater) {
+        if (survivors.isEmpty() && templater.templateContainsKey("survivors")) {
+            return;
+        }
+
+        if (victims.isEmpty() && templater.templateContainsKey("victims")) {
+            return;
+        }
+
+        if (!survivors.isEmpty()) {
+            templater.add("survivors", () -> survivors.stream().map(Adventurer::getName).collect(Collectors.toList()));
+        }
+
+        if (!victims.isEmpty()) {
+            templater.add("victims", () -> victims.stream().map(Adventurer::getName).collect(Collectors.toList()));
+        }
+
+        chat.say(templater);
+    }
+
+    private void runPayouts() {
+        // (UserId, amount)
+        Map<Long, Long> payouts = new HashMap<>();
+
+        survivors.forEach(adventurer -> {
+            long bet = adventurer.getBet();
+            long payout = adventurer.getPayout();
+            User user = adventurer.getUser();
+
+            adventureRecordService.recordAdventureRun(user, bet, payout, adventurer.isTamagotchi());
+            processSurvivorAchievements(adventurer);
+
+            payouts.compute(user.getId(), (id, value) -> {
+                long add = (adventurer.isTamagotchi() ? payout : bet + payout);
+                return (value == null ? add : value + add);
+            });
         });
 
-    executor.schedule(() -> {
-      runPayouts();
-      resetAdventure();
-    }, counter.get() * configService.getNextChapterInterval(), TimeUnit.MILLISECONDS);
-  }
+        if (payouts.size() > 0) {
+            Map<User, Long> userLongMap = EBiStream.from(payouts)
+                    .mapKey(id -> usersService.getUser(id))
+                    .peek(((user, payout) -> user.setPoints(user.getPoints() + payout)))
+                    .toMap();
 
-  private void formatAndPostChapter(Templater templater) {
-    if (survivors.isEmpty() && templater.templateContainsKey("survivors")) {
-      return;
+            usersService.save(userLongMap.keySet());
+            chat.say(i18n.get("Adventure.payouts")
+                    .add("list", () -> EBiStream.from(userLongMap)
+                            .mapKey(User::getDisplayName)
+                            .sortedByValue((a, b) -> Long.compare(b, a))
+                            .mapValue(payout -> pointsService.asString(payout))
+                            .toOrderedMap()));
+        }
+
+        victims.forEach((adventurer -> adventureRecordService.recordAdventureRun(
+                adventurer.getUser(),
+                adventurer.getBet(),
+                0,
+                adventurer.isTamagotchi())));
     }
 
-    if (victims.isEmpty() && templater.templateContainsKey("victims")) {
-      return;
+    private void processSurvivorAchievements(Adventurer adventurer) {
+        User user = adventurer.getUser();
+
+        // Go big achievement
+        if (adventurer.getBet() >= 1000) {
+            eventBus.post(new AchievementEvent(user, "ADV_GO_BIG", i18n.getString("Achievement.goBig")));
+        }
+
+        long recordCount = adventureRecordService.getRecordCount(user);
+
+        // Bear Grylls achievement
+        if (recordCount >= 10) {
+            eventBus.post(new AchievementEvent(user, "ADV_BEAR_GRYLLS", i18n.getString("Achievement.bearGrylls")));
+        }
+
+        // Steve Irwin achievement
+        if (recordCount >= 20) {
+            eventBus.post(new AchievementEvent(user, "ADV_STEVE_IRWIN", i18n.getString("Achievement.steveIrwin")));
+        }
     }
 
-    if (!survivors.isEmpty()) {
-      templater.add("survivors", () -> survivors.stream().map(Adventurer::getName).collect(Collectors.toList()));
+    private void resetAdventure() {
+        survivors.clear();
+        victims.clear();
+        nextRun = DateTime.now().withDurationAdded(settings.getCooldown(), 1);
+        story = null;
+
+        if (executor != null) {
+            executor.shutdownNow();
+            executor = null;
+        }
+
+        state = NOT_RUNNING;
     }
-
-    if (!victims.isEmpty()) {
-      templater.add("victims", () -> victims.stream().map(Adventurer::getName).collect(Collectors.toList()));
-    }
-
-    chat.say(templater);
-  }
-
-  private void runPayouts() {
-    // (UserId, amount)
-    Map<Long, Long> payouts = new HashMap<>();
-
-    survivors.forEach(adventurer -> {
-      long bet = adventurer.getBet();
-      long payout = adventurer.getPayout();
-      User user = adventurer.getUser();
-
-      adventureRecordService.recordAdventureRun(user, bet, payout, adventurer.isTamagotchi());
-      processSurvivorAchievements(adventurer);
-
-      payouts.compute(user.getId(), (id, value) -> {
-        long add = (adventurer.isTamagotchi() ? payout : bet + payout);
-        return (value == null ? add : value + add);
-      });
-    });
-
-    if (payouts.size() > 0) {
-      Map<User, Long> userLongMap = EBiStream.from(payouts)
-          .mapKey(id -> usersService.getUser(id))
-          .peek(((user, payout) -> user.setPoints(user.getPoints() + payout)))
-          .toMap();
-
-      usersService.save(userLongMap.keySet());
-      chat.say(i18n.get("Adventure.payouts")
-          .add("list", () -> EBiStream.from(userLongMap)
-              .mapKey(User::getDisplayName)
-              .sortedByValue((a, b) -> Long.compare(b, a))
-              .mapValue(payout -> pointsService.asString(payout))
-              .toOrderedMap()));
-    }
-
-    victims.forEach((adventurer -> adventureRecordService.recordAdventureRun(
-        adventurer.getUser(),
-        adventurer.getBet(),
-        0,
-        adventurer.isTamagotchi())));
-  }
-
-  private void processSurvivorAchievements(Adventurer adventurer) {
-    User user = adventurer.getUser();
-
-    // Go big achievement
-    if (adventurer.getBet() >= 1000) {
-      eventBus.post(new AchievementEvent(user, "ADV_GO_BIG", i18n.getString("Achievement.goBig")));
-    }
-
-    long recordCount = adventureRecordService.getRecordCount(user);
-
-    // Bear Grylls achievement
-    if (recordCount >= 10) {
-      eventBus.post(new AchievementEvent(user, "ADV_BEAR_GRYLLS", i18n.getString("Achievement.bearGrylls")));
-    }
-
-    // Steve Irwin achievement
-    if (recordCount >= 20) {
-      eventBus.post(new AchievementEvent(user, "ADV_STEVE_IRWIN", i18n.getString("Achievement.steveIrwin")));
-    }
-  }
-
-  private void resetAdventure() {
-    survivors.clear();
-    victims.clear();
-    nextRun = DateTime.now().withDurationAdded(settings.getCooldown(), 1);
-    story = null;
-
-    if (executor != null) {
-      executor.shutdownNow();
-      executor = null;
-    }
-
-    state = NOT_RUNNING;
-  }
 }

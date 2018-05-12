@@ -17,42 +17,42 @@ import javax.inject.Inject;
 @Default
 public class QuoteService {
 
-  @Inject
-  private QuoteDao quoteDao;
+    @Inject
+    private QuoteDao quoteDao;
 
-  @Inject
-  private GameService gameService;
+    @Inject
+    private GameService gameService;
 
-  /**
-   * Register a new quote
-   *
-   * @param user The user that made the quote
-   * @param message The quote
-   * @return The persisted Quote
-   */
-  public Quote registerQuote(User user, String message) {
-    Game currentGame = gameService.getCurrent();
+    /**
+     * Register a new quote
+     *
+     * @param user    The user that made the quote
+     * @param message The quote
+     * @return The persisted Quote
+     */
+    public Quote registerQuote(User user, String message) {
+        Game currentGame = gameService.getCurrent();
 
-    Quote quote = new Quote();
-    quote.setUser(user);
-    quote.setMessage(message);
-    quote.setDate(DateTime.now());
-    quote.setGameAtMoment(currentGame);
+        Quote quote = new Quote();
+        quote.setUser(user);
+        quote.setMessage(message);
+        quote.setDate(DateTime.now());
+        quote.setGameAtMoment(currentGame);
 
-    quoteDao.save(quote);
+        quoteDao.save(quote);
 
-    return quote;
-  }
+        return quote;
+    }
 
-  public Quote getQuote(long id) {
-    return quoteDao.get(id);
-  }
+    public Quote getQuote(long id) {
+        return quoteDao.get(id);
+    }
 
-  public Quote getRandom() {
-    return quoteDao.getRandom();
-  }
+    public Quote getRandom() {
+        return quoteDao.getRandom();
+    }
 
-  public void delete(Quote quote) {
-    quoteDao.delete(quote);
-  }
+    public void delete(Quote quote) {
+        quoteDao.delete(quote);
+    }
 }

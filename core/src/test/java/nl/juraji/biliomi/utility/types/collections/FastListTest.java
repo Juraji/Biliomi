@@ -14,28 +14,28 @@ import static org.junit.Assert.assertTrue;
  */
 public class FastListTest {
 
-  private List<String> list;
+    private List<String> list;
 
-  @Before
-  public void setUp() throws Exception {
-    list = new FastList<>();
-    list.add("Test1");
-    list.add("Test2");
-    list.add("Test3");
-  }
+    @Before
+    public void setUp() {
+        list = new FastList<>();
+        list.add("Test1");
+        list.add("Test2");
+        list.add("Test3");
+    }
 
-  @Test
-  public void contains() throws Exception {
-    assertTrue(list.contains("Test1"));
-    assertFalse(list.contains("XXXXX"));
-  }
+    @Test
+    public void contains() {
+        assertTrue(list.contains("Test1"));
+        assertFalse(list.contains("XXXXX"));
+    }
 
-  @Test
-  public void remove() throws Exception {
-    boolean removed = list.remove("Test2");
-    assertTrue(removed);
-    assertTrue(list.contains("Test1") && list.contains("Test3"));
-    assertFalse(list.contains("Test2"));
-    assertFalse(list.remove("XXXXX"));
-  }
+    @Test
+    public void remove() {
+        boolean removed = list.remove("Test2");
+        assertTrue(removed);
+        assertTrue(list.contains("Test1") && list.contains("Test3"));
+        assertFalse(list.contains("Test2"));
+        assertFalse(list.remove("XXXXX"));
+    }
 }

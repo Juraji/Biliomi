@@ -11,43 +11,43 @@ import static org.junit.Assert.*;
  */
 public class NumberConverterTest {
 
-  @Test
-  public void withDefault() throws Exception {
-    int result = asNumber("abc").withDefault(1).toInteger();
-    assertEquals(1, result);
-  }
+    @Test
+    public void withDefault() {
+        int result = asNumber("abc").withDefault(1).toInteger();
+        assertEquals(1, result);
+    }
 
-  @Test
-  public void toInteger() throws Exception {
-    int result = asNumber("123").toInteger();
-    Integer nullResult = asNumber("abc").toInteger();
-    assertEquals(123, result);
-    assertNull(nullResult);
-  }
+    @Test
+    public void toInteger() {
+        int result = asNumber("123").toInteger();
+        Integer nullResult = asNumber("abc").toInteger();
+        assertEquals(123, result);
+        assertNull(nullResult);
+    }
 
-  @Test
-  public void toDouble() throws Exception {
-    double result = asNumber("123.1").toDouble();
-    Double nullResult = asNumber("abc").toDouble();
-    assertEquals(123.1, result, 0);
-    assertNull(nullResult);
-  }
+    @Test
+    public void toDouble() {
+        double result = asNumber("123.1").toDouble();
+        Double nullResult = asNumber("abc").toDouble();
+        assertEquals(123.1, result, 0);
+        assertNull(nullResult);
+    }
 
-  @Test
-  public void toLong() throws Exception {
-    long result = asNumber("123").toLong();
-    Long nullResult = asNumber("abc").toLong();
-    assertEquals(123, result);
-    assertNull(nullResult);
-  }
+    @Test
+    public void toLong() {
+        long result = asNumber("123").toLong();
+        Long nullResult = asNumber("abc").toLong();
+        assertEquals(123, result);
+        assertNull(nullResult);
+    }
 
-  @Test
-  public void isNaN() throws Exception {
-    boolean isNan = asNumber("abc").isNaN();
-    boolean notIsNan = asNumber("123").isNaN();
+    @Test
+    public void isNaN() {
+        boolean isNan = asNumber("abc").isNaN();
+        boolean notIsNan = asNumber("123").isNaN();
 
-    assertTrue(isNan);
-    assertFalse(notIsNan);
-  }
+        assertTrue(isNan);
+        assertFalse(notIsNan);
+    }
 
 }

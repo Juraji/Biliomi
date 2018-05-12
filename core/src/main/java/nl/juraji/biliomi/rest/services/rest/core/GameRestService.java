@@ -16,56 +16,56 @@ import java.util.List;
 @Path("/core/games")
 public class GameRestService extends ModelRestService<Game> {
 
-  @Inject
-  private GameDao gameDao;
+    @Inject
+    private GameDao gameDao;
 
-  @Override
-  public List<Game> getEntities() {
-    return gameDao.getList();
-  }
-
-  @Override
-  public Game getEntity(long id) {
-    return gameDao.get(id);
-  }
-
-  @Override
-  public Game createEntity(Game e) {
-    Game game = new Game();
-    game.setName(e.getName());
-    game.setFirstPlayedOn(e.getFirstPlayedOn());
-
-    if (e.getCommunities() != null) {
-      game.getCommunities().addAll(e.getCommunities());
+    @Override
+    public List<Game> getEntities() {
+        return gameDao.getList();
     }
 
-    gameDao.save(game);
-    return game;
-  }
-
-  @Override
-  public Game updateEntity(Game e, long id) {
-    Game game = gameDao.get(id);
-
-    if (game == null) {
-      return null;
+    @Override
+    public Game getEntity(long id) {
+        return gameDao.get(id);
     }
 
-    game.setName(e.getName());
-    game.setFirstPlayedOn(e.getFirstPlayedOn());
-    game.setSteamId(e.getSteamId());
+    @Override
+    public Game createEntity(Game e) {
+        Game game = new Game();
+        game.setName(e.getName());
+        game.setFirstPlayedOn(e.getFirstPlayedOn());
 
-    if (e.getCommunities() != null) {
-      game.getCommunities().clear();
-      game.getCommunities().addAll(e.getCommunities());
+        if (e.getCommunities() != null) {
+            game.getCommunities().addAll(e.getCommunities());
+        }
+
+        gameDao.save(game);
+        return game;
     }
 
-    gameDao.save(game);
-    return game;
-  }
+    @Override
+    public Game updateEntity(Game e, long id) {
+        Game game = gameDao.get(id);
 
-  @Override
-  public boolean deleteEntity(long id) {
-    throw new ForbiddenException();
-  }
+        if (game == null) {
+            return null;
+        }
+
+        game.setName(e.getName());
+        game.setFirstPlayedOn(e.getFirstPlayedOn());
+        game.setSteamId(e.getSteamId());
+
+        if (e.getCommunities() != null) {
+            game.getCommunities().clear();
+            game.getCommunities().addAll(e.getCommunities());
+        }
+
+        gameDao.save(game);
+        return game;
+    }
+
+    @Override
+    public boolean deleteEntity(long id) {
+        throw new ForbiddenException();
+    }
 }

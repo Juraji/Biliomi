@@ -15,11 +15,11 @@ import java.util.Set;
 @XmlRootElement(name = "SpotifyTrackUriList")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SpotifyTrackUriList {
-  @XmlElement(name = "uris")
-  public Set<String> uris;
+    @XmlElement(name = "uris")
+    public Set<String> uris;
 
-  public Set<String> getUris() {
-    uris = ModelUtils.initCollection(uris);
-    return uris;
-  }
+    public Set<String> getUris() {
+        uris = ModelUtils.initCollection(uris);
+        return uris;
+    }
 }

@@ -13,69 +13,69 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TmiHost {
 
-  @XmlElement(name = "host_id")
-  private Integer hostId;
+    @XmlElement(name = "host_id")
+    private Integer hostId;
 
-  @XmlElement(name = "target_id")
-  private Integer targetId;
+    @XmlElement(name = "target_id")
+    private Integer targetId;
 
-  @XmlElement(name = "host_login")
-  private String hostUsername;
+    @XmlElement(name = "host_login")
+    private String hostUsername;
 
-  @XmlElement(name = "target_login")
-  private String targetUsername;
+    @XmlElement(name = "target_login")
+    private String targetUsername;
 
-  @XmlElement(name = "host_display_name")
-  private String hostDisplayName;
+    @XmlElement(name = "host_display_name")
+    private String hostDisplayName;
 
-  @XmlElement(name = "target_display_name")
-  private String targetDisplayName;
+    @XmlElement(name = "target_display_name")
+    private String targetDisplayName;
 
-  public Integer getHostId() {
-    return hostId;
-  }
+    public Integer getHostId() {
+        return hostId;
+    }
 
-  public void setHostId(Integer hostId) {
-    this.hostId = hostId;
-  }
+    public void setHostId(Integer hostId) {
+        this.hostId = hostId;
+    }
 
-  public Integer getTargetId() {
-    return targetId;
-  }
+    public Integer getTargetId() {
+        return targetId;
+    }
 
-  public void setTargetId(Integer targetId) {
-    this.targetId = targetId;
-  }
+    public void setTargetId(Integer targetId) {
+        this.targetId = targetId;
+    }
 
-  public String getHostUsername() {
-    return hostUsername;
-  }
+    public String getHostUsername() {
+        return hostUsername;
+    }
 
-  public void setHostUsername(String hostUsername) {
-    this.hostUsername = hostUsername;
-  }
+    public void setHostUsername(String hostUsername) {
+        this.hostUsername = hostUsername;
+    }
 
-  public String getTargetUsername() {
-    return targetUsername;
-  }
+    public String getTargetUsername() {
+        return targetUsername;
+    }
 
-  public void setTargetUsername(String targetUsername) {
-    this.targetUsername = targetUsername;
-  }
+    public void setTargetUsername(String targetUsername) {
+        this.targetUsername = targetUsername;
+    }
 
-  public String getHostDisplayName() {
-    return hostDisplayName;
-  }
+    public String getHostDisplayName() {
+        return hostDisplayName;
+    }
 
-  public void setHostDisplayName(String hostDisplayName) {
-    this.hostDisplayName = hostDisplayName;
-  }
+    public void setHostDisplayName(String hostDisplayName) {
+        this.hostDisplayName = hostDisplayName;
+    }
 
-  public String getTargetDisplayName() {
-    return targetDisplayName;
-  }
+    public String getTargetDisplayName() {
+        return targetDisplayName;
+    }
 
-  public void setTargetDisplayName(String targetDisplayName) {
-    this.targetDisplayName = targetDisplayName;
-  }
+    public void setTargetDisplayName(String targetDisplayName) {
+        this.targetDisplayName = targetDisplayName;
+    }
 }

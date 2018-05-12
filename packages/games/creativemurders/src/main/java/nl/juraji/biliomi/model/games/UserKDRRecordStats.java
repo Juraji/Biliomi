@@ -18,42 +18,42 @@ import java.math.RoundingMode;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class UserKDRRecordStats extends UserRecordStats {
 
-  @XmlElement(name = "Suicides")
-  private final long suicides;
+    @XmlElement(name = "Suicides")
+    private final long suicides;
 
-  @XmlElement(name = "FavoriteTarget")
-  private final User favoriteTarget;
+    @XmlElement(name = "FavoriteTarget")
+    private final User favoriteTarget;
 
-  @XmlElement(name = "KDR")
-  private final String kdr;
+    @XmlElement(name = "KDR")
+    private final String kdr;
 
-  public UserKDRRecordStats(long recordCount, long kills, long deaths, long suicides, User favoriteTarget) {
-    super(recordCount, deaths, kills);
-    this.suicides = suicides;
-    this.favoriteTarget = favoriteTarget;
+    public UserKDRRecordStats(long recordCount, long kills, long deaths, long suicides, User favoriteTarget) {
+        super(recordCount, deaths, kills);
+        this.suicides = suicides;
+        this.favoriteTarget = favoriteTarget;
 
-    // The KDR ratio as KILLS/DEATHS/SUICIDES
-    String suicideRatio;
-    if (suicides > 0) {
-      suicideRatio = new BigDecimal((double) losses / (double) suicides)
-          .setScale(1, RoundingMode.HALF_UP)
-          .toString();
-    } else {
-      suicideRatio = "0";
+        // The KDR ratio as KILLS/DEATHS/SUICIDES
+        String suicideRatio;
+        if (suicides > 0) {
+            suicideRatio = new BigDecimal((double) losses / (double) suicides)
+                    .setScale(1, RoundingMode.HALF_UP)
+                    .toString();
+        } else {
+            suicideRatio = "0";
+        }
+
+        this.kdr = MathUtils.asFraction(wins, losses) + '/' + suicideRatio;
     }
 
-    this.kdr = MathUtils.asFraction(wins, losses) + '/' + suicideRatio;
-  }
+    public long getSuicides() {
+        return suicides;
+    }
 
-  public long getSuicides() {
-    return suicides;
-  }
+    public User getFavoriteTarget() {
+        return favoriteTarget;
+    }
 
-  public User getFavoriteTarget() {
-    return favoriteTarget;
-  }
-
-  public String getKdr() {
-    return kdr;
-  }
+    public String getKdr() {
+        return kdr;
+    }
 }

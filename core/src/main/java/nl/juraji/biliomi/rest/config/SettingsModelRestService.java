@@ -17,48 +17,46 @@ import javax.ws.rs.core.Response;
  */
 public abstract class SettingsModelRestService<T extends Settings> {
 
-  @Inject
-  protected SettingsService settingsService;
+    @Inject
+    protected SettingsService settingsService;
 
-  public abstract T getEntity();
+    public abstract T getEntity();
 
-  public abstract T updateEntity(T e);
+    public abstract T updateEntity(T e);
 
-  /**
-   * Get the Settings type entity
-   *
-   * @return An OK response with the entity or NO_CONTENT on empty result
-   * @throws Exception When an internal error occurs
-   */
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response restGetEntity() throws Exception {
-    T entity = getEntity();
+    /**
+     * Get the Settings type entity
+     *
+     * @return An OK response with the entity or NO_CONTENT on empty result
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response restGetEntity() {
+        T entity = getEntity();
 
-    if (entity == null) {
-      return Responses.noContent();
+        if (entity == null) {
+            return Responses.noContent();
+        }
+
+        return Responses.ok(entity);
     }
 
-    return Responses.ok(entity);
-  }
+    /**
+     * Update the Settings type entity
+     *
+     * @param e The entity body with updated values
+     * @return An OK response with the entity or NOT_MODIFIED when no modification took place
+     */
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response restUpdateEntity(T e) {
+        T entity = updateEntity(e);
 
-  /**
-   * Update the Settings type entity
-   *
-   * @param e  The entity body with updated values
-   * @return An OK response with the entity or NOT_MODIFIED when no modification took place
-   * @throws Exception When an internal error occurs
-   */
-  @PUT
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response restUpdateEntity(T e) throws Exception {
-    T entity = updateEntity(e);
+        if (entity == null) {
+            return Responses.notModified();
+        }
 
-    if (entity == null) {
-      return Responses.notModified();
+        return Responses.ok(entity);
     }
-
-    return Responses.ok(entity);
-  }
 }

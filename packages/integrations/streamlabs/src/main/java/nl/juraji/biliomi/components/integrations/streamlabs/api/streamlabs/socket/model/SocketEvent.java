@@ -16,36 +16,36 @@ import java.util.Set;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SocketEvent {
 
-  @XmlElement(name = "type")
-  private SocketEventType type;
+    @XmlElement(name = "type")
+    private SocketEventType type;
 
-  @XmlElement(name = "for")
-  private SocketEventForType forAccountType;
+    @XmlElement(name = "for")
+    private SocketEventForType forAccountType;
 
-  @XmlElement(name = "message")
-  private Set<JsonNode> message;
+    @XmlElement(name = "message")
+    private Set<JsonNode> message;
 
-  public SocketEventType getType() {
-    return type;
-  }
+    public SocketEventType getType() {
+        return type;
+    }
 
-  public void setType(SocketEventType type) {
-    this.type = type;
-  }
+    public void setType(SocketEventType type) {
+        this.type = type;
+    }
 
-  public SocketEventForType getForAccountType() {
-    return forAccountType;
-  }
+    public SocketEventForType getForAccountType() {
+        return forAccountType;
+    }
 
-  public void setForAccountType(SocketEventForType forAccountType) {
-    this.forAccountType = forAccountType;
-  }
+    public void setForAccountType(SocketEventForType forAccountType) {
+        this.forAccountType = forAccountType;
+    }
 
-  public Set<JsonNode> getMessage() {
-    return message;
-  }
+    public Set<JsonNode> getMessage() {
+        return message;
+    }
 
-  public void setMessage(Set<JsonNode> message) {
-    this.message = message;
-  }
+    public void setMessage(Set<JsonNode> message) {
+        this.message = message;
+    }
 }

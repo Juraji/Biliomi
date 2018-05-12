@@ -5,5 +5,5 @@ package nl.juraji.biliomi.model.chat;
  * Biliomi v3
  */
 public enum ModerationAction {
-  WARN, PURGE, TIMEOUT, BAN
+    WARN, PURGE, TIMEOUT, BAN
 }

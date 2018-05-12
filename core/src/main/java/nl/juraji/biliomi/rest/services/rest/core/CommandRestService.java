@@ -19,62 +19,62 @@ import java.util.stream.Collectors;
 @Path("/core/commands")
 public class CommandRestService extends ModelRestService<Command> {
 
-  @Inject
-  private CommandDao commandDao;
+    @Inject
+    private CommandDao commandDao;
 
-  @Inject
-  private CommandRouterRegistry commandRouterRegistry;
+    @Inject
+    private CommandRouterRegistry commandRouterRegistry;
 
-  @Override
-  public List<Command> getEntities() {
+    @Override
+    public List<Command> getEntities() {
 
-    return commandDao.getList().stream()
-        .filter(command -> !CustomCommand.class.isAssignableFrom(command.getClass()))
-        .collect(Collectors.toList());
-  }
-
-  @Override
-  public Command getEntity(long id) {
-    return commandDao.get(id);
-  }
-
-  @Override
-  public Command createEntity(Command e) {
-    throw new ForbiddenException();
-  }
-
-  @Override
-  public Command updateEntity(Command e, long id) {
-    Command command = commandDao.get(id);
-    String commandStr = command.getCommand();
-
-    // Only some of the properties can be changed
-    command.setPrice(e.getPrice());
-    command.setCooldown(e.getCooldown());
-    command.setModeratorCanActivate(e.isModeratorCanActivate());
-
-    if (e.getUserGroup() != null) {
-      command.setUserGroup(e.getUserGroup());
+        return commandDao.getList().stream()
+                .filter(command -> !CustomCommand.class.isAssignableFrom(command.getClass()))
+                .collect(Collectors.toList());
     }
 
-    // Clear current aliasses for command
-    if (!command.getAliasses().isEmpty()) {
-      command.getAliasses().clear();
-      commandRouterRegistry.clearAliassesFor(commandStr);
+    @Override
+    public Command getEntity(long id) {
+        return commandDao.get(id);
     }
 
-    if (!e.getAliasses().isEmpty()) {
-      // Re-add all aliasses for command
-      command.getAliasses().addAll(e.getAliasses());
-      e.getAliasses().forEach(alias -> commandRouterRegistry.putAlias(alias, commandStr));
+    @Override
+    public Command createEntity(Command e) {
+        throw new ForbiddenException();
     }
 
-    commandDao.save(command);
-    return command;
-  }
+    @Override
+    public Command updateEntity(Command e, long id) {
+        Command command = commandDao.get(id);
+        String commandStr = command.getCommand();
 
-  @Override
-  public boolean deleteEntity(long id) {
-    throw new ForbiddenException();
-  }
+        // Only some of the properties can be changed
+        command.setPrice(e.getPrice());
+        command.setCooldown(e.getCooldown());
+        command.setModeratorCanActivate(e.isModeratorCanActivate());
+
+        if (e.getUserGroup() != null) {
+            command.setUserGroup(e.getUserGroup());
+        }
+
+        // Clear current aliasses for command
+        if (!command.getAliasses().isEmpty()) {
+            command.getAliasses().clear();
+            commandRouterRegistry.clearAliassesFor(commandStr);
+        }
+
+        if (!e.getAliasses().isEmpty()) {
+            // Re-add all aliasses for command
+            command.getAliasses().addAll(e.getAliasses());
+            e.getAliasses().forEach(alias -> commandRouterRegistry.putAlias(alias, commandStr));
+        }
+
+        commandDao.save(command);
+        return command;
+    }
+
+    @Override
+    public boolean deleteEntity(long id) {
+        throw new ForbiddenException();
+    }
 }

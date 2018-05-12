@@ -32,99 +32,99 @@ import static nl.juraji.biliomi.utility.types.Templater.template;
 @Singleton
 public final class EntityManagerFactoryProducer {
 
-  @Inject
-  private YamlCoreSettings yamlCoreSettings;
+    @Inject
+    private YamlCoreSettings yamlCoreSettings;
 
-  @Inject
-  private Logger logger;
+    @Inject
+    private Logger logger;
 
-  @Inject
-  @UpdateMode
-  private UpdateModeType updateMode;
+    @Inject
+    @UpdateMode
+    private UpdateModeType updateMode;
 
-  private EntityManagerFactory entityManagerFactory;
+    private EntityManagerFactory entityManagerFactory;
 
-  @PostConstruct
-  private void initEntityManagerFactoryProducer() {
-    boolean useH2Database = yamlCoreSettings.getBiliomi().getDatabase().isUseH2Database();
-    String ddlMode = updateMode.getDdlMode();
+    @PostConstruct
+    private void initEntityManagerFactoryProducer() {
+        boolean useH2Database = yamlCoreSettings.getBiliomi().getDatabase().isUseH2Database();
+        String ddlMode = updateMode.getDdlMode();
 
-    if (useH2Database) {
-      try {
-        entityManagerFactory = setupH2EMF(ddlMode);
-      } catch (IOException e) {
-        BiliomiContainer.getContainer().shutdownInError();
-      }
-    } else {
-      entityManagerFactory = setupMySQLEMF(ddlMode);
+        if (useH2Database) {
+            try {
+                entityManagerFactory = setupH2EMF(ddlMode);
+            } catch (IOException e) {
+                BiliomiContainer.getContainer().shutdownInError();
+            }
+        } else {
+            entityManagerFactory = setupMySQLEMF(ddlMode);
+        }
     }
-  }
 
-  @PreDestroy
-  private void destroyEntityManagerFactoryProducer() {
-    if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
-      entityManagerFactory.close();
+    @PreDestroy
+    private void destroyEntityManagerFactoryProducer() {
+        if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
+            entityManagerFactory.close();
+        }
     }
-  }
 
-  @Produces
-  public EntityManagerFactory getEntityManagerFactory() {
-    return entityManagerFactory;
-  }
+    @Produces
+    public EntityManagerFactory getEntityManagerFactory() {
+        return entityManagerFactory;
+    }
 
-  private EntityManagerFactory setupH2EMF(String ddlMode) throws IOException {
-    Map<String, Object> configuration = new HashMap<>();
+    private EntityManagerFactory setupH2EMF(String ddlMode) throws IOException {
+        Map<String, Object> configuration = new HashMap<>();
 
-    String jdbcUri = template("jdbc:h2:file:{{datapath}}/datastore")
-        .add("datapath", BiliomiContainer.getParameters().getWorkingDir().getCanonicalPath())
-        .apply();
+        String jdbcUri = template("jdbc:h2:file:{{datapath}}/datastore")
+                .add("datapath", BiliomiContainer.getParameters().getWorkingDir().getCanonicalPath())
+                .apply();
 
-    configuration.put("hibernate.connection.url", jdbcUri);
-    configuration.put("hibernate.hbm2ddl.auto", ddlMode);
+        configuration.put("hibernate.connection.url", jdbcUri);
+        configuration.put("hibernate.hbm2ddl.auto", ddlMode);
 
-    // Add entity classes
-    configuration.put(AvailableSettings.LOADED_CLASSES, scanForEntityClasses());
+        // Add entity classes
+        configuration.put(AvailableSettings.LOADED_CLASSES, scanForEntityClasses());
 
-    // Create Entity manager factory
-    logger.debug("Creating entity manager factory for local H2 database...");
-    HibernatePersistenceProvider provider = new HibernatePersistenceProvider();
-    return provider.createEntityManagerFactory("Biliomi-H2-DS", configuration);
-  }
+        // Create Entity manager factory
+        logger.debug("Creating entity manager factory for local H2 database...");
+        HibernatePersistenceProvider provider = new HibernatePersistenceProvider();
+        return provider.createEntityManagerFactory("Biliomi-H2-DS", configuration);
+    }
 
-  private EntityManagerFactory setupMySQLEMF(String ddlMode) {
-    Map<String, Object> configuration = new HashMap<>();
-    USMySQL mySQL = yamlCoreSettings.getBiliomi().getDatabase().getMySQL();
-    boolean useSSL = mySQL.isUsessl();
+    private EntityManagerFactory setupMySQLEMF(String ddlMode) {
+        Map<String, Object> configuration = new HashMap<>();
+        USMySQL mySQL = yamlCoreSettings.getBiliomi().getDatabase().getMySQL();
+        boolean useSSL = mySQL.isUsessl();
 
-    // Biliomi doesn't need the MySQL server to be in the correct timezone since all dates
-    // are persisted as ISO8601, but a server might stall connection if this isn't set.
-    TimeZone timeZone = Calendar.getInstance().getTimeZone();
-    configuration.put("hibernate.connection.serverTimezone", timeZone.getID());
+        // Biliomi doesn't need the MySQL server to be in the correct timezone since all dates
+        // are persisted as ISO8601, but a server might stall connection if this isn't set.
+        TimeZone timeZone = Calendar.getInstance().getTimeZone();
+        configuration.put("hibernate.connection.serverTimezone", timeZone.getID());
 
-    String jdbcUri = template("jdbc:mysql://{{host}}:{{port}}/{{database}}")
-        .add("host", mySQL::getHost)
-        .add("port", mySQL::getPort)
-        .add("database", mySQL::getDatabase)
-        .apply();
+        String jdbcUri = template("jdbc:mysql://{{host}}:{{port}}/{{database}}")
+                .add("host", mySQL::getHost)
+                .add("port", mySQL::getPort)
+                .add("database", mySQL::getDatabase)
+                .apply();
 
-    configuration.put("hibernate.connection.url", jdbcUri);
-    configuration.put("hibernate.connection.username", mySQL.getUsername());
-    configuration.put("hibernate.connection.password", mySQL.getPassword());
-    configuration.put("hibernate.connection.useSSL", String.valueOf(useSSL));
-    configuration.put("hibernate.hbm2ddl.auto", ddlMode);
+        configuration.put("hibernate.connection.url", jdbcUri);
+        configuration.put("hibernate.connection.username", mySQL.getUsername());
+        configuration.put("hibernate.connection.password", mySQL.getPassword());
+        configuration.put("hibernate.connection.useSSL", String.valueOf(useSSL));
+        configuration.put("hibernate.hbm2ddl.auto", ddlMode);
 
-    // Add entity classes
-    configuration.put(AvailableSettings.LOADED_CLASSES, scanForEntityClasses());
+        // Add entity classes
+        configuration.put(AvailableSettings.LOADED_CLASSES, scanForEntityClasses());
 
-    // Create Entity manager factory
-    logger.debug("Creating entity manager factory for MySQL database...");
-    HibernatePersistenceProvider provider = new HibernatePersistenceProvider();
-    return provider.createEntityManagerFactory("Biliomi-MySQL-DS", configuration);
-  }
+        // Create Entity manager factory
+        logger.debug("Creating entity manager factory for MySQL database...");
+        HibernatePersistenceProvider provider = new HibernatePersistenceProvider();
+        return provider.createEntityManagerFactory("Biliomi-MySQL-DS", configuration);
+    }
 
-  private List<Class<?>> scanForEntityClasses() {
-    return ReflectionUtils.forPackages("nl.juraji.biliomi.model")
-        .annotatedTypes(Entity.class)
-        .collect(Collectors.toList());
-  }
+    private List<Class<?>> scanForEntityClasses() {
+        return ReflectionUtils.forPackages("nl.juraji.biliomi.model")
+                .annotatedTypes(Entity.class)
+                .collect(Collectors.toList());
+    }
 }

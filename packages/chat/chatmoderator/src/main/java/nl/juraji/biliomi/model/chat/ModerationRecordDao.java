@@ -14,20 +14,20 @@ import java.util.List;
 @Default
 public class ModerationRecordDao extends JpaDao<ModerationRecord> {
 
-  public ModerationRecordDao() {
-    super(ModerationRecord.class);
-  }
+    public ModerationRecordDao() {
+        super(ModerationRecord.class);
+    }
 
-  public List<ModerationRecord> getRecords(Long userId) {
-    User user = new User();
-    user.setId(userId);
-    return getRecords(user);
-  }
+    public List<ModerationRecord> getRecords(Long userId) {
+        User user = new User();
+        user.setId(userId);
+        return getRecords(user);
+    }
 
-  public List<ModerationRecord> getRecords(User user) {
-    return criteria()
-        .createAlias("user", "u")
-        .add(Restrictions.eq("u.id", user.getId()))
-        .getList();
-  }
+    public List<ModerationRecord> getRecords(User user) {
+        return criteria()
+                .createAlias("user", "u")
+                .add(Restrictions.eq("u.id", user.getId()))
+                .getList();
+    }
 }

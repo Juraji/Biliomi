@@ -26,133 +26,133 @@ import java.util.concurrent.TimeUnit;
 @NormalComponent
 public class AdventureSettingsComponent extends Component {
 
-  private AdventureSettings settings;
+    private AdventureSettings settings;
 
-  @Inject
-  private TimeFormatter timeFormatter;
+    @Inject
+    private TimeFormatter timeFormatter;
 
-  @Inject
-  private PointsService pointsService;
+    @Inject
+    private PointsService pointsService;
 
-  @Override
-  public void init() {
-    settings = settingsService.getSettings(AdventureSettings.class, s -> settings = s);
-  }
-
-  /**
-   * Manage adventure settings
-   * Usage: !adventuresettings [jointimeout|minimumbet|maximumbet|cooldown|winmultiplier] [more...]
-   */
-  @CommandRoute(command = "adventuresettings", systemCommand = true)
-  public boolean adventuresettingsCommand(User user, Arguments arguments) {
-    return captureSubCommands("adventuresettings", i18n.supply("ChatCommand.adventuresettings.usage"), user, arguments);
-  }
-
-  /**
-   * Set the timout for joining adventures, after an adventure has been initiated
-   * Usage: !adventuresettings jointimeout [minutes 1...10]
-   */
-  @SubCommandRoute(parentCommand = "adventuresettings", command = "jointimeout")
-  public boolean adventuresettingsCommandJoinTimeout(User user, Arguments arguments) {
-    Integer minutes = NumberConverter.asNumber(arguments.get(0)).toInteger();
-
-    if (minutes == null || minutes < 1 || minutes > 10) {
-      chat.whisper(user, i18n.get("ChatCommand.adventuresettings.jointimeout.usage"));
-      return false;
+    @Override
+    public void init() {
+        settings = settingsService.getSettings(AdventureSettings.class, s -> settings = s);
     }
 
-    long miliseconds = TimeUnit.MILLISECONDS.convert(minutes, TimeUnit.MINUTES);
-    settings.setJoinTimeout(miliseconds);
-    settingsService.save(settings);
-
-    chat.whisper(user, i18n.get("ChatCommand.adventuresettings.jointimeout.saved")
-        .add("time", () -> timeFormatter.timeQuantity(miliseconds, TimeUnit.MINUTES)));
-    return true;
-  }
-
-  /**
-   * Set the minimum bet for initiating/joining an adventure
-   * Usage: !adventuresettings minimumbet [amount of points]
-   */
-  @SubCommandRoute(parentCommand = "adventuresettings", command = "minimumbet")
-  public boolean adventuresettingsCommandMinimumBet(User user, Arguments arguments) {
-    Long minPoints = NumberConverter.asNumber(arguments.get(0)).toLong();
-
-    if (minPoints == null || minPoints < 1) {
-      chat.whisper(user, i18n.get("ChatCommand.adventuresettings.minimumbet.usage"));
-      return false;
+    /**
+     * Manage adventure settings
+     * Usage: !adventuresettings [jointimeout|minimumbet|maximumbet|cooldown|winmultiplier] [more...]
+     */
+    @CommandRoute(command = "adventuresettings", systemCommand = true)
+    public boolean adventuresettingsCommand(User user, Arguments arguments) {
+        return captureSubCommands("adventuresettings", i18n.supply("ChatCommand.adventuresettings.usage"), user, arguments);
     }
 
-    settings.setMinimumBet(minPoints);
-    settingsService.save(settings);
+    /**
+     * Set the timout for joining adventures, after an adventure has been initiated
+     * Usage: !adventuresettings jointimeout [minutes 1...10]
+     */
+    @SubCommandRoute(parentCommand = "adventuresettings", command = "jointimeout")
+    public boolean adventuresettingsCommandJoinTimeout(User user, Arguments arguments) {
+        Integer minutes = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
-    chat.whisper(user, i18n.get("ChatCommand.adventuresettings.minimumbet.saved")
-        .add("points", () -> pointsService.asString(minPoints)));
-    return true;
-  }
+        if (minutes == null || minutes < 1 || minutes > 10) {
+            chat.whisper(user, i18n.get("ChatCommand.adventuresettings.jointimeout.usage"));
+            return false;
+        }
 
-  /**
-   * Set the maximum bet for initiating/joining an adventure
-   * Usage: !adventuresettings minimumbet [amount of points]
-   */
-  @SubCommandRoute(parentCommand = "adventuresettings", command = "maximumbet")
-  public boolean adventuresettingsCommandMaximumBet(User user, Arguments arguments) {
-    Long maxPoints = NumberConverter.asNumber(arguments.get(0)).toLong();
+        long miliseconds = TimeUnit.MILLISECONDS.convert(minutes, TimeUnit.MINUTES);
+        settings.setJoinTimeout(miliseconds);
+        settingsService.save(settings);
 
-    if (maxPoints == null || maxPoints < 1) {
-      chat.whisper(user, i18n.get("ChatCommand.adventuresettings.maximumbet.usage"));
-      return false;
+        chat.whisper(user, i18n.get("ChatCommand.adventuresettings.jointimeout.saved")
+                .add("time", () -> timeFormatter.timeQuantity(miliseconds, TimeUnit.MINUTES)));
+        return true;
     }
 
-    settings.setMaximumBet(maxPoints);
-    settingsService.save(settings);
+    /**
+     * Set the minimum bet for initiating/joining an adventure
+     * Usage: !adventuresettings minimumbet [amount of points]
+     */
+    @SubCommandRoute(parentCommand = "adventuresettings", command = "minimumbet")
+    public boolean adventuresettingsCommandMinimumBet(User user, Arguments arguments) {
+        Long minPoints = NumberConverter.asNumber(arguments.get(0)).toLong();
 
-    chat.whisper(user, i18n.get("ChatCommand.adventuresettings.maximumbet.saved")
-        .add("points", () -> pointsService.asString(maxPoints)));
-    return true;
-  }
+        if (minPoints == null || minPoints < 1) {
+            chat.whisper(user, i18n.get("ChatCommand.adventuresettings.minimumbet.usage"));
+            return false;
+        }
 
-  /**
-   * Set the cooldown for the next adventure
-   * Usage: !adventuresettings cooldown [minutes]
-   */
-  @SubCommandRoute(parentCommand = "adventuresettings", command = "cooldown")
-  public boolean adventuresettingsCommandCooldown(User user, Arguments arguments) {
-    Integer cooldownMinutes = NumberConverter.asNumber(arguments.get(0)).toInteger();
+        settings.setMinimumBet(minPoints);
+        settingsService.save(settings);
 
-    if (cooldownMinutes == null || cooldownMinutes < 0) {
-      chat.whisper(user, i18n.get("ChatCommand.adventuresettings.cooldown.usage"));
-      return false;
+        chat.whisper(user, i18n.get("ChatCommand.adventuresettings.minimumbet.saved")
+                .add("points", () -> pointsService.asString(minPoints)));
+        return true;
     }
 
-    long cooldownMillis = TimeUnit.MICROSECONDS.convert(cooldownMinutes, TimeUnit.MINUTES);
-    settings.setCooldown(cooldownMillis);
-    settingsService.save(settings);
+    /**
+     * Set the maximum bet for initiating/joining an adventure
+     * Usage: !adventuresettings minimumbet [amount of points]
+     */
+    @SubCommandRoute(parentCommand = "adventuresettings", command = "maximumbet")
+    public boolean adventuresettingsCommandMaximumBet(User user, Arguments arguments) {
+        Long maxPoints = NumberConverter.asNumber(arguments.get(0)).toLong();
 
-    chat.whisper(user, i18n.get("ChatCommand.adventuresettings.cooldown.saved")
-        .add("time", () -> timeFormatter.timeQuantity(cooldownMillis)));
-    return true;
-  }
+        if (maxPoints == null || maxPoints < 1) {
+            chat.whisper(user, i18n.get("ChatCommand.adventuresettings.maximumbet.usage"));
+            return false;
+        }
 
-  /**
-   * Set the bet multiplier for survivors. The survivors bet will be multiplied by this value and given to the survivor, along with the original bet
-   * Usage: !adventuresettings multiplier [0...1]
-   */
-  @SubCommandRoute(parentCommand = "adventuresettings", command = "multiplier")
-  public boolean adventuresettingsCommandWinMultiplier(User user, Arguments arguments) {
-    Double multiplier = NumberConverter.asNumber(arguments.get(0)).toDouble();
+        settings.setMaximumBet(maxPoints);
+        settingsService.save(settings);
 
-    if (multiplier == null || multiplier < 0 || multiplier > 1) {
-      chat.whisper(user, i18n.get("ChatCommand.adventuresettings.multiplier.usage"));
-      return false;
+        chat.whisper(user, i18n.get("ChatCommand.adventuresettings.maximumbet.saved")
+                .add("points", () -> pointsService.asString(maxPoints)));
+        return true;
     }
 
-    settings.setWinMultiplier(multiplier);
-    settingsService.save(settings);
+    /**
+     * Set the cooldown for the next adventure
+     * Usage: !adventuresettings cooldown [minutes]
+     */
+    @SubCommandRoute(parentCommand = "adventuresettings", command = "cooldown")
+    public boolean adventuresettingsCommandCooldown(User user, Arguments arguments) {
+        Integer cooldownMinutes = NumberConverter.asNumber(arguments.get(0)).toInteger();
 
-    chat.whisper(user, i18n.get("ChatCommand.adventuresettings.multiplier.saved")
-        .add("pointsname", pointsService::pointsName)
-        .add("percentage", () -> MathUtils.doubleToPercentage(multiplier)));
-    return true;
-  }
+        if (cooldownMinutes == null || cooldownMinutes < 0) {
+            chat.whisper(user, i18n.get("ChatCommand.adventuresettings.cooldown.usage"));
+            return false;
+        }
+
+        long cooldownMillis = TimeUnit.MICROSECONDS.convert(cooldownMinutes, TimeUnit.MINUTES);
+        settings.setCooldown(cooldownMillis);
+        settingsService.save(settings);
+
+        chat.whisper(user, i18n.get("ChatCommand.adventuresettings.cooldown.saved")
+                .add("time", () -> timeFormatter.timeQuantity(cooldownMillis)));
+        return true;
+    }
+
+    /**
+     * Set the bet multiplier for survivors. The survivors bet will be multiplied by this value and given to the survivor, along with the original bet
+     * Usage: !adventuresettings multiplier [0...1]
+     */
+    @SubCommandRoute(parentCommand = "adventuresettings", command = "multiplier")
+    public boolean adventuresettingsCommandWinMultiplier(User user, Arguments arguments) {
+        Double multiplier = NumberConverter.asNumber(arguments.get(0)).toDouble();
+
+        if (multiplier == null || multiplier < 0 || multiplier > 1) {
+            chat.whisper(user, i18n.get("ChatCommand.adventuresettings.multiplier.usage"));
+            return false;
+        }
+
+        settings.setWinMultiplier(multiplier);
+        settingsService.save(settings);
+
+        chat.whisper(user, i18n.get("ChatCommand.adventuresettings.multiplier.saved")
+                .add("pointsname", pointsService::pointsName)
+                .add("percentage", () -> MathUtils.doubleToPercentage(multiplier)));
+        return true;
+    }
 }

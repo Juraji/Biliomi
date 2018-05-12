@@ -20,65 +20,65 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AchievementRecord {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @XmlElement(name = "Id")
-  private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement(name = "Id")
+    private long id;
 
-  @ManyToOne(optional = false)
-  @XmlElement(name = "User")
-  private User user;
+    @ManyToOne(optional = false)
+    @XmlElement(name = "User")
+    private User user;
 
-  @Column(nullable = false)
-  @XmlElement(name = "AchievementId")
-  private String achievementId;
+    @Column(nullable = false)
+    @XmlElement(name = "AchievementId")
+    private String achievementId;
 
-  @Column(nullable = false)
-  @XmlElement(name = "Achievement")
-  private String achievement;
+    @Column(nullable = false)
+    @XmlElement(name = "Achievement")
+    private String achievement;
 
-  @Column
-  @Type(type = DateTimeISO8601Type.TYPE)
-  @XmlElement(name = "Date")
-  private DateTime date;
+    @Column
+    @Type(type = DateTimeISO8601Type.TYPE)
+    @XmlElement(name = "Date")
+    private DateTime date;
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-  public User getUser() {
-    return user;
-  }
+    public User getUser() {
+        return user;
+    }
 
-  public void setUser(User user) {
-    this.user = user;
-  }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-  public String getAchievementId() {
-    return achievementId;
-  }
+    public String getAchievementId() {
+        return achievementId;
+    }
 
-  public void setAchievementId(String achievementId) {
-    this.achievementId = achievementId;
-  }
+    public void setAchievementId(String achievementId) {
+        this.achievementId = achievementId;
+    }
 
-  public String getAchievement() {
-    return achievement;
-  }
+    public String getAchievement() {
+        return achievement;
+    }
 
-  public void setAchievement(String achievement) {
-    this.achievement = achievement;
-  }
+    public void setAchievement(String achievement) {
+        this.achievement = achievement;
+    }
 
-  public DateTime getDate() {
-    return date;
-  }
+    public DateTime getDate() {
+        return date;
+    }
 
-  public void setDate(DateTime date) {
-    this.date = date;
-  }
+    public void setDate(DateTime date) {
+        this.date = date;
+    }
 }

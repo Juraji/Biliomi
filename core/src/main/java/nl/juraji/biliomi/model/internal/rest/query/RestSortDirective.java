@@ -13,25 +13,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RestSortDirective {
 
-  @XmlElement(name = "Property")
-  private String property;
+    @XmlElement(name = "Property")
+    private String property;
 
-  @XmlElement(name = "Descending")
-  private boolean descending;
+    @XmlElement(name = "Descending")
+    private boolean descending;
 
-  public String getProperty() {
-    return property;
-  }
+    public String getProperty() {
+        return property;
+    }
 
-  public void setProperty(String property) {
-    this.property = property;
-  }
+    public void setProperty(String property) {
+        this.property = property;
+    }
 
-  public boolean isDescending() {
-    return descending;
-  }
+    public boolean isDescending() {
+        return descending;
+    }
 
-  public void setDescending(boolean descending) {
-    this.descending = descending;
-  }
+    public void setDescending(boolean descending) {
+        this.descending = descending;
+    }
 }

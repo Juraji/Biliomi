@@ -17,22 +17,22 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class LogInfo {
 
-  @XmlElement(name = "LogDate")
-  private DateTime logDate;
+    @XmlElement(name = "LogDate")
+    private DateTime logDate;
 
-  @XmlElement(name = "Lines")
-  private List<String> lines;
+    @XmlElement(name = "Lines")
+    private List<String> lines;
 
-  public DateTime getLogDate() {
-    return logDate;
-  }
+    public DateTime getLogDate() {
+        return logDate;
+    }
 
-  public void setLogDate(DateTime logDate) {
-    this.logDate = logDate;
-  }
+    public void setLogDate(DateTime logDate) {
+        this.logDate = logDate;
+    }
 
-  public List<String> getLines() {
-    this.lines = ModelUtils.initCollection(this.lines);
-    return lines;
-  }
+    public List<String> getLines() {
+        this.lines = ModelUtils.initCollection(this.lines);
+        return lines;
+    }
 }

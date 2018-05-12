@@ -13,47 +13,47 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TwitchImageInfo {
 
-  @XmlElement(name = "small")
-  private String small;
+    @XmlElement(name = "small")
+    private String small;
 
-  @XmlElement(name = "medium")
-  private String medium;
+    @XmlElement(name = "medium")
+    private String medium;
 
-  @XmlElement(name = "large")
-  private String large;
+    @XmlElement(name = "large")
+    private String large;
 
-  @XmlElement(name = "template")
-  private String template;
+    @XmlElement(name = "template")
+    private String template;
 
-  public String getSmall() {
-    return small;
-  }
+    public String getSmall() {
+        return small;
+    }
 
-  public void setSmall(String small) {
-    this.small = small;
-  }
+    public void setSmall(String small) {
+        this.small = small;
+    }
 
-  public String getMedium() {
-    return medium;
-  }
+    public String getMedium() {
+        return medium;
+    }
 
-  public void setMedium(String medium) {
-    this.medium = medium;
-  }
+    public void setMedium(String medium) {
+        this.medium = medium;
+    }
 
-  public String getLarge() {
-    return large;
-  }
+    public String getLarge() {
+        return large;
+    }
 
-  public void setLarge(String large) {
-    this.large = large;
-  }
+    public void setLarge(String large) {
+        this.large = large;
+    }
 
-  public String getTemplate() {
-    return template;
-  }
+    public String getTemplate() {
+        return template;
+    }
 
-  public void setTemplate(String template) {
-    this.template = template;
-  }
+    public void setTemplate(String template) {
+        this.template = template;
+    }
 }

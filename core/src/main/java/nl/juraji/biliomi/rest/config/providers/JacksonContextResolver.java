@@ -16,10 +16,10 @@ import javax.ws.rs.ext.Provider;
 @Priority(Priorities.ENTITY_CODER)
 public class JacksonContextResolver implements ContextResolver<ObjectMapper> {
 
-  private final ObjectMapper mapper = JacksonMarshaller.getObjectMapper();
+    private final ObjectMapper mapper = JacksonMarshaller.getObjectMapper();
 
-  @Override
-  public ObjectMapper getContext(Class<?> aClass) {
-    return mapper;
-  }
+    @Override
+    public ObjectMapper getContext(Class<?> aClass) {
+        return mapper;
+    }
 }
