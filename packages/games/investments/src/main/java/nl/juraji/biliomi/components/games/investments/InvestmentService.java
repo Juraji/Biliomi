@@ -77,6 +77,8 @@ public class InvestmentService extends TimerService {
         record.setDate(new DateTime());
         investmentRecordDao.save(record);
 
+        pointsService.take(invester, invested);
+
         schedule(() -> investmentResult(record), settings.getInvestmentDuration(), TimeUnit.MILLISECONDS);
         return record;
     }

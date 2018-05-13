@@ -66,7 +66,9 @@ public class InvestmentGameComponent extends Component {
         Integer investPercentage = NumberConverter.asNumber(arguments.getSafe(1)).toInteger();
 
         if (investAmount == null || investPercentage == null) {
-            chat.whisper(user, i18n.get("ChatCommand.invest.usage"));
+            chat.whisper(user, i18n.get("ChatCommand.invest.usage")
+                    .add("min", MathUtils.doubleFractionToAbsolute(settings.getMinInterest()))
+                    .add("max", MathUtils.doubleFractionToAbsolute(settings.getMaxInterest())));
             return false;
         }
 

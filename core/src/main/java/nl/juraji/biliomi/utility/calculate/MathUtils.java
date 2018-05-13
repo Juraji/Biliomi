@@ -188,7 +188,16 @@ public final class MathUtils {
      * @return The resulting string e.g. 0.54 -> 54%
      */
     public static String doubleToPercentage(double number) {
-        return (int) (number * 100) + "%";
+        return doubleFractionToAbsolute(number) + "%";
+    }
+
+    /**
+     * Convert a double fraction value to it's absolute value
+     * @param number The double to convert
+     * @return The resulting number e.g. 0.54 -> 54
+     */
+    public static int doubleFractionToAbsolute(double number) {
+        return (int) (number * 100);
     }
 
     /**
