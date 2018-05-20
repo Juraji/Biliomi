@@ -1,9 +1,11 @@
 package nl.juraji.biliomi.model.chat;
 
+import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.settings.Settings;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -28,6 +30,14 @@ public class AnnouncementsSettings extends Settings {
     private boolean shuffle;
 
     @Column
+    @XmlElement(name = "DualStreamMode")
+    private boolean dualStreamMode;
+
+    @OneToOne
+    @XmlElement(name = "DualStreamTarget")
+    private User dualStreamTarget;
+
+    @Column
     @XmlElement(name = "RunInterval")
     private long runInterval;
 
@@ -49,6 +59,22 @@ public class AnnouncementsSettings extends Settings {
 
     public void setShuffle(boolean shuffle) {
         this.shuffle = shuffle;
+    }
+
+    public boolean isDualStreamMode() {
+        return dualStreamMode;
+    }
+
+    public void setDualStreamMode(boolean dualStreamMode) {
+        this.dualStreamMode = dualStreamMode;
+    }
+
+    public User getDualStreamTarget() {
+        return dualStreamTarget;
+    }
+
+    public void setDualStreamTarget(User dualStreamTarget) {
+        this.dualStreamTarget = dualStreamTarget;
     }
 
     public long getRunInterval() {

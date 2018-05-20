@@ -193,6 +193,7 @@ public final class MathUtils {
 
     /**
      * Convert a double fraction value to it's absolute value
+     *
      * @param number The double to convert
      * @return The resulting number e.g. 0.54 -> 54
      */

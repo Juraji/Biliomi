@@ -1,5 +1,7 @@
 package nl.juraji.biliomi.utility.cdi.annotations.modifiers;
 
+import nl.juraji.biliomi.utility.types.components.Component;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -12,5 +14,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})
 public @interface I18nData {
-    Class value(); // File basename
+    Class<? extends Component> value(); // File basename
 }

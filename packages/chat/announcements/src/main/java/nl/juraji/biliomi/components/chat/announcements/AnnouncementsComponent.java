@@ -11,6 +11,8 @@ import nl.juraji.biliomi.utility.commandrouters.annotations.CommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.annotations.SubCommandRoute;
 import nl.juraji.biliomi.utility.commandrouters.types.Arguments;
 import nl.juraji.biliomi.utility.types.components.Component;
+import nl.juraji.biliomi.utility.types.enums.OnOff;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -142,5 +144,43 @@ public class AnnouncementsComponent extends Component {
         chat.whisper(user, i18n.get("ChatCommand.announcement.minMsgs.set")
                 .add("amount", settings::getMinChatMessages));
         return true;
+    }
+
+    @SubCommandRoute(parentCommand = "announcement", command = "dualstreammode")
+    public boolean announcementCommandDualStreamMode(User user, Arguments arguments) {
+        if (arguments.size() < 2) {
+            chat.whisper(user, i18n.get("ChatCommand.announcement.dualStreamMode.usage"));
+            return false;
+        }
+
+        String arg = arguments.get(0);
+        if (StringUtils.isNotEmpty(arg)) {
+            if (OnOff.OFF.equalsString(arg)) {
+                settings.setDualStreamMode(false);
+                settingsService.save(settings);
+                announcementTimerService.restart();
+
+                chat.say(i18n.get("ChatCommand.announcement.dualStreamMode.disable"));
+                return true;
+            } else {
+                final User targetUser = usersService.getUser(arg);
+                if (targetUser == null) {
+                    chat.whisper(user, i18n.getUserNonExistent(arg));
+                    return false;
+                }
+
+                settings.setDualStreamMode(true);
+                settings.setDualStreamTarget(targetUser);
+                settingsService.save(settings);
+                announcementTimerService.restart();
+
+                chat.whisper(user, i18n.get("ChatCommand.announcement.dualStreamMode.enable")
+                        .add("targetname", targetUser::getDisplayName));
+                return true;
+            }
+        }
+
+        chat.whisper(user, i18n.get("ChatCommand.announcement.dualStreamMode.usage"));
+        return false;
     }
 }

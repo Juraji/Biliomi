@@ -1,22 +1,22 @@
 {
-  "hosts": [
-    {
-      "host_id": 15862156,
-      "target_id": 12345678,
-      "host_login": "birger000",
-      "target_login": "juraji"
-    },
-    {
-      "host_id": 16564854,
-      "target_id": 12345678,
-      "host_login": "birger000",
-      "target_login": "juraji"
-    },
-    {
-      "host_id": 56616452,
-      "target_id": 12345678,
-      "host_login": "birger000",
-      "target_login": "juraji"
-    }
-  ]
+    "hosts": [
+        {
+            "host_id": 15862156,
+            "target_id": 12345678,
+            "host_login": "birger000",
+            "target_login": "juraji"
+        },
+        {
+            "host_id": 16564854,
+            "target_id": 12345678,
+            "host_login": "birger000",
+            "target_login": "juraji"
+        },
+        {
+            "host_id": 56616452,
+            "target_id": 12345678,
+            "host_login": "birger000",
+            "target_login": "juraji"
+        }
+    ]
 }

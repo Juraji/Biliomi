@@ -6,11 +6,15 @@ import nl.juraji.biliomi.components.system.settings.SettingsService;
 import nl.juraji.biliomi.model.chat.Announcement;
 import nl.juraji.biliomi.model.chat.AnnouncementDao;
 import nl.juraji.biliomi.model.chat.AnnouncementsSettings;
+import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.internal.events.irc.user.messages.IrcChatMessageEvent;
+import nl.juraji.biliomi.utility.cdi.annotations.modifiers.I18nData;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.BotName;
+import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.ChannelName;
 import nl.juraji.biliomi.utility.events.interceptors.EventBusSubscriber;
 import nl.juraji.biliomi.utility.types.Counter;
 import nl.juraji.biliomi.utility.types.Templater;
+import nl.juraji.biliomi.utility.types.collections.I18nMap;
 import nl.juraji.biliomi.utility.types.collections.NeverEndingList;
 import nl.juraji.biliomi.utility.types.components.TimerService;
 
@@ -29,17 +33,29 @@ import java.util.concurrent.TimeUnit;
 public class AnnouncementTimerService extends TimerService {
     private static final String ANNOUNTEMENT_TEMPLATE = "{{message}} ({{id}})";
     private final Counter messageCounter = new Counter();
+    private NeverEndingList<Announcement> announcements;
+    private AnnouncementsSettings settings;
+
     @Inject
     private SettingsService settingsService;
+
     @Inject
     private ChatService chat;
+
     @Inject
     private AnnouncementDao announcementDao;
+
     @Inject
     @BotName
     private String botName;
-    private NeverEndingList<Announcement> announcements;
-    private AnnouncementsSettings settings;
+
+    @Inject
+    @ChannelName
+    private String channelName;
+
+    @Inject
+    @I18nData(AnnouncementsComponent.class)
+    private I18nMap i18n;
 
     @Override
     public void start() {
@@ -49,10 +65,15 @@ public class AnnouncementTimerService extends TimerService {
             settings = settingsService.getSettings(AnnouncementsSettings.class, s -> settings = s);
         }
 
-        this.announcements = new NeverEndingList<>(announcementDao.getList());
+        if (settings.isDualStreamMode()) {
+            scheduleAtFixedRate(this::runDualStreamAnnouncement, settings.getRunInterval(), TimeUnit.MILLISECONDS);
+        } else {
+            NeverEndingList<Announcement> announcements = new NeverEndingList<>(announcementDao.getList());
 
-        if (!announcements.isEmpty()) {
-            scheduleAtFixedRate(this::runAnnouncements, settings.getRunInterval(), TimeUnit.MILLISECONDS);
+            if (!announcements.isEmpty()) {
+                this.announcements = announcements;
+                scheduleAtFixedRate(this::runAnnouncements, settings.getRunInterval(), TimeUnit.MILLISECONDS);
+            }
         }
     }
 
@@ -78,6 +99,16 @@ public class AnnouncementTimerService extends TimerService {
                     .add("id", announcement::getId));
 
             messageCounter.reset();
+        }
+    }
+
+    private void runDualStreamAnnouncement() {
+        final User target = settings.getDualStreamTarget();
+        if (target != null) {
+            chat.say(i18n.get("ChatCommand.announcement.dualStreamMode.message")
+                    .add("castername", channelName)
+                    .add("targetname", target::getDisplayName)
+                    .add("targetusername", target::getUsername));
         }
     }
 }

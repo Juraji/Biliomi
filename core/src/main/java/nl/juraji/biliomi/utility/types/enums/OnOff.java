@@ -10,4 +10,8 @@ public enum OnOff {
     public static OnOff fromBoolean(boolean state) {
         return (state ? ON : OFF);
     }
+
+    public boolean equalsString(String value) {
+        this.toString().equalsIgnoreCase(value);
+    }
 }

@@ -8,21 +8,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by Juraji on 23-12-2017.
  * Biliomi
  */
 public class RestFilterQueryParser {
-    private static final Pattern QUERY_PREDICATE_PATTERN = Pattern.compile("^([a-z. ]+)\\s+([!]?[=~<>])\\s+(.*)$", Pattern.CASE_INSENSITIVE);
-    private static final Pattern QUERY_QUOTE_PATTERN = Pattern.compile("^\"(.*)\"$");
-    private static final String QUERY_AND_DELIMITER = "AND";
-    private static final String QUERY_OR_DELIMITER = "OR";
-    private static final String QUERY_NOT_OPERATOR = "!";
+
+    private final QueryPatterns patterns;
 
     private RestFilterQueryParser() {
-        // Private constructor
+        this.patterns = new QueryPatterns();
     }
 
     public static Collection<RestFilterDirective> parseQuery(String query) throws RestFilterQueryException {
@@ -37,8 +33,8 @@ public class RestFilterQueryParser {
             RestFilterDirective directive = new RestFilterDirective();
             String predicate = queryArray[i];
 
-            if (QUERY_AND_DELIMITER.equalsIgnoreCase(predicate) || QUERY_OR_DELIMITER.equalsIgnoreCase(predicate)) {
-                directive.setOrPrevious(QUERY_OR_DELIMITER.equalsIgnoreCase(predicate));
+            if (patterns.isAndDelimiter(predicate) || patterns.isOrDelimiter(predicate)) {
+                directive.setOrPrevious(patterns.isOrDelimiter(predicate));
                 try {
                     predicate = queryArray[++i];
                 } catch (ArrayIndexOutOfBoundsException e) {
@@ -46,7 +42,7 @@ public class RestFilterQueryParser {
                 }
             }
 
-            Matcher predicateMatcher = QUERY_PREDICATE_PATTERN.matcher(predicate);
+            Matcher predicateMatcher = patterns.getQueryPredicatePattern().matcher(predicate);
             if (!predicateMatcher.matches()) {
                 throw new RestFilterQueryException("Invalid query predicate: " + predicate);
             }
@@ -63,8 +59,7 @@ public class RestFilterQueryParser {
     }
 
     private String[] splitQuery(String query) {
-        Pattern delimiterPattern = Pattern.compile("((?<= and )|(?= and )|(?<= or )|(?= or ))", Pattern.CASE_INSENSITIVE);
-        String[] parts = delimiterPattern.split(query);
+        String[] parts = patterns.getQueryDelimiterPattern().split(query);
 
         for (int i = 0; i < parts.length; i++) {
             parts[i] = parts[i].trim();
@@ -94,14 +89,14 @@ public class RestFilterQueryParser {
 
     private Object getRealValue(String valGroup) {
         // Nulls
-        if (valGroup.equalsIgnoreCase("null")) {
+        if (patterns.isNullValue(valGroup)) {
             return null;
         }
 
         // Booleans
-        if (valGroup.equalsIgnoreCase("true")) {
+        if (patterns.isTrueValue(valGroup)) {
             return true;
-        } else if (valGroup.equalsIgnoreCase("false")) {
+        } else if (patterns.isFalseValue(valGroup)) {
             return false;
         }
 
@@ -112,11 +107,11 @@ public class RestFilterQueryParser {
         }
 
         // Remove quotes;
-        return valGroup.replaceAll(QUERY_QUOTE_PATTERN.pattern(), "$1");
+        return valGroup.replaceAll(patterns.getQueryQuotePattern().pattern(), "$1");
     }
 
     private boolean isOpGroupNotted(String opGroup) {
-        return opGroup.substring(0, 1).equals(QUERY_NOT_OPERATOR);
+        return patterns.isNotOperator(opGroup.substring(0, 1));
     }
 
     public static class RestFilterQueryException extends Exception {
