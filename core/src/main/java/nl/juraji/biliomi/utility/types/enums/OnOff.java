@@ -12,6 +12,6 @@ public enum OnOff {
     }
 
     public boolean equalsString(String value) {
-        this.toString().equalsIgnoreCase(value);
+        return this.toString().equalsIgnoreCase(value);
     }
 }
