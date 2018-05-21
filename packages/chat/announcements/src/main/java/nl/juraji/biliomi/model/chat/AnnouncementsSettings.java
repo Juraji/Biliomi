@@ -97,6 +97,7 @@ public class AnnouncementsSettings extends Settings {
     public void setDefaultValues() {
         enabled = false;
         shuffle = false;
+        dualStreamMode = false;
         runInterval = TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES);
         minChatMessages = 10;
     }
