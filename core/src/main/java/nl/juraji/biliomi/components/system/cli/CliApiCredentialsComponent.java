@@ -131,7 +131,7 @@ public class CliApiCredentialsComponent extends Component {
 
         final JWTGenerator generator = CDI.current().select(JWTGenerator.class).get();
         final ApiSecuritySettings settings = settingsService.getSettings(ApiSecuritySettings.class);
-        String applicationName = event.getInput().split(" ", 1)[1];
+        String applicationName = event.getInput().substring(event.getInput().indexOf(' ') + 1);
 
         final String token = generator.generateApplicationToken(settings.getSecret(), applicationName);
 
