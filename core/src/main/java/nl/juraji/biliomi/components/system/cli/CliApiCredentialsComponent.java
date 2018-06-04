@@ -1,19 +1,18 @@
 package nl.juraji.biliomi.components.system.cli;
 
-import nl.juraji.biliomi.components.system.settings.SettingsService;
-import nl.juraji.biliomi.components.system.users.UsersService;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.core.security.ApiLogin;
 import nl.juraji.biliomi.model.core.security.ApiSecuritySettings;
 import nl.juraji.biliomi.model.internal.events.bot.ConsoleInputEvent;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.SystemComponent;
 import nl.juraji.biliomi.utility.commandrouters.annotations.CliCommandRoute;
+import nl.juraji.biliomi.utility.security.JWTGenerator;
 import nl.juraji.biliomi.utility.security.PasswordEncryptor;
 import nl.juraji.biliomi.utility.types.MutableString;
 import nl.juraji.biliomi.utility.types.components.Component;
 
 import javax.enterprise.inject.Default;
-import javax.inject.Inject;
+import javax.enterprise.inject.spi.CDI;
 import javax.inject.Singleton;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -27,12 +26,6 @@ import java.util.List;
 @Singleton
 @SystemComponent
 public class CliApiCredentialsComponent extends Component {
-
-    @Inject
-    private SettingsService settingsService;
-
-    @Inject
-    private UsersService usersService;
 
     @CliCommandRoute(command = "apilistusers", description = "List REST api users")
     public boolean apiListUsersCommand(ConsoleInputEvent event) {
@@ -124,6 +117,46 @@ public class CliApiCredentialsComponent extends Component {
         settingsService.save(settings);
 
         logger.info("Successfully deleted {}'s credentials for the REST api", credentials.getUser().getDisplayName());
+        return true;
+    }
+
+    @CliCommandRoute(command = "apigenerateapptoken", description = "Generate a new application token")
+    public boolean apiGenerateAppToken(ConsoleInputEvent event) {
+        final List<String> inputSplit = event.getInputSplit();
+
+        if (inputSplit.size() < 2) {
+            logger.info("Usage /apigenerateapptoken [application name]");
+            return false;
+        }
+
+        final JWTGenerator generator = CDI.current().select(JWTGenerator.class).get();
+        final ApiSecuritySettings settings = settingsService.getSettings(ApiSecuritySettings.class);
+        String applicationName = event.getInput().split(" ", 1)[1];
+
+        final String token = generator.generateApplicationToken(settings.getSecret(), applicationName);
+
+        logger.info("New application token for {}: {}", applicationName, token);
+        logger.info("Keep this token ABSOLUTELY SECRET, as it grants read access to ALL endpoints and NEVER expires");
+        logger.info("If you wish to invalidate this token, regenerate your apisecret using \"/apiresetsecret\"");
+
+        return false;
+    }
+
+    @CliCommandRoute(command = "apiresetsecret", description = "Reset the api token secret, invalidating ALL current tokens")
+    public boolean apiResetSecret(ConsoleInputEvent event) {
+        final List<String> inputSplit = event.getInputSplit();
+
+        if (inputSplit.size() < 2 || !"YES".equals(inputSplit.get(1))) {
+            logger.info("This will reset the api security secret, invalidating ALL current authorization and refresh tokens!");
+            logger.info("Usage: /apiresetsecret YES");
+            return false;
+        }
+
+        final ApiSecuritySettings settings = settingsService.getSettings(ApiSecuritySettings.class);
+        settings.setDefaultValues();
+        settingsService.save(settings);
+
+        logger.info("Api security secret reset, ALL tokens are now invalidated");
         return true;
     }
 }

@@ -1,7 +1,6 @@
 package nl.juraji.biliomi.utility.security;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.impl.DefaultClaims;
 import io.jsonwebtoken.impl.DefaultJwsHeader;
 import nl.juraji.biliomi.Biliomi;
 import nl.juraji.biliomi.model.core.User;
@@ -43,14 +42,14 @@ public class JWTGenerator {
     private Long allowedSkewSeconds;
 
     /**
-     * Generate a new JWT for the given user
+     * Generate a new authorization JWT for the given user
      *
      * @param secretBytes The JWT secret as byte array
      * @param user        The user to encode the token for
      * @return The generated token as string
      */
     public String generateAuthorizationToken(@NotNull byte[] secretBytes, @NotNull User user) {
-        Claims claims = new DefaultClaims();
+        JwtClaims claims = new JwtClaims();
         claims.put(CLAIMS_TOKEN_TYPE, TokenType.AUTH);
 
         if (user.isCaster()) {
@@ -61,17 +60,58 @@ public class JWTGenerator {
             throw new IllegalStateException("User \"" + user.getDisplayName() + "\" is not a caster nor a moderator");
         }
 
-        return generateToken(secretBytes, claims, user, authTokenExpiry);
+        final Date expiryDate = new Date();
+        expiryDate.setTime(expiryDate.getTime() + authTokenExpiry);
+        return generateToken(secretBytes, claims, user, expiryDate);
     }
 
+    /**
+     * Generate a new refresh JWT for the given user
+     *
+     * @param secretBytes The JWT secret as byte array
+     * @param user        The user to encode the token for
+     * @return The generated token as string
+     */
     public String generateRefreshToken(byte[] secretBytes, User user) {
-        DefaultClaims claims = new DefaultClaims();
+        JwtClaims claims = new JwtClaims();
         claims.put(CLAIMS_TOKEN_TYPE, TokenType.REFRESH);
 
-        return generateToken(secretBytes, claims, user, refreshTokenExpiry);
+        final Date expiryDate = new Date();
+        expiryDate.setTime(expiryDate.getTime() + refreshTokenExpiry);
+        return generateToken(secretBytes, claims, user, expiryDate);
     }
 
-    public Claims validateToken(@NotNull byte[] secretBytes, @NotNull String token, TokenType requiredTokenType) throws JwtException {
+    /**
+     * Generate a new application token for the given application name.
+     * Beware that this token has an (almost) infinite lifespan!
+     *
+     * @param secretBytes     The JWT secret as byte array
+     * @param applicationName The application name to encode the token for
+     * @return The generated token as string
+     */
+    public String generateApplicationToken(byte[] secretBytes, String applicationName) {
+        JwtClaims claims = new JwtClaims();
+        claims.put(CLAIMS_TOKEN_TYPE, TokenType.AUTH);
+        claims.put(CLAIMS_USER_TYPE, TokenUserType.APPLICATION);
+        User user = new User();
+        user.setUsername(applicationName);
+        user.setDisplayName(applicationName);
+
+        // Set an insanely far off expiry date, to emulate a never expire
+        final Date expiryDate = new Date(Long.MAX_VALUE);
+        return generateToken(secretBytes, claims, user, expiryDate);
+    }
+
+    /**
+     * Validate a JWT token against the secret, expiry date and token type
+     *
+     * @param secretBytes       The JWT secret as byte array
+     * @param token             The token to validate
+     * @param requiredTokenType The expected token type
+     * @return The claims extracted from a valid token
+     * @throws JwtException If the token secret does not match, the token is expired or the token type does not match
+     */
+    public JwtClaims validateToken(byte[] secretBytes, String token, TokenType requiredTokenType) throws JwtException {
         SecretKeySpec secretKeySpec = new SecretKeySpec(secretBytes, signatureAlgorithm.getJcaName());
 
         Claims claims = Jwts.parser()
@@ -95,19 +135,16 @@ public class JWTGenerator {
             throw new JwtException("Token is not for channel " + channelName);
         }
 
-        return claims;
+        return new JwtClaims(claims);
     }
 
-    private String generateToken(byte[] secretBytes, Claims claims, User user, long expiresInMillis) {
+    private String generateToken(byte[] secretBytes, JwtClaims claims, User user, Date expiresAt) {
         DefaultJwsHeader jwsHeader = new DefaultJwsHeader();
         Date now = new Date();
-        Date expiresAt = new Date();
 
         jwsHeader.setAlgorithm(signatureAlgorithm.getValue());
         jwsHeader.setType(Header.JWT_TYPE);
 
-
-        expiresAt.setTime(now.getTime() + expiresInMillis);
         claims.setIssuedAt(now);
         claims.setSubject(user.getUsername());
         claims.setIssuer(Biliomi.class.getSimpleName());
@@ -115,11 +152,10 @@ public class JWTGenerator {
         claims.put(CLAIMS_CHANNEL, channelName);
         claims.put(CLAIMS_USER_DISPLAY_NAME, user.getDisplayName());
 
-        JwtBuilder builder = Jwts.builder()
+        return Jwts.builder()
                 .setHeader((Map<String, Object>) jwsHeader)
                 .setClaims(claims)
-                .signWith(signatureAlgorithm, secretBytes);
-
-        return builder.compact();
+                .signWith(signatureAlgorithm, secretBytes)
+                .compact();
     }
 }

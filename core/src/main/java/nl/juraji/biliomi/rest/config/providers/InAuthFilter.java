@@ -1,20 +1,22 @@
 package nl.juraji.biliomi.rest.config.providers;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import nl.juraji.biliomi.model.core.security.ApiSecuritySettings;
 import nl.juraji.biliomi.model.core.settings.SettingsDao;
 import nl.juraji.biliomi.model.internal.rest.auth.RestAuthorizationResponse;
 import nl.juraji.biliomi.model.internal.rest.auth.TokenType;
+import nl.juraji.biliomi.model.internal.rest.auth.TokenUserType;
 import nl.juraji.biliomi.rest.config.RestRequestInfoHolder;
 import nl.juraji.biliomi.utility.factories.marshalling.JacksonMarshaller;
 import nl.juraji.biliomi.utility.security.JWTGenerator;
+import nl.juraji.biliomi.utility.security.JwtClaims;
 import org.eclipse.jetty.http.HttpHeader;
 import org.eclipse.jetty.http.HttpMethod;
 
 import javax.annotation.Priority;
 import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
+import javax.ws.rs.GET;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -32,7 +34,7 @@ import java.lang.reflect.Method;
 @Provider
 @Priority(Priorities.AUTHORIZATION)
 public class InAuthFilter implements ContainerRequestFilter {
-    protected static final String OPTIONS_METHOD = HttpMethod.OPTIONS.toString();
+    private static final String OPTIONS_METHOD = HttpMethod.OPTIONS.toString();
     private static final String APPLICATION_WADL_PATH = "application.wadl";
 
     @Inject
@@ -52,35 +54,41 @@ public class InAuthFilter implements ContainerRequestFilter {
 
         String authorizationToken = requestContext.getHeaders().getFirst(HttpHeader.AUTHORIZATION.asString());
         ApiSecuritySettings settings = settingsDao.getSettings(ApiSecuritySettings.class);
-        RestAuthorizationResponse fault = null;
 
         try {
             RestRequestInfoHolder.RequestInfo requestInfo = RestRequestInfoHolder.getRequestInfo();
-            Claims claims = jwtGenerator.validateToken(settings.getSecret(), authorizationToken, TokenType.AUTH);
+            JwtClaims claims = jwtGenerator.validateToken(settings.getSecret(), authorizationToken, TokenType.AUTH);
 
-            boolean userNonExistent = settings.getLogins().stream()
-                    .noneMatch(apiLogin -> apiLogin.getUser().getUsername().equals(claims.getSubject()));
+            if (TokenUserType.APPLICATION.equals(claims.getUserType())) {
+                // Application tokens are granted access by default, but ONLY to GET endpoints
+                boolean isGETRequest = "GET".equals(requestContext.getMethod());
+                boolean isGETResource = resourceInfo.getResourceMethod().isAnnotationPresent(GET.class);
+                if (!isGETRequest || !isGETResource) {
+                    throw new JwtException("Application tokens may only execute GET requests");
+                }
+            } else {
+                boolean userNonExistent = settings.getLogins().stream()
+                        .noneMatch(apiLogin -> apiLogin.getUser().getUsername().equals(claims.getSubject()));
 
-            if (userNonExistent) {
-                throw new JwtException("No login known for user " + claims.getSubject());
+                if (userNonExistent) {
+                    throw new JwtException("No login known for user " + claims.getSubject());
+                }
+
             }
 
             requestInfo.setUsername(claims.getSubject());
-        } catch (IllegalArgumentException e) {
-            fault = new RestAuthorizationResponse();
-            fault.setMessage(RestAuthorizationResponse.getFaultAuthorizationMissingMsg());
-        } catch (JwtException e) {
-            // The JWT is invalid, let the requester know what's wrong
-            fault = new RestAuthorizationResponse();
-            fault.setMessage(e.getMessage());
-        }
+        } catch (JwtException | IllegalArgumentException e) {
+            RestAuthorizationResponse fault = new RestAuthorizationResponse();
+            if (e instanceof IllegalArgumentException) {
+                fault.setMessage(RestAuthorizationResponse.getFaultAuthorizationMissingMsg());
+            } else {
+                fault.setMessage(e.getMessage());
+            }
 
-        if (fault != null) {
             String faultBody = JacksonMarshaller.marshal(fault);
-            requestContext
-                    .abortWith(Response.status(Response.Status.UNAUTHORIZED)
-                            .entity(faultBody)
-                            .build());
+            requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(faultBody)
+                    .build());
         }
     }
 
