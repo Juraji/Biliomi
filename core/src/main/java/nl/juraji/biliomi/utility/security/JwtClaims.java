@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.impl.DefaultClaims;
 import nl.juraji.biliomi.model.internal.rest.auth.TokenType;
 import nl.juraji.biliomi.model.internal.rest.auth.TokenUserType;
+import nl.juraji.biliomi.utility.calculate.EnumUtils;
 
 /**
  * Created by Juraji on 4-6-2018.
@@ -40,7 +41,7 @@ public class JwtClaims extends DefaultClaims {
     }
 
     public TokenUserType getUserType() {
-        return super.get(USER_TYPE, TokenUserType.class);
+        return this.getEnum(USER_TYPE, TokenUserType.class);
     }
 
     public void setUserType(TokenUserType userType) {
@@ -48,10 +49,15 @@ public class JwtClaims extends DefaultClaims {
     }
 
     public TokenType getTokenType() {
-        return super.get(TOKEN_TYPE, TokenType.class);
+        return this.getEnum(TOKEN_TYPE, TokenType.class);
     }
 
     public void setTokenType(TokenType tokenType) {
         super.put(TOKEN_TYPE, tokenType);
+    }
+
+    private <E extends Enum<E>> E getEnum(String key, Class<E> enumClass) {
+        final String o = super.get(key, String.class);
+        return EnumUtils.toEnum(o, enumClass);
     }
 }

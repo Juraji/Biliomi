@@ -6,7 +6,6 @@ import nl.juraji.biliomi.Biliomi;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.model.internal.rest.auth.TokenType;
 import nl.juraji.biliomi.model.internal.rest.auth.TokenUserType;
-import nl.juraji.biliomi.utility.calculate.EnumUtils;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.AppData;
 import nl.juraji.biliomi.utility.cdi.annotations.qualifiers.ChannelName;
 
@@ -23,10 +22,6 @@ import java.util.Map;
  */
 @Default
 public class JWTGenerator {
-    private static final String CLAIMS_CHANNEL = "chn";
-    private static final String CLAIMS_USER_DISPLAY_NAME = "usr";
-    private static final String CLAIMS_USER_TYPE = "utp";
-    private static final String CLAIMS_TOKEN_TYPE = "ttp";
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     @Inject
     @ChannelName
@@ -50,12 +45,12 @@ public class JWTGenerator {
      */
     public String generateAuthorizationToken(@NotNull byte[] secretBytes, @NotNull User user) {
         JwtClaims claims = new JwtClaims();
-        claims.put(CLAIMS_TOKEN_TYPE, TokenType.AUTH);
+        claims.setTokenType(TokenType.AUTH);
 
         if (user.isCaster()) {
-            claims.put(CLAIMS_USER_TYPE, TokenUserType.CASTER);
+            claims.setUserType(TokenUserType.CASTER);
         } else if (user.isModerator()) {
-            claims.put(CLAIMS_USER_TYPE, TokenUserType.MODERATOR);
+            claims.setUserType(TokenUserType.MODERATOR);
         } else {
             throw new IllegalStateException("User \"" + user.getDisplayName() + "\" is not a caster nor a moderator");
         }
@@ -74,7 +69,7 @@ public class JWTGenerator {
      */
     public String generateRefreshToken(byte[] secretBytes, User user) {
         JwtClaims claims = new JwtClaims();
-        claims.put(CLAIMS_TOKEN_TYPE, TokenType.REFRESH);
+        claims.setTokenType(TokenType.REFRESH);
 
         final Date expiryDate = new Date();
         expiryDate.setTime(expiryDate.getTime() + refreshTokenExpiry);
@@ -91,8 +86,8 @@ public class JWTGenerator {
      */
     public String generateApplicationToken(byte[] secretBytes, String applicationName) {
         JwtClaims claims = new JwtClaims();
-        claims.put(CLAIMS_TOKEN_TYPE, TokenType.AUTH);
-        claims.put(CLAIMS_USER_TYPE, TokenUserType.APPLICATION);
+        claims.setTokenType(TokenType.AUTH);
+        claims.setUserType(TokenUserType.APPLICATION);
         User user = new User();
         user.setUsername(applicationName);
         user.setDisplayName(applicationName);
@@ -120,17 +115,17 @@ public class JWTGenerator {
                 .parseClaimsJws(token)
                 .getBody();
 
-        Object claimedTokenType = claims.getOrDefault(CLAIMS_TOKEN_TYPE, null);
+        final JwtClaims jwtClaims = new JwtClaims(claims);
+        final TokenType claimedTokenType = jwtClaims.getTokenType();
         if (claimedTokenType == null) {
             throw new JwtException("Token is missing token type claim");
         } else {
-            TokenType tokenType = EnumUtils.toEnum((String) claimedTokenType, TokenType.class);
-            if (!requiredTokenType.equals(tokenType)) {
-                throw new JwtException("Wanted token type " + requiredTokenType.toString() + " but got " + tokenType.toString());
+            if (!requiredTokenType.equals(claimedTokenType)) {
+                throw new JwtException("Wanted token type " + requiredTokenType.toString() + " but got " + claimedTokenType.toString());
             }
         }
 
-        Object claimedChannel = claims.getOrDefault(CLAIMS_CHANNEL, null);
+        Object claimedChannel = jwtClaims.getChannel();
         if (!channelName.equals(claimedChannel)) {
             throw new JwtException("Token is not for channel " + channelName);
         }
@@ -149,8 +144,8 @@ public class JWTGenerator {
         claims.setSubject(user.getUsername());
         claims.setIssuer(Biliomi.class.getSimpleName());
         claims.setExpiration(expiresAt);
-        claims.put(CLAIMS_CHANNEL, channelName);
-        claims.put(CLAIMS_USER_DISPLAY_NAME, user.getDisplayName());
+        claims.setChannel(channelName);
+        claims.setUserDisplayName(user.getDisplayName());
 
         return Jwts.builder()
                 .setHeader((Map<String, Object>) jwsHeader)
