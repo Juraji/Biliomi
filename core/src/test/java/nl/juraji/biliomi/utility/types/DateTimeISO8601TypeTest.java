@@ -20,12 +20,6 @@ public class DateTimeISO8601TypeTest {
     private final DateTime later = DateTime.now().withDurationAdded(1, 1000);
 
     @Test
-    public void typeStaticEqualsPackage() {
-        String actualType = DateTimeISO8601Type.class.getPackage().getName() + '.' + DateTimeISO8601Type.class.getSimpleName();
-        assertEquals(actualType, DateTimeISO8601Type.TYPE);
-    }
-
-    @Test
     public void sqlTypes() {
         assertArrayEquals(new int[]{Types.VARCHAR}, instance.sqlTypes());
     }

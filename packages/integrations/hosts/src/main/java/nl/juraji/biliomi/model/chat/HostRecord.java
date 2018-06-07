@@ -2,8 +2,6 @@ package nl.juraji.biliomi.model.chat;
 
 import nl.juraji.biliomi.model.core.Direction;
 import nl.juraji.biliomi.model.core.User;
-import nl.juraji.biliomi.utility.types.hibernatetypes.DateTimeISO8601Type;
-import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -34,8 +32,7 @@ public class HostRecord {
 
     @Column
     @NotNull
-    @Type(type = DateTimeISO8601Type.TYPE)
-    @XmlElement(name = "Date")
+        @XmlElement(name = "Date")
     private DateTime date;
 
     @Column

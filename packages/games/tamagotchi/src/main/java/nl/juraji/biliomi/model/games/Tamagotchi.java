@@ -3,9 +3,7 @@ package nl.juraji.biliomi.model.games;
 import nl.juraji.biliomi.components.games.tamagotchi.services.Gender;
 import nl.juraji.biliomi.model.core.User;
 import nl.juraji.biliomi.utility.factories.ModelUtils;
-import nl.juraji.biliomi.utility.types.hibernatetypes.DateTimeISO8601Type;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -74,13 +72,11 @@ public class Tamagotchi {
 
     @Column
     @NotNull
-    @Type(type = DateTimeISO8601Type.TYPE)
-    @XmlElement(name = "DateOfBirth")
+        @XmlElement(name = "DateOfBirth")
     private DateTime dateOfBirth;
 
     @Column
-    @Type(type = DateTimeISO8601Type.TYPE)
-    @XmlElement(name = "DateOfDeath")
+        @XmlElement(name = "DateOfDeath")
     private DateTime dateOfDeath;
 
     @Column

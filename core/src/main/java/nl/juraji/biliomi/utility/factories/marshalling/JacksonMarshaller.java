@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
+import nl.juraji.biliomi.utility.factories.marshalling.serializers.BiliomiSerializersModule;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -30,6 +31,10 @@ public final class JacksonMarshaller {
         // Add the JaxbAnnotationModule to the object mapper
         // To be have Jackson introspect the Jaxb annotations like @XmlElement
         mapper.registerModule(new JaxbAnnotationModule());
+
+        // Add custom (de)serializers module
+        mapper.registerModule(new BiliomiSerializersModule());
+
     }
 
     public static String marshal(Object object) throws JsonProcessingException {

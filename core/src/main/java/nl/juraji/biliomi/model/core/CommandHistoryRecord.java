@@ -1,7 +1,5 @@
 package nl.juraji.biliomi.model.core;
 
-import nl.juraji.biliomi.utility.types.hibernatetypes.DateTimeISO8601Type;
-import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -37,8 +35,7 @@ public class CommandHistoryRecord {
     private String arguments;
 
     @Column
-    @Type(type = DateTimeISO8601Type.TYPE)
-    @XmlElement(name = "Date")
+        @XmlElement(name = "Date")
     private DateTime date;
 
     @OneToOne

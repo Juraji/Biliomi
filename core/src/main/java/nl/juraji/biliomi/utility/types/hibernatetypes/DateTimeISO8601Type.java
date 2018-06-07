@@ -3,6 +3,8 @@ package nl.juraji.biliomi.utility.types.hibernatetypes;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
 import java.io.Serializable;
 import java.sql.PreparedStatement;
@@ -19,8 +21,13 @@ import static org.hibernate.type.StandardBasicTypes.STRING;
  * Persistence usertype for persisting Joda DateTime in ISO8601 format
  */
 public final class DateTimeISO8601Type implements UserType, Serializable {
-    public static final String TYPE = "nl.juraji.biliomi.utility.types.hibernatetypes.DateTimeISO8601Type";
     private static final int[] SQL_TYPES = new int[]{Types.VARCHAR};
+
+    private final DateTimeFormatter formatter;
+
+    public DateTimeISO8601Type() {
+        this.formatter = ISODateTimeFormat.dateTime();
+    }
 
     @Override
     public int[] sqlTypes() {
@@ -62,7 +69,7 @@ public final class DateTimeISO8601Type implements UserType, Serializable {
             STRING.nullSafeSet(preparedStatement, null, i, sessionImplementor);
         } else {
             DateTime dt = (DateTime) o;
-            STRING.nullSafeSet(preparedStatement, dt.toString(), i, sessionImplementor);
+            STRING.nullSafeSet(preparedStatement, dt.toString(formatter), i, sessionImplementor);
         }
     }
 

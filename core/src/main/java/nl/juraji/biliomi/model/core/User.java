@@ -1,8 +1,6 @@
 package nl.juraji.biliomi.model.core;
 
-import nl.juraji.biliomi.utility.types.hibernatetypes.DateTimeISO8601Type;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -76,8 +74,7 @@ public class User {
     private boolean follower;
 
     @Column
-    @Type(type = DateTimeISO8601Type.TYPE)
-    @XmlElement(name = "FollowDate")
+        @XmlElement(name = "FollowDate")
     private DateTime followDate;
 
     @Column
@@ -85,13 +82,11 @@ public class User {
     private boolean subscriber;
 
     @Column
-    @Type(type = DateTimeISO8601Type.TYPE)
-    @XmlElement(name = "SubscribeDate")
+        @XmlElement(name = "SubscribeDate")
     private DateTime subscribeDate;
 
     @Column
-    @Type(type = DateTimeISO8601Type.TYPE)
-    @XmlElement(name = "BlacklistedSince")
+        @XmlElement(name = "BlacklistedSince")
     private DateTime blacklistedSince;
 
     public long getId() {

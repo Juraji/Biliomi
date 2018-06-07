@@ -1,4 +1,4 @@
-package nl.juraji.biliomi.rest.services.chat.settings;
+package nl.juraji.biliomi.rest.services.followers.settings;
 
 import nl.juraji.biliomi.model.chat.AnnouncementsSettings;
 import nl.juraji.biliomi.rest.config.SettingsModelRestService;

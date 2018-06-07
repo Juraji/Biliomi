@@ -1,8 +1,6 @@
 package nl.juraji.biliomi.model.core;
 
 import nl.juraji.biliomi.utility.factories.ModelUtils;
-import nl.juraji.biliomi.utility.types.hibernatetypes.DateTimeISO8601Type;
-import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -34,8 +32,7 @@ public class Game {
 
     @Column
     @NotNull
-    @Type(type = DateTimeISO8601Type.TYPE)
-    @XmlElement(name = "FirstPlayedOn")
+        @XmlElement(name = "FirstPlayedOn")
     private DateTime firstPlayedOn;
 
     @Column

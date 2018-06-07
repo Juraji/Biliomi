@@ -1,7 +1,5 @@
 package nl.juraji.biliomi.model.games;
 
-import nl.juraji.biliomi.utility.types.hibernatetypes.DateTimeISO8601Type;
-import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.Column;
@@ -26,8 +24,7 @@ public class TamagotchiToy {
     private String toyName;
 
     @Column
-    @Type(type = DateTimeISO8601Type.TYPE)
-    @XmlElement(name = "ExpiresAt")
+        @XmlElement(name = "ExpiresAt")
     private DateTime expiresAt;
 
     @Column

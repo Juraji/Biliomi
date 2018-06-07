@@ -1,7 +1,5 @@
 package nl.juraji.biliomi.model.core.security.tokens;
 
-import nl.juraji.biliomi.utility.types.hibernatetypes.DateTimeISO8601Type;
-import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -41,8 +39,7 @@ public class AuthToken {
     private String secret;
 
     @Column
-    @Type(type = DateTimeISO8601Type.TYPE)
-    private DateTime issuedAt;
+        private DateTime issuedAt;
 
     @Column
     private Long timeToLive;
