@@ -86,7 +86,7 @@ public final class EntityManagerFactoryProducer {
         configuration.put(AvailableSettings.LOADED_CLASSES, scanForEntityClasses());
 
         // Create Entity manager factory
-        logger.debug("Creating entity manager factory for local H2 database...");
+        logger.debug("Creating entity manager factory for local H2 database ({})...", jdbcUri);
         HibernatePersistenceProvider provider = new HibernatePersistenceProvider();
         return provider.createEntityManagerFactory("Biliomi-H2-DS", configuration);
     }
@@ -117,7 +117,8 @@ public final class EntityManagerFactoryProducer {
         configuration.put(AvailableSettings.LOADED_CLASSES, scanForEntityClasses());
 
         // Create Entity manager factory
-        logger.debug("Creating entity manager factory for MySQL database...");
+        logger.debug("Creating entity manager factory for MySQL database\nUrl: {}\nUsername: {}\nUse SSL: {}",
+                jdbcUri, mySQL.getUsername(), useSSL);
         HibernatePersistenceProvider provider = new HibernatePersistenceProvider();
         return provider.createEntityManagerFactory("Biliomi-MySQL-DS", configuration);
     }
